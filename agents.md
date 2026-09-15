@@ -12,7 +12,7 @@ Baca `DOKUMEN_TEKNIS_PIPELINE_SCRAPING_BERITA.md` dulu sebelum mulai coding. Dok
 2. Implementasi harus modular sesuai struktur folder di dokumen teknis (`config.py`, `query_builder.py`, `fetch_news.py`, `extract_content.py`, `entity_mapper.py`, `sentiment.py`, `export_excel.py`, `main.py`). Jangan menggabungkan semua logika ke satu file besar.
 3. Setiap fungsi yang melakukan HTTP request harus punya delay/backoff, jangan spam request ke situs media secara paralel tanpa batas.
 4. Filter domain harus dilakukan dua kali: sekali di query (Google dork), sekali lagi di kode Python setelah hasil didapat (post-filter dengan `urlparse`). Jangan hanya mengandalkan salah satu.
-5. Kolom Excel wajib persis: `Tanggal`, `Title`, `Link Website`, `Media Name`, `Tone`, `Spokesperson 1`, `Spokesperson 2`, `Unit Eselon`, `Terkait Kemenperin`. Urutan kolom harus konsisten dengan urutan ini.
+5. Kolom Excel wajib persis: `Tanggal`, `Title`, `Link Website`, `Media Name`, `Tone`, `Spokesperson 1`, `Spokesperson 2`, `Unit Eselon`, `Terkait Kemenperin`, `Keywords`. Urutan kolom harus konsisten dengan urutan ini.
 6. Sebelum mengklaim sentiment classifier "akurat", jalankan validasi manual pada sample kecil (50-100 artikel) dan laporkan hasilnya. Jangan asumsikan akurasi model publik tanpa pengecekan.
 7. Sumber data spokesperson sekarang adalah `keyword_nama.xlsx` (bukan lagi `keyword_nama.txt`), dengan dua kolom terstruktur: `nama` dan `jabatan`. Baca file ini dengan `pandas.read_excel()`. Kalau ke depannya ada file baru lagi yang menggantikan ini, update baris ini juga supaya tidak ada modul yang masih merujuk ke sumber data yang sudah tidak dipakai.
 8. Setiap perubahan besar pada strategi query/filtering harus dicatat sebagai perubahan di bagian "Riwayat Perubahan" di bawah, supaya iterasi berikutnya (manusia atau agent lain) tahu konteksnya.
@@ -52,7 +52,19 @@ Catatan: `openpyxl` dipakai dua arah, sebagai engine baca `keyword_nama.xlsx` (l
 - Penerapan OPSI B untuk sinyal Kemenperin: `is_kemenperin_related()` tidak lagi membuang artikel, melainkan berfungsi sebagai penanda/flagging dengan kolom baru `Terkait Kemenperin` ("Ya" / "Tidak") di akhir kolom Excel (`export_excel.py`). Seluruh berita industri tanggal kemarin tetap tersimpan lengkap.
 - Penambahan penanganan timeout toleran 20 detik dan retry 2x khusus untuk domain `.go.id` di `extract_content.py` (`fetch_gov_html_with_retry()`) untuk mengatasi server portal daerah/pemerintah yang lambat merespons.
 - Penanganan limit 100 entri Google News RSS: Query media (`build_media_query`) dan query pemerintah (`build_gov_query`) dijalankan terpisah, masing-masing membawa hingga 100 entri (total hingga ~200 entri unik sebelum dedup URL). Keterbatasan 100 entri per query adalah batasan arsitektur RSS Google News.
-
+- Penambahan `JOB_PORTAL_BLOCKLIST` dan `JOB_URL_PATTERNS` di `config.py` dan `fetch_news.py`, serta fungsi `is_job_posting()` di `relevance_filter.py` dan `main.py` untuk mengeliminasi noise lowongan kerja / karir (Glints, KitaLulus, BeBee, LinkedIn Jobs, dll.).
+- Penambahan filter makna ganda komoditas non-industri (`is_kelapa_context_valid`, `is_karet_context_valid`, `is_kakao_context_valid`, `is_kertas_context_valid`) di `relevance_filter.py` untuk membuang false positive seperti "LRT Kelapa Gading", idiom "Jam Karet", evakuasi kecelakaan kapal dengan perahu karet, dan entitas K-Pop "Kakao Entertainment".
+- Penambahan rate limiting thread-safe, mutex lock, dan in-memory caching di `resolve_article_url()` (`extract_content.py`) untuk mencegah HTTP 429 Too Many Requests dari Google News decoder saat scraping batch skala besar.
+- **Integrasi Alternatif Serper.dev (`serper_search.py`)**:
+  - Penambahan modul `serper_search.py` sebagai alternatif sumber pencarian berita saat Google News RSS terkena rate limit atau CAPTCHA gate.
+  - Endpoint: `https://google.serper.dev/news` via header `X-API-KEY`. Mengembalikan format data yang identik dengan `fetch_news.py` (`title`, `link`, `published`, `media_name`), sehingga kompatibel langsung dengan seluruh modul pipeline (ekstraksi, filter, sentimen, dan ekspor).
+  - Tautan yang dikembalikan oleh Serper adalah direct publisher URL (bukan tautan redirect Google News), sehingga proses ekstraksi teks sama sekali tidak memerlukan resolusi decoder (`googlenewsdecoder` / `batchexecute`), bebas risiko pemblokiran Google.
+  - Kuota Serper gratis terbatas (2.500 query sekali pakai, lifetime tanpa reset bulanan). Karena itu Serper.dev strictly dihemat dan hanya diaktifkan saat Google News RSS terblokir via flag `USE_SERPER_ONLY=True` atau argumen `--serper-only`.
+- **Kronologi Insiden CAPTCHA Gate (15 September 2026, Mulai 11:00 WIB)**:
+  - Pada pukul 11:00 WIB saat eksekusi Batch 7, IP jaringan kantor (`202.47.80.21`) mengalami redirect ke `google.com/sorry/index` (CAPTCHA gate) akibat akumulasi request `batchexecute` oleh `googlenewsdecoder`.
+  - Batch 1–6 (29 keyword) dan 5 keyword besar telah tersimpan aman dengan total 171 baris berita bersih di `hasil_scrapping/hasil_scraping_semua_keyword_clean.xlsx`.
+  - Monitoring polling otomatis tiap 10 menit dihentikan sepenuhnya agar IP kantor benar-benar istirahat dari traffic Google dan tidak memperpanjang masa blokir.
+  - Eksekusi Batch 7 dan Batch 8 dialihkan secara aman ke Serper.dev menggunakan flag `--serper-only`, dengan hasil yang digabungkan langsung ke dataset bersih tanpa kehilangan data historis.
 
 
 

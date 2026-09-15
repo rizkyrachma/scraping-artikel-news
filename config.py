@@ -23,13 +23,17 @@ def is_published_yesterday(published_str: str) -> bool:
     Memeriksa apakah tanggal publikasi artikel sama persis dengan 'kemarin'.
     Artikel yang lolos HANYA yang tanggal publikasinya persis sama dengan 'kemarin',
     bukan hari ini, bukan juga tanggal sebelum kemarin.
+    Mendukung format absolut maupun relatif (misal '1 day ago' dari Serper).
     """
     if not published_str:
         return False
     try:
         dt = pd.to_datetime(published_str, errors="coerce")
         if pd.isna(dt):
-            return False
+            import dateparser
+            dt = dateparser.parse(published_str)
+            if dt is None:
+                return False
         yesterday_start, _ = get_date_range()
         return dt.date() == yesterday_start
     except Exception:
@@ -53,6 +57,14 @@ ASSET_HOST_BLOCKLIST = [
 SOCIAL_MEDIA_BLOCKLIST = [
     "youtube.com", "instagram.com", "tiktok.com",
     "wikipedia.org", "x.com", "facebook.com", "twitter.com",
+    "linkedin.com",
+]
+
+# Blocklist portal lowongan kerja / karir
+JOB_PORTAL_BLOCKLIST = [
+    "glints.com", "kitalulus.com", "bebee.com", "jobstreet.co.id",
+    "jobstreet.com", "kalibrr.com", "karir.com", "loker.id",
+    "indeed.com", "jobsdb.com", "prosple.com",
 ]
 
 # Blocklist ekstensi file non-artikel pada URL
@@ -62,6 +74,12 @@ ASSET_EXTENSION_BLOCKLIST = [
 
 # Pola URL komersial yang diabaikan
 BLOCKED_URL_PATTERNS = ["jual", "beli", "produk", "harga", "toko", "review"]
+
+# Pola URL lowongan kerja yang diabaikan
+JOB_URL_PATTERNS = [
+    "/lowongan", "/jobs/", "/job/", "/opportunities/jobs",
+    "/career", "/karir", "/loker",
+]
 
 
 def load_keywords(path: str | Path = "keyword_data.txt") -> list[str]:

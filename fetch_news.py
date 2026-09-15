@@ -12,7 +12,9 @@ from config import (
     MARKETPLACE_BLOCKLIST,
     ASSET_HOST_BLOCKLIST,
     SOCIAL_MEDIA_BLOCKLIST,
+    JOB_PORTAL_BLOCKLIST,
     ASSET_EXTENSION_BLOCKLIST,
+    JOB_URL_PATTERNS,
     GOV_DOMAIN_SUFFIX,
 )
 from relevance_filter import is_likely_relevant
@@ -33,8 +35,9 @@ def is_valid_domain(url: str) -> bool:
     """
     Validasi domain dan ekstensi URL dengan strategi denylist-first:
     - Tolak jika path berakhiran ekstensi aset (ASSET_EXTENSION_BLOCKLIST)
+    - Tolak jika URL mengandung pola URL lowongan kerja (JOB_URL_PATTERNS)
     - Domain .go.id otomatis lolos (jalur terpisah)
-    - Tolak jika netloc match MARKETPLACE_BLOCKLIST, ASSET_HOST_BLOCKLIST, atau SOCIAL_MEDIA_BLOCKLIST
+    - Tolak jika netloc match MARKETPLACE_BLOCKLIST, ASSET_HOST_BLOCKLIST, SOCIAL_MEDIA_BLOCKLIST, atau JOB_PORTAL_BLOCKLIST
     - Terima domain lainnya
     """
     if not url:
@@ -43,24 +46,31 @@ def is_valid_domain(url: str) -> bool:
     parsed = urlparse(url)
     netloc = parsed.netloc.lower()
     path = parsed.path.lower()
+    full_url = url.lower()
 
     # 1. Tolak jika match ekstensi aset non-artikel (.pdf, .mp4, dll.)
     if any(path.endswith(ext.lower()) for ext in ASSET_EXTENSION_BLOCKLIST):
         return False
 
-    # 2. Domain .go.id tetap otomatis lolos (jalur terpisah)
+    # 2. Tolak pola path/URL lowongan kerja
+    if any(p in full_url for p in JOB_URL_PATTERNS):
+        return False
+
+    # 3. Domain .go.id tetap otomatis lolos (jalur terpisah)
     if netloc.endswith(GOV_DOMAIN_SUFFIX) or f"{GOV_DOMAIN_SUFFIX}:" in netloc:
         return True
 
-    # 3. Tolak jika domain atau subdomain match marketplace, host aset, atau media sosial
+    # 4. Tolak jika domain atau subdomain match marketplace, host aset, media sosial, atau portal loker
     if is_domain_in_blocklist(netloc, MARKETPLACE_BLOCKLIST):
         return False
     if is_domain_in_blocklist(netloc, ASSET_HOST_BLOCKLIST):
         return False
     if is_domain_in_blocklist(netloc, SOCIAL_MEDIA_BLOCKLIST):
         return False
+    if is_domain_in_blocklist(netloc, JOB_PORTAL_BLOCKLIST):
+        return False
 
-    # 4. Terima domain media apa pun yang tersisa
+    # 5. Terima domain media apa pun yang tersisa
     return True
 
 
@@ -82,7 +92,7 @@ def clean_title_suffix(raw_title: str, source_title: str | None) -> str:
     return title
 
 
-def search_keyword(keyword: str, delay: float = 1.0) -> list[dict]:
+def search_keyword(keyword: str, delay: float = 3.5) -> list[dict]:
     """
     Mengambil berita untuk satu keyword dari Google News RSS (media query dan gov query).
     Menerapkan validasi domain, ekstraksi media_name, pembersihan title, serta filter relevansi.
@@ -173,7 +183,7 @@ def dedup_by_title(items: list[dict], threshold: int = 85) -> list[dict]:
     """
     unique: list[dict] = []
     for item in items:
-        title = item.get("title", "")
+        title = item.get("title") or item.get("Title") or ""
         text = item.get("text", "")
         matched_idx = -1
 

@@ -50,6 +50,7 @@ from extract_content import (
 from relevance_filter import (
     is_recipe,
     is_promotional,
+    is_job_posting,
     is_keyword_primary_topic,
     is_industry_policy_topic,
     is_kemenperin_related,
@@ -59,17 +60,24 @@ from relevance_filter import (
 from entity_mapper import find_spokespersons
 from sentiment import classify_tone
 from export_excel import save_to_excel
+from serper_search import search_serper_news
+
+USE_SERPER_ONLY: bool = os.environ.get("USE_SERPER_ONLY", "false").lower() in ("true", "1", "yes")
 
 OUTPUT_DIR = "hasil_scrapping"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 
 def extract_one_article(item: dict) -> dict:
-    """Helper untuk ekstraksi konten satu artikel secara concurrent dengan resolusi Google News URL."""
+    """Helper untuk ekstraksi konten satu artikel secara concurrent (mendukung resolusi URL Google News & direct URL Serper)."""
     link = item.get("link", "")
-    try:
-        resolved = resolve_article_url(link)
-    except Exception:
+    if "news.google.com" in link:
+        try:
+            resolved = resolve_article_url(link)
+        except Exception:
+            resolved = link
+    else:
+        # Tautan langsung dari Serper.dev tidak membutuhkan resolusi Google decoder
         resolved = link
 
     try:
@@ -92,6 +100,7 @@ def filter_valid_articles(
     """
     Menyaring artikel yang valid secara konten:
     - Membuang artikel kosong / gagal ekstrak / suspiciously short (< min_length)
+    - Membuang materi lowongan kerja / rekrutmen (is_job_posting)
     - Membuang jika keyword bukan topik utama (title match ATAU >= 2x di teks)
     - Membuang resep kuliner (is_recipe)
     - Membuang iklan/promosi ritel (is_promotional)
@@ -110,6 +119,13 @@ def filter_valid_articles(
         if not text or len(text.strip()) < min_length:
             item_copy = dict(item)
             item_copy["discard_reason"] = "empty_or_too_short"
+            discarded.append(item_copy)
+            continue
+
+        # 1b. Cek materi lowongan pekerjaan / rekrutmen
+        if is_job_posting(title, text):
+            item_copy = dict(item)
+            item_copy["discard_reason"] = "job_posting"
             discarded.append(item_copy)
             continue
 
@@ -174,6 +190,7 @@ def process_single_keyword(
     delay: float = 1.0,
     max_workers: int = 8,
     name_map: dict[str, str] | None = None,
+    serper_only: bool = False,
 ) -> dict:
     """
     Mengambil, mengekstrak, dan menyaring berita untuk satu kata kunci,
@@ -182,8 +199,13 @@ def process_single_keyword(
     if name_map is None:
         name_map = load_spokesperson_map("keyword_nama.xlsx")
 
-    print(f"  [>] Fetching berita untuk '{keyword}'...", flush=True)
-    raw_results = search_keyword(keyword, delay=delay)
+    use_serper = serper_only or USE_SERPER_ONLY
+    if use_serper:
+        print(f"  [>] [Serper.dev] Fetching berita untuk '{keyword}'...", flush=True)
+        raw_results = search_serper_news(keyword)
+    else:
+        print(f"  [>] Fetching berita untuk '{keyword}'...", flush=True)
+        raw_results = search_keyword(keyword, delay=delay)
     candidates = dedup_by_link(raw_results)
     init_count = len(candidates)
     print(f"      -> {init_count} kandidat unik setelah filter domain & URL dedup.", flush=True)
@@ -303,7 +325,7 @@ def finalize_and_export(
             "Spokesperson 2": sp2,
             "Unit Eselon": unit,
             "Terkait Kemenperin": terkait_kemenperin,
-            "Keyword": art.get("keyword", ""),
+            "Keywords": art.get("keyword", ""),
         })
 
     print(f"Entity Mapping: {sp_count} artikel memiliki Spokesperson terisi, {total_after - sp_count} kosong.", flush=True)
@@ -340,7 +362,13 @@ def run_pipeline(
     name_map = load_spokesperson_map("keyword_nama.xlsx")
     print(f"Loaded: {len(keywords)} keyword ({keywords[:5]}...), {len(name_map)} pejabat.")
 
-    raw_results = collect_all(keywords)
+    if USE_SERPER_ONLY:
+        print(f"  [>] Mode USE_SERPER_ONLY aktif: Mengambil kandidat via Serper.dev...", flush=True)
+        raw_results = []
+        for kw in keywords:
+            raw_results.extend(search_serper_news(kw))
+    else:
+        raw_results = collect_all(keywords)
     print(f"Kandidat berita setelah domain filter & dedup awal: {len(raw_results)}")
 
     # Filter Tanggal: HANYA KEMARIN (sebelum ekstraksi untuk kecepatan)
@@ -394,6 +422,7 @@ def run_pipeline(
             "Spokesperson 2": sp2,
             "Unit Eselon": unit,
             "Terkait Kemenperin": terkait_kemenperin,
+            "Keywords": item.get("keyword", ""),
         })
 
     print(f"Status Kemenperin: {kemenperin_yes_count} Terkait Kemenperin: Ya | {len(content_valid) - kemenperin_yes_count} Tidak.")
@@ -523,10 +552,18 @@ if __name__ == "__main__":
     parser.add_argument("keyword", nargs="?", default=None, help="Satu kata kunci spesifik (opsional)")
     parser.add_argument("output", nargs="?", default=None, help="Nama file output Excel (opsional)")
     parser.add_argument("--batch", type=int, default=None, help="Nomor batch tertentu untuk dijalankan (1-indexed)")
-    parser.add_argument("--batch-size", type=int, default=5, help="Ukuran tiap batch keyword (default: 5)")
     parser.add_argument("--all", action="store_true", help="Jalankan semua batch dari awal / lanjutkan checkpoint")
+    parser.add_argument("--serper-only", action="store_true", help="Pakai Serper.dev SAJA untuk fetch berita (bypass Google News RSS)")
+    parser.add_argument("--api-key", type=str, default=None, help="Serper.dev API Key")
 
     args = parser.parse_args()
+
+    if args.api_key:
+        os.environ["SERPER_API_KEY"] = args.api_key.strip()
+
+    if args.serper_only:
+        USE_SERPER_ONLY = True
+        os.environ["USE_SERPER_ONLY"] = "true"
 
     if args.keyword and not args.keyword.startswith("--"):
         out = args.output if args.output else os.path.join(OUTPUT_DIR, f"hasil_scraping_{args.keyword}.xlsx")

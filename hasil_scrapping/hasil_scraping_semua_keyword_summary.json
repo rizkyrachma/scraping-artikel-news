@@ -1,0 +1,514 @@
+{
+  "evaluated_date": "2026-09-14",
+  "total_articles": 105,
+  "kemenperin_yes": 1,
+  "kemenperin_no": 104,
+  "spokesperson_filled": 0,
+  "tone_distribution": {
+    "Positif": 26,
+    "Netral": 71,
+    "Negatif": 8
+  },
+  "batch_reports": [
+    {
+      "batch_num": 1,
+      "keywords": [
+        "mamin",
+        "kelapa",
+        "gula",
+        "tepung",
+        "terigu"
+      ],
+      "total_initial": 701,
+      "total_date_valid": 97,
+      "total_final_valid": 29,
+      "total_kemenperin_yes": 0,
+      "details": [
+        {
+          "keyword": "mamin",
+          "initial": 152,
+          "date_valid": 1,
+          "final_valid": 0,
+          "kemenperin_yes": 0,
+          "kemenperin_no": 0
+        },
+        {
+          "keyword": "kelapa",
+          "initial": 167,
+          "date_valid": 59,
+          "final_valid": 22,
+          "kemenperin_yes": 0,
+          "kemenperin_no": 22
+        },
+        {
+          "keyword": "gula",
+          "initial": 101,
+          "date_valid": 18,
+          "final_valid": 4,
+          "kemenperin_yes": 0,
+          "kemenperin_no": 4
+        },
+        {
+          "keyword": "tepung",
+          "initial": 133,
+          "date_valid": 9,
+          "final_valid": 1,
+          "kemenperin_yes": 0,
+          "kemenperin_no": 1
+        },
+        {
+          "keyword": "terigu",
+          "initial": 148,
+          "date_valid": 10,
+          "final_valid": 2,
+          "kemenperin_yes": 0,
+          "kemenperin_no": 2
+        }
+      ]
+    },
+    {
+      "batch_num": 2,
+      "keywords": [
+        "tapioka",
+        "sagu",
+        "rumput laut",
+        "alga",
+        "spirulina"
+      ],
+      "total_initial": 837,
+      "total_date_valid": 53,
+      "total_final_valid": 12,
+      "total_kemenperin_yes": 0,
+      "details": [
+        {
+          "keyword": "tapioka",
+          "initial": 157,
+          "date_valid": 16,
+          "final_valid": 1,
+          "kemenperin_yes": 0,
+          "kemenperin_no": 1
+        },
+        {
+          "keyword": "sagu",
+          "initial": 152,
+          "date_valid": 14,
+          "final_valid": 6,
+          "kemenperin_yes": 0,
+          "kemenperin_no": 6
+        },
+        {
+          "keyword": "rumput laut",
+          "initial": 185,
+          "date_valid": 19,
+          "final_valid": 5,
+          "kemenperin_yes": 0,
+          "kemenperin_no": 5
+        },
+        {
+          "keyword": "alga",
+          "initial": 170,
+          "date_valid": 4,
+          "final_valid": 0,
+          "kemenperin_yes": 0,
+          "kemenperin_no": 0
+        },
+        {
+          "keyword": "spirulina",
+          "initial": 173,
+          "date_valid": 0,
+          "final_valid": 0,
+          "kemenperin_yes": 0,
+          "kemenperin_no": 0
+        }
+      ]
+    },
+    {
+      "batch_num": 3,
+      "keywords": [
+        "olahan daging",
+        "mi instan",
+        "ikan kaleng",
+        "makanan kemasan",
+        "biskuit"
+      ],
+      "total_initial": 819,
+      "total_date_valid": 70,
+      "total_final_valid": 2,
+      "total_kemenperin_yes": 0,
+      "details": [
+        {
+          "keyword": "olahan daging",
+          "initial": 153,
+          "date_valid": 10,
+          "final_valid": 0,
+          "kemenperin_yes": 0,
+          "kemenperin_no": 0
+        },
+        {
+          "keyword": "mi instan",
+          "initial": 158,
+          "date_valid": 12,
+          "final_valid": 1,
+          "kemenperin_yes": 0,
+          "kemenperin_no": 1
+        },
+        {
+          "keyword": "ikan kaleng",
+          "initial": 162,
+          "date_valid": 9,
+          "final_valid": 0,
+          "kemenperin_yes": 0,
+          "kemenperin_no": 0
+        },
+        {
+          "keyword": "makanan kemasan",
+          "initial": 183,
+          "date_valid": 26,
+          "final_valid": 0,
+          "kemenperin_yes": 0,
+          "kemenperin_no": 0
+        },
+        {
+          "keyword": "biskuit",
+          "initial": 163,
+          "date_valid": 13,
+          "final_valid": 1,
+          "kemenperin_yes": 0,
+          "kemenperin_no": 1
+        }
+      ]
+    },
+    {
+      "batch_num": 4,
+      "keywords": [
+        "pulp",
+        "mebel",
+        "furniture",
+        "atsiri",
+        "karet"
+      ],
+      "total_initial": 800,
+      "total_date_valid": 143,
+      "total_final_valid": 34,
+      "total_kemenperin_yes": 0,
+      "details": [
+        {
+          "keyword": "pulp",
+          "initial": 173,
+          "date_valid": 14,
+          "final_valid": 4,
+          "kemenperin_yes": 0,
+          "kemenperin_no": 4
+        },
+        {
+          "keyword": "mebel",
+          "initial": 141,
+          "date_valid": 64,
+          "final_valid": 7,
+          "kemenperin_yes": 0,
+          "kemenperin_no": 7
+        },
+        {
+          "keyword": "furniture",
+          "initial": 130,
+          "date_valid": 24,
+          "final_valid": 8,
+          "kemenperin_yes": 0,
+          "kemenperin_no": 8
+        },
+        {
+          "keyword": "atsiri",
+          "initial": 182,
+          "date_valid": 13,
+          "final_valid": 2,
+          "kemenperin_yes": 0,
+          "kemenperin_no": 2
+        },
+        {
+          "keyword": "karet",
+          "initial": 174,
+          "date_valid": 28,
+          "final_valid": 13,
+          "kemenperin_yes": 0,
+          "kemenperin_no": 13
+        }
+      ]
+    },
+    {
+      "batch_num": 5,
+      "keywords": [
+        "kayu lapis",
+        "hasil tembakau",
+        "kakao",
+        "cokelat",
+        "minuman beralkohol"
+      ],
+      "total_initial": 831,
+      "total_date_valid": 226,
+      "total_final_valid": 24,
+      "total_kemenperin_yes": 1,
+      "details": [
+        {
+          "keyword": "kayu lapis",
+          "initial": 186,
+          "date_valid": 28,
+          "final_valid": 0,
+          "kemenperin_yes": 0,
+          "kemenperin_no": 0
+        },
+        {
+          "keyword": "hasil tembakau",
+          "initial": 179,
+          "date_valid": 46,
+          "final_valid": 6,
+          "kemenperin_yes": 1,
+          "kemenperin_no": 5
+        },
+        {
+          "keyword": "kakao",
+          "initial": 170,
+          "date_valid": 34,
+          "final_valid": 8,
+          "kemenperin_yes": 0,
+          "kemenperin_no": 8
+        },
+        {
+          "keyword": "cokelat",
+          "initial": 149,
+          "date_valid": 74,
+          "final_valid": 5,
+          "kemenperin_yes": 0,
+          "kemenperin_no": 5
+        },
+        {
+          "keyword": "minuman beralkohol",
+          "initial": 147,
+          "date_valid": 44,
+          "final_valid": 5,
+          "kemenperin_yes": 0,
+          "kemenperin_no": 5
+        }
+      ]
+    },
+    {
+      "batch_num": 6,
+      "keywords": [
+        "minuman berpemanis",
+        "nikotin",
+        "tar",
+        "teh",
+        "susu"
+      ],
+      "total_initial": 764,
+      "total_date_valid": 105,
+      "total_final_valid": 7,
+      "total_kemenperin_yes": 0,
+      "details": [
+        {
+          "keyword": "minuman berpemanis",
+          "initial": 148,
+          "date_valid": 5,
+          "final_valid": 0,
+          "kemenperin_yes": 0,
+          "kemenperin_no": 0
+        },
+        {
+          "keyword": "nikotin",
+          "initial": 177,
+          "date_valid": 20,
+          "final_valid": 7,
+          "kemenperin_yes": 0,
+          "kemenperin_no": 7
+        },
+        {
+          "keyword": "tar",
+          "initial": 159,
+          "date_valid": 5,
+          "final_valid": 0,
+          "kemenperin_yes": 0,
+          "kemenperin_no": 0
+        },
+        {
+          "keyword": "teh",
+          "initial": 137,
+          "date_valid": 29,
+          "final_valid": 0,
+          "kemenperin_yes": 0,
+          "kemenperin_no": 0
+        },
+        {
+          "keyword": "susu",
+          "initial": 143,
+          "date_valid": 46,
+          "final_valid": 0,
+          "kemenperin_yes": 0,
+          "kemenperin_no": 0
+        }
+      ]
+    },
+    {
+      "batch_num": 7,
+      "keywords": [
+        "amdk",
+        "air minum dalam kemasan",
+        "galon guna ulang",
+        "kopi",
+        "cpo"
+      ],
+      "total_initial": 868,
+      "total_date_valid": 137,
+      "total_final_valid": 0,
+      "total_kemenperin_yes": 0,
+      "details": [
+        {
+          "keyword": "amdk",
+          "initial": 183,
+          "date_valid": 6,
+          "final_valid": 0,
+          "kemenperin_yes": 0,
+          "kemenperin_no": 0
+        },
+        {
+          "keyword": "air minum dalam kemasan",
+          "initial": 179,
+          "date_valid": 18,
+          "final_valid": 0,
+          "kemenperin_yes": 0,
+          "kemenperin_no": 0
+        },
+        {
+          "keyword": "galon guna ulang",
+          "initial": 167,
+          "date_valid": 6,
+          "final_valid": 0,
+          "kemenperin_yes": 0,
+          "kemenperin_no": 0
+        },
+        {
+          "keyword": "kopi",
+          "initial": 164,
+          "date_valid": 91,
+          "final_valid": 0,
+          "kemenperin_yes": 0,
+          "kemenperin_no": 0
+        },
+        {
+          "keyword": "cpo",
+          "initial": 175,
+          "date_valid": 16,
+          "final_valid": 0,
+          "kemenperin_yes": 0,
+          "kemenperin_no": 0
+        }
+      ]
+    },
+    {
+      "batch_num": 8,
+      "keywords": [
+        "minyak sawit",
+        "pome",
+        "fame",
+        "biodiesel",
+        "bioethanol",
+        "pakan ternak"
+      ],
+      "total_initial": 1062,
+      "total_date_valid": 136,
+      "total_final_valid": 0,
+      "total_kemenperin_yes": 0,
+      "details": [
+        {
+          "keyword": "minyak sawit",
+          "initial": 180,
+          "date_valid": 31,
+          "final_valid": 0,
+          "kemenperin_yes": 0,
+          "kemenperin_no": 0
+        },
+        {
+          "keyword": "pome",
+          "initial": 169,
+          "date_valid": 1,
+          "final_valid": 0,
+          "kemenperin_yes": 0,
+          "kemenperin_no": 0
+        },
+        {
+          "keyword": "fame",
+          "initial": 173,
+          "date_valid": 5,
+          "final_valid": 0,
+          "kemenperin_yes": 0,
+          "kemenperin_no": 0
+        },
+        {
+          "keyword": "biodiesel",
+          "initial": 197,
+          "date_valid": 26,
+          "final_valid": 0,
+          "kemenperin_yes": 0,
+          "kemenperin_no": 0
+        },
+        {
+          "keyword": "bioethanol",
+          "initial": 177,
+          "date_valid": 42,
+          "final_valid": 0,
+          "kemenperin_yes": 0,
+          "kemenperin_no": 0
+        },
+        {
+          "keyword": "pakan ternak",
+          "initial": 166,
+          "date_valid": 31,
+          "final_valid": 0,
+          "kemenperin_yes": 0,
+          "kemenperin_no": 0
+        }
+      ]
+    }
+  ],
+  "five_big_stats": [
+    {
+      "keyword": "industri agro",
+      "initial": 166,
+      "date_valid": 24,
+      "final_valid": 0,
+      "kemenperin_yes": 0,
+      "kemenperin_no": 0
+    },
+    {
+      "keyword": "makanan dan minuman",
+      "initial": 163,
+      "date_valid": 36,
+      "final_valid": 0,
+      "kemenperin_yes": 0,
+      "kemenperin_no": 0
+    },
+    {
+      "keyword": "sawit",
+      "initial": 181,
+      "date_valid": 57,
+      "final_valid": 0,
+      "kemenperin_yes": 0,
+      "kemenperin_no": 0
+    },
+    {
+      "keyword": "kertas",
+      "initial": 169,
+      "date_valid": 36,
+      "final_valid": 0,
+      "kemenperin_yes": 0,
+      "kemenperin_no": 0
+    },
+    {
+      "keyword": "rokok",
+      "initial": 188,
+      "date_valid": 82,
+      "final_valid": 0,
+      "kemenperin_yes": 0,
+      "kemenperin_no": 0
+    }
+  ],
+  "excel_path": "hasil_scrapping\\hasil_scraping_semua_keyword.xlsx"
+}

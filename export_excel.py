@@ -30,12 +30,49 @@ def save_to_excel(records: list[dict], output_path: str):
         "Spokesperson 2",
         "Unit Eselon",
         "Terkait Kemenperin",
+        "Keywords",
     ]
-    df = pd.DataFrame(records, columns=columns)
+    df = pd.DataFrame(records)
+    if not df.empty:
+        # Dukung key 'Keyword' atau 'keyword' jika 'Keywords' belum ada
+        if "Keywords" not in df.columns:
+            if "Keyword" in df.columns:
+                df["Keywords"] = df["Keyword"]
+            elif "keyword" in df.columns:
+                df["Keywords"] = df["keyword"]
+            else:
+                df["Keywords"] = ""
+        for col in columns:
+            if col not in df.columns:
+                df[col] = ""
+        df = df[columns]
+    else:
+        df = pd.DataFrame(columns=columns)
 
     # Konversi field Tanggal ke datetime Excel tanpa timezone
     if "Tanggal" in df.columns and not df.empty:
-        df["Tanggal"] = pd.to_datetime(df["Tanggal"], errors="coerce", utc=True).dt.tz_localize(None)
+        import dateparser
+
+        def _parse_date(val):
+            if pd.isna(val) or not val:
+                return None
+            if isinstance(val, pd.Timestamp):
+                return val.tz_localize(None) if val.tzinfo else val
+            try:
+                dt = pd.to_datetime(val, utc=True)
+                if not pd.isna(dt):
+                    return dt.tz_localize(None) if dt.tzinfo else dt
+            except Exception:
+                pass
+            try:
+                parsed = dateparser.parse(str(val))
+                if parsed:
+                    return pd.Timestamp(parsed)
+            except Exception:
+                pass
+            return None
+
+        df["Tanggal"] = df["Tanggal"].apply(_parse_date)
 
     def _write_excel(target_writer):
         df.to_excel(target_writer, index=False, sheet_name="Berita")
@@ -44,10 +81,8 @@ def save_to_excel(records: list[dict], output_path: str):
         # Format header bold dan lebar kolom auto-fit
         for col_idx, col_name in enumerate(columns, start=1):
             ws.cell(row=1, column=col_idx).font = Font(bold=True)
-            max_len = max(
-                df[col_name].astype(str).map(len).max() if not df.empty else 0,
-                len(col_name)
-            )
+            col_lengths = [len(str(v)) for v in df[col_name].dropna() if str(v).strip()]
+            max_len = max(max(col_lengths) if col_lengths else 0, len(col_name))
             ws.column_dimensions[get_column_letter(col_idx)].width = min(max_len + 4, 60)
 
         # Format kolom Tanggal sebagai Date Excel

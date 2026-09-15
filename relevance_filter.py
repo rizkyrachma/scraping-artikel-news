@@ -112,6 +112,41 @@ def is_promotional(title: str = "", text: str = "") -> bool:
     return any_word_boundary_match(PROMO_WORDS, combined)
 
 
+# Kata kunci indikator lowongan pekerjaan / karir
+JOB_TITLE_KEYWORDS = [
+    "lowongan", "loker", "dibutuhkan", "we are hiring", "open recruitment",
+    "job vacancy", "buka lowongan", "pelamar kerja", "drafter", "quality control",
+    "workshop furniture", "marketing furniture", "staff admin", "graphic design",
+]
+
+JOB_CONTENT_KEYWORDS = [
+    "kualifikasi:", "persyaratan:", "job description", "deskripsi pekerjaan",
+    "tanggung jawab pekerjaan", "rentang gaji", "kirim cv", "lamar pekerjaan",
+    "apply now", "cara melamar",
+]
+
+
+def is_job_posting(title: str = "", text: str = "") -> bool:
+    """
+    Mendeteksi apakah artikel merupakan materi lowongan pekerjaan / rekrutmen lowongan:
+    - Judul memuat indikator lowongan / posisi kerja
+    - Atau teks awal memuat pola instruksi lamaran kerja / kualifikasi pelamar
+    """
+    title_lower = (title or "").lower()
+    snippet = (text[:1000] if text else "").lower()
+
+    if any(matches_word_boundary(w, title_lower) for w in JOB_TITLE_KEYWORDS):
+        return True
+
+    if any(kw in snippet for kw in JOB_CONTENT_KEYWORDS):
+        if any(matches_word_boundary(w, title_lower) for w in ["lowongan", "loker", "rekrutmen", "karir", "career"]):
+            return True
+        if any(matches_word_boundary(w, snippet) for w in ["lowongan", "loker", "dibutuhkan", "hiring"]):
+            return True
+
+    return False
+
+
 # Frasa dengan makna ganda yang bukan merujuk pada komoditas/industri kertas
 KERTAS_EXCLUDE_PHRASES = [
     "kertas kerja",
@@ -137,22 +172,18 @@ def is_kertas_context_valid(title: str, text: str) -> bool:
     """
     Memvalidasi apakah artikel benar-benar membahas kertas sebagai komoditas industri,
     bukan 'kertas kerja' (dokumen penilaian/audit/akuntansi) atau idiom 'di atas kertas'.
-    Mengembalikan False jika frasa non-industri mendominasi kemunculan kata 'kertas'
-    dan tidak ada konteks industri spesifik.
     """
     combined = f"{title} {text}"
     raw_kertas = len(re.findall(r"\bkertas\b", combined, flags=re.IGNORECASE))
     if raw_kertas == 0:
         return True
 
-    # Hitung kemunculan frasa non-industri
     excluded_count = sum(
         len(re.findall(rf"\b{re.escape(phrase)}\b", combined, flags=re.IGNORECASE))
         for phrase in KERTAS_EXCLUDE_PHRASES
     )
     standalone_kertas = raw_kertas - excluded_count
 
-    # Cek apakah ada istilah industri kertas yang jelas
     has_industry_context = any(
         re.search(rf"\b{re.escape(term)}\b", combined, flags=re.IGNORECASE)
         for term in KERTAS_INDUSTRY_TERMS
@@ -161,10 +192,90 @@ def is_kertas_context_valid(title: str, text: str) -> bool:
     if has_industry_context:
         return True
 
-    # Jika didominasi oleh kertas kerja / di atas kertas dan tidak ada konteks industri
     if standalone_kertas <= 0 or excluded_count >= standalone_kertas:
         return False
 
+    return True
+
+
+KELAPA_EXCLUDE_PHRASES = ["kelapa gading"]
+KELAPA_INDUSTRY_TERMS = [
+    "pohon kelapa", "minyak kelapa", "kelapa parut", "kopra", "sabut kelapa",
+    "perkebunan kelapa", "petani kelapa", "olahan kelapa", "batok kelapa",
+    "air kelapa", "hilirisasi kelapa", "kelapa kopyor", "tunas kelapa",
+]
+
+
+def is_kelapa_context_valid(title: str, text: str) -> bool:
+    """
+    Memvalidasi keyword 'kelapa' agar tidak tercampur nama lokasi ('Kelapa Gading')
+    atau spam judi/slot ('bet tunas kelapa').
+    """
+    combined = f"{title} {text}".lower()
+    if "bet tunas kelapa" in combined or "situs resmi indonesia" in combined:
+        return False
+
+    if "kelapa gading" in combined:
+        has_industry = any(matches_word_boundary(term, combined) for term in KELAPA_INDUSTRY_TERMS)
+        if not has_industry:
+            return False
+    return True
+
+
+KARET_EXCLUDE_PHRASES = ["jam karet", "perahu karet", "ban karet", "gelang karet", "celana karet"]
+KARET_INDUSTRY_TERMS = [
+    "kebun karet", "perkebunan karet", "petani karet", "harga karet",
+    "ekspor karet", "industri karet", "sadap karet", "getah karet",
+    "lateks", "apkarindo", "gabungan perusahaan karet", "produksi karet",
+    "tanaman karet", "pohon karet", "kayu karet",
+]
+
+
+def is_karet_context_valid(title: str, text: str) -> bool:
+    """
+    Memvalidasi keyword 'karet' agar tidak tercampur idiom 'jam karet',
+    kecelakaan kapal / evakuasi perahu karet, atau aksesoris non-industri.
+    """
+    combined = f"{title} {text}".lower()
+    has_industry = any(matches_word_boundary(term, combined) for term in KARET_INDUSTRY_TERMS)
+    if has_industry:
+        return True
+
+    title_lower = (title or "").lower()
+    if any(w in title_lower for w in ["jam karet", "kapal", "km ", "tenggelam", "perahu"]):
+        return False
+
+    raw_karet = len(re.findall(r"\bkaret\b", combined, flags=re.IGNORECASE))
+    if raw_karet == 0:
+        return True
+
+    excluded_count = sum(
+        len(re.findall(rf"\b{re.escape(phrase)}\b", combined, flags=re.IGNORECASE))
+        for phrase in KARET_EXCLUDE_PHRASES
+    )
+    if raw_karet - excluded_count <= 0:
+        return False
+
+    return True
+
+
+KAKAO_EXCLUDE_PHRASES = ["kakao entertainment", "kakao page", "kakaotalk", "kakao corp", "the boyz", "label 78"]
+KAKAO_INDUSTRY_TERMS = [
+    "kebun kakao", "perkebunan kakao", "petani kakao", "biji kakao",
+    "olahan kakao", "harga kakao", "produksi kakao", "ekspor kakao",
+    "industri kakao", "pohon kakao", "cokelat",
+]
+
+
+def is_kakao_context_valid(title: str, text: str) -> bool:
+    """
+    Memvalidasi keyword 'kakao' agar tidak mencocokkan entitas hiburan / K-pop Korea (Kakao Corp / Entertainment).
+    """
+    combined = f"{title} {text}".lower()
+    if any(phrase in combined for phrase in KAKAO_EXCLUDE_PHRASES):
+        has_industry = any(matches_word_boundary(term, combined) for term in KAKAO_INDUSTRY_TERMS)
+        if not has_industry:
+            return False
     return True
 
 
@@ -194,6 +305,15 @@ def is_keyword_primary_topic(title: str, text: str, keyword: str, min_content_oc
 
     # Khusus keyword kertas: buang jika didominasi makna dokumen non-industri ("kertas kerja" / "di atas kertas")
     if kw_lower == "kertas" and not is_kertas_context_valid(title, text):
+        return False
+    # Khusus keyword kelapa: buang jika terkait LRT Kelapa Gading / spam judi
+    if kw_lower == "kelapa" and not is_kelapa_context_valid(title, text):
+        return False
+    # Khusus keyword karet: buang jika idiom jam karet / evakuasi kecelakaan laut
+    if kw_lower == "karet" and not is_karet_context_valid(title, text):
+        return False
+    # Khusus keyword kakao: buang jika terkait Kakao Entertainment K-Pop
+    if kw_lower == "kakao" and not is_kakao_context_valid(title, text):
         return False
 
     search_terms = [keyword]
