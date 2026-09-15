@@ -1,0 +1,10 @@
+feedparser
+trafilatura
+newspaper3k
+googlenewsdecoder
+requests
+rapidfuzz
+transformers
+torch
+pandas
+openpyxl
