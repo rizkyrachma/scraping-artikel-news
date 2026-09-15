@@ -112,6 +112,62 @@ def is_promotional(title: str = "", text: str = "") -> bool:
     return any_word_boundary_match(PROMO_WORDS, combined)
 
 
+# Frasa dengan makna ganda yang bukan merujuk pada komoditas/industri kertas
+KERTAS_EXCLUDE_PHRASES = [
+    "kertas kerja",
+    "di atas kertas",
+]
+
+KERTAS_INDUSTRY_TERMS = [
+    "pabrik kertas",
+    "industri kertas",
+    "bahan baku kertas",
+    "produksi kertas",
+    "produsen kertas",
+    "ekspor kertas",
+    "impor kertas",
+    "kertas bekas",
+    "limbah kertas",
+    "daur ulang kertas",
+    "pulp",
+]
+
+
+def is_kertas_context_valid(title: str, text: str) -> bool:
+    """
+    Memvalidasi apakah artikel benar-benar membahas kertas sebagai komoditas industri,
+    bukan 'kertas kerja' (dokumen penilaian/audit/akuntansi) atau idiom 'di atas kertas'.
+    Mengembalikan False jika frasa non-industri mendominasi kemunculan kata 'kertas'
+    dan tidak ada konteks industri spesifik.
+    """
+    combined = f"{title} {text}"
+    raw_kertas = len(re.findall(r"\bkertas\b", combined, flags=re.IGNORECASE))
+    if raw_kertas == 0:
+        return True
+
+    # Hitung kemunculan frasa non-industri
+    excluded_count = sum(
+        len(re.findall(rf"\b{re.escape(phrase)}\b", combined, flags=re.IGNORECASE))
+        for phrase in KERTAS_EXCLUDE_PHRASES
+    )
+    standalone_kertas = raw_kertas - excluded_count
+
+    # Cek apakah ada istilah industri kertas yang jelas
+    has_industry_context = any(
+        re.search(rf"\b{re.escape(term)}\b", combined, flags=re.IGNORECASE)
+        for term in KERTAS_INDUSTRY_TERMS
+    )
+
+    if has_industry_context:
+        return True
+
+    # Jika didominasi oleh kertas kerja / di atas kertas dan tidak ada konteks industri
+    if standalone_kertas <= 0 or excluded_count >= standalone_kertas:
+        return False
+
+    return True
+
+
 def count_keyword_occurrences(text: str, keyword: str) -> int:
     """
     Menghitung jumlah kemunculan keyword dalam teks menggunakan word boundary (\\b...\\b).
@@ -134,12 +190,17 @@ def is_keyword_primary_topic(title: str, text: str, keyword: str, min_content_oc
     if not keyword:
         return False
 
+    kw_lower = keyword.lower()
+
+    # Khusus keyword kertas: buang jika didominasi makna dokumen non-industri ("kertas kerja" / "di atas kertas")
+    if kw_lower == "kertas" and not is_kertas_context_valid(title, text):
+        return False
+
     search_terms = [keyword]
     OFFICIAL_NAMES = [
         "agus gumiwang", "putu juli ardika", "merrijantij punguan",
         "dyan garneta", "rr citra rapati", "krisna septiningrum",
     ]
-    kw_lower = keyword.lower()
     for name in OFFICIAL_NAMES:
         if name in kw_lower and name != kw_lower:
             search_terms.append(name)

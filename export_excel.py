@@ -29,6 +29,7 @@ def save_to_excel(records: list[dict], output_path: str):
         "Spokesperson 1",
         "Spokesperson 2",
         "Unit Eselon",
+        "Terkait Kemenperin",
     ]
     df = pd.DataFrame(records, columns=columns)
 

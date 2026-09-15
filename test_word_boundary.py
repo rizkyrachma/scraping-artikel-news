@@ -249,6 +249,32 @@ def test_is_kemenperin_related():
     print("  [PASS] Word boundary protection mencegah substring 'semenperingatan' mencocokkan 'menperin'")
 
 
+def test_kertas_context_filter():
+    from relevance_filter import is_kertas_context_valid, is_keyword_primary_topic
+    print("\n=== TEST 10: FILTER MAKNA GANDA KERTAS (KERTAS KERJA / DI ATAS KERTAS) ===")
+
+    # 1. Kertas kerja dokumen/penilaian (DJKN) -> Harus False
+    t1 = "Artikel Kanwil DJKN Jawa Barat"
+    c1 = "Kertas kerja penilaian merupakan dokumen penting bagi penilai pemerintah. Kertas kerja ini memuat analisis."
+    assert not is_kertas_context_valid(t1, c1)
+    assert not is_keyword_primary_topic(t1, c1, "kertas")
+    print("  [PASS] Dokumen 'kertas kerja' berhasil dibuang (bukan komoditas kertas)")
+
+    # 2. Idiom 'di atas kertas' (Kompas/Suara) -> Harus False
+    t2 = "Standar Keselamatan Jangan Cuma di Atas Kertas"
+    c2 = "Pemerintah harus memastikan implementasi lapangan tidak hanya di atas kertas."
+    assert not is_kertas_context_valid(t2, c2)
+    assert not is_keyword_primary_topic(t2, c2, "kertas")
+    print("  [PASS] Idiom 'di atas kertas' berhasil dibuang")
+
+    # 3. Industri/komoditas kertas asli -> Harus True
+    t3 = "Pabrik Kertas Tjiwi Kimia Perluas Pangsa Ekspor"
+    c3 = "Produksi kertas dan bahan baku kertas terus ditingkatkan untuk memenuhi permintaan pasar global."
+    assert is_kertas_context_valid(t3, c3)
+    assert is_keyword_primary_topic(t3, c3, "kertas")
+    print("  [PASS] Berita industri komoditas kertas asli berhasil LOLOS")
+
+
 if __name__ == "__main__":
     test_word_boundary_isolation()
     test_entity_mapper_word_boundary()
@@ -259,6 +285,7 @@ if __name__ == "__main__":
     test_clean_title_suffix()
     test_date_filter()
     test_is_kemenperin_related()
+    test_kertas_context_filter()
     print("\n" + "=" * 50)
     print("SEMUA UNIT TEST BERHASIL LULUS 100%!")
     print("=" * 50)

@@ -12,7 +12,7 @@ Baca `DOKUMEN_TEKNIS_PIPELINE_SCRAPING_BERITA.md` dulu sebelum mulai coding. Dok
 2. Implementasi harus modular sesuai struktur folder di dokumen teknis (`config.py`, `query_builder.py`, `fetch_news.py`, `extract_content.py`, `entity_mapper.py`, `sentiment.py`, `export_excel.py`, `main.py`). Jangan menggabungkan semua logika ke satu file besar.
 3. Setiap fungsi yang melakukan HTTP request harus punya delay/backoff, jangan spam request ke situs media secara paralel tanpa batas.
 4. Filter domain harus dilakukan dua kali: sekali di query (Google dork), sekali lagi di kode Python setelah hasil didapat (post-filter dengan `urlparse`). Jangan hanya mengandalkan salah satu.
-5. Kolom Excel wajib persis: `Tanggal`, `Title`, `Link Website`, `Media Name`, `Tone`, `Spokesperson 1`, `Spokesperson 2`, `Unit Eselon`. Urutan kolom harus konsisten dengan urutan ini.
+5. Kolom Excel wajib persis: `Tanggal`, `Title`, `Link Website`, `Media Name`, `Tone`, `Spokesperson 1`, `Spokesperson 2`, `Unit Eselon`, `Terkait Kemenperin`. Urutan kolom harus konsisten dengan urutan ini.
 6. Sebelum mengklaim sentiment classifier "akurat", jalankan validasi manual pada sample kecil (50-100 artikel) dan laporkan hasilnya. Jangan asumsikan akurasi model publik tanpa pengecekan.
 7. Sumber data spokesperson sekarang adalah `keyword_nama.xlsx` (bukan lagi `keyword_nama.txt`), dengan dua kolom terstruktur: `nama` dan `jabatan`. Baca file ini dengan `pandas.read_excel()`. Kalau ke depannya ada file baru lagi yang menggantikan ini, update baris ini juga supaya tidak ada modul yang masih merujuk ke sumber data yang sudah tidak dipakai.
 8. Setiap perubahan besar pada strategi query/filtering harus dicatat sebagai perubahan di bagian "Riwayat Perubahan" di bawah, supaya iterasi berikutnya (manusia atau agent lain) tahu konteksnya.
@@ -49,7 +49,10 @@ Catatan: `openpyxl` dipakai dua arah, sebagai engine baca `keyword_nama.xlsx` (l
 - Pemisahan `Media Name` dari `Title` dan penambahan kolom `Media Name` di skema ekspor Excel (di antara `Link Website` dan `Tone`). Ekstraksi nama media mengandalkan field terstruktur `entry.source.title` dari feedparser, dan suffix ` - <Media Name>` pada raw title dibersihkan tanpa rsplit sembarangan, menjaga nama media yang mengandung tanda hubung (seperti 'DINAS PERPUSTAKAAN DAN KEARSIPAN - Kabupaten Sidoarjo') tetap utuh.
 - Pengalihan direktori penyimpanan output Excel ke folder `hasil_scrapping/` (auto-create dengan `os.makedirs(exist_ok=True)`), tidak lagi mengotori direktori root.
 - Penambahan filter tanggal publikasi dinamis (`get_date_range()` dan `is_published_yesterday()` di `config.py` dan `main.py`): artikel yang lolos ekspor hanya yang tanggal rilisnya persis sama dengan 'kemarin' (H-1 dari hari eksekusi) untuk menyaring arsip dokumen lama di domain pemerintah (.go.id).
-- (isi oleh agent/user setiap ada perubahan arsitektur signifikan berikutnya)
+- Penerapan OPSI B untuk sinyal Kemenperin: `is_kemenperin_related()` tidak lagi membuang artikel, melainkan berfungsi sebagai penanda/flagging dengan kolom baru `Terkait Kemenperin` ("Ya" / "Tidak") di akhir kolom Excel (`export_excel.py`). Seluruh berita industri tanggal kemarin tetap tersimpan lengkap.
+- Penambahan penanganan timeout toleran 20 detik dan retry 2x khusus untuk domain `.go.id` di `extract_content.py` (`fetch_gov_html_with_retry()`) untuk mengatasi server portal daerah/pemerintah yang lambat merespons.
+- Penanganan limit 100 entri Google News RSS: Query media (`build_media_query`) dan query pemerintah (`build_gov_query`) dijalankan terpisah, masing-masing membawa hingga 100 entri (total hingga ~200 entri unik sebelum dedup URL). Keterbatasan 100 entri per query adalah batasan arsitektur RSS Google News.
+
 
 
 

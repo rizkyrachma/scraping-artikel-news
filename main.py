@@ -54,6 +54,7 @@ from relevance_filter import (
     is_industry_policy_topic,
     is_kemenperin_related,
     get_kemenperin_signal,
+    is_kertas_context_valid,
 )
 from entity_mapper import find_spokespersons
 from sentiment import classify_tone
@@ -112,7 +113,13 @@ def filter_valid_articles(
             discarded.append(item_copy)
             continue
 
-        # 2. Filter frekuensi keyword
+        # 2. Filter frekuensi keyword & makna ganda
+        if keyword and keyword.lower() == "kertas" and not is_kertas_context_valid(title, text):
+            item_copy = dict(item)
+            item_copy["discard_reason"] = "kertas_kerja_or_idiom"
+            discarded.append(item_copy)
+            continue
+
         if keyword and not is_keyword_primary_topic(title, text, keyword):
             item_copy = dict(item)
             item_copy["discard_reason"] = "keyword_not_primary_topic"
@@ -181,10 +188,15 @@ def process_single_keyword(
     init_count = len(candidates)
     print(f"      -> {init_count} kandidat unik setelah filter domain & URL dedup.", flush=True)
 
+    # 1. Filter tanggal dari metadata RSS (HANYA KEMARIN) sebelum ekstraksi web
+    yesterday_candidates = [c for c in candidates if is_published_yesterday(c.get("published", ""))]
+    date_dropped_count = init_count - len(yesterday_candidates)
+    print(f"      -> {len(yesterday_candidates)} kandidat tanggal kemarin (Gugur tanggal arsip lama: {date_dropped_count}).", flush=True)
+
     extracted = []
-    if candidates:
+    if yesterday_candidates:
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
-            futures = [executor.submit(extract_one_article, item) for item in candidates]
+            futures = [executor.submit(extract_one_article, item) for item in yesterday_candidates]
             for f in as_completed(futures):
                 extracted.append(f.result())
 
@@ -195,49 +207,40 @@ def process_single_keyword(
         r = d.get("discard_reason", "other")
         reasons[r] = reasons.get(r, 0) + 1
 
-    # Filter tanggal: HANYA KEMARIN
-    date_valid = []
-    date_dropped = []
+    # 2. Flagging institusi: Terkait Kemenperin (Eksplisit / Implisit) - OPSI B (BUKAN BUANG)
+    kemenperin_yes_count = 0
+    flagged_articles = []
     for item in content_valid:
-        pub = item.get("published", "")
-        if is_published_yesterday(pub):
-            date_valid.append(item)
-        else:
-            date_dropped.append(item)
-
-    # Filter institusi: HANYA KEMENPERIN RELATED (Eksplisit / Implisit)
-    kemenperin_valid = []
-    kemenperin_dropped = []
-    for item in date_valid:
         is_rel, sig_type, sig_det = get_kemenperin_signal(
             item.get("title", ""), item.get("text", ""), name_map
         )
+        item_copy = dict(item)
+        item_copy["terkait_kemenperin"] = "Ya" if is_rel else "Tidak"
+        item_copy["kemenperin_signal_type"] = sig_type
+        item_copy["kemenperin_signal_detail"] = sig_det
+        flagged_articles.append(item_copy)
         if is_rel:
-            item_copy = dict(item)
-            item_copy["kemenperin_signal_type"] = sig_type
-            item_copy["kemenperin_signal_detail"] = sig_det
-            kemenperin_valid.append(item_copy)
-        else:
-            item_copy = dict(item)
-            item_copy["discard_reason"] = "not_kemenperin_related"
-            kemenperin_dropped.append(item_copy)
+            kemenperin_yes_count += 1
 
+    kemenperin_no_count = len(content_valid) - kemenperin_yes_count
     print(
-        f"      -> Konten Valid: {len(content_valid)} | Lolos Tanggal (Kemarin): {len(date_valid)} (Gugur: {len(date_dropped)}) | "
-        f"FINAL Lolos Kemenperin: {len(kemenperin_valid)} (Gugur Bukan Kemenperin: {len(kemenperin_dropped)})",
+        f"      -> Final Valid (setelah filter konten): {len(content_valid)} | "
+        f"Terkait Kemenperin: Ya={kemenperin_yes_count} / Tidak={kemenperin_no_count}",
         flush=True,
     )
 
     return {
         "keyword": keyword,
         "initial_candidates": init_count,
+        "date_valid_count": len(yesterday_candidates),
+        "date_dropped_count": date_dropped_count,
         "content_valid_count": len(content_valid),
-        "date_dropped_count": len(date_dropped),
-        "kemenperin_dropped_count": len(kemenperin_dropped),
-        "valid_articles": kemenperin_valid,
-        "discarded_count": len(discarded) + len(date_dropped) + len(kemenperin_dropped),
+        "kemenperin_yes_count": kemenperin_yes_count,
+        "valid_articles": flagged_articles,
+        "discarded_count": len(discarded) + date_dropped_count,
         "discard_reasons": reasons,
     }
+
 
 
 def finalize_and_export(
@@ -281,6 +284,10 @@ def finalize_and_export(
         text = art.get("text", "")
         sp1, sp2, unit = find_spokespersons(text, name_map)
         tone = classify_tone(text)
+        is_rel, sig_type, sig_det = get_kemenperin_signal(
+            art.get("title", ""), text, name_map
+        )
+        terkait_kemenperin = "Ya" if is_rel else "Tidak"
 
         if sp1 or sp2:
             sp_count += 1
@@ -295,6 +302,7 @@ def finalize_and_export(
             "Spokesperson 1": sp1,
             "Spokesperson 2": sp2,
             "Unit Eselon": unit,
+            "Terkait Kemenperin": terkait_kemenperin,
             "Keyword": art.get("keyword", ""),
         })
 
@@ -335,60 +343,41 @@ def run_pipeline(
     raw_results = collect_all(keywords)
     print(f"Kandidat berita setelah domain filter & dedup awal: {len(raw_results)}")
 
-    print(f"Mengekstrak {len(raw_results)} artikel...")
+    # Filter Tanggal: HANYA KEMARIN (sebelum ekstraksi untuk kecepatan)
+    start_date, end_date = get_date_range()
+    print(f"\n[Filter Tanggal] Menyaring artikel tanggal publikasi persis kemarin: {start_date}...")
+    yesterday_candidates = [item for item in raw_results if is_published_yesterday(item.get("published", ""))]
+    date_dropped_count = len(raw_results) - len(yesterday_candidates)
+    print(f"Total sebelum filter tanggal : {len(raw_results)} artikel")
+    print(f"Artikel gugur filter tanggal: {date_dropped_count} artikel")
+    print(f"Artikel lolos filter tanggal (kemarin): {len(yesterday_candidates)} artikel")
+
+    print(f"Mengekstrak {len(yesterday_candidates)} artikel tanggal kemarin...")
     extracted_articles = []
     with ThreadPoolExecutor(max_workers=8) as executor:
-        futures = [executor.submit(extract_one_article, item) for item in raw_results]
+        futures = [executor.submit(extract_one_article, item) for item in yesterday_candidates]
         for f in as_completed(futures):
             extracted_articles.append(f.result())
 
     content_valid, discarded = filter_valid_articles(extracted_articles, min_length=300)
-    print(f"Artikel lolos filter konten: {len(content_valid)} (Dibuang konten: {len(discarded)})")
+    print(f"Artikel lolos filter konten & industri: {len(content_valid)} (Dibuang konten: {len(discarded)})")
 
-    # Filter Tanggal: HANYA KEMARIN
-    start_date, end_date = get_date_range()
-    print(f"\n[Filter Tanggal] Menyaring artikel tanggal publikasi persis kemarin: {start_date}...")
-    date_valid = []
-    date_dropped = []
-    for item in content_valid:
-        pub = item.get("published", "")
-        if is_published_yesterday(pub):
-            date_valid.append(item)
-        else:
-            date_dropped.append(item)
-
-    print(f"Total sebelum filter tanggal : {len(content_valid)} artikel")
-    print(f"Artikel gugur filter tanggal: {len(date_dropped)} artikel")
-    print(f"Artikel lolos filter tanggal (kemarin): {len(date_valid)} artikel")
-
-    # Filter Institusi: HANYA KEMENPERIN RELATED (Eksplisit atau Implisit)
-    print(f"\n[Filter Institusi Kemenperin] Menyaring artikel terkait Kemenperin (Eksplisit / Implisit)...")
-    kemenperin_valid = []
-    kemenperin_dropped = []
-    for item in date_valid:
-        is_rel, sig_type, sig_det = get_kemenperin_signal(
-            item.get("title", ""), item.get("text", ""), name_map
-        )
-        if is_rel:
-            item_copy = dict(item)
-            item_copy["kemenperin_signal_type"] = sig_type
-            item_copy["kemenperin_signal_detail"] = sig_det
-            kemenperin_valid.append(item_copy)
-        else:
-            kemenperin_dropped.append(item)
-
-    print(f"Total sebelum filter institusi : {len(date_valid)} artikel (lolos tanggal kemarin)")
-    print(f"Artikel gugur bukan Kemenperin : {len(kemenperin_dropped)} artikel")
-    print(f"Artikel FINAL lolos Kemenperin : {len(kemenperin_valid)} artikel")
-
+    # Flagging Institusi: Terkait Kemenperin (Eksplisit atau Implisit) - OPSI B
     records = []
     spokesperson_filled = 0
     spokesperson_empty = 0
+    kemenperin_yes_count = 0
 
-    for item in kemenperin_valid:
+    for item in content_valid:
         text = item["text"]
         sp1, sp2, unit = find_spokespersons(text, name_map)
         tone = classify_tone(text)
+        is_rel, sig_type, sig_det = get_kemenperin_signal(
+            item.get("title", ""), text, name_map
+        )
+        terkait_kemenperin = "Ya" if is_rel else "Tidak"
+        if is_rel:
+            kemenperin_yes_count += 1
 
         if sp1 or sp2:
             spokesperson_filled += 1
@@ -404,12 +393,14 @@ def run_pipeline(
             "Spokesperson 1": sp1,
             "Spokesperson 2": sp2,
             "Unit Eselon": unit,
+            "Terkait Kemenperin": terkait_kemenperin,
         })
 
+    print(f"Status Kemenperin: {kemenperin_yes_count} Terkait Kemenperin: Ya | {len(content_valid) - kemenperin_yes_count} Tidak.")
     print(f"Entity Mapping: {spokesperson_filled} artikel memiliki Spokesperson terisi, {spokesperson_empty} kosong.")
     saved_path = save_to_excel(records, output_excel)
     print(f"Selesai. {len(records)} artikel berhasil disimpan ke {saved_path}")
-    return records, len(content_valid), len(date_dropped), len(kemenperin_valid)
+    return records, len(content_valid), date_dropped_count, kemenperin_yes_count
 
 
 def run_batch_pipeline(
@@ -462,7 +453,7 @@ def run_batch_pipeline(
         batch_initial = 0
         batch_content_valid = 0
         batch_date_dropped = 0
-        batch_kemenperin_dropped = 0
+        batch_kemenperin_yes = 0
         batch_final_valid = 0
         batch_kw_stats = []
 
@@ -471,7 +462,7 @@ def run_batch_pipeline(
             batch_initial += res["initial_candidates"]
             batch_content_valid += res["content_valid_count"]
             batch_date_dropped += res["date_dropped_count"]
-            batch_kemenperin_dropped += res.get("kemenperin_dropped_count", 0)
+            batch_kemenperin_yes += res.get("kemenperin_yes_count", 0)
             batch_final_valid += len(res["valid_articles"])
             checkpoint["articles"].extend(res["valid_articles"])
             batch_kw_stats.append({
@@ -479,7 +470,7 @@ def run_batch_pipeline(
                 "initial": res["initial_candidates"],
                 "content_valid": res["content_valid_count"],
                 "date_dropped": res["date_dropped_count"],
-                "kemenperin_dropped": res.get("kemenperin_dropped_count", 0),
+                "kemenperin_yes": res.get("kemenperin_yes_count", 0),
                 "final_valid": len(res["valid_articles"]),
                 "discarded": res["discarded_count"],
                 "reasons": res["discard_reasons"],
@@ -492,7 +483,7 @@ def run_batch_pipeline(
             "total_initial": batch_initial,
             "total_content_valid": batch_content_valid,
             "total_date_dropped": batch_date_dropped,
-            "total_kemenperin_dropped": batch_kemenperin_dropped,
+            "total_kemenperin_yes": batch_kemenperin_yes,
             "total_final_valid": batch_final_valid,
             "details": batch_kw_stats,
         })
@@ -505,13 +496,13 @@ def run_batch_pipeline(
         print(f"Keywords diproses        : {', '.join(current_kws)}", flush=True)
         print(f"Total kandidat awal      : {batch_initial}", flush=True)
         print(f"Gugur filter tanggal     : {batch_date_dropped}", flush=True)
-        print(f"Gugur bukan Kemenperin   : {batch_kemenperin_dropped}", flush=True)
-        print(f"Total final lolos        : {batch_final_valid}", flush=True)
+        print(f"Total final lolos kemarin: {batch_final_valid}", flush=True)
+        print(f"Terkait Kemenperin (Ya)  : {batch_kemenperin_yes} | Tidak: {batch_final_valid - batch_kemenperin_yes}", flush=True)
         print("Rincian per keyword:", flush=True)
         for s in batch_kw_stats:
             print(
-                f"  - '{s['keyword']}': Awal={s['initial']} -> KontenValid={s['content_valid']} -> "
-                f"GugurTanggal={s['date_dropped']} -> GugurBukanKemenperin={s.get('kemenperin_dropped', 0)} -> FINAL={s['final_valid']}",
+                f"  - '{s['keyword']}': Awal={s['initial']} -> LolosKemarin={s['initial'] - s['date_dropped']} -> "
+                f"FINAL={s['final_valid']} (Kemenperin: Ya={s.get('kemenperin_yes', 0)} / Tidak={s['final_valid'] - s.get('kemenperin_yes', 0)})",
                 flush=True,
             )
         print(f"Checkpoint tersimpan ke: {checkpoint_file}", flush=True)
@@ -521,7 +512,10 @@ def run_batch_pipeline(
         print("\nSeluruh batch telah selesai! Melanjutkan ke finalisasi...", flush=True)
         finalize_and_export(checkpoint["articles"], name_map, output_excel=output_excel)
     elif target_batch is not None:
-        print(f"\nBatch {target_batch} selesai diproses. Jalankan batch berikutnya dengan --batch {target_batch + 1} atau --all.", flush=True)
+        batch_out = os.path.join(OUTPUT_DIR, f"hasil_scraping_batch_{target_batch}.xlsx")
+        print(f"\nBatch {target_batch} selesai diproses. Mengekspor hasil batch ke {batch_out}...", flush=True)
+        finalize_and_export(checkpoint["articles"], name_map, output_excel=batch_out)
+        print(f"Jalankan batch berikutnya dengan --batch {target_batch + 1} atau --all.", flush=True)
 
 
 if __name__ == "__main__":
