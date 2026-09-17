@@ -21,6 +21,7 @@ import sys
 import os
 import json
 import argparse
+from datetime import date
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 if sys.platform == "win32":
@@ -33,7 +34,9 @@ from config import (
     load_keywords,
     load_spokesperson_map,
     get_date_range,
+    get_date_folder,
     is_published_yesterday,
+    is_single_word_keyword,
 )
 from fetch_news import (
     collect_all,
@@ -51,16 +54,31 @@ from relevance_filter import (
     is_recipe,
     is_promotional,
     is_job_posting,
+    is_crime_or_accident,
+    is_celebrity_entertainment,
     is_keyword_primary_topic,
     is_industry_policy_topic,
     is_kemenperin_related,
     get_kemenperin_signal,
     is_kertas_context_valid,
+    is_kelapa_context_valid,
+    is_karet_context_valid,
+    is_kakao_context_valid,
+    is_cokelat_context_valid,
+    is_tar_context_valid,
+    is_teh_context_valid,
+    is_susu_context_valid,
+    is_kopi_context_valid,
+    is_fame_context_valid,
+    is_foreign_noise_domain,
+    is_pulp_context_valid,
+    has_ditjen_agro_override,
 )
 from entity_mapper import find_spokespersons
 from sentiment import classify_tone
 from export_excel import save_to_excel
 from serper_search import search_serper_news
+from exa_search import search_exa_news
 
 USE_SERPER_ONLY: bool = os.environ.get("USE_SERPER_ONLY", "false").lower() in ("true", "1", "yes")
 
@@ -69,7 +87,7 @@ os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 
 def extract_one_article(item: dict) -> dict:
-    """Helper untuk ekstraksi konten satu artikel secara concurrent (mendukung resolusi URL Google News & direct URL Serper)."""
+    """Helper untuk ekstraksi konten satu artikel secara concurrent (mendukung resolusi URL Google News & direct URL Serper/Exa)."""
     link = item.get("link", "")
     if "news.google.com" in link:
         try:
@@ -77,13 +95,18 @@ def extract_one_article(item: dict) -> dict:
         except Exception:
             resolved = link
     else:
-        # Tautan langsung dari Serper.dev tidak membutuhkan resolusi Google decoder
+        # Tautan langsung dari Serper.dev / Exa tidak membutuhkan resolusi Google decoder
         resolved = link
 
-    try:
-        text = extract_article_text(resolved, max_length=8000)
-    except Exception:
-        text = ""
+    # Jika teks sudah disediakan oleh Exa dan memadai (>= 300 char), gunakan langsung
+    text = item.get("text", "")
+    if not text or len(text.strip()) < 300:
+        try:
+            extracted_text = extract_article_text(resolved, max_length=8000)
+            if extracted_text and len(extracted_text.strip()) > len(text):
+                text = extracted_text
+        except Exception:
+            pass
 
     item_copy = dict(item)
     item_copy["text"] = text
@@ -113,6 +136,7 @@ def filter_valid_articles(
     for item in articles:
         title = item.get("title", "")
         text = item.get("text", "")
+        link = item.get("resolved_url") or item.get("link", "")
         keyword = item.get("keyword") or default_keyword
 
         # 1. Cek isi kosong atau terlalu pendek
@@ -122,46 +146,129 @@ def filter_valid_articles(
             discarded.append(item_copy)
             continue
 
-        # 1b. Cek materi lowongan pekerjaan / rekrutmen
-        if is_job_posting(title, text):
+        # 1a. Cek domain asing yang mengindeks berita auto-translate (seperti .vn)
+        if is_foreign_noise_domain(link):
+            item_copy = dict(item)
+            item_copy["discard_reason"] = "foreign_noise_domain"
+            discarded.append(item_copy)
+            continue
+
+        # 1b. Cek materi lowongan pekerjaan / rekrutmen (termasuk pola URL /job/)
+        if is_job_posting(title, text, url=link):
             item_copy = dict(item)
             item_copy["discard_reason"] = "job_posting"
             discarded.append(item_copy)
             continue
 
-        # 2. Filter frekuensi keyword & makna ganda
-        if keyword and keyword.lower() == "kertas" and not is_kertas_context_valid(title, text):
+        # 1c. Cek berita kriminal/kecelakaan/musibah non-industri
+        if is_crime_or_accident(title, text):
             item_copy = dict(item)
-            item_copy["discard_reason"] = "kertas_kerja_or_idiom"
+            item_copy["discard_reason"] = "crime_or_accident"
             discarded.append(item_copy)
             continue
 
-        if keyword and not is_keyword_primary_topic(title, text, keyword):
+        # 1d. Cek berita infotainment / selebriti murni
+        if is_celebrity_entertainment(title, text):
             item_copy = dict(item)
-            item_copy["discard_reason"] = "keyword_not_primary_topic"
+            item_copy["discard_reason"] = "celebrity_entertainment"
             discarded.append(item_copy)
             continue
 
-        # 3. Cek resep kuliner
-        if is_recipe(title, text):
-            item_copy = dict(item)
-            item_copy["discard_reason"] = "recipe"
-            discarded.append(item_copy)
-            continue
+        # OVERRIDE: Artikel yang menyebut Ditjen Industri Agro langsung lolos tanpa filter sekunder
+        if not has_ditjen_agro_override(title, text):
+            # 2. Filter frekuensi keyword & makna ganda
+            if keyword and keyword.lower() == "kertas" and not is_kertas_context_valid(title, text):
+                item_copy = dict(item)
+                item_copy["discard_reason"] = "kertas_kerja_or_idiom"
+                discarded.append(item_copy)
+                continue
 
-        # 4. Cek materi promosi ritel
-        if is_promotional(title, text):
-            item_copy = dict(item)
-            item_copy["discard_reason"] = "promotional"
-            discarded.append(item_copy)
-            continue
+            if keyword and keyword.lower() == "kelapa" and not is_kelapa_context_valid(title, text):
+                item_copy = dict(item)
+                item_copy["discard_reason"] = "kelapa_location_or_spam"
+                discarded.append(item_copy)
+                continue
 
-        # 5. Filter topik industri/kebijakan vs kesehatan personal
-        if not is_industry_policy_topic(title, text):
-            item_copy = dict(item)
-            item_copy["discard_reason"] = "health_personal_topic"
-            discarded.append(item_copy)
-            continue
+            if keyword and keyword.lower() == "karet" and not is_karet_context_valid(title, text):
+                item_copy = dict(item)
+                item_copy["discard_reason"] = "karet_idiom_or_marine"
+                discarded.append(item_copy)
+                continue
+
+            if keyword and keyword.lower() == "kakao" and not is_kakao_context_valid(title, text):
+                item_copy = dict(item)
+                item_copy["discard_reason"] = "kakao_entertainment"
+                discarded.append(item_copy)
+                continue
+
+            if keyword and keyword.lower() == "cokelat" and not is_cokelat_context_valid(title, text):
+                item_copy = dict(item)
+                item_copy["discard_reason"] = "cokelat_color_or_envelope"
+                discarded.append(item_copy)
+                continue
+
+            if keyword and keyword.lower() == "pulp" and not is_pulp_context_valid(title, text):
+                item_copy = dict(item)
+                item_copy["discard_reason"] = "pulp_fiction_or_pop_culture"
+                discarded.append(item_copy)
+                continue
+
+            if keyword and keyword.lower() == "tar" and not is_tar_context_valid(title, text):
+                item_copy = dict(item)
+                item_copy["discard_reason"] = "tar_not_tobacco"
+                discarded.append(item_copy)
+                continue
+
+            if keyword and keyword.lower() == "teh" and not is_teh_context_valid(title, text):
+                item_copy = dict(item)
+                item_copy["discard_reason"] = "teh_sundanese_honorific"
+                discarded.append(item_copy)
+                continue
+
+            if keyword and keyword.lower() == "susu" and not is_susu_context_valid(title, text):
+                item_copy = dict(item)
+                item_copy["discard_reason"] = "susu_idiom_or_dental"
+                discarded.append(item_copy)
+                continue
+
+            if keyword and keyword.lower() == "kopi" and not is_kopi_context_valid(title, text):
+                item_copy = dict(item)
+                item_copy["discard_reason"] = "kopi_lifestyle_or_parenting"
+                discarded.append(item_copy)
+                continue
+
+            if keyword and keyword.lower() == "fame" and not is_fame_context_valid(title, text):
+                item_copy = dict(item)
+                item_copy["discard_reason"] = "fame_sports_hall_of_fame"
+                discarded.append(item_copy)
+                continue
+
+            if keyword and not is_keyword_primary_topic(title, text, keyword):
+                item_copy = dict(item)
+                item_copy["discard_reason"] = "keyword_not_primary_topic"
+                discarded.append(item_copy)
+                continue
+
+            # 3. Cek resep kuliner
+            if is_recipe(title, text):
+                item_copy = dict(item)
+                item_copy["discard_reason"] = "recipe"
+                discarded.append(item_copy)
+                continue
+
+            # 4. Cek materi promosi ritel
+            if is_promotional(title, text):
+                item_copy = dict(item)
+                item_copy["discard_reason"] = "promotional"
+                discarded.append(item_copy)
+                continue
+
+            # 5. Filter topik industri/kebijakan vs kesehatan personal
+            if not is_industry_policy_topic(title, text):
+                item_copy = dict(item)
+                item_copy["discard_reason"] = "health_personal_topic"
+                discarded.append(item_copy)
+                continue
 
         # 6. Deduplikasi kemiripan judul (threshold = 85)
         matched_idx = -1
@@ -174,13 +281,18 @@ def filter_valid_articles(
             valid.append(item)
         else:
             existing_text = valid[matched_idx].get("text", "")
+            is_any_rss = valid[matched_idx].get("sumber_data") == "RSS" or item.get("sumber_data") == "RSS"
             if len(text) > len(existing_text):
                 discarded.append({**valid[matched_idx], "discard_reason": "near_duplicate_title"})
                 valid[matched_idx] = item
+                if is_any_rss:
+                    valid[matched_idx]["sumber_data"] = "RSS"
             else:
                 item_copy = dict(item)
                 item_copy["discard_reason"] = "near_duplicate_title"
                 discarded.append(item_copy)
+                if is_any_rss:
+                    valid[matched_idx]["sumber_data"] = "RSS"
 
     return valid, discarded
 
@@ -206,6 +318,21 @@ def process_single_keyword(
     else:
         print(f"  [>] Fetching berita untuk '{keyword}'...", flush=True)
         raw_results = search_keyword(keyword, delay=delay)
+
+    for item in raw_results:
+        if "sumber_data" not in item:
+            item["sumber_data"] = "Serper" if use_serper else "RSS"
+
+    # Integrasi Exa Search permanen: HANYA dipanggil jika keyword satu kata
+    if is_single_word_keyword(keyword):
+        print(f"  [>] [Exa.ai] Fetching berita pelengkap untuk keyword 1 kata '{keyword}'...", flush=True)
+        exa_items = search_exa_news(keyword)
+        if exa_items:
+            print(f"      -> {len(exa_items)} kandidat pelengkap ditemukan oleh Exa Search.", flush=True)
+            raw_results = raw_results + exa_items
+        else:
+            print(f"      -> Tidak ada entri tambahan dari Exa (atau EXA_API_KEY tidak diset).", flush=True)
+
     candidates = dedup_by_link(raw_results)
     init_count = len(candidates)
     print(f"      -> {init_count} kandidat unik setelah filter domain & URL dedup.", flush=True)
@@ -326,14 +453,15 @@ def finalize_and_export(
             "Unit Eselon": unit,
             "Terkait Kemenperin": terkait_kemenperin,
             "Keywords": art.get("keyword", ""),
+            "Sumber Data": art.get("sumber_data", "RSS"),
         })
 
     print(f"Entity Mapping: {sp_count} artikel memiliki Spokesperson terisi, {total_after - sp_count} kosong.", flush=True)
     print(f"Distribusi Tone: Positif={tone_dist.get('Positif', 0)}, Netral={tone_dist.get('Netral', 0)}, Negatif={tone_dist.get('Negatif', 0)}", flush=True)
 
-    # 4. Simpan ke file Excel
-    save_to_excel(records, output_excel)
-    print(f"\nHasil akhir berhasil disimpan ke: {output_excel}", flush=True)
+    # 4. Simpan ke file Excel (merge jika file sudah ada)
+    save_to_excel(records, output_excel, merge_existing=True)
+    print(f"\nHasil akhir berhasil disimpan / di-merge ke: {output_excel}", flush=True)
 
     return records, tone_dist
 
@@ -348,16 +476,22 @@ def run_pipeline(
     """
     print("=== MEMULAI PIPELINE SCRAPING BERITA INDUSTRI ===")
 
+    yesterday_date, _ = get_date_range()
+    date_folder = get_date_folder(yesterday_date)
+    date_str = yesterday_date.strftime("%Y-%m-%d")
+
     if isinstance(keywords_or_file, list):
         keywords = keywords_or_file
     else:
         keywords = load_keywords(keywords_or_file)
 
     if not output_excel:
-        kw_name = keywords[0] if len(keywords) == 1 else "berita"
-        output_excel = os.path.join(OUTPUT_DIR, f"hasil_scraping_{kw_name}.xlsx")
+        if len(keywords) == 1:
+            output_excel = os.path.join(date_folder, f"checkpoint_{keywords[0]}.xlsx")
+        else:
+            output_excel = os.path.join(date_folder, f"all_{date_str}.xlsx")
     elif not os.path.dirname(output_excel):
-        output_excel = os.path.join(OUTPUT_DIR, output_excel)
+        output_excel = os.path.join(date_folder, output_excel)
 
     name_map = load_spokesperson_map("keyword_nama.xlsx")
     print(f"Loaded: {len(keywords)} keyword ({keywords[:5]}...), {len(name_map)} pejabat.")
@@ -369,6 +503,23 @@ def run_pipeline(
             raw_results.extend(search_serper_news(kw))
     else:
         raw_results = collect_all(keywords)
+
+    for item in raw_results:
+        if "sumber_data" not in item:
+            item["sumber_data"] = "Serper" if USE_SERPER_ONLY else "RSS"
+
+    # Integrasi Exa Search permanen: HANYA untuk keyword satu kata
+    for kw in keywords:
+        if is_single_word_keyword(kw):
+            print(f"  [>] [Exa.ai] Fetching berita pelengkap untuk keyword 1 kata '{kw}'...", flush=True)
+            exa_items = search_exa_news(kw)
+            if exa_items:
+                print(f"      -> {len(exa_items)} kandidat pelengkap ditemukan oleh Exa Search.", flush=True)
+                raw_results.extend(exa_items)
+            else:
+                print(f"      -> Tidak ada entri tambahan dari Exa (atau EXA_API_KEY tidak diset).", flush=True)
+
+    raw_results = dedup_by_link(raw_results)
     print(f"Kandidat berita setelah domain filter & dedup awal: {len(raw_results)}")
 
     # Filter Tanggal: HANYA KEMARIN (sebelum ekstraksi untuk kecepatan)
@@ -423,12 +574,13 @@ def run_pipeline(
             "Unit Eselon": unit,
             "Terkait Kemenperin": terkait_kemenperin,
             "Keywords": item.get("keyword", ""),
+            "Sumber Data": item.get("sumber_data", "RSS"),
         })
 
     print(f"Status Kemenperin: {kemenperin_yes_count} Terkait Kemenperin: Ya | {len(content_valid) - kemenperin_yes_count} Tidak.")
     print(f"Entity Mapping: {spokesperson_filled} artikel memiliki Spokesperson terisi, {spokesperson_empty} kosong.")
-    saved_path = save_to_excel(records, output_excel)
-    print(f"Selesai. {len(records)} artikel berhasil disimpan ke {saved_path}")
+    saved_path = save_to_excel(records, output_excel, merge_existing=True)
+    print(f"Selesai. {len(records)} artikel berhasil disimpan / di-merge ke {saved_path}")
     return records, len(content_valid), date_dropped_count, kemenperin_yes_count
 
 
@@ -436,13 +588,27 @@ def run_batch_pipeline(
     keywords_or_file: str | list[str] = "keyword_data.txt",
     batch_size: int = 5,
     target_batch: int | None = None,
-    checkpoint_file: str = "scraping_checkpoint.json",
-    output_excel: str = os.path.join(OUTPUT_DIR, "hasil_scraping_berita_lengkap.xlsx"),
+    checkpoint_file: str | None = None,
+    output_excel: str | None = None,
 ):
     """
     Menjalankan scraping per batch (misal 5 keyword per batch),
-    menyimpan progress ke checkpoint_file, dan mengekspor hasil gabungan.
+    menyimpan progress ke checkpoint_file di dalam folder tanggal, dan mengekspor hasil gabungan.
     """
+    yesterday_date, _ = get_date_range()
+    date_folder = get_date_folder(yesterday_date)
+    date_str = yesterday_date.strftime("%Y-%m-%d")
+
+    if not checkpoint_file:
+        checkpoint_file = os.path.join(date_folder, "progress.json")
+    elif not os.path.dirname(checkpoint_file):
+        checkpoint_file = os.path.join(date_folder, checkpoint_file)
+
+    if not output_excel:
+        output_excel = os.path.join(date_folder, f"all_{date_str}.xlsx")
+    elif not os.path.dirname(output_excel):
+        output_excel = os.path.join(date_folder, output_excel)
+
     if isinstance(keywords_or_file, list):
         keywords = keywords_or_file
     else:
@@ -541,7 +707,7 @@ def run_batch_pipeline(
         print("\nSeluruh batch telah selesai! Melanjutkan ke finalisasi...", flush=True)
         finalize_and_export(checkpoint["articles"], name_map, output_excel=output_excel)
     elif target_batch is not None:
-        batch_out = os.path.join(OUTPUT_DIR, f"hasil_scraping_batch_{target_batch}.xlsx")
+        batch_out = os.path.join(date_folder, f"checkpoint_batch_{target_batch}.xlsx")
         print(f"\nBatch {target_batch} selesai diproses. Mengekspor hasil batch ke {batch_out}...", flush=True)
         finalize_and_export(checkpoint["articles"], name_map, output_excel=batch_out)
         print(f"Jalankan batch berikutnya dengan --batch {target_batch + 1} atau --all.", flush=True)

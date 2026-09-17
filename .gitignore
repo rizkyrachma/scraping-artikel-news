@@ -1,0 +1,26 @@
+# Environment variables / Secrets (WAJIB DILINDUNGI)
+.env
+.env.*
+*.env
+!.env.example
+
+# Python bytecode & cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+
+# Virtual Environment
+venv/
+.venv/
+env/
+ENV/
+
+# Scratch & Temporary Testing Scripts (sering memuat debug/test API key)
+scratch/
+
+# Temporary / OS files
+.DS_Store
+Thumbs.db
+*.tmp
+*.log

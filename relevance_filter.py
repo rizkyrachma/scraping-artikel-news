@@ -7,6 +7,21 @@ Filter relevansi artikel berbasis judul dan cuplikan teks menggunakan pencocokan
 """
 
 import re
+from urllib.parse import urlparse
+
+
+def is_foreign_noise_domain(url: str) -> bool:
+    """
+    Menolak domain luar negeri non-relevan seperti .vn (Vietnam) yang mengindeks artikel lokal berbahasa asing/auto-translate.
+    """
+    if not url:
+        return False
+    try:
+        netloc = urlparse(url).netloc.lower().split(":")[0]
+        return netloc.endswith(".vn")
+    except Exception:
+        return False
+
 
 # Kata kunci konteks industri/ekonomi
 INDUSTRY_CONTEXT_WORDS = [
@@ -20,6 +35,7 @@ INDUSTRY_CONTEXT_WORDS = [
 HEALTH_LIFESTYLE_WORDS = [
     "gula darah", "diabetes", "kalori", "diet", "kesehatan tubuh",
     "manfaat", "efek samping", "penyakit", "gejala", "kolesterol",
+    "behel", "kawat gigi", "skors", "gigi berlubang",
 ]
 
 # Kata kunci konten resep / kuliner
@@ -33,7 +49,8 @@ PROMO_WORDS = [
     "syarat dan ketentuan", "syarat & ketentuan", "periode promo",
     "dapatkan", "diskon", "supermarket", "minimal pembelian",
     "minimum transaksi", "cashback", "voucher", "katalog promo",
-    "harga promo", "promo bca",
+    "harga promo", "promo bca", "promo", "katalog", "brosur",
+    "promo mingguan", "promo ssr", "promo jsm",
 ]
 
 
@@ -79,22 +96,22 @@ def is_likely_relevant(title: str) -> bool:
 def is_recipe(title: str = "", text: str = "") -> bool:
     """
     Mendeteksi apakah artikel merupakan konten resep / panduan memasak kuliner:
-    - Judul atau 300 karakter awal memuat indikator resep kuat ('resep', 'cara membuat', 'bahan-bahan')
-    - Atau terdapat pola takaran bahan berulang (misal '150 gram', '2 sendok makan', dll.)
+    - Judul memuat indikator resep ('resep', 'cara membuat', 'cara memasak', 'cara buat', 'yuk buat', 'yuk bikin', 're-cook', dll.)
+    - Atau snippet 1500 karakter awal memuat indikator resep dan takaran bahan berulang.
     """
     title_text = title or ""
-    snippet = text[:300] if text else ""
+    snippet = text[:1500] if text else ""
 
-    # 1. Cek indikator kata resep di judul atau 300 karakter pertama
-    if any_word_boundary_match(["resep", "cara membuat", "cara memasak"], title_text):
+    # 1. Cek indikator kata resep di judul
+    if any_word_boundary_match(["resep", "cara membuat", "cara memasak", "cara buat", "yuk buat", "yuk bikin", "re-cook", "resep praktis"], title_text):
         return True
     if any_word_boundary_match(RECIPE_WORDS, snippet):
         return True
 
-    # 2. Cek pola format takaran bahan berulang di 300 karakter pertama
-    measurement_pattern = r"\b\d+[\s\w]*(gram|gr|ml|mililiter|sendok makan|sendok teh|sdm|sdt|butir|lembar|siung)\b"
+    # 2. Cek pola format takaran bahan berulang di snippet awal teks
+    measurement_pattern = r"\b\d+[\s\w]*(gram|gr|ml|mililiter|sendok makan|sendok teh|sdm|sdt|butir|lembar|siung|bungkus|cup)\b"
     matches = re.findall(measurement_pattern, snippet, flags=re.IGNORECASE)
-    if len(matches) >= 2:
+    if len(matches) >= 2 and any_word_boundary_match(["bahan", "bumbu", "resep", "cara memasak", "langkah membuat", "masak", "goreng", "tumis"], snippet):
         return True
 
     return False
@@ -126,12 +143,17 @@ JOB_CONTENT_KEYWORDS = [
 ]
 
 
-def is_job_posting(title: str = "", text: str = "") -> bool:
+def is_job_posting(title: str = "", text: str = "", url: str = "") -> bool:
     """
     Mendeteksi apakah artikel merupakan materi lowongan pekerjaan / rekrutmen lowongan:
+    - URL memuat pola direktori lowongan (/job/, /career, /loker, dll.)
     - Judul memuat indikator lowongan / posisi kerja
     - Atau teks awal memuat pola instruksi lamaran kerja / kualifikasi pelamar
     """
+    url_lower = (url or "").lower()
+    if any(p in url_lower for p in ["/job/", "/jobs/", "/loker/", "/career", "/karir", "/lowongan"]):
+        return True
+
     title_lower = (title or "").lower()
     snippet = (text[:1000] if text else "").lower()
 
@@ -147,10 +169,89 @@ def is_job_posting(title: str = "", text: str = "") -> bool:
     return False
 
 
+CRITICAL_INCIDENT_TITLE_PHRASES = [
+    "meninggal dunia", "ditemukan tewas", "tewas", "mayat", "pembunuhan",
+    "diserang beruang", "diterkam buaya", "diserang buaya", "kebakaran lahan",
+    "pemadaman", "laka lantas", "kecelakaan maut", "orang hilang",
+    "serangan jantung", "bakar lahan", "membakar lahan", "karhutla",
+    "diterkam", "meninggal", "gantung diri", "bunuh diri",
+]
+
+CRIME_ACCIDENT_TITLE_KEYWORDS = [
+    "bobol", "pembobolan", "curi", "mencuri", "pencurian",
+    "residivis", "maling", "perampokan", "rampok", "kebakaran",
+    "korban", "pembunuhan", "mayat", "laka lantas", "tewas",
+]
+
+CELEBRITY_TITLE_KEYWORDS = [
+    "ji chang-wook", "aktor korea", "artis korea", "drakor", "k-pop", "konser",
+    "lirik lagu", "chord gitar", "kunci gitar", "makna lagu", "viral tiktok", "ig nobel",
+]
+
+
+def is_crime_or_accident(title: str = "", text: str = "") -> bool:
+    """
+    Mendeteksi berita kriminal, kecelakaan maut, atau musibah kebakaran di mana
+    komoditas hanya muncul sebagai barang bukti curian, lokasi musibah, atau bantuan darurat.
+    """
+    title_lower = (title or "").lower()
+    if any(phrase in title_lower for phrase in CRITICAL_INCIDENT_TITLE_PHRASES):
+        return True
+
+    if any(matches_word_boundary(w, title_lower) for w in CRIME_ACCIDENT_TITLE_KEYWORDS):
+        comb = f"{title_lower} {(text or '').lower()}"
+        ind = count_signal_occurrences(INDUSTRY_POLICY_SIGNALS, comb)
+        if ind < 2:
+            return True
+    return False
+
+
+def is_celebrity_entertainment(title: str = "", text: str = "") -> bool:
+    """
+    Mendeteksi berita infotainment/gaya hidup selebriti murni (misal aktor Korea, konser, drakor).
+    """
+    title_lower = (title or "").lower()
+    return any(w in title_lower for w in CELEBRITY_TITLE_KEYWORDS)
+
+
+PULP_EXCLUDE_PHRASES = ["pulp fiction"]
+PULP_INDUSTRY_TERMS = [
+    "pabrik pulp", "industri pulp", "bubur kertas", "kayu pulp",
+    "produksi pulp", "ekspor pulp", "impor pulp", "toba pulp",
+    "serat kayu", "hutan tanaman industri", "hti",
+]
+
+
+def is_pulp_context_valid(title: str, text: str) -> bool:
+    """
+    Memvalidasi keyword 'pulp' agar tidak mencocokkan parfum 'Pulp Fiction' atau referensi film/pop culture.
+    """
+    combined = f"{title} {text}".lower()
+    if any(phrase in combined for phrase in PULP_EXCLUDE_PHRASES):
+        has_industry = any(matches_word_boundary(term, combined) for term in PULP_INDUSTRY_TERMS)
+        if not has_industry:
+            return False
+    return True
+
+
 # Frasa dengan makna ganda yang bukan merujuk pada komoditas/industri kertas
 KERTAS_EXCLUDE_PHRASES = [
     "kertas kerja",
     "di atas kertas",
+    "uang kertas",
+    "tiket kertas",
+    "wayang kertas",
+    "ujian kertas",
+    "kertas ujian",
+    "ujian berbasis komputer atau kertas",
+    "era kertas",
+    "menandatangani kertas",
+    "selembar kertas",
+    "kantong kertas",
+    "kertas suara",
+    "kertas kado",
+    "pesawat kertas",
+    "antara kertas dan realita",
 ]
 
 KERTAS_INDUSTRY_TERMS = [
@@ -165,78 +266,91 @@ KERTAS_INDUSTRY_TERMS = [
     "limbah kertas",
     "daur ulang kertas",
     "pulp",
+    "kertas kemasan",
+    "kertas karton",
+    "tjiwi kimia",
+    "indah kiat",
 ]
 
 
 def is_kertas_context_valid(title: str, text: str) -> bool:
     """
     Memvalidasi apakah artikel benar-benar membahas kertas sebagai komoditas industri,
-    bukan 'kertas kerja' (dokumen penilaian/audit/akuntansi) atau idiom 'di atas kertas'.
+    bukan penggunaan non-industri (uang kertas, tiket, wayang kertas, dokumen ujian/kantor).
     """
-    combined = f"{title} {text}"
-    raw_kertas = len(re.findall(r"\bkertas\b", combined, flags=re.IGNORECASE))
-    if raw_kertas == 0:
-        return True
+    combined = f"{title} {text}".lower()
+    title_lower = (title or "").lower()
 
-    excluded_count = sum(
-        len(re.findall(rf"\b{re.escape(phrase)}\b", combined, flags=re.IGNORECASE))
-        for phrase in KERTAS_EXCLUDE_PHRASES
-    )
-    standalone_kertas = raw_kertas - excluded_count
-
-    has_industry_context = any(
-        re.search(rf"\b{re.escape(term)}\b", combined, flags=re.IGNORECASE)
-        for term in KERTAS_INDUSTRY_TERMS
-    )
-
-    if has_industry_context:
-        return True
-
-    if standalone_kertas <= 0 or excluded_count >= standalone_kertas:
+    if any(phrase in title_lower for phrase in KERTAS_EXCLUDE_PHRASES):
         return False
 
-    return True
+    has_industry = any(matches_word_boundary(term, combined) for term in KERTAS_INDUSTRY_TERMS)
+    if has_industry:
+        return True
+
+    return False
 
 
-KELAPA_EXCLUDE_PHRASES = ["kelapa gading"]
+KELAPA_EXCLUDE_PHRASES = [
+    "kelapa gading",
+    "talang kelapa",
+    "tanjung kelapa",
+    "pulau kelapa",
+    "kelapa dua",
+    "kelapa lima",
+]
 KELAPA_INDUSTRY_TERMS = [
     "pohon kelapa", "minyak kelapa", "kelapa parut", "kopra", "sabut kelapa",
     "perkebunan kelapa", "petani kelapa", "olahan kelapa", "batok kelapa",
     "air kelapa", "hilirisasi kelapa", "kelapa kopyor", "tunas kelapa",
+    "daging kelapa", "ekspor kelapa", "industri kelapa", "produksi kelapa",
 ]
 
 
 def is_kelapa_context_valid(title: str, text: str) -> bool:
     """
-    Memvalidasi keyword 'kelapa' agar tidak tercampur nama lokasi ('Kelapa Gading')
+    Memvalidasi keyword 'kelapa' agar tidak tercampur nama lokasi ('Kelapa Gading', 'Talang Kelapa', dll.)
     atau spam judi/slot ('bet tunas kelapa').
     """
     combined = f"{title} {text}".lower()
     if "bet tunas kelapa" in combined or "situs resmi indonesia" in combined:
         return False
 
-    if "kelapa gading" in combined:
+    if any(phrase in combined for phrase in KELAPA_EXCLUDE_PHRASES):
         has_industry = any(matches_word_boundary(term, combined) for term in KELAPA_INDUSTRY_TERMS)
         if not has_industry:
             return False
     return True
 
 
-KARET_EXCLUDE_PHRASES = ["jam karet", "perahu karet", "ban karet", "gelang karet", "celana karet"]
+KARET_EXCLUDE_PHRASES = [
+    "jam karet", "perahu karet", "ban karet", "gelang karet", "celana karet",
+    "tali karet", "permainan karet", "lompat tali", "stasiun karet",
+]
 KARET_INDUSTRY_TERMS = [
     "kebun karet", "perkebunan karet", "petani karet", "harga karet",
     "ekspor karet", "industri karet", "sadap karet", "getah karet",
     "lateks", "apkarindo", "gabungan perusahaan karet", "produksi karet",
-    "tanaman karet", "pohon karet", "kayu karet",
+    "tanaman karet", "pohon karet", "kayu karet", "hilirisasi",
 ]
 
 
 def is_karet_context_valid(title: str, text: str) -> bool:
     """
     Memvalidasi keyword 'karet' agar tidak tercampur idiom 'jam karet',
-    kecelakaan kapal / evakuasi perahu karet, atau aksesoris non-industri.
+    kecelakaan kapal / evakuasi perahu karet, Stasiun Karet, permainan anak, atau aksesoris non-industri.
     """
     combined = f"{title} {text}".lower()
+
+    # Jika mengandung frasa exclude (misal stasiun karet, permainan karet)
+    if any(phrase in combined for phrase in KARET_EXCLUDE_PHRASES):
+        has_strong_industry = any(
+            matches_word_boundary(w, combined)
+            for w in ["hilirisasi", "apkarindo", "harga karet", "ekspor karet", "industri karet", "pabrik karet"]
+        )
+        if not has_strong_industry:
+            return False
+
     has_industry = any(matches_word_boundary(term, combined) for term in KARET_INDUSTRY_TERMS)
     if has_industry:
         return True
@@ -279,14 +393,142 @@ def is_kakao_context_valid(title: str, text: str) -> bool:
     return True
 
 
+COKELAT_EXCLUDE_PHRASES = [
+    "amplop cokelat", "warna cokelat", "baju cokelat", "seragam cokelat",
+    "celana cokelat", "sepatu cokelat", "kulit cokelat", "mata cokelat",
+    "rambut cokelat", "beras cokelat", "gula cokelat",
+]
+COKELAT_INDUSTRY_TERMS = [
+    "biji cokelat", "kebun cokelat", "petani cokelat", "perkebunan cokelat",
+    "olahan cokelat", "produk cokelat", "batang cokelat", "pabrik cokelat",
+    "industri cokelat", "bubuk cokelat", "ekspor cokelat", "harga cokelat",
+    "kakao", "kudapan cokelat", "kue cokelat", "manisan cokelat", "bikin cokelat",
+    "makan cokelat", "cokelat batang", "cokelat batangan",
+]
+
+
+def is_cokelat_context_valid(title: str, text: str) -> bool:
+    """
+    Memvalidasi keyword 'cokelat' agar tidak mencocokkan benda berwarna cokelat non-makanan
+    (misal 'amplop cokelat', 'baju cokelat', 'seragam cokelat').
+    """
+    combined = f"{title} {text}".lower()
+    title_lower = (title or "").lower()
+    if any(phrase in title_lower for phrase in ["amplop cokelat", "baju cokelat", "seragam cokelat", "celana cokelat"]):
+        return False
+    if any(phrase in combined for phrase in COKELAT_EXCLUDE_PHRASES):
+        has_industry = any(matches_word_boundary(term, combined) for term in COKELAT_INDUSTRY_TERMS)
+        if not has_industry:
+            return False
+    return True
+
+
+TAR_INDUSTRY_TERMS = [
+    "rokok", "tembakau", "sigaret", "nikotin", "asap rokok", "kretek",
+    "kadar tar", "kandungan tar", "senyawa tar", "vape",
+]
+
+
+def is_tar_context_valid(title: str, text: str) -> bool:
+    """
+    Memvalidasi keyword 'tar' agar tidak mencocokkan singkatan inisial merek atau kata umum.
+    Harus berkaitan dengan residu tembakau/rokok atau industri hasil tembakau.
+    """
+    combined = f"{title} {text}".lower()
+    return any(matches_word_boundary(t, combined) for t in TAR_INDUSTRY_TERMS)
+
+
+TEH_EXCLUDE_TITLE_PHRASES = [
+    "teh cely", "teh rina", "teh nia", "teh melly", "teh nita", "lirik lagu",
+]
+TEH_INDUSTRY_TERMS = [
+    "kebun teh", "perkebunan teh", "petani teh", "daun teh", "pabrik teh",
+    "industri teh", "produksi teh", "ekspor teh", "harga teh", "pucuk teh",
+    "minuman teh", "teh kemasan", "teh hitam", "teh hijau", "teh wangi",
+]
+
+
+def is_teh_context_valid(title: str, text: str) -> bool:
+    """
+    Memvalidasi keyword 'teh' agar tidak mencocokkan panggilan kehormatan Sunda ('Teh Cely', dsb).
+    """
+    title_lower = (title or "").lower()
+    if any(p in title_lower for p in TEH_EXCLUDE_TITLE_PHRASES):
+        return False
+    combined = f"{title} {text}".lower()
+    has_industry = any(matches_word_boundary(t, combined) for t in TEH_INDUSTRY_TERMS)
+    if re.search(r"\bTeh\s+[A-Z][a-z]+", title or "") and not has_industry:
+        return False
+    return True
+
+
+SUSU_EXCLUDE_PHRASES = [
+    "gigi susu", "warna kopi susu", "berwarna kopi susu", "susu kecoa", "susu kecoak",
+]
+
+
+def is_susu_context_valid(title: str, text: str) -> bool:
+    """
+    Memvalidasi keyword 'susu' agar tidak mencocokkan istilah 'gigi susu' (kedokteran gigi),
+    metafora warna air 'kopi susu', atau parodi riset 'susu kecoa'.
+    """
+    title_lower = (title or "").lower()
+    combined = f"{title} {text}".lower()
+    if any(p in title_lower for p in SUSU_EXCLUDE_PHRASES):
+        return False
+    if "susu kecoa" in combined or "susu kecoak" in combined:
+        return False
+    if any(w in title_lower for w in ["gigi susu", "gigi berlubang", "rekomendasi susu oat"]):
+        return False
+    return True
+
+
+KOPI_EXCLUDE_TITLE_PHRASES = [
+    "kena skors", "etiket makan", "perkembangan anak", "tumbuh kembang",
+    "asam lambung", "rekomendasi susu oat", "aeropress", "french press",
+    "#cari_aman",
+]
+
+
+def is_kopi_context_valid(title: str, text: str) -> bool:
+    """
+    Memvalidasi keyword 'kopi' agar tidak mencocokkan artikel parenting/akronim komunitas,
+    tips lambung/kesehatan pribadi, peralatan seduh barista, atau insiden disiplin sekolah.
+    """
+    title_lower = (title or "").lower()
+    if any(p in title_lower for p in KOPI_EXCLUDE_TITLE_PHRASES):
+        return False
+    if "perkembangan anak" in title_lower or "pola asuh" in title_lower:
+        return False
+    return True
+
+
+FAME_EXCLUDE_PHRASES = ["hall of fame", "walk of fame"]
+FAME_INDUSTRY_TERMS = [
+    "fatty acid", "methyl ester", "biodiesel", "sawit", "b35", "b40", "b50",
+    "bioenergi", "ebt", "bahan bakar nabati", "bbn", "cpo", "solar",
+]
+
+
+def is_fame_context_valid(title: str, text: str) -> bool:
+    """
+    Memvalidasi keyword 'fame' agar merujuk pada Fatty Acid Methyl Ester (FAME) bahan baku biodiesel,
+    BUKAN penghargaan olahraga/hiburan 'Hall of Fame' atau 'Walk of Fame'.
+    """
+    combined = f"{title} {text}".lower()
+    if any(p in combined for p in FAME_EXCLUDE_PHRASES):
+        return False
+    return any(matches_word_boundary(t, combined) for t in FAME_INDUSTRY_TERMS)
+
+
 def count_keyword_occurrences(text: str, keyword: str) -> int:
     """
-    Menghitung jumlah kemunculan keyword dalam teks menggunakan word boundary (\\b...\\b).
+    Menghitung kemunculan kata kunci sebagai kata utuh (word boundary regex).
     """
     if not text or not keyword:
         return 0
-    pattern = rf"\b{re.escape(keyword)}\b"
-    return len(re.findall(pattern, text, flags=re.IGNORECASE))
+    pattern = rf"\b{re.escape(keyword.lower())}\b"
+    return len(re.findall(pattern, text.lower()))
 
 
 def is_keyword_primary_topic(title: str, text: str, keyword: str, min_content_occurrences: int = 2) -> bool:
@@ -314,6 +556,24 @@ def is_keyword_primary_topic(title: str, text: str, keyword: str, min_content_oc
         return False
     # Khusus keyword kakao: buang jika terkait Kakao Entertainment K-Pop
     if kw_lower == "kakao" and not is_kakao_context_valid(title, text):
+        return False
+    # Khusus keyword cokelat: buang jika hanya warna / amplop cokelat
+    if kw_lower == "cokelat" and not is_cokelat_context_valid(title, text):
+        return False
+    # Khusus keyword tar: buang jika bukan terkait rokok/tembakau/cukai
+    if kw_lower == "tar" and not is_tar_context_valid(title, text):
+        return False
+    # Khusus keyword teh: buang jika panggilan nama Sunda / lirik lagu
+    if kw_lower == "teh" and not is_teh_context_valid(title, text):
+        return False
+    # Khusus keyword susu: buang jika gigi susu / metafora warna kopi susu
+    if kw_lower == "susu" and not is_susu_context_valid(title, text):
+        return False
+    # Khusus keyword kopi: buang jika parenting/skors/alat seduh/tips lambung
+    if kw_lower == "kopi" and not is_kopi_context_valid(title, text):
+        return False
+    # Khusus keyword fame: buang jika Hall of Fame olahraga / hiburan
+    if kw_lower == "fame" and not is_fame_context_valid(title, text):
         return False
 
     search_terms = [keyword]
@@ -412,50 +672,77 @@ EXPLICIT_KEMENPERIN_SIGNALS = [
 
 
 def get_kemenperin_signal(
-    title: str = "", text: str = "", spokesperson_map: dict | None = None
+    title: str = "",
+    text: str = "",
+    spokesperson_map: dict | None = None,
+    keyword: str = "",
+    sumber_data: str = "",
 ) -> tuple[bool, str, str]:
     """
-    Mengecek apakah artikel terkait Kemenperin melalui sinyal EKSPLISIT atau IMPLISIT:
-    1. SINYAL EKSPLISIT: Menyebut nama institusi Kemenperin dalam EXPLICIT_KEMENPERIN_SIGNALS
-       menggunakan word boundary matching regex.
-    2. SINYAL IMPLISIT: Mengutip salah satu nama pejabat dari spokesperson_map
-       menggunakan match_name_in_text() dari entity_mapper.py.
+    Pengecekan KETAT dan SPESIFIK keterkaitan Kemenperin:
+    HANYA bernilai True jika:
+    1. Menyebut nama institusi secara eksplisit: "kemenperin", "kementerian perindustrian",
+       "menperin", "wamenperin", "wakil menteri perindustrian", "direktorat jenderal industri agro",
+       "ditjen agro", "ditjen industri agro" (word boundary matching), ATAU
+    2. Mengutip salah satu dari 13 nama pejabat di database (via find_spokespersons / match_name_in_text), ATAU
+    3. Berasal dari pencarian institusi khusus (keyword == 'kemenperin_institusi') atau Direct Crawl (sumber_data == 'Direct Crawl').
 
-    Returns:
-        tuple (is_related: bool, signal_type: str, matched_detail: str)
-        - signal_type: 'EKSPLISIT', 'IMPLISIT', atau 'NONE'
-        - matched_detail: frasa eksplisit atau nama pejabat yang terdeteksi
+    Kata-kata umum industri/produksi/ekspor/pabrik/dll BUKAN sinyal Kemenperin.
     """
-    from entity_mapper import match_name_in_text
+    from entity_mapper import find_spokespersons
 
-    if spokesperson_map is None:
-        try:
-            from config import load_spokesperson_map
-            spokesperson_map = load_spokesperson_map()
-        except Exception:
-            spokesperson_map = {}
+    # 1. Cek Sumber Khusus Institusi / Direct Crawl
+    if (keyword or "").strip().lower() == "kemenperin_institusi":
+        return True, "EKSPLISIT", "kemenperin_institusi"
+    if (sumber_data or "").strip().lower() == "direct crawl":
+        return True, "EKSPLISIT", "Direct Crawl"
 
     combined = f"{title or ''} {text or ''}"
 
-    # 1. Cek Sinyal Eksplisit
+    # 2. Cek Sinyal Eksplisit Institusi
     for signal in EXPLICIT_KEMENPERIN_SIGNALS:
         if matches_word_boundary(signal, combined):
             return True, "EKSPLISIT", signal
 
-    # 2. Cek Sinyal Implisit (dari spokesperson_map)
-    for official_name in spokesperson_map.keys():
-        if match_name_in_text(official_name, combined):
-            return True, "IMPLISIT", official_name
+    # 3. Cek Sinyal Pejabat di Database (13 pejabat)
+    sp1, sp2, sp_unit = find_spokespersons(combined)
+    if sp1:
+        return True, "IMPLISIT", sp1
 
     return False, "NONE", ""
 
 
 def is_kemenperin_related(
-    title: str = "", text: str = "", spokesperson_map: dict | None = None
+    title: str = "",
+    text: str = "",
+    spokesperson_map: dict | None = None,
+    keyword: str = "",
+    sumber_data: str = "",
 ) -> bool:
     """
-    Filter institusi: Mengembalikan True jika artikel memiliki sinyal EKSPLISIT atau IMPLISIT Kemenperin,
-    False jika tidak ada sama sekali.
+    Filter institusi ketat: Mengembalikan True HANYA jika artikel memiliki keterkaitan spesifik ke Kemenperin.
     """
-    is_related, _, _ = get_kemenperin_signal(title, text, spokesperson_map)
+    is_related, _, _ = get_kemenperin_signal(
+        title=title, text=text, spokesperson_map=spokesperson_map, keyword=keyword, sumber_data=sumber_data
+    )
     return is_related
+
+
+
+_DITJEN_AGRO_PATTERN = re.compile(
+    r"\b(ditjen\s+industri\s+agro|direktorat\s+jenderal\s+industri\s+agro)\b",
+    re.IGNORECASE,
+)
+
+
+def has_ditjen_agro_override(title: str = "", text: str = "") -> bool:
+    """
+    Mengecek keberadaan frasa 'ditjen industri agro' atau 'direktorat jenderal industri agro'
+    (case-insensitive, word boundary matching) pada title atau text.
+    """
+    combined = f"{title or ''} {text or ''}"
+    if not combined.strip():
+        return False
+    return bool(_DITJEN_AGRO_PATTERN.search(combined))
+
+

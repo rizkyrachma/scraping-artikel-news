@@ -16,6 +16,7 @@ Baca `DOKUMEN_TEKNIS_PIPELINE_SCRAPING_BERITA.md` dulu sebelum mulai coding. Dok
 6. Sebelum mengklaim sentiment classifier "akurat", jalankan validasi manual pada sample kecil (50-100 artikel) dan laporkan hasilnya. Jangan asumsikan akurasi model publik tanpa pengecekan.
 7. Sumber data spokesperson sekarang adalah `keyword_nama.xlsx` (bukan lagi `keyword_nama.txt`), dengan dua kolom terstruktur: `nama` dan `jabatan`. Baca file ini dengan `pandas.read_excel()`. Kalau ke depannya ada file baru lagi yang menggantikan ini, update baris ini juga supaya tidak ada modul yang masih merujuk ke sumber data yang sudah tidak dipakai.
 8. Setiap perubahan besar pada strategi query/filtering harus dicatat sebagai perubahan di bagian "Riwayat Perubahan" di bawah, supaya iterasi berikutnya (manusia atau agent lain) tahu konteksnya.
+9. Seluruh output scraping (file final `all_<tanggal>.xlsx`, `progress.json`, dan checkpoint) wajib disimpan di dalam folder tanggal evaluasi masing-masing (`hasil_scrapping/<YYYY-MM-DD>/`) via `get_date_folder()`. Dilarang menyimpan file output langsung di root `hasil_scrapping/`, dan dilarang menimpa file tanggal yang sudah ada secara destruktif (selalu gunakan merge dedup URL dan resume checkpoint).
 
 ## Cara Menjalankan
 
@@ -64,7 +65,64 @@ Catatan: `openpyxl` dipakai dua arah, sebagai engine baca `keyword_nama.xlsx` (l
   - Pada pukul 11:00 WIB saat eksekusi Batch 7, IP jaringan kantor (`202.47.80.21`) mengalami redirect ke `google.com/sorry/index` (CAPTCHA gate) akibat akumulasi request `batchexecute` oleh `googlenewsdecoder`.
   - Batch 1–6 (29 keyword) dan 5 keyword besar telah tersimpan aman dengan total 171 baris berita bersih di `hasil_scrapping/hasil_scraping_semua_keyword_clean.xlsx`.
   - Monitoring polling otomatis tiap 10 menit dihentikan sepenuhnya agar IP kantor benar-benar istirahat dari traffic Google dan tidak memperpanjang masa blokir.
-  - Eksekusi Batch 7 dan Batch 8 dialihkan secara aman ke Serper.dev menggunakan flag `--serper-only`, dengan hasil yang digabungkan langsung ke dataset bersih tanpa kehilangan data historis.
+- **Pembaruan Deduplikasi Lintas Keyword (`dedup_across_keywords`)**:
+  - Penambahan fungsi `merge_keywords()` dan `dedup_across_keywords()` di `fetch_news.py` dan `run_all_batches.py`.
+  - Sebelumnya, jika artikel yang sama muncul pada beberapa keyword yang berbeda (baik lewat kemiripan URL maupun skor judul `rapidfuzz` >= 85), sistem hanya menyimpan keyword yang pertama kali ditemukan dan membuang keyword berikutnya.
+  - Logika baru secara otomatis menggabungkan (*merge*) seluruh keyword yang cocok untuk artikel yang sama menjadi format daftar unik dipisahkan koma (contoh: `"gula, kelapa"`, `"cokelat, kakao"`, `"cpo, minyak sawit"`).
+- **Integrasi Exa Search sebagai Sumber Pelengkap Permanen (`exa_search.py`)**:
+  - Exa Search API diintegrasikan sebagai sumber berita pelengkap permanen (BUKAN pengganti Google News RSS) dengan batasan ketat:
+    1. **Hanya Keyword Satu Kata**: Otomatis dicek via `is_single_word_keyword()` di `config.py` (panjang split == 1, contoh: "gula", "karet", "kakao"). Keyword frasa 2+ kata (seperti "industri agro", "makanan dan minuman") tetap hanya diproses via RSS karena hasil uji banding membuktikan Exa tidak efektif untuk frasa multi-kata.
+    2. **Filter Domain Indonesia Ketat**: Hanya menerima URL yang domainnya berakhiran `.id` atau `.co.id` (`is_allowed_id_domain()`). Seluruh domain lain (`.com`, `.org`, `.net`, TLD negara lain seperti `.mx`, `.ar`) dibuang untuk mengeliminasi noise situs luar negeri dan web spam.
+    3. **Konservasi Kredit API**: Menggunakan keyword search standar (`type: "keyword"` non-agent/deep, `num_results=25`) dengan batas tanggal tepat kemarin. Karena kuota kredit terbatas, dilarang menjalankan tes berulang tanpa kebutuhan jelas.
+    4. **Kolom Baru 'Sumber Data'**: Penambahan kolom `"Sumber Data"` (bernilai `"RSS"`, `"Exa"`, atau `"Serper"`) di posisi paling akhir kolom Excel (`export_excel.py`) untuk keperluan audit asal data.
+    5. **Penerapan Filter Seragam**: Seluruh rantai filter konten (`min_length`, anti-loker, override Ditjen Agro, topik utama, anti-resep, anti-iklan ritel, rasio industri vs kesehatan, dan dedup kemiripan judul) diterapkan sama rata tanpa perlakuan khusus.
+- **Struktur Folder Output Terorganisir per Tanggal Evaluasi**:
+  - Seluruh output pipeline tidak lagi disimpan langsung di root `hasil_scrapping/`, melainkan dipartisi ke dalam subfolder tanggal: `hasil_scrapping/<YYYY-MM-DD>/`.
+  - Fungsi `get_date_folder(target_date: date) -> str` di `config.py` dipanggil di awal proses (sebelum fetch keyword pertama) untuk membuat folder tanggal secara otomatis (`os.makedirs(folder, exist_ok=True)`).
+  - Standar struktur subfolder:
+    ```text
+    hasil_scrapping/
+    ├── 2026-09-14/
+    │   ├── all_2026-09-14.xlsx          (file final gabungan hari itu)
+    │   ├── progress.json                 (checkpoint keyword yang sudah selesai hari itu)
+    │   └── checkpoint_<keyword>.xlsx     (checkpoint per keyword, jika dieksekusi parsial)
+    ├── 2026-09-15/
+    │   ├── all_2026-09-15.xlsx
+    │   ├── progress.json
+    │   └── checkpoint_<keyword>.xlsx
+    └── 2026-09-16/
+        └── ...
+    ```
+  - **Aturan Proteksi Data**:
+    1. **Satu folder per tanggal**: Pemisahan tegas antar-tanggal evaluasi, mencegah file tertimpa atau bercampur baur antar-hari.
+    2. **Resume Checkpoint Otomatis**: Sebelum memulai scraping tanggal tertentu, pipeline mengecek `hasil_scrapping/<tanggal>/progress.json`. Keyword yang sudah tercatat selesai akan di-skip otomatis.
+    3. **Non-Destructive Merge**: File gabungan `all_<tanggal>.xlsx` menggunakan mode `merge_existing=True` di `save_to_excel()`. Data baru akan digabung ke file yang sudah ada dengan deduplikasi URL dan judul (`threshold=85`), tanpa menimpa data yang telah terkumpul sebelumnya.
+    4. **Root Bersih**: Direktori root `hasil_scrapping/` steril dari file lepas (loose files), hanya berisi subdirektori berformat tanggal `YYYY-MM-DD`.
+- **Perluasan Validasi Konteks Spesifik Komoditas & Eliminasi False Positive**:
+  - `is_cokelat_context_valid`: membuang deskriptor warna (*amplop cokelat*, *baju cokelat*).
+  - `is_tar_context_valid`: menyaring inisial merek non-rokok (akronim merek beras TAR) dan mewajibkan asosiasi istilah residu tembakau/rokok.
+  - `is_teh_context_valid`: menyaring sapaan kehormatan Sunda (*Teh Cely*) dan lirik lagu pop.
+  - `is_susu_context_valid`: menyaring istilah kedokteran gigi (*gigi susu*), metafora warna air (*kopi susu*), dan riset parodi *susu kecoa*.
+  - `is_kopi_context_valid`: menyaring insiden disiplin sekolah (*kena skors*), akronim parenting *KOPI Aceh*, etiket makan, dan tips asam lambung.
+  - `is_fame_context_valid`: menyaring penghargaan olahraga/hiburan (*Hall of Fame*) dan memastikan hanya merujuk pada *Fatty Acid Methyl Ester* / biofuel sawit.
+  - `is_kertas_context_valid`: mewajibkan istilah industri manufaktur kertas/pulp dan membuang penggunaan non-industri (*uang kertas*, *tiket kertas*, *wayang kertas*, *ujian kertas*).
+  - `is_foreign_noise_domain`: menyaring domain luar negeri non-relevan (`.vn`) yang mengindeks artikel lokal Vietnam dalam bahasa Indonesia otomatis.
+- **Pembaruan Skema Monitoring Terstruktur "Kompilasi Data Monitoring Media Massa"**:
+  - Database Pejabat diperluas menjadi 13 pejabat di `keyword_nama.xlsx` dengan kolom terstruktur: `nama`, `jabatan`, `unit_eselon`, `kategori`, dan `level`.
+  - Pemisahan keyword umum Kemenperin (`keyword_kemenperin.csv`) dan 46 keyword komoditas Ditjen Industri Agro (`keyword_topik_ia.csv` dan `keyword_data.txt`).
+  - Penambahan kolom baru di skema Excel dan DataFrame:
+    `Tanggal`, `Title`, `Link Website`, `Media Name`, `Category Group`, `Category`, `Unit Eselon`, `Spokesperson 1`, `Spokesperson 2`, `Tone`, `Keterangan Tone`, `Terkait Kemenperin`, `Keywords`, `Sumber Data`.
+  - Logika Tagging Otomatis:
+    1. **Terkait Kemenperin** = `"Ya"` jika menyebut keyword umum Kemenperin, pejabat di database, atau topik industri agro yang memiliki konteks industri/kebijakan (membuang resep masakan & isu kesehatan pribadi lewat heuristik filter).
+    2. **Category Group**: `"Kemenperin"` jika menyebut institusi/pejabat Kemenperin, `"PReskripsi"` jika membahas topik industri manufaktur/agro umum tanpa menyebut Kemenperin secara langsung.
+    3. **Unit Eselon**: Diambil dari database pejabat (`IA`, `IKFT`, `ILMATE`, `IKMA`, `KPAII`, `MENTERI`, `WAMEN`, `SETJEN`, `ITJEN`) atau `"IA"` untuk topik komoditas agro.
+    4. **Spokesperson 1 & 2**: Diurutkan berdasarkan **kemunculan pertama** nama/alias pejabat di dalam teks artikel.
+    5. **Category**: Mapping unit eselon (`IA` -> `"03. Industri Agro"`, `MENTERI`/`WAMEN`/`SETJEN`/`ITJEN` -> `"01. Kementerian Perindustrian"`, dst.).
+    6. **Tone & Keterangan Tone**: Sentimen rule-based 3 kelas (`Positif`, `Netral`, `Negatif`) dilengkapi kolom keterangan `"Estimasi Otomatis (Dapat Direvisi Manual)"`.
+  - Formatting Hyperlink Excel: Kolom `Link Website` menggunakan relasi hyperlink aktif OOXML dengan styling biru `#0563C1` dan single underline (`Font(color="0563C1", underline="single")`).
+
+
+
 
 
 
