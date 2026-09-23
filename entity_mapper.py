@@ -20,6 +20,10 @@ def match_name_in_text(name: str, text: str, threshold: int = 85) -> bool:
         return True
 
     # 2. Fuzzy match pada window n-gram kata
+    # Khusus akronim jabatan sensitif (menperin vs wamenperin), tidak boleh fuzzy match
+    if name.lower() in ("wamenperin", "menperin"):
+        return False
+
     words = re.findall(r"\b\w+\b", text.lower())
     n = len(name.split())
     if len(words) < n:
@@ -66,7 +70,7 @@ def find_spokespersons(
                     earliest_pos = pos
 
             # 2. Fuzzy match fallback
-            if earliest_pos is None:
+            if earliest_pos is None and alias.lower() not in ("wamenperin", "menperin"):
                 words = re.findall(r"\b\w+\b", text.lower())
                 n = len(alias.split())
                 if len(words) >= n:

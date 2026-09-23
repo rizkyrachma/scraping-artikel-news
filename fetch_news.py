@@ -9,7 +9,7 @@ import time
 import random
 import requests
 from datetime import date, datetime
-from urllib.parse import urlparse
+from urllib.parse import urlparse, parse_qs
 import feedparser  # type: ignore
 
 from query_builder import build_media_query, build_gov_query, build_rss_url
@@ -255,7 +255,11 @@ def is_valid_domain(url: str) -> bool:
     if any(p in full_url for p in JOB_URL_PATTERNS):
         return False
 
-    # 3. Domain .go.id tetap otomatis lolos (jalur terpisah)
+    # 3. Domain non-berita lokal (sekolah / desa)
+    if netloc.endswith(".sch.id") or netloc.endswith(".desa.id"):
+        return False
+
+    # 4. Domain .go.id tetap otomatis lolos (jalur terpisah)
     if netloc.endswith(GOV_DOMAIN_SUFFIX) or f"{GOV_DOMAIN_SUFFIX}:" in netloc:
         return True
 
@@ -291,48 +295,92 @@ def clean_title_suffix(raw_title: str, source_title: str | None) -> str:
     return title
 
 
-def search_keyword(keyword: str, delay: float | None = None) -> list[dict]:
+_KEYWORD_GROUPS_CACHE: dict[str, list[str]] | None = None
+
+
+def get_cached_keyword_groups() -> dict[str, list[str]]:
+    """Mengambil cache grup keyword untuk mencegah re-read disk berulang."""
+    global _KEYWORD_GROUPS_CACHE
+    if _KEYWORD_GROUPS_CACHE is None:
+        from config import build_keyword_groups
+        _KEYWORD_GROUPS_CACHE = build_keyword_groups()
+    return _KEYWORD_GROUPS_CACHE
+
+
+def search_keyword(keyword: str | list[str], delay: float | None = None, target_date: date | None = None) -> list[dict]:
     """
-    Mengambil berita untuk satu keyword dari Google News RSS (media query dan gov query).
+    Mengambil berita untuk satu keyword atau grup keyword dari Google News RSS (media query dan gov query).
+    Jika keyword berupa komoditas (misal 'gula'), otomatis digabungkan dengan variannya ('industri gula', 'industri gula rafinasi')
+    menjadi SATU query OR: ("gula" OR "industri gula" OR "industri gula rafinasi").
+    Jika keyword adalah 'pejabat_kemenperin', otomatis menggunakan 13 nama pejabat Kemenperin dalam 1 query OR.
     Menerapkan validasi domain, ekstraksi media_name, pembersihan title, serta filter relevansi.
     Proteksi jeda acak 3-5 detik otomatis diterapkan di fetch_google_news_rss.
+    Jika target_date diberikan, menyertakan parameter after/before di query RSS untuk mencari tanggal spesifik.
     """
     results = []
-    for query_fn in (build_media_query, build_gov_query):
-        encoded = query_fn(keyword)
-        rss_url = build_rss_url(encoded)
-        feed = fetch_google_news_rss(rss_url, keyword=keyword)
+    from datetime import timedelta
+    from query_builder import format_keyword_query
+    from config import get_officials_query_variants
 
-        for entry in feed.entries:
-            link = entry.get("link", "")
-            source_info = entry.get("source", {})
-            source_href = source_info.get("href", "") if isinstance(source_info, dict) else ""
-            raw_source_title = source_info.get("title") if isinstance(source_info, dict) else None
-            source_title = str(raw_source_title).strip() if raw_source_title else None
+    if isinstance(keyword, str) and keyword.lower() in ("pejabat_kemenperin", "pejabat kemenperin", "kemenperin_pejabat"):
+        variants_list = get_officials_query_variants()
+        base_label = "pejabat_kemenperin"
+    elif isinstance(keyword, (list, tuple)):
+        # Jika berupa list of list (chunks)
+        if keyword and isinstance(keyword[0], (list, tuple)):
+            variants_list = list(keyword)
+            base_label = str(variants_list[0][0]) if variants_list[0] else "unknown"
+        else:
+            variants_list = [list(keyword)]
+            base_label = str(keyword[0]) if keyword else "unknown"
+    else:
+        base_label = str(keyword).strip()
+        groups = get_cached_keyword_groups()
+        variants_list = [groups.get(base_label.lower(), [base_label])]
 
-            # 1. Validasi URL link dan URL domain asli penerbit
-            if not is_valid_domain(link) or (source_href and not is_valid_domain(source_href)):
-                continue
+    for variants in variants_list:
+        kw_expr = format_keyword_query(variants)
+        query_kw = kw_expr
+        if target_date is not None:
+            prev_d = target_date - timedelta(days=1)
+            next_d = target_date + timedelta(days=1)
+            query_kw = f"{kw_expr} after:{prev_d.strftime('%Y-%m-%d')} before:{next_d.strftime('%Y-%m-%d')}"
 
-            # 2. Bersihkan suffix nama media dari judul mentah
-            raw_title = entry.get("title", "")
-            clean_title = clean_title_suffix(raw_title, source_title)
+        for query_fn in (build_media_query, build_gov_query):
+            encoded = query_fn(query_kw)
+            rss_url = build_rss_url(encoded)
+            feed = fetch_google_news_rss(rss_url, keyword=base_label)
 
-            # 3. Filter relevansi berbasis judul (buang topik kesehatan/lifestyle murni)
-            if not is_likely_relevant(clean_title):
-                continue
+            for entry in feed.entries:
+                link = entry.get("link", "")
+                source_info = entry.get("source", {})
+                source_href = source_info.get("href", "") if isinstance(source_info, dict) else ""
+                raw_source_title = source_info.get("title") if isinstance(source_info, dict) else None
+                source_title = str(raw_source_title).strip() if raw_source_title else None
 
-            results.append({
-                "keyword": keyword,
-                "title": clean_title,
-                "raw_title": raw_title,
-                "link": link,
-                "media_name": source_title,
-                "source": source_title or "",
-                "source_url": source_href,
-                "published": entry.get("published", ""),
-                "sumber_data": "RSS",
-            })
+                # 1. Validasi URL link dan URL domain asli penerbit
+                if not is_valid_domain(link) or (source_href and not is_valid_domain(source_href)):
+                    continue
+
+                # 2. Bersihkan suffix nama media dari judul mentah
+                raw_title = entry.get("title", "")
+                clean_title = clean_title_suffix(raw_title, source_title)
+
+                # 3. Filter relevansi berbasis judul (buang topik kesehatan/lifestyle murni)
+                if not is_likely_relevant(clean_title):
+                    continue
+
+                results.append({
+                    "keyword": base_label,
+                    "title": clean_title,
+                    "raw_title": raw_title,
+                    "link": link,
+                    "media_name": source_title,
+                    "source": source_title or "",
+                    "source_url": source_href,
+                    "published": entry.get("published", ""),
+                    "sumber_data": "RSS",
+                })
 
     return results
 
@@ -380,7 +428,15 @@ def dedup_by_link(items: list[dict]) -> list[dict]:
             if link.lower() in ("nan", "none"):
                 link = ""
 
-        key = link.split("?")[0].rstrip("/") if link else f"__no_link_{id(item)}__"
+        if "youtube.com/watch" in link.lower():
+            parsed_u = urlparse(link)
+            qs = parse_qs(parsed_u.query)
+            vid = qs.get("v", [""])[0]
+            key = f"https://www.youtube.com/watch?v={vid}" if vid else link
+        elif "youtu.be/" in link.lower():
+            key = link.split("?")[0].rstrip("/")
+        else:
+            key = link.split("?")[0].rstrip("/") if link else f"__no_link_{id(item)}__"
         if key not in url_map:
             url_map[key] = dict(item)
         else:

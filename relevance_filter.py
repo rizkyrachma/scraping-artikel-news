@@ -23,6 +23,24 @@ def is_foreign_noise_domain(url: str) -> bool:
         return False
 
 
+def is_pdf_document(url: str = "", title: str = "", sumber_data: str = "") -> bool:
+    """
+    Mendeteksi dokumen PDF agar tidak diambil / diblokir total:
+    - Sumber Data bernilai PDF
+    - Ekstensi atau pola URL memuat .pdf, /pdf/, /unduh/, /download/, digivla.id
+    - Judul berakhiran .pdf atau mengandung [PDF] / (PDF)
+    """
+    if sumber_data and str(sumber_data).upper() == "PDF":
+        return True
+    u = (url or "").lower()
+    if any(p in u for p in [".pdf", "/pdf/", "digivla.id", "/unduh/", "/download/"]):
+        return True
+    t = (title or "").lower()
+    if t.endswith(".pdf") or "[pdf]" in t or "(pdf)" in t:
+        return True
+    return False
+
+
 # Kata kunci konteks industri/ekonomi
 INDUSTRY_CONTEXT_WORDS = [
     "industri", "ekspor", "impor", "produksi", "pabrik", "kemenperin",
@@ -186,6 +204,7 @@ CRIME_ACCIDENT_TITLE_KEYWORDS = [
 CELEBRITY_TITLE_KEYWORDS = [
     "ji chang-wook", "aktor korea", "artis korea", "drakor", "k-pop", "konser",
     "lirik lagu", "chord gitar", "kunci gitar", "makna lagu", "viral tiktok", "ig nobel",
+    "minidrama", "mini drama", "sinetron", "film pendek", "trailer", "teaser", "webseries",
 ]
 
 
@@ -206,12 +225,114 @@ def is_crime_or_accident(title: str = "", text: str = "") -> bool:
     return False
 
 
+CRIME_ACCIDENT_SIGNALS = [
+    "kebakaran", "terbakar", "puntung rokok", "hangus", "dilalap api", "kobaran api",
+    "curi", "pencuri", "pencurian", "digerebek", "gerebek", "sabu", "narkoba",
+    "tertangkap", "ditangkap polisi", "diamankan polisi", "maling",
+]
+
+POLICY_INSTITUTION_TITLE_SIGNALS = [
+    "kemenperin", "kementerian perindustrian", "menperin", "wamenperin",
+    "ditjen agro", "menteri perindustrian", "kebijakan", "regulasi", "ekspor",
+    "impor", "produksi nasional", "investasi", "hilirisasi",
+]
+
+
+def is_crime_accident_noise(title: str = "", text: str = "") -> bool:
+    """
+    Mendeteksi berita kriminal, kecelakaan, musibah kebakaran, atau narkoba yang lolos
+    karena kebetulan menyebut nama komoditas sebagai lokasi/objek/bahan (bukan topik industrinya).
+    True jika salah satu sinyal CRIME_ACCIDENT_SIGNALS muncul di TITLE dan TIDAK disertai
+    konteks kebijakan/institusi (Kemenperin, ekspor, produksi nasional, dst) di title yang sama.
+    """
+    title_lower = (title or "").lower()
+    if not title_lower:
+        return False
+
+    has_crime_signal = any(
+        matches_word_boundary(sig, title_lower) or sig in title_lower
+        for sig in CRIME_ACCIDENT_SIGNALS
+    )
+    if not has_crime_signal:
+        return False
+
+    has_policy_exception = any(
+        matches_word_boundary(exc, title_lower) or exc in title_lower
+        for exc in POLICY_INSTITUTION_TITLE_SIGNALS
+    )
+    return not has_policy_exception
+
+
 def is_celebrity_entertainment(title: str = "", text: str = "") -> bool:
     """
     Mendeteksi berita infotainment/gaya hidup selebriti murni (misal aktor Korea, konser, drakor).
     """
     title_lower = (title or "").lower()
     return any(w in title_lower for w in CELEBRITY_TITLE_KEYWORDS)
+
+
+NON_ARTICLE_TITLE_PATTERNS = [
+    # Bab skripsi / tesis / buku akademik
+    r"^\s*(bab|chapter)\s+([ivxlcdm]+|\d+)\b",
+    # Template jurnal / format penulisan
+    r"\btemplate\b",
+    # Elemen struktural dokumen / skripsi / jurnal akademik
+    r"^\s*(daftar\s+isi|daftar\s+tabel|daftar\s+gambar|daftar\s+pustaka|lembar\s+pengesahan|kata\s+pengantar|halaman\s+judul|lampiran)\b",
+    r"^\s*(abstrak|abstract)\b",
+    r"\b(ijccs|ijccs-style)\b",
+]
+
+_NON_ARTICLE_REGEX = re.compile("|".join(NON_ARTICLE_TITLE_PATTERNS), re.IGNORECASE)
+
+
+def is_non_article_document_noise(title: str = "", text: str = "") -> bool:
+    """
+    Mendeteksi dokumen non-artikel berita seperti bab skripsi/tesis (BAB II),
+    template jurnal akademik (Template Jurnal IJCCS), daftar isi, kata pengantar,
+    atau abstrak skripsi tanpa konteks berita industri.
+    """
+    title_clean = (title or "").strip().lower()
+    if not title_clean:
+        return False
+
+    # 1. Cek pola judul dokumen akademik / non-artikel
+    if _NON_ARTICLE_REGEX.search(title_clean):
+        # Kecualikan jika judul secara eksplisit memuat konteks industri/kebijakan formal
+        if any_word_boundary_match(["kemenperin", "kementerian", "ekspor", "impor", "pabrik", "produksi"], title_clean):
+            return False
+        return True
+
+    # 2. Cek judul terlalu pendek & generik (misal: "BAB 2", "COVER", "LAMPIRAN")
+    if len(title_clean) < 15 and re.match(r"^(bab|cover|lampiran|skripsi|tesis)\b", title_clean):
+        return True
+
+    return False
+
+
+SAWIT_EXCLUDE_PHRASES = [
+    "duren sawit",
+    "kecamatan duren sawit",
+    "kelurahan duren sawit",
+    "polsek duren sawit",
+]
+SAWIT_INDUSTRY_TERMS = [
+    "kelapa sawit", "minyak sawit", "perkebunan sawit", "kebun sawit", "cpo",
+    "tbs", "tandan buah segar", "petani sawit", "industri sawit", "pabrik sawit",
+    "ekspor sawit", "hilirisasi sawit", "bpdpks", "gapki", "sawit rakyat",
+]
+
+
+def is_sawit_context_valid(title: str, text: str) -> bool:
+    """
+    Memvalidasi keyword 'sawit' agar tidak tercampur nama lokasi kecamatan/jalan ('Duren Sawit')
+    kecuali jika benar-benar membahas industri kelapa sawit / CPO.
+    """
+    combined = f"{title} {text}".lower()
+    if any(phrase in combined for phrase in SAWIT_EXCLUDE_PHRASES):
+        has_industry = any(matches_word_boundary(term, combined) for term in SAWIT_INDUSTRY_TERMS)
+        if not has_industry:
+            return False
+    return True
 
 
 PULP_EXCLUDE_PHRASES = ["pulp fiction"]
@@ -576,7 +697,16 @@ def is_keyword_primary_topic(title: str, text: str, keyword: str, min_content_oc
     if kw_lower == "fame" and not is_fame_context_valid(title, text):
         return False
 
-    search_terms = [keyword]
+    search_terms = []
+    if "," in keyword:
+        for sub_kw in [k.strip() for k in keyword.split(",") if k.strip()]:
+            search_terms.append(sub_kw)
+    else:
+        search_terms.append(keyword)
+
+    if any(k in kw_lower for k in ["kemenperin", "perindustrian", "institusi", "agus gumiwang"]):
+        search_terms.extend(["kemenperin", "kementerian perindustrian", "agus gumiwang", "menperin"])
+
     OFFICIAL_NAMES = [
         "agus gumiwang", "putu juli ardika", "merrijantij punguan",
         "dyan garneta", "rr citra rapati", "krisna septiningrum",
@@ -617,13 +747,15 @@ INDUSTRY_POLICY_SIGNALS = [
     "pt ", "tata niaga", "kuota", "rafinasi", "harga", "daya saing",
 ]
 
-# Sinyal kata kunci artikel kesehatan / nutrisi pribadi
+# Sinyal kata kunci artikel kesehatan / nutrisi pribadi & trivia non-industri
 HEALTH_PERSONAL_SIGNALS = [
     "kesehatan tubuh", "gizi", "diet", "kalori", "diabetes",
     "gula darah", "kemenkes", "puskesmas", "manfaat", "khasiat",
     "efek samping", "penyakit", "menu sarapan", "menu sehat",
     "pola makan", "asupan", "konsumsi harian", "tips kesehatan",
-    "detoksifikasi", "resep",
+    "detoksifikasi", "resep", "racun", "keracunan", "toksik",
+    "toksisitas", "gangguan saraf", "kemandulan", "penurunan fungsi organ",
+    "sejarah kuno", "romawi kuno", "zaman dulu", "fakta unik", "fakta menarik",
 ]
 
 
@@ -646,16 +778,51 @@ def count_signal_occurrences(signals: list[str], text: str) -> int:
     return total
 
 
-def is_industry_policy_topic(title: str = "", text: str = "") -> bool:
+def is_industry_policy_topic(title: str = "", text: str = "", sumber_data: str = "") -> bool:
     """
-    Memeriksa apakah artikel bertema industri / kebijakan pemerintah vs kesehatan / nutrisi pribadi:
+    Memeriksa apakah artikel bertema industri / kebijakan pemerintah vs kesehatan / nutrisi pribadi / trivia:
     - industry_score > health_score : LOLOS (True)
     - health_score > industry_score : DIBUANG (False)
-    - skor sama-sama 0 atau seri    : LOLOS by default (True)
+    - skor sama-sama 0 atau seri    : LOLOS by default (True) untuk teks berita formal
+    - Khusus YouTube:
+      * Tolak jika dominan musik/sound effect ([musik] >= 10 atau rasio > 15%)
+      * Wajib minimal 2 sinyal industri (ind_score >= 2) untuk menyaring kata lepas di video trivia
     """
     combined = f"{title or ''} {text or ''}"
     ind_score = count_signal_occurrences(INDUSTRY_POLICY_SIGNALS, combined)
     health_score = count_signal_occurrences(HEALTH_PERSONAL_SIGNALS, combined)
+
+    is_yt = (sumber_data or "").strip().lower() == "youtube" or "[musik]" in combined.lower()
+
+    if is_yt:
+        # 1. Tolak video dengan aksara non-Latin (Chinese/Japanese/Korean/Arabic) drama pendek auto-translate
+        if re.search(r"[\u4e00-\u9fff\u3040-\u30ff\uac00-\ud7af\u0600-\u06ff]", title or ""):
+            return False
+
+        # 2. Tolak video drama/skit/sinetron pendek
+        title_lower = (title or "").lower()
+        if any(tag in title_lower for tag in ["#drama", "#shortdrama", "#skit", "#alurcerita", "#sinetron", "#filmpendek", "#motivation"]):
+            return False
+
+        # 3. Tolak video katalog/toko mebel ritel
+        if any(w in title_lower for w in ["grosir", "toko mebel", "toko furniture", "paket satua"]):
+            return False
+
+        # 4. Tolak video parade/karnaval musik latar tanpa dialog berita substantif
+        musik_count = combined.lower().count("[musik]")
+        words = len(combined.split())
+        if musik_count >= 10 or (words > 0 and (musik_count / words) > 0.15):
+            return False
+
+        # 5. Tolak jika sinyal kesehatan/trivia lebih besar atau sama
+        if health_score >= ind_score:
+            return False
+
+        # 6. Transkrip YouTube wajib memiliki minimal 2 sinyal industri agar tidak tertipu 1 kata lepas
+        if ind_score < 2:
+            return False
+
+        return True
 
     if health_score > ind_score:
         return False
@@ -665,9 +832,9 @@ def is_industry_policy_topic(title: str = "", text: str = "") -> bool:
 
 # Sinyal eksplisit institusi Kemenperin (nama institusi langsung disebut)
 EXPLICIT_KEMENPERIN_SIGNALS = [
-    "kemenperin", "kementerian perindustrian", "menperin",
-    "wamenperin", "wakil menteri perindustrian", "direktorat jenderal industri agro",
-    "ditjen agro", "ditjen industri agro",
+    "kemenperin", "kementerian perindustrian", "menteri perindustrian",
+    "menperin", "wamenperin", "wakil menteri perindustrian",
+    "direktorat jenderal industri agro", "ditjen agro", "ditjen industri agro",
 ]
 
 
@@ -685,15 +852,17 @@ def get_kemenperin_signal(
        "menperin", "wamenperin", "wakil menteri perindustrian", "direktorat jenderal industri agro",
        "ditjen agro", "ditjen industri agro" (word boundary matching), ATAU
     2. Mengutip salah satu dari 13 nama pejabat di database (via find_spokespersons / match_name_in_text), ATAU
-    3. Berasal dari pencarian institusi khusus (keyword == 'kemenperin_institusi') atau Direct Crawl (sumber_data == 'Direct Crawl').
+    3. Berasal dari pencarian institusi khusus (keyword == 'kemenperin_institusi' atau 'pejabat_kemenperin')
+       atau Direct Crawl (sumber_data == 'Direct Crawl').
 
     Kata-kata umum industri/produksi/ekspor/pabrik/dll BUKAN sinyal Kemenperin.
     """
     from entity_mapper import find_spokespersons
 
-    # 1. Cek Sumber Khusus Institusi / Direct Crawl
-    if (keyword or "").strip().lower() == "kemenperin_institusi":
-        return True, "EKSPLISIT", "kemenperin_institusi"
+    # 1. Cek Sumber Khusus Institusi / Pejabat / Direct Crawl
+    clean_kw = (keyword or "").strip().lower()
+    if clean_kw in ("kemenperin_institusi", "pejabat_kemenperin", "pejabat kemenperin", "kemenperin_pejabat"):
+        return True, "EKSPLISIT", "pejabat_kemenperin"
     if (sumber_data or "").strip().lower() == "direct crawl":
         return True, "EKSPLISIT", "Direct Crawl"
 
@@ -728,21 +897,57 @@ def is_kemenperin_related(
     return is_related
 
 
-
-_DITJEN_AGRO_PATTERN = re.compile(
-    r"\b(ditjen\s+industri\s+agro|direktorat\s+jenderal\s+industri\s+agro)\b",
+_KEMENPERIN_OR_AGRO_PATTERN = re.compile(
+    r"\b(kemenperin|kementerian\s+perindustrian|menteri\s+perindustrian|wamenperin|wakil\s+menteri\s+perindustrian|menperin|direktorat\s+jenderal\s+industri\s+agro|ditjen\s+agro|ditjen\s+industri\s+agro)\b",
     re.IGNORECASE,
 )
 
+_OFFICIALS_DETAILS_CACHE: list[dict] | None = None
 
-def has_ditjen_agro_override(title: str = "", text: str = "") -> bool:
+
+def has_kemenperin_or_agro_override(title: str = "", text: str = "") -> bool:
     """
-    Mengecek keberadaan frasa 'ditjen industri agro' atau 'direktorat jenderal industri agro'
-    (case-insensitive, word boundary matching) pada title atau text.
+    Override khusus Kemenperin & Ditjen Industri Agro:
+    Mengembalikan True jika salah satu terdeteksi pada title atau text (word boundary matching):
+    1. Nama institusi: "kemenperin", "kementerian perindustrian", "menperin", "wamenperin",
+       "direktorat jenderal industri agro", "ditjen agro" (atau "ditjen industri agro", "menteri perindustrian")
+    2. Nama salah satu dari 13 pejabat di keyword_nama.xlsx (menggunakan match_name_in_text).
     """
+    global _OFFICIALS_DETAILS_CACHE
     combined = f"{title or ''} {text or ''}"
     if not combined.strip():
         return False
-    return bool(_DITJEN_AGRO_PATTERN.search(combined))
+
+    # 1. Cek regex nama institusi (sangat cepat)
+    if _KEMENPERIN_OR_AGRO_PATTERN.search(combined):
+        return True
+
+    # 2. Cek nama salah satu dari 13 pejabat
+    from entity_mapper import match_name_in_text
+    if _OFFICIALS_DETAILS_CACHE is None:
+        from config import load_spokesperson_details
+        _OFFICIALS_DETAILS_CACHE = load_spokesperson_details()
+
+    for d in _OFFICIALS_DETAILS_CACHE:
+        for a in d.get("aliases", []):
+            if match_name_in_text(a, combined):
+                return True
+
+    return False
+
+
+# Alias backwards compatibility
+has_ditjen_agro_override = has_kemenperin_or_agro_override
+
+
+if __name__ == "__main__":
+    assert is_non_article_document_noise("Template Jurnal IJCCS", "") is True
+    assert is_non_article_document_noise("BAB II", "") is True
+    assert is_non_article_document_noise("BAB 1. PENDAHULUAN 1 1.1 Latar Belakang Tepung terigu ...", "") is True
+    assert is_non_article_document_noise("Daftar Isi", "") is True
+    assert is_non_article_document_noise("Harga Kelapa Sumsel Terjun Bebas", "") is False
+    print("All relevance_filter self-checks passed successfully!")
+
+
 
 

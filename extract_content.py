@@ -9,6 +9,10 @@ from newspaper import Article  # type: ignore
 
 import threading
 import time
+import socket
+
+# Cegah proses hanging tanpa batas di level socket OS
+socket.setdefaulttimeout(15)
 
 try:
     import googlenewsdecoder  # type: ignore
@@ -25,7 +29,7 @@ _DECODER_LOCK = threading.Lock()
 _LAST_DECODE_TIME = 0.0
 
 
-def resolve_article_url(url: str, min_interval: float = 3.5, max_retries: int = 3) -> str:
+def resolve_article_url(url: str, min_interval: float = 0.4, max_retries: int = 2) -> str:
     """
     Menyelesaikan URL Google News (news.google.com/rss/articles/...)
     menjadi URL asli situs penerbit dengan:
@@ -141,7 +145,7 @@ import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
-def fetch_html_with_timeout(url: str, timeout: int = 12, max_retries: int = 2) -> str | None:
+def fetch_html_with_timeout(url: str, timeout: int = 8, max_retries: int = 1) -> str | None:
     """
     Fetch URL dengan timeout eksplisit dan retry.
     Mencegah proses hanging tanpa batas pada koneksi yang macet.
@@ -172,12 +176,23 @@ def extract_article_text(url: str, max_length: int = 8000) -> str:
     diikuti parsing in-memory trafilatura dan newspaper3k tanpa second network request.
     """
     target_url = resolve_article_url(url)
+    
+    # Router: jika URL adalah file PDF atau dari endpoint dokumen download,
+    # blokir langsung (jangan diekstrak dan jangan proses OCR/pypdf)
+    is_pdf_url = any(p in target_url.lower() for p in [".pdf", "/pdf/", "digivla.id", "/unduh/", "/download/"])
+    if is_pdf_url:
+        return ""
+
     raw_text = ""
     is_gov = ".go.id" in target_url.lower()
-    req_timeout = 20 if is_gov else 12
+    req_timeout = 10 if is_gov else 8
 
     # Fetch HTML dengan strict timeout
-    downloaded = fetch_html_with_timeout(target_url, timeout=req_timeout, max_retries=2)
+    downloaded = fetch_html_with_timeout(target_url, timeout=req_timeout, max_retries=1)
+
+    # Cek apakah response berupa file PDF biner (meski URL tidak berakhiran .pdf)
+    if downloaded and downloaded.startswith("%PDF-"):
+        return ""
 
     # 1. Ekstraksi utama dengan trafilatura (in-memory dari downloaded HTML)
     if downloaded:

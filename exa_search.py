@@ -110,6 +110,7 @@ def search_exa(
             "text": text,
             "media_name": media_name,
             "author": item.get("author") or "",
+            "sumber_data": "Exa",
         })
 
     return articles

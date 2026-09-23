@@ -20,6 +20,8 @@ Orkestrasi pipeline scraping berita industri end-to-end:
 import sys
 import os
 import json
+import time
+import threading
 import argparse
 from datetime import date
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -37,6 +39,9 @@ from config import (
     get_date_folder,
     is_published_yesterday,
     is_single_word_keyword,
+    log_granular,
+    start_heartbeat,
+    format_display_url,
 )
 from fetch_news import (
     collect_all,
@@ -44,6 +49,7 @@ from fetch_news import (
     is_near_duplicate_title,
     dedup_by_link,
     dedup_by_title,
+    GoogleCaptchaBlockedError,
 )
 from extract_content import (
     extract_article_text,
@@ -51,6 +57,7 @@ from extract_content import (
     resolve_article_url,
 )
 from relevance_filter import (
+    is_pdf_document,
     is_recipe,
     is_promotional,
     is_job_posting,
@@ -72,13 +79,18 @@ from relevance_filter import (
     is_fame_context_valid,
     is_foreign_noise_domain,
     is_pulp_context_valid,
+    is_crime_accident_noise,
+    is_sawit_context_valid,
+    is_non_article_document_noise,
     has_ditjen_agro_override,
+    has_kemenperin_or_agro_override,
 )
 from entity_mapper import find_spokespersons
 from sentiment import classify_tone
 from export_excel import save_to_excel
 from serper_search import search_serper_news
 from exa_search import search_exa_news
+from youtube_search import search_youtube_videos, get_kemenperin_channel_videos
 
 USE_SERPER_ONLY: bool = os.environ.get("USE_SERPER_ONLY", "false").lower() in ("true", "1", "yes")
 
@@ -98,15 +110,16 @@ def extract_one_article(item: dict) -> dict:
         # Tautan langsung dari Serper.dev / Exa tidak membutuhkan resolusi Google decoder
         resolved = link
 
-    # Jika teks sudah disediakan oleh Exa dan memadai (>= 300 char), gunakan langsung
+    # Jika teks sudah disediakan oleh Exa / YouTube dan memadai (>= 300 char), gunakan langsung
     text = item.get("text", "")
     if not text or len(text.strip()) < 300:
-        try:
-            extracted_text = extract_article_text(resolved, max_length=8000)
-            if extracted_text and len(extracted_text.strip()) > len(text):
-                text = extracted_text
-        except Exception:
-            pass
+        if item.get("sumber_data") != "YouTube":
+            try:
+                extracted_text = extract_article_text(resolved, max_length=8000)
+                if extracted_text and len(extracted_text.strip()) > len(text):
+                    text = extracted_text
+            except Exception:
+                pass
 
     item_copy = dict(item)
     item_copy["text"] = text
@@ -115,6 +128,25 @@ def extract_one_article(item: dict) -> dict:
         item_copy["link"] = resolved
     item_copy["is_suspiciously_short"] = is_suspiciously_short(text)
     return item_copy
+
+
+def extract_single_article_with_timer(item: dict) -> tuple[dict, str]:
+    """
+    Ekstraksi konten satu artikel dengan watchdog timer 10 detik.
+    Jika melebihi 10 detik, cetak peringatan [LAMBAT] tanpa memutus proses.
+    """
+    disp_url = format_display_url(item)
+    timer = threading.Timer(
+        10.0,
+        lambda: log_granular(f"       [LAMBAT] URL ini butuh waktu lebih dari 10 detik: {disp_url}, masih mencoba...")
+    )
+    timer.daemon = True
+    timer.start()
+    try:
+        res = extract_one_article(item)
+        return res, disp_url
+    finally:
+        timer.cancel()
 
 
 def filter_valid_articles(
@@ -139,6 +171,14 @@ def filter_valid_articles(
         link = item.get("resolved_url") or item.get("link", "")
         keyword = item.get("keyword") or default_keyword
 
+        # 1-pdf. Cek dokumen PDF (diblokir total sesuai instruksi)
+        if (item.get("sumber_data", "").upper() == "PDF" or
+            is_pdf_document(url=link, title=title, sumber_data=item.get("sumber_data", ""))):
+            item_copy = dict(item)
+            item_copy["discard_reason"] = "pdf_blocked"
+            discarded.append(item_copy)
+            continue
+
         # 1. Cek isi kosong atau terlalu pendek
         if not text or len(text.strip()) < min_length:
             item_copy = dict(item)
@@ -161,7 +201,7 @@ def filter_valid_articles(
             continue
 
         # 1c. Cek berita kriminal/kecelakaan/musibah non-industri
-        if is_crime_or_accident(title, text):
+        if is_crime_or_accident(title, text) or is_crime_accident_noise(title, text):
             item_copy = dict(item)
             item_copy["discard_reason"] = "crime_or_accident"
             discarded.append(item_copy)
@@ -174,8 +214,30 @@ def filter_valid_articles(
             discarded.append(item_copy)
             continue
 
-        # OVERRIDE: Artikel yang menyebut Ditjen Industri Agro langsung lolos tanpa filter sekunder
-        if not has_ditjen_agro_override(title, text):
+        # 1e. Cek resep kuliner (wajib dibuang meski menyebut Kemenperin/Agro)
+        if is_recipe(title, text):
+            item_copy = dict(item)
+            item_copy["discard_reason"] = "recipe"
+            discarded.append(item_copy)
+            continue
+
+        # 1f. Cek materi promosi ritel / iklan (wajib dibuang meski menyebut Kemenperin/Agro)
+        if is_promotional(title, text):
+            item_copy = dict(item)
+            item_copy["discard_reason"] = "promotional"
+            discarded.append(item_copy)
+            continue
+
+        # 1g. Cek dokumen non-artikel berita (bab skripsi/tesis, template jurnal akademik, abstrak)
+        if is_non_article_document_noise(title, text):
+            item_copy = dict(item)
+            item_copy["discard_reason"] = "non_article_document_noise"
+            discarded.append(item_copy)
+            continue
+
+        # OVERRIDE: Artikel yang menyebut Kemenperin, Menperin/Wamenperin, Ditjen Industri Agro,
+        # atau salah satu dari 13 pejabat Kemenperin langsung lolos is_keyword_primary_topic dan is_industry_policy_topic
+        if not has_kemenperin_or_agro_override(title, text):
             # 2. Filter frekuensi keyword & makna ganda
             if keyword and keyword.lower() == "kertas" and not is_kertas_context_valid(title, text):
                 item_copy = dict(item)
@@ -243,28 +305,26 @@ def filter_valid_articles(
                 discarded.append(item_copy)
                 continue
 
+            if keyword and keyword.lower() in ("sawit", "minyak sawit") and not is_sawit_context_valid(title, text):
+                item_copy = dict(item)
+                item_copy["discard_reason"] = "sawit_location_duren_sawit"
+                discarded.append(item_copy)
+                continue
+
+            if is_crime_accident_noise(title, text):
+                item_copy = dict(item)
+                item_copy["discard_reason"] = "crime_accident_noise"
+                discarded.append(item_copy)
+                continue
+
             if keyword and not is_keyword_primary_topic(title, text, keyword):
                 item_copy = dict(item)
                 item_copy["discard_reason"] = "keyword_not_primary_topic"
                 discarded.append(item_copy)
                 continue
 
-            # 3. Cek resep kuliner
-            if is_recipe(title, text):
-                item_copy = dict(item)
-                item_copy["discard_reason"] = "recipe"
-                discarded.append(item_copy)
-                continue
-
-            # 4. Cek materi promosi ritel
-            if is_promotional(title, text):
-                item_copy = dict(item)
-                item_copy["discard_reason"] = "promotional"
-                discarded.append(item_copy)
-                continue
-
-            # 5. Filter topik industri/kebijakan vs kesehatan personal
-            if not is_industry_policy_topic(title, text):
+            # 3. Filter topik industri/kebijakan vs kesehatan personal
+            if not is_industry_policy_topic(title, text, sumber_data=item.get("sumber_data", "")):
                 item_copy = dict(item)
                 item_copy["discard_reason"] = "health_personal_topic"
                 discarded.append(item_copy)
@@ -306,57 +366,86 @@ def process_single_keyword(
 ) -> dict:
     """
     Mengambil, mengekstrak, dan menyaring berita untuk satu kata kunci,
-    termasuk filter tanggal 'kemarin' dan filter institusi Kemenperin (Eksplisit/Implisit).
+    termasuk filter tanggal 'kemarin' dan filter institusi Kemenperin (Eksplisit/Implisit)
+    dengan 6 sub-tahap granular dan progress counter live.
     """
+    t_start = time.time()
     if name_map is None:
         name_map = load_spokesperson_map("keyword_nama.xlsx")
 
     use_serper = serper_only or USE_SERPER_ONLY
+    log_granular(f"  [>] Memproses keyword: '{keyword}'...")
+
+    # [1/6] Fetch RSS (media + gov)
     if use_serper:
-        print(f"  [>] [Serper.dev] Fetching berita untuk '{keyword}'...", flush=True)
         raw_results = search_serper_news(keyword)
     else:
-        print(f"  [>] Fetching berita untuk '{keyword}'...", flush=True)
         raw_results = search_keyword(keyword, delay=delay)
+    log_granular(f"     [1/6] Fetch RSS (media + gov)...          -> selesai, {len(raw_results)} kandidat")
 
     for item in raw_results:
         if "sumber_data" not in item:
             item["sumber_data"] = "Serper" if use_serper else "RSS"
 
-    # Integrasi Exa Search permanen: HANYA dipanggil jika keyword satu kata
+    # [2/6] Fetch Exa (jika keyword 1 kata)
     if is_single_word_keyword(keyword):
-        print(f"  [>] [Exa.ai] Fetching berita pelengkap untuk keyword 1 kata '{keyword}'...", flush=True)
         exa_items = search_exa_news(keyword)
         if exa_items:
-            print(f"      -> {len(exa_items)} kandidat pelengkap ditemukan oleh Exa Search.", flush=True)
+            log_granular(f"     [2/6] Fetch Exa (jika keyword 1 kata)...  -> selesai, {len(exa_items)} kandidat")
             raw_results = raw_results + exa_items
         else:
-            print(f"      -> Tidak ada entri tambahan dari Exa (atau EXA_API_KEY tidak diset).", flush=True)
+            log_granular(f"     [2/6] Fetch Exa (jika keyword 1 kata)...  -> selesai, 0 kandidat")
+    else:
+        log_granular(f"     [2/6] Fetch Exa (jika keyword 1 kata)...  -> dilewati (keyword > 1 kata)")
+
+    # Fetch YouTube (1x per keyword, hemat kuota: 100 unit)
+    yt_items = search_youtube_videos(keyword)
+    if yt_items:
+        log_granular(f"     [+] Fetch YouTube (search 1x)...          -> selesai, {len(yt_items)} video")
+        raw_results = raw_results + yt_items
+    else:
+        log_granular(f"     [-] Fetch YouTube (search 1x)...          -> 0 video (atau API key kosong)")
 
     candidates = dedup_by_link(raw_results)
     init_count = len(candidates)
-    print(f"      -> {init_count} kandidat unik setelah filter domain & URL dedup.", flush=True)
 
-    # 1. Filter tanggal dari metadata RSS (HANYA KEMARIN) sebelum ekstraksi web
+    # [3/6] Filter tanggal kemarin
     yesterday_candidates = [c for c in candidates if is_published_yesterday(c.get("published", ""))]
     date_dropped_count = init_count - len(yesterday_candidates)
-    print(f"      -> {len(yesterday_candidates)} kandidat tanggal kemarin (Gugur tanggal arsip lama: {date_dropped_count}).", flush=True)
+    log_granular(f"     [3/6] Filter tanggal kemarin...            -> {len(yesterday_candidates)} lolos")
 
+    # [4/6] Ekstraksi konten
+    total_yest = len(yesterday_candidates)
+    log_granular(f"     [4/6] Ekstraksi konten ({total_yest} artikel)...")
     extracted = []
     if yesterday_candidates:
-        with ThreadPoolExecutor(max_workers=max_workers) as executor:
-            futures = [executor.submit(extract_one_article, item) for item in yesterday_candidates]
+        workers = min(max_workers, 4 if use_serper else 2)
+        with ThreadPoolExecutor(max_workers=workers) as executor:
+            futures = [executor.submit(extract_single_article_with_timer, item) for item in yesterday_candidates]
+            completed = 0
             for f in as_completed(futures):
-                extracted.append(f.result())
+                completed += 1
+                try:
+                    res, disp_url = f.result(timeout=35)
+                    extracted.append(res)
+                except GoogleCaptchaBlockedError:
+                    raise
+                except Exception:
+                    disp_url = "url"
+                log_granular(f"       -> mengekstrak artikel {completed}/{total_yest}: {disp_url}")
+    else:
+        log_granular(f"       -> tidak ada artikel tanggal kemarin untuk diekstrak")
 
+    # [5/6] Filter relevansi & dedup
     content_valid, discarded = filter_valid_articles(extracted, min_length=300, default_keyword=keyword)
+    log_granular(f"     [5/6] Filter relevansi & dedup...          -> {len(content_valid)} lolos")
 
     reasons = {}
     for d in discarded:
         r = d.get("discard_reason", "other")
         reasons[r] = reasons.get(r, 0) + 1
 
-    # 2. Flagging institusi: Terkait Kemenperin (Eksplisit / Implisit) - OPSI B (BUKAN BUANG)
+    # [6/6] Sentiment & entity mapping
     kemenperin_yes_count = 0
     flagged_articles = []
     for item in content_valid:
@@ -364,6 +453,7 @@ def process_single_keyword(
             item.get("title", ""), item.get("text", ""), name_map
         )
         item_copy = dict(item)
+        item_copy["keyword"] = keyword
         item_copy["terkait_kemenperin"] = "Ya" if is_rel else "Tidak"
         item_copy["kemenperin_signal_type"] = sig_type
         item_copy["kemenperin_signal_detail"] = sig_det
@@ -371,12 +461,11 @@ def process_single_keyword(
         if is_rel:
             kemenperin_yes_count += 1
 
+    log_granular(f"     [6/6] Sentiment & entity mapping...        -> selesai")
+    duration = time.time() - t_start
+    log_granular(f"   [OK] '{keyword}' selesai: {len(content_valid)} artikel final. (durasi: {duration:.0f} detik)")
+
     kemenperin_no_count = len(content_valid) - kemenperin_yes_count
-    print(
-        f"      -> Final Valid (setelah filter konten): {len(content_valid)} | "
-        f"Terkait Kemenperin: Ya={kemenperin_yes_count} / Tidak={kemenperin_no_count}",
-        flush=True,
-    )
 
     return {
         "keyword": keyword,
@@ -531,12 +620,24 @@ def run_pipeline(
     print(f"Artikel gugur filter tanggal: {date_dropped_count} artikel")
     print(f"Artikel lolos filter tanggal (kemarin): {len(yesterday_candidates)} artikel")
 
-    print(f"Mengekstrak {len(yesterday_candidates)} artikel tanggal kemarin...")
+    total_yest = len(yesterday_candidates)
+    log_granular(f"Mengekstrak {total_yest} artikel tanggal kemarin...")
     extracted_articles = []
-    with ThreadPoolExecutor(max_workers=8) as executor:
-        futures = [executor.submit(extract_one_article, item) for item in yesterday_candidates]
-        for f in as_completed(futures):
-            extracted_articles.append(f.result())
+    if yesterday_candidates:
+        workers = min(8, 4 if USE_SERPER_ONLY else 2)
+        with ThreadPoolExecutor(max_workers=workers) as executor:
+            futures = [executor.submit(extract_single_article_with_timer, item) for item in yesterday_candidates]
+            completed = 0
+            for f in as_completed(futures):
+                completed += 1
+                try:
+                    res, disp_url = f.result(timeout=35)
+                    extracted_articles.append(res)
+                except Exception:
+                    disp_url = "url"
+                log_granular(f"  -> mengekstrak artikel {completed}/{total_yest}: {disp_url}")
+    else:
+        log_granular("  -> 0 artikel untuk diekstrak")
 
     content_valid, discarded = filter_valid_articles(extracted_articles, min_length=300)
     print(f"Artikel lolos filter konten & industri: {len(content_valid)} (Dibuang konten: {len(discarded)})")
@@ -731,12 +832,14 @@ if __name__ == "__main__":
         USE_SERPER_ONLY = True
         os.environ["USE_SERPER_ONLY"] = "true"
 
+    start_heartbeat()
+
     if args.keyword and not args.keyword.startswith("--"):
         out = args.output if args.output else os.path.join(OUTPUT_DIR, f"hasil_scraping_{args.keyword}.xlsx")
         run_pipeline(keywords_or_file=[args.keyword], output_excel=out)
     elif args.batch is not None:
-        run_batch_pipeline(batch_size=args.batch_size, target_batch=args.batch)
+        run_batch_pipeline(batch_size=5, target_batch=args.batch)
     elif args.all:
-        run_batch_pipeline(batch_size=args.batch_size)
+        run_batch_pipeline(batch_size=5)
     else:
-        run_batch_pipeline(batch_size=args.batch_size)
+        run_batch_pipeline(batch_size=5)

@@ -2,7 +2,7 @@ makanan dan minuman
 mamin
 industri agro
 kelapa
-gula
+gula rafinasi
 tepung
 terigu
 tapioka
@@ -23,7 +23,9 @@ atsiri
 karet
 kayu lapis
 hasil tembakau
-rokok
+djbc rokok ilegal
+rokok tanpa pita cukai
+bnn rokok elektrik
 kakao
 cokelat
 minuman beralkohol
@@ -44,3 +46,49 @@ fame
 biodiesel
 bioethanol
 pakan ternak
+industri makanan dan minuman
+industri mamin
+industri agro
+industri kelapa
+industri tepung
+industri terigu
+industri tapioka
+industri sagu
+industri rumput laut
+industri alga
+industri spirulina
+industri olahan daging
+industri mi instan
+industri ikan kaleng
+industri makanan kemasan
+industri biskuit
+industri kertas
+industri pulp
+industri mebel
+industri furniture
+industri atsiri
+industri karet
+industri kayu lapis
+industri hasil tembakau
+industri kakao
+industri cokelat
+industri minuman beralkohol
+industri minuman berpemanis
+industri nikotin
+industri tar
+industri teh
+industri susu
+industri amdk
+industri air minum dalam kemasan
+industri galon guna ulang
+industri kopi
+industri cpo
+industri sawit
+industri minyak sawit
+industri pome
+industri fame
+industri biodiesel
+industri bioethanol
+industri pakan ternak
+industri rokok ilegal
+industri gula rafinasi

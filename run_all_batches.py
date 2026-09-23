@@ -19,6 +19,9 @@ from config import (
     is_published_yesterday,
     is_single_word_keyword,
     get_date_folder,
+    log_granular,
+    start_heartbeat,
+    format_display_url,
 )
 from fetch_news import (
     search_keyword,
@@ -35,12 +38,15 @@ from fetch_news import (
 )
 from exa_search import search_exa_news
 from extract_content import extract_article_text, resolve_article_url
-from main import filter_valid_articles, extract_one_article
+from main import filter_valid_articles, extract_one_article, extract_single_article_with_timer
 from relevance_filter import get_kemenperin_signal
 from entity_mapper import find_spokespersons
 from sentiment import classify_tone
 from export_excel import save_to_excel
 from serper_search import search_serper_news
+from youtube_search import search_youtube_videos, get_kemenperin_channel_videos, get_youtube_quota_used
+from pdf_search import search_pdf_documents
+from pdf_ocr import process_pdf_input_folder
 
 USE_SERPER_ONLY: bool = os.environ.get("USE_SERPER_ONLY", "false").lower() in ("true", "1", "yes")
 
@@ -50,7 +56,7 @@ CHECKPOINT_FILE = os.path.join(OUTPUT_DIR, "batch_progress_checkpoint.json")
 
 # 41 Keyword sisa yang belum dijalankan (di luar 5 keyword besar)
 BATCHES = [
-    ["mamin", "kelapa", "gula", "tepung", "terigu"],
+    ["mamin", "kelapa", "gula rafinasi", "tepung", "terigu"],
     ["tapioka", "sagu", "rumput laut", "alga", "spirulina"],
     ["olahan daging", "mi instan", "ikan kaleng", "makanan kemasan", "biskuit"],
     ["pulp", "mebel", "furniture", "atsiri", "karet"],
@@ -60,49 +66,95 @@ BATCHES = [
     ["minyak sawit", "pome", "fame", "biodiesel", "bioethanol", "pakan ternak"],
 ]
 
-FIVE_BIG_KEYWORDS = ["industri agro", "makanan dan minuman", "sawit", "kertas", "rokok"]
+FIVE_BIG_KEYWORDS = [
+    "industri agro", "makanan dan minuman", "sawit", "kertas",
+    "djbc rokok ilegal", "rokok tanpa pita cukai", "bnn rokok elektrik",
+]
 ALL_46_KEYWORDS = [kw for b in BATCHES for kw in b] + FIVE_BIG_KEYWORDS
+ALL_KEYWORDS = ALL_46_KEYWORDS
 
 
-def process_keyword(kw: str, name_map: dict, serper_only: bool = False) -> dict:
-    """Memproses satu keyword dengan RSS + integrasi Exa untuk keyword satu kata."""
+def process_keyword(kw: str, name_map: dict, serper_only: bool = False, target_date: date | None = None) -> dict:
+    """Memproses satu keyword dengan 6 sub-tahap granular, live extraction progress, dan timeout warning."""
+    t_start = time.time()
     use_serper = serper_only or USE_SERPER_ONLY
+
+    if target_date is None:
+        target_date, _ = get_date_range()
+
+    log_granular(f"  [>] Memproses keyword: '{kw}'...")
+
+    # [1/6] Fetch RSS (media + gov)
     if use_serper:
         raw = search_serper_news(kw)
     else:
         raw = search_keyword(kw)
+    log_granular(f"     [1/6] Fetch RSS (media + gov)...          -> selesai, {len(raw)} kandidat")
 
-    # Integrasi Exa Search permanen: HANYA untuk keyword satu kata
+    for item in raw:
+        if "sumber_data" not in item or not item["sumber_data"]:
+            item["sumber_data"] = "Serper" if use_serper else "RSS"
+
+    # [2/6] Fetch Exa (jika keyword 1 kata)
     if is_single_word_keyword(kw):
-        print(f"      [Exa.ai] Fetching berita pelengkap untuk keyword 1 kata '{kw}'...", flush=True)
-        exa_items = search_exa_news(kw)
+        exa_items = search_exa_news(kw, target_date=target_date)
         if exa_items:
-            print(f"      -> {len(exa_items)} kandidat pelengkap ditemukan oleh Exa Search.", flush=True)
+            for item in exa_items:
+                item["sumber_data"] = "Exa"
+            log_granular(f"     [2/6] Fetch Exa (jika keyword 1 kata)...  -> selesai, {len(exa_items)} kandidat")
             raw = raw + exa_items
         else:
-            print(f"      -> Tidak ada entri tambahan dari Exa (atau EXA_API_KEY tidak diset).", flush=True)
+            log_granular(f"     [2/6] Fetch Exa (jika keyword 1 kata)...  -> selesai, 0 kandidat")
+    else:
+        log_granular(f"     [2/6] Fetch Exa (jika keyword 1 kata)...  -> dilewati (keyword > 1 kata)")
+
+    # Fetch YouTube (1x per keyword, hemat kuota: 100 unit)
+    yt_items = search_youtube_videos(kw, target_date=target_date)
+    if yt_items:
+        log_granular(f"     [+] Fetch YouTube (search 1x)...          -> selesai, {len(yt_items)} video")
+        raw = raw + yt_items
+    else:
+        log_granular(f"     [-] Fetch YouTube (search 1x)...          -> 0 video (atau API key kosong)")
+
+    # Fetch PDF Publik via Google Dork (filetype:pdf) - DIBLOKIR / DINONAKTIFKAN
+    # Dokumen PDF tidak lagi diambil sesuai instruksi user
+    # pdf_items = search_pdf_documents(kw, target_date=target_date, max_results=5)
 
     candidates = dedup_by_link(raw)
     initial_count = len(candidates)
 
-    yesterday_items = [c for c in candidates if is_published_yesterday(c.get("published", ""))]
+    # [3/6] Filter tanggal kemarin
+    yesterday_items = [c for c in candidates if is_published_yesterday(c.get("published", ""), target_date=target_date)]
     date_dropped = initial_count - len(yesterday_items)
+    log_granular(f"     [3/6] Filter tanggal kemarin...            -> {len(yesterday_items)} lolos")
 
+    # [4/6] Ekstraksi konten
+    total_yest = len(yesterday_items)
+    log_granular(f"     [4/6] Ekstraksi konten ({total_yest} artikel)...")
     extracted = []
     if yesterday_items:
-        workers = 4 if use_serper else 2
+        workers = 8
         with ThreadPoolExecutor(max_workers=workers) as ex:
-            futures = [ex.submit(extract_one_article, item) for item in yesterday_items]
+            futures = [ex.submit(extract_single_article_with_timer, item) for item in yesterday_items]
+            completed = 0
             for f in as_completed(futures):
+                completed += 1
                 try:
-                    extracted.append(f.result(timeout=35))
+                    res, disp_url = f.result(timeout=35)
+                    extracted.append(res)
                 except GoogleCaptchaBlockedError:
                     raise
                 except Exception:
-                    pass
+                    disp_url = "url"
+                log_granular(f"       -> mengekstrak artikel {completed}/{total_yest}: {disp_url}")
+    else:
+        log_granular(f"       -> tidak ada artikel tanggal kemarin untuk diekstrak")
 
+    # [5/6] Filter relevansi & dedup
     content_valid, discarded = filter_valid_articles(extracted, min_length=300, default_keyword=kw)
+    log_granular(f"     [5/6] Filter relevansi & dedup...          -> {len(content_valid)} lolos")
 
+    # [6/6] Sentiment & entity mapping
     kemenperin_yes = 0
     flagged = []
     for art in content_valid:
@@ -115,6 +167,11 @@ def process_keyword(kw: str, name_map: dict, serper_only: bool = False) -> dict:
         flagged.append(item_copy)
         if is_rel:
             kemenperin_yes += 1
+
+    log_granular(f"     [6/6] Sentiment & entity mapping...        -> selesai")
+    duration = time.time() - t_start
+    log_granular(f"   [OK] '{kw}' selesai: {len(content_valid)} artikel final. (durasi: {duration:.0f} detik)")
+
 
     return {
         "keyword": kw,
@@ -189,7 +246,10 @@ def main():
     parser.add_argument("--serper-only", action="store_true", help="Pakai Serper.dev SAJA (bypass Google News RSS)")
     parser.add_argument("--api-key", type=str, default=None, help="Serper.dev API Key")
     parser.add_argument("--batches", type=str, default=None, help="Nomor batch yang ingin dijalankan (contoh: 1,2)")
+    parser.add_argument("--batch-delay", type=float, default=None, help="Jeda antar-batch dalam detik (default: 25-35s)")
+    parser.add_argument("--date", "--target-date", dest="target_date", type=str, default=None, help="Tanggal target evaluasi YYYY-MM-DD")
     parser.add_argument("--skip-access-check", action="store_true", help="Lewati tes awal akses Google News")
+    parser.add_argument("--force", action="store_true", help="Paksa jalankan ulang keyword meskipun sudah ada di progress.json")
     args = parser.parse_args()
 
     if args.api_key:
@@ -200,7 +260,12 @@ def main():
         USE_SERPER_ONLY = True
         os.environ["USE_SERPER_ONLY"] = "true"
 
-    yesterday_date, _ = get_date_range()
+    if args.target_date:
+        from datetime import datetime
+        yesterday_date = datetime.strptime(args.target_date.strip(), "%Y-%m-%d").date()
+    else:
+        yesterday_date, _ = get_date_range()
+
     date_str = yesterday_date.strftime("%Y-%m-%d")
     date_folder = get_date_folder(yesterday_date)
 
@@ -211,6 +276,8 @@ def main():
     print(f"Folder Output    : {date_folder}")
     name_map = load_spokesperson_map("keyword_nama.xlsx")
     print(f"Daftar Pejabat   : {len(name_map)} nama")
+
+    start_heartbeat()
 
     # 5. TES KONEKSI RINGAN SEBELUM MULAI BATCH (1x request, bukan cron)
     if USE_SERPER_ONLY:
@@ -245,7 +312,7 @@ def main():
             continue
 
         # Cek apakah seluruh keyword dalam batch sudah selesai
-        if all(is_keyword_completed(k, target_date=yesterday_date) for k in kw_list):
+        if not args.force and all(is_keyword_completed(k, target_date=yesterday_date) for k in kw_list):
             print(f"[SKIP] Batch {b_num}/{total_batches} ({kw_list}) seluruhnya sudah selesai di {date_folder}.")
             continue
 
@@ -257,7 +324,7 @@ def main():
 
         for kw_idx, kw in enumerate(kw_list):
             # 6. Checkpoint per keyword: lewati jika sudah ada
-            if is_keyword_completed(kw, target_date=yesterday_date):
+            if not args.force and is_keyword_completed(kw, target_date=yesterday_date):
                 print(f"  [SKIP] Keyword '{kw}' sudah selesai di {date_folder}/progress.json.", flush=True)
                 continue
 
@@ -268,9 +335,8 @@ def main():
                 else:
                     sleep_between_keywords()
 
-            print(f"  [>] Memproses keyword: '{kw}'...", flush=True)
             try:
-                res = process_keyword(kw, name_map)
+                res = process_keyword(kw, name_map, target_date=yesterday_date)
                 # 6. Simpan checkpoint seketika setelah 1 keyword selesai
                 save_keyword_progress(
                     kw,
@@ -283,11 +349,6 @@ def main():
                         "kemenperin_no": res["kemenperin_no"],
                     },
                     target_date=yesterday_date,
-                )
-                print(
-                    f"      -> Awal={res['initial']} | Tgl Kemarin={res['date_valid']} | "
-                    f"FINAL VALID={res['final_valid']} (Kemenperin: Ya={res['kemenperin_yes']} / Tidak={res['kemenperin_no']})",
-                    flush=True,
                 )
             except GoogleCaptchaBlockedError as c_err:
                 print(f"\n[CRITICAL CAPTCHA GATE] {c_err}", flush=True)
@@ -307,29 +368,28 @@ def main():
         if captcha_triggered:
             break
 
-        # 8. Batasi 5-6 keyword per sesi eksekusi: jeda 2-3 menit antar-batch
+        # 8. Batasi 5-6 keyword per sesi eksekusi
         if b_idx < total_batches - 1 and (target_batch_indices is None or (b_idx + 1) in target_batch_indices):
-            session_delay = random.uniform(120.0, 180.0)
-            print(f"\n[Jeda Antar-Sesi] Menunggu jeda aman {session_delay:.1f} detik (2-3 menit) sebelum batch berikutnya...", flush=True)
+            session_delay = args.batch_delay if args.batch_delay is not None else (1.0 if USE_SERPER_ONLY else random.uniform(25.0, 35.0))
+            print(f"\n[Jeda Antar-Sesi] Menunggu jeda aman {session_delay:.1f} detik sebelum batch berikutnya...", flush=True)
             time.sleep(session_delay)
 
     # Proses 5 Keyword Besar jika tidak ada batasan batch atau eksplisit diminta
     run_five_big = (target_batch_indices is None) or ("big" in (args.batches or "").lower()) or ("9" in (args.batches or ""))
-    if run_five_big and not all(is_keyword_completed(k, target_date=yesterday_date) for k in FIVE_BIG_KEYWORDS):
+    if run_five_big and (args.force or not all(is_keyword_completed(k, target_date=yesterday_date) for k in FIVE_BIG_KEYWORDS)):
         print(f"\n" + "=" * 70)
         print(f"=== SESI 5 KEYWORD BESAR: {FIVE_BIG_KEYWORDS} ===")
         print("=" * 70)
         for kw_idx, kw in enumerate(FIVE_BIG_KEYWORDS):
-            if is_keyword_completed(kw, target_date=yesterday_date):
+            if not args.force and is_keyword_completed(kw, target_date=yesterday_date):
                 print(f"  [SKIP] Keyword 5 besar '{kw}' sudah selesai di {date_folder}/progress.json.", flush=True)
                 continue
 
             if not USE_SERPER_ONLY:
                 sleep_between_keywords()
 
-            print(f"  [>] Memproses keyword 5 besar: '{kw}'...", flush=True)
             try:
-                res = process_keyword(kw, name_map)
+                res = process_keyword(kw, name_map, target_date=yesterday_date)
                 save_keyword_progress(
                     kw,
                     res["articles"],
@@ -342,11 +402,6 @@ def main():
                     },
                     target_date=yesterday_date,
                 )
-                print(
-                    f"      -> Awal={res['initial']} | Tgl Kemarin={res['date_valid']} | "
-                    f"FINAL VALID={res['final_valid']} (Kemenperin: Ya={res['kemenperin_yes']} / Tidak={res['kemenperin_no']})",
-                    flush=True,
-                )
             except GoogleCaptchaBlockedError as c_err:
                 print(f"\n[CRITICAL CAPTCHA GATE] {c_err}", flush=True)
                 exa_key = os.environ.get("EXA_API_KEY", "").strip()
@@ -357,6 +412,82 @@ def main():
                 else:
                     print(f"  d. EXA_API_KEY tidak diset. Menghentikan proses total.", flush=True)
                 break
+
+    # Sesi Pencarian Nama Pejabat Kemenperin (13 Pejabat OR Query)
+    run_officials = (target_batch_indices is None) or ("pejabat" in (args.batches or "").lower())
+    if run_officials and (args.force or not is_keyword_completed("pejabat_kemenperin", target_date=yesterday_date)):
+        print(f"\n" + "=" * 70)
+        print("=== SESI PENCARIAN 13 NAMA PEJABAT KEMENPERIN (OR QUERY) ===")
+        print("=" * 70)
+        if not USE_SERPER_ONLY:
+            sleep_between_keywords()
+
+        try:
+            res = process_keyword("pejabat_kemenperin", name_map, target_date=yesterday_date)
+            save_keyword_progress(
+                "pejabat_kemenperin",
+                res["articles"],
+                report_data={
+                    "initial": res["initial"],
+                    "date_valid": res["date_valid"],
+                    "final_valid": res["final_valid"],
+                    "kemenperin_yes": res["kemenperin_yes"],
+                    "kemenperin_no": res["kemenperin_no"],
+                },
+                target_date=yesterday_date,
+            )
+        except GoogleCaptchaBlockedError as c_err:
+            print(f"\n[CRITICAL CAPTCHA GATE] {c_err}", flush=True)
+            exa_key = os.environ.get("EXA_API_KEY", "").strip()
+            if exa_key:
+                print(f"  c. Mengalihkan sisa keyword ke Exa Search...", flush=True)
+                run_remaining_via_exa(["pejabat_kemenperin"], name_map, target_date=yesterday_date)
+
+    # Direct Pull 2 Channel Resmi Kemenperin & Ditjen Agro
+    print("\n" + "=" * 70)
+    print("=== DIRECT PULL 2 CHANNEL RESMI KEMENPERIN & DITJEN AGRO (2 UNIT KUOTA) ===")
+    print("=" * 70)
+    ch_videos = get_kemenperin_channel_videos(target_date=yesterday_date)
+    print(f"Total video resmi diupload pada {yesterday_date}: {len(ch_videos)} video")
+    if ch_videos:
+        ch_valid, _ = filter_valid_articles(ch_videos, min_length=300, default_keyword="kemenperin_institusi")
+        ch_flagged = []
+        for v in ch_valid:
+            title = v.get("title", "")
+            text = v.get("text", "")
+            sp1, sp2, unit = find_spokespersons(f"{title} {text}", name_map)
+            tone = classify_tone(text, title)
+            v_copy = dict(v)
+            v_copy["tone"] = tone
+            v_copy["spokesperson_1"] = sp1 or ""
+            v_copy["spokesperson_2"] = sp2 or ""
+            v_copy["unit_eselon"] = unit or "-"
+            v_copy["terkait_kemenperin"] = "Ya"
+            v_copy["kemenperin_signal_type"] = "Official Channel"
+            v_copy["kemenperin_signal_detail"] = v.get("media_name", "Kemenperin")
+            v_copy["keyword"] = "kemenperin_institusi"
+            v_copy["sumber_data"] = "YouTube"
+            ch_flagged.append(v_copy)
+
+        if ch_flagged:
+            save_keyword_progress(
+                "kemenperin_official_channel",
+                ch_flagged,
+                report_data={
+                    "initial": len(ch_videos),
+                    "date_valid": len(ch_videos),
+                    "final_valid": len(ch_flagged),
+                    "kemenperin_yes": len(ch_flagged),
+                    "kemenperin_no": 0,
+                    "source": "YouTube_Official_Channel",
+                },
+                target_date=yesterday_date,
+            )
+            print(f"[+] Berhasil menambahkan {len(ch_flagged)} video resmi ke checkpoint progres.")
+
+    # Direct Pull File Manual dari folder pdf_input/ jika ada - DIBLOKIR / DINONAKTIFKAN
+    # Dokumen PDF tidak lagi diambil sesuai instruksi user
+    # manual_pdfs = process_pdf_input_folder("pdf_input")
 
     # Finalisasi dan Penggabungan Dataset ke Excel dalam folder tanggal
     print("\n" + "=" * 70)
@@ -373,6 +504,32 @@ def main():
 
         saved_final = save_to_excel(final_unique, final_excel_path, merge_existing=True)
         print(f"[SUKSES] File Excel berhasil disimpan / di-merge ke: {saved_final}")
+
+        # Laporan Ringkasan Akhir
+        try:
+            df_final = pd.read_excel(saved_final)
+            print("\n" + "=" * 70)
+            print(f"=== RINGKASAN DATASET FINAL ({date_str}) ===")
+            print("=" * 70)
+            print(f"Total baris artikel: {len(df_final)}")
+            
+            print("\n[1] DISTRIBUSI SUMBER DATA:")
+            if "Sumber Data" in df_final.columns:
+                print(df_final["Sumber Data"].value_counts().to_string())
+            else:
+                print("  (Kolom 'Sumber Data' tidak ditemukan)")
+
+            print("\n[2] DISTRIBUSI TONE GABUNGAN:")
+            if "Tone" in df_final.columns:
+                print(df_final["Tone"].value_counts().to_string())
+            else:
+                print("  (Kolom 'Tone' tidak ditemukan)")
+
+            print("\n[3] PENGGUNAAN KUOTA YOUTUBE DATA API:")
+            print(f"  Total kuota terpakai sesi ini: {get_youtube_quota_used()} unit (dari limit harian 10.000 unit)")
+            print("=" * 70)
+        except Exception as err:
+            print(f"  [Warning] Gagal mencetak ringkasan dataset: {err}")
     else:
         print("[INFO] Tidak ada artikel terkumpul untuk diekspor.")
 

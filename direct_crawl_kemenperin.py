@@ -46,12 +46,17 @@ def crawl_kemenperin_siaran_pers(target_date: date | None = None, max_pages: int
     """
     results = []
 
+    current_url = KEMENPERIN_SIARAN_PERS_URL
+    seen_urls = set()
+
     for page in range(1, max_pages + 1):
-        url = KEMENPERIN_SIARAN_PERS_URL if page == 1 else f"{KEMENPERIN_SIARAN_PERS_URL}?page={page}"
+        if not current_url or current_url in seen_urls:
+            break
+        seen_urls.add(current_url)
         try:
-            resp = requests.get(url, headers=HEADERS, verify=False, timeout=25)
+            resp = requests.get(current_url, headers=HEADERS, verify=False, timeout=25)
             if resp.status_code != 200:
-                print(f"[Direct Crawl] Gagal mengakses {url} (HTTP {resp.status_code})")
+                print(f"[Direct Crawl] Gagal mengakses {current_url} (HTTP {resp.status_code})")
                 break
 
             soup = BeautifulSoup(resp.text, "html.parser")
@@ -81,7 +86,6 @@ def crawl_kemenperin_siaran_pers(target_date: date | None = None, max_pages: int
                         art_resp = requests.get(full_url, headers=HEADERS, verify=False, timeout=20)
                         if art_resp.status_code == 200:
                             art_soup = BeautifulSoup(art_resp.text, "html.parser")
-                            # Isi teks biasanya ada dalam container konten artikel
                             content_div = art_soup.find("div", class_=re.compile(r"content|artikel|isi|detail", re.I))
                             if content_div:
                                 article_text = content_div.get_text(separator="\n", strip=True)
@@ -109,11 +113,19 @@ def crawl_kemenperin_siaran_pers(target_date: date | None = None, max_pages: int
                     })
                     found_on_page += 1
 
-            if found_on_page == 0 and page > 1:
-                break
+            active_li = soup.find("li", class_="active")
+            next_li = active_li.find_next_sibling("li") if active_li else None
+            if next_li and next_li.find("a") and next_li.find("a").get("href"):
+                next_href = next_li.find("a")["href"]
+                if next_href != "#" and next_href not in seen_urls:
+                    current_url = f"https://kemenperin.go.id{next_href}"
+                else:
+                    current_url = None
+            else:
+                current_url = None
 
         except Exception as e:
-            print(f"[Direct Crawl] Error crawling {url}: {e}")
+            print(f"[Direct Crawl] Error crawling {current_url}: {e}")
             break
 
     return results

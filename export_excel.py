@@ -9,6 +9,62 @@ from openpyxl.styles import Font
 from openpyxl.utils import get_column_letter
 
 
+def normalize_rokok_keywords(kw_str: str, title: str = "", text: str = "") -> str:
+    """
+    Mengubah keyword generik 'rokok' menjadi spesifik sesuai keyword_data.txt:
+    - 'bnn rokok elektrik'
+    - 'rokok tanpa pita cukai'
+    - 'djbc rokok ilegal'
+    """
+    if not kw_str:
+        return kw_str
+
+    kws = [k.strip() for k in str(kw_str).split(",") if k.strip()]
+    if not any(k.lower() == "rokok" for k in kws):
+        return kw_str
+
+    non_rokok = [k for k in kws if k.lower() != "rokok"]
+
+    combined = f"{title or ''} {text or ''}".lower()
+    title_lower = (title or "").lower()
+
+    specific = []
+
+    # 1. BNN rokok elektrik
+    if any(term in title_lower for term in ["rokok elektrik", "rokok elektronik", "vape", "vapor", "rokok sintetis"]) or \
+       ("elektrik" in title_lower and "rokok" in title_lower) or \
+       ("bnn" in combined and any(v in combined for v in ["vape", "elektrik", "narkotika"])) or \
+       ("rokok elektrik" in combined or "rokok elektronik" in combined or "vape" in combined):
+        specific.append("bnn rokok elektrik")
+
+    # 2. Rokok tanpa pita cukai
+    if any(term in title_lower for term in ["tanpa pita cukai", "pita cukai", "cukai rokok"]) or \
+       "tanpa pita cukai" in combined or \
+       ("pita cukai" in combined) or \
+       ("cukai rokok" in combined):
+        specific.append("rokok tanpa pita cukai")
+
+    # 3. DJBC rokok ilegal
+    if any(term in title_lower for term in ["rokok ilegal", "djbc", "bea cukai", "gempur rokok"]) or \
+       "rokok ilegal" in combined or \
+       ("bea cukai" in combined and "rokok" in combined) or \
+       ("djbc" in combined and "rokok" in combined) or \
+       ("gempur rokok ilegal" in combined):
+        specific.append("djbc rokok ilegal")
+
+    # Fallback jika belum terpetakan ke salah satu dari tiga di atas
+    if not specific:
+        if "cukai" in combined or "tarif" in combined:
+            specific.append("rokok tanpa pita cukai")
+        elif any(w in combined for w in ["vape", "elektrik"]):
+            specific.append("bnn rokok elektrik")
+        else:
+            specific.append("djbc rokok ilegal")
+
+    final_kws = non_rokok + [s for s in specific if s not in non_rokok]
+    return ", ".join(final_kws)
+
+
 def save_to_excel(records: list[dict], output_path: str, merge_existing: bool = False):
     """
     Menyimpan hasil scraping dan NLP ke file Excel dengan styling:
@@ -76,6 +132,14 @@ def save_to_excel(records: list[dict], output_path: str, merge_existing: bool = 
             df["Sumber Data"] = "RSS"
         df["Sumber Data"] = df["Sumber Data"].replace("", "RSS").fillna("RSS")
 
+        # Filter proteksi: singkirkan seluruh dokumen PDF (sesuai instruksi user)
+        from relevance_filter import is_pdf_document
+        is_pdf_mask = (
+            df["Sumber Data"].astype(str).str.upper().eq("PDF") |
+            df.apply(lambda r: is_pdf_document(url=str(r.get("Link Website", "")), title=str(r.get("Title", "")), sumber_data=str(r.get("Sumber Data", ""))), axis=1)
+        )
+        df = df[~is_pdf_mask].reset_index(drop=True)
+
         # Pastikan kolom bertipe string/object agar aman saat assignment
         text_cols = [c for c in columns if c != "Tanggal"]
         for col in text_cols:
@@ -94,21 +158,36 @@ def save_to_excel(records: list[dict], output_path: str, merge_existing: bool = 
             kw = str(df.at[idx, "Keywords"] or "")
             sd = str(df.at[idx, "Sumber Data"] or "")
 
-            combined = f"{t} {txt}"
+            combined = f"{t} {txt}".strip()
 
-            # 1. Spokesperson 1 & 2 serta Unit Eselon (diurutkan berdasar kemunculan pertama)
-            sp1, sp2, unit = find_spokespersons(combined)
-            df.at[idx, "Spokesperson 1"] = sp1
-            df.at[idx, "Spokesperson 2"] = sp2
-            df.at[idx, "Unit Eselon"] = unit if unit else "-"
+            # 1. Spokesperson 1 & 2 serta Unit Eselon: isi jika belum ada / kosong
+            curr_sp1 = str(df.at[idx, "Spokesperson 1"] or "").strip()
+            if not curr_sp1 or curr_sp1 in ["nan", "None"]:
+                sp1, sp2, unit = find_spokespersons(combined)
+                df.at[idx, "Spokesperson 1"] = sp1
+                df.at[idx, "Spokesperson 2"] = sp2
+                df.at[idx, "Unit Eselon"] = unit if unit else "-"
+            else:
+                curr_unit = str(df.at[idx, "Unit Eselon"] or "").strip()
+                if not curr_unit or curr_unit in ["-", "nan", "None"]:
+                    _, _, unit = find_spokespersons(curr_sp1)
+                    if unit and unit != "-":
+                        df.at[idx, "Unit Eselon"] = unit
 
-            # 2. Terkait Kemenperin (KETAT & SPESIFIK)
-            is_rel = is_kemenperin_related(title=t, text=txt, keyword=kw, sumber_data=sd)
-            df.at[idx, "Terkait Kemenperin"] = "Ya" if is_rel else "Tidak"
+            # 2. Terkait Kemenperin: isi jika belum ada / kosong
+            curr_rel = str(df.at[idx, "Terkait Kemenperin"] or "").strip()
+            if not curr_rel or curr_rel in ["nan", "None"]:
+                is_rel = is_kemenperin_related(title=t, text=txt, keyword=kw, sumber_data=sd)
+                df.at[idx, "Terkait Kemenperin"] = "Ya" if is_rel else "Tidak"
 
             # 3. Tone
             if pd.isna(df.at[idx, "Tone"]) or str(df.at[idx, "Tone"]).strip() in ["", "nan", "None"]:
                 df.at[idx, "Tone"] = classify_tone(txt, t)
+
+            # 4. Normalisasi keyword rokok agar sesuai keyword_data.txt
+            curr_kw = str(df.at[idx, "Keywords"] or "").strip()
+            if "rokok" in [k.strip().lower() for k in curr_kw.split(",")]:
+                df.at[idx, "Keywords"] = normalize_rokok_keywords(curr_kw, t, txt)
 
         # Pembersihan nilai kosong agar tidak tersimpan sebagai string literal 'nan'
         if "Tone" in df.columns:
