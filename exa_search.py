@@ -134,10 +134,10 @@ def search_exa_news(
     if not key:
         return []
 
-    eval_date = target_date if target_date is not None else get_date_range()[0]
-    prev_day = eval_date - timedelta(days=1)
+    start_d, end_d = get_date_range(target_date)
+    prev_day = start_d - timedelta(days=1)
     start_utc = f"{prev_day.strftime('%Y-%m-%d')}T17:00:00.000Z"
-    end_utc = f"{eval_date.strftime('%Y-%m-%d')}T23:59:59.999Z"
+    end_utc = f"{end_d.strftime('%Y-%m-%d')}T23:59:59.999Z"
 
     try:
         raw_items = search_exa(
@@ -168,7 +168,7 @@ def search_exa_news(
             continue
 
         # 3. Filter tanggal publikasi tepat 'kemarin'
-        if not is_published_yesterday(pub, target_date=eval_date):
+        if not is_published_yesterday(pub, target_date=target_date):
             continue
 
         media_name = item.get("media_name", "")

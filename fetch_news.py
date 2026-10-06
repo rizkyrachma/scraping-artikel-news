@@ -78,6 +78,32 @@ def check_google_news_access() -> tuple[bool, str]:
         return False, f"Gagal menghubungi Google News RSS: {e}"
 
 
+def determine_session_source(force_serper: bool = False, skip_check: bool = False) -> tuple[bool, str]:
+    """
+    Pengecekan status Google News RSS di setiap awal sesi baru (BUKAN polling berkala / cron):
+    - Jika force_serper=True: Memaksa mode Serper.
+    - Jika skip_check=True: Menggunakan status konfigurasi env saat ini.
+    - Selain itu: Mengirim 1 request tes ringan via check_google_news_access().
+      * Begitu RSS normal (HTTP 200), otomatis kembali pakai Google News RSS sebagai SUMBER UTAMA (USE_SERPER_ONLY=False).
+      * Jika RSS terganggu (429/503/CAPTCHA), otomatis beralih ke Serper.dev sebagai CADANGAN DARURAT (USE_SERPER_ONLY=True).
+    """
+    if force_serper:
+        os.environ["USE_SERPER_ONLY"] = "true"
+        return True, "Mode Serper.dev dipaksa aktif via argumen --serper-only."
+
+    if skip_check:
+        is_serper = os.environ.get("USE_SERPER_ONLY", "false").lower() in ("true", "1", "yes")
+        return is_serper, f"Pengecekan RSS awal sesi dilewati (Mode aktif: {'Serper.dev' if is_serper else 'Google News RSS'})."
+
+    is_ok, msg = check_google_news_access()
+    if is_ok:
+        os.environ["USE_SERPER_ONLY"] = "false"
+        return False, f"Akses RSS pulih/normal: {msg}. Otomatis kembali menggunakan Google News RSS sebagai SUMBER UTAMA (Serper = cadangan darurat)."
+    else:
+        os.environ["USE_SERPER_ONLY"] = "true"
+        return True, f"Akses RSS terganggu: {msg}. Otomatis beralih menggunakan Serper.dev sebagai CADANGAN DARURAT untuk sesi ini."
+
+
 # 2. Jeda antar-keyword
 def sleep_between_keywords():
     """
@@ -342,8 +368,10 @@ def search_keyword(keyword: str | list[str], delay: float | None = None, target_
         kw_expr = format_keyword_query(variants)
         query_kw = kw_expr
         if target_date is not None:
-            prev_d = target_date - timedelta(days=1)
-            next_d = target_date + timedelta(days=1)
+            from config import get_date_range
+            start_d, end_d = get_date_range(target_date)
+            prev_d = start_d - timedelta(days=1)
+            next_d = end_d + timedelta(days=1)
             query_kw = f"{kw_expr} after:{prev_d.strftime('%Y-%m-%d')} before:{next_d.strftime('%Y-%m-%d')}"
 
         for query_fn in (build_media_query, build_gov_query):
@@ -381,6 +409,147 @@ def search_keyword(keyword: str | list[str], delay: float | None = None, target_
                     "published": entry.get("published", ""),
                     "sumber_data": "RSS",
                 })
+
+    return results
+
+
+def search_pejabat_presisi(
+    pejabat_list: list[dict] | None = None,
+    target_date: date | None = None,
+    chunk_size: int = 4,
+    use_serper: bool | None = None,
+) -> list[dict]:
+    """
+    Melakukan pencarian presisi pejabat Kemenperin berbasis pemetaan pejabat_keyword_mapping.csv:
+    Format query: ("Nama Pejabat") (keyword1 OR keyword2 OR ...) (site:... OR ...)
+    Merupakan lapisan tambahan di atas pencarian institusi umum.
+    Hanya menjalankan 9 pejabat Agro + Menteri/Wamen/Sekjen/Irjen (4 pejabat non-Agro dikecualikan).
+    Tiap hasil ditandai dengan keyword 'pejabat_presisi' dan Terkait Kemenperin otomatis 'Ya'.
+    Mendukung mode Serper.dev maupun Google News RSS.
+    """
+    from datetime import timedelta
+    from config import load_pejabat_precision_mapping
+    from query_builder import build_media_query, build_gov_query, build_rss_url
+
+    if pejabat_list is None:
+        pejabat_list = load_pejabat_precision_mapping(active_only=True)
+
+    use_serper_active = (
+        use_serper
+        if use_serper is not None
+        else (os.environ.get("USE_SERPER_ONLY", "false").lower() in ("true", "1", "yes"))
+    )
+
+    results = []
+    seen_links = set()
+
+    for p in pejabat_list:
+        nama = p.get("nama", "").strip()
+        keywords = p.get("keywords", [])
+        if not keywords:
+            continue
+
+        # Alias nama pencarian efektif
+        search_name = nama
+        if "Muhammad Sarmuji" in nama or "Sarmuji" in nama:
+            search_name = "Sarmuji"
+        elif "Agus Gumiwang" in nama:
+            search_name = "Agus Gumiwang"
+        elif "Eko S.A. Cahyanto" in nama:
+            search_name = "Eko Cahyanto"
+        elif "Citra Rapati" in nama:
+            search_name = "Citra Rapati"
+
+        chunks = [keywords[i : i + chunk_size] for i in range(0, len(keywords), chunk_size)]
+        for chunk in chunks:
+            clean_chunk = [f'"{k}"' if not (k.startswith('"') and k.endswith('"')) else k for k in chunk]
+            kw_or = " OR ".join(clean_chunk)
+            base_kw_expr = f'"{search_name}" ({kw_or})'
+
+            if use_serper_active:
+                from serper_search import search_serper_news
+                serper_items = search_serper_news(base_kw_expr, target_date=target_date)
+                for item in serper_items:
+                    link = item.get("link", "")
+                    if not link or link in seen_links:
+                        continue
+
+                    source_title = item.get("source", "") or item.get("media_name", "")
+                    raw_title = item.get("raw_title", "") or item.get("title", "")
+                    clean_title = clean_title_suffix(raw_title, source_title)
+
+                    if not is_likely_relevant(clean_title):
+                        continue
+
+                    seen_links.add(link)
+                    matched_kws = [k for k in chunk if k.lower() in clean_title.lower()]
+                    kw_label = f"{', '.join(matched_kws)}, pejabat_presisi" if matched_kws else "pejabat_presisi"
+
+                    results.append({
+                        "keyword": kw_label,
+                        "title": clean_title,
+                        "raw_title": raw_title,
+                        "link": link,
+                        "media_name": source_title,
+                        "source": source_title or "",
+                        "source_url": item.get("source_url", ""),
+                        "published": item.get("published", ""),
+                        "sumber_data": "Serper",
+                        "terkait_kemenperin": "Ya",
+                        "kemenperin_signal_type": "Pejabat Presisi",
+                        "kemenperin_signal_detail": nama,
+                    })
+            else:
+                query_kw = base_kw_expr
+                if target_date is not None:
+                    from config import get_date_range
+                    start_d, end_d = get_date_range(target_date)
+                    prev_d = start_d - timedelta(days=1)
+                    next_d = end_d + timedelta(days=1)
+                    query_kw = f"{base_kw_expr} after:{prev_d.strftime('%Y-%m-%d')} before:{next_d.strftime('%Y-%m-%d')}"
+
+                for query_fn in (build_media_query, build_gov_query):
+                    encoded = query_fn(query_kw)
+                    rss_url = build_rss_url(encoded)
+                    feed = fetch_google_news_rss(rss_url, keyword=f"presisi_{search_name}")
+
+                    for entry in feed.entries:
+                        link = entry.get("link", "")
+                        if not link or link in seen_links:
+                            continue
+
+                        source_info = entry.get("source", {})
+                        source_href = source_info.get("href", "") if isinstance(source_info, dict) else ""
+                        raw_source_title = source_info.get("title") if isinstance(source_info, dict) else None
+                        source_title = str(raw_source_title).strip() if raw_source_title else None
+
+                        if not is_valid_domain(link) or (source_href and not is_valid_domain(source_href)):
+                            continue
+
+                        raw_title = entry.get("title", "")
+                        clean_title = clean_title_suffix(raw_title, source_title)
+
+                        if not is_likely_relevant(clean_title):
+                            continue
+
+                        seen_links.add(link)
+                        matched_kws = [k for k in chunk if k.lower() in clean_title.lower()]
+                        kw_label = f"{', '.join(matched_kws)}, pejabat_presisi" if matched_kws else "pejabat_presisi"
+
+                        results.append({
+                            "keyword": kw_label,
+                            "title": clean_title,
+                            "raw_title": raw_title,
+                            "link": link,
+                            "media_name": source_title,
+                            "source": source_title or "",
+                            "source_url": source_href,
+                            "published": entry.get("published", ""),
+                            "sumber_data": "RSS",
+                            "terkait_kemenperin": "Ya",
+                            "kemenperin_signal_type": "Pejabat Presisi",
+                            "kemenperin_signal_detail": nama,
+                        })
 
     return results
 
@@ -482,52 +651,76 @@ def is_near_duplicate_title(title_a: str, title_b: str, threshold: int = 85) -> 
     return False
 
 
+def clean_title_media_suffix(title: str) -> str:
+    """Membersihkan suffix nama media penerbit Google News (' - <Media>') dari judul."""
+    if not title or isinstance(title, float):
+        return ""
+    s = str(title).strip()
+    return s.rsplit(" - ", 1)[0].strip() if " - " in s else s
+
+
 def dedup_by_title(items: list[dict], threshold: int = 85) -> list[dict]:
     """
-    Deduplikasi artikel berbasis kemiripan judul (rapidfuzz).
-    Diterapkan sebagai lapis dedup tambahan setelah dedup_by_link().
-    Jika ditemukan artikel dengan judul mirip (>= threshold), gabungkan keyword
-    dan simpan artikel yang isinya lebih lengkap/panjang.
+    Mengelompokkan artikel berbasis kemiripan judul (rapidfuzz >= threshold).
+    Alih-alih membuang artikel sindikasi siaran pers, seluruh artikel TETAP DISIMPAN
+    dan diberi nilai kolom 'Isu' yang sama (mengambil judul representasi dari artikel
+    paling lengkap/panjang di grup tersebut).
     """
-    unique: list[dict] = []
+    if not items:
+        return []
+
+    clusters: list[list[dict]] = []
+
     for item in items:
         title = item.get("title") or item.get("Title") or ""
-        text = item.get("text", "")
-        matched_idx = -1
+        matched_cluster_idx = -1
 
-        for idx, existing in enumerate(unique):
-            existing_title = existing.get("title") or existing.get("Title") or ""
-            if is_near_duplicate_title(title, existing_title, threshold):
-                matched_idx = idx
+        for c_idx, cluster in enumerate(clusters):
+            # Cek kecocokan kemiripan judul dengan representasi klaster
+            rep_article = cluster[0]
+            rep_title = rep_article.get("title") or rep_article.get("Title") or ""
+            if is_near_duplicate_title(title, rep_title, threshold=threshold):
+                matched_cluster_idx = c_idx
+                break
+            for existing in cluster[1:]:
+                ex_title = existing.get("title") or existing.get("Title") or ""
+                if is_near_duplicate_title(title, ex_title, threshold=threshold):
+                    matched_cluster_idx = c_idx
+                    break
+            if matched_cluster_idx != -1:
                 break
 
-        if matched_idx == -1:
-            unique.append(dict(item))
+        item_copy = dict(item)
+        if matched_cluster_idx == -1:
+            clusters.append([item_copy])
         else:
-            existing_kw = unique[matched_idx].get("keyword") or unique[matched_idx].get("Keywords") or ""
-            new_kw = item.get("keyword") or item.get("Keywords") or ""
-            merged = merge_keywords(existing_kw, new_kw)
+            clusters[matched_cluster_idx].append(item_copy)
 
-            existing_text = unique[matched_idx].get("text", "")
-            if len(text) > len(existing_text):
-                unique[matched_idx] = dict(item)
+    # Untuk tiap klaster, tetapkan 'Isu' dari artikel paling lengkap (teks terpanjang)
+    result: list[dict] = []
+    for cluster in clusters:
+        best_art = max(cluster, key=lambda a: len(str(a.get("text") or "")))
+        best_title = best_art.get("title") or best_art.get("Title") or ""
+        isu_name = clean_title_media_suffix(best_title) or best_title
 
-            unique[matched_idx]["keyword"] = merged
-            if "Keywords" in unique[matched_idx]:
-                unique[matched_idx]["Keywords"] = merged
+        for art in cluster:
+            art["Isu"] = isu_name
+            art["isu"] = isu_name
+            result.append(art)
 
-    return unique
+    return result
 
 
 def dedup_across_keywords(articles: list[dict], threshold: int = 85) -> list[dict]:
     """
     Deduplikasi komprehensif lintas keyword:
-    1. Menggabungkan artikel dengan URL yang sama (strip query param), menggabungkan kolom keyword-nya.
-    2. Menggabungkan artikel dengan kemiripan judul >= threshold, menggabungkan kolom keyword-nya,
-       serta mempertahankan teks yang lebih panjang/lengkap.
+    1. Menggabungkan artikel dengan URL yang persis sama (strip query param), menggabungkan kolom keyword-nya.
+    2. Mengelompokkan artikel dengan kemiripan judul >= threshold, mempertahankan seluruh baris,
+       dan memberi nilai kolom 'Isu' yang seragam per kelompok sindikasi.
     """
     url_deduped = dedup_by_link(articles)
     return dedup_by_title(url_deduped, threshold=threshold)
+
 
 
 

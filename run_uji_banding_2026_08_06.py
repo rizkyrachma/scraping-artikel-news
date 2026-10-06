@@ -50,7 +50,7 @@ OUTPUT_EXCEL = os.path.join("hasil_scrapping", "uji_banding_2026-08-06.xlsx")
 REFERENCE_EXCEL = r"C:\1.Pupud\MAGANG AGRO\Data\excel\Kompilasi Data Monitoring Media Massa Periode 06 - 13 Agustus 2026.xlsx"
 
 BATCHES = [
-    ["mamin", "kelapa", "gula", "tepung", "terigu"],
+    ["mamin", "kelapa", "gula rafinasi", "tepung", "terigu"],
     ["tapioka", "sagu", "rumput laut", "alga", "spirulina"],
     ["olahan daging", "mi instan", "ikan kaleng", "makanan kemasan", "biskuit"],
     ["pulp", "mebel", "furniture", "atsiri", "karet"],

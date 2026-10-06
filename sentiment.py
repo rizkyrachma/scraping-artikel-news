@@ -57,6 +57,10 @@ POSITIVE_SIGNALS = [
     r"\boptimis\b", r"\boptimisme\b", r"\bdorong\b", r"\bmendorong\b", r"\bdaya saing\b",
     r"\bpenghargaan\b", r"\bkinerja positif\b", r"\blaba\b", r"\buntung\b", r"\bkeuntungan\b",
     r"\bpotensi besar\b", r"\bkolaborasi\b", r"\bdukungan\b", r"\bterobosan\b", r"\binovasi\b",
+    # Kemandirian, Prestasi, dan Kedaulatan Industri
+    r"\bajaib\b", r"\btanaman ajaib\b", r"\bmiracle\b", r"\bmandiri\b", r"\bkemandirian\b",
+    r"\bswasembada\b", r"\bberhasil\b", r"\bkeberhasilan\b", r"\bunggul\b", r"\bkeunggulan\b",
+    r"\bkarunia\b", r"\bstrategis\b",
 ]
 
 _NEG_REGEX = re.compile("|".join(NEGATIVE_SIGNALS), re.IGNORECASE)
@@ -141,6 +145,7 @@ if __name__ == "__main__":
     assert classify_tone("", "APTRI Keluhkan Impor Gula 150 Ribu Ton saat Musim Giling") == "Negatif"
     assert classify_tone("", "Petani Tebu Khawatir Pemerintah Buka Impor 150 Ribu Ton Gula") == "Negatif"
     assert classify_tone("", "Kemenperin Dorong Hilirisasi Industri Kelapa Sawit") == "Positif"
+    assert classify_tone("", "Prabowo: Kelapa Sawit Adalah Tanaman Ajaib, The Miracle Plant") == "Positif"
     print("All sentiment self-checks passed successfully!")
 
 

@@ -92,15 +92,56 @@ def any_word_boundary_match(word_list: list[str], text: str) -> bool:
     return bool(re.search(pattern, text, flags=re.IGNORECASE))
 
 
+# Pola indikator interaksi / polling / Call-to-Action (CTA) media sosial (Shorts, Reels, TikTok)
+SOCIAL_MEDIA_ENGAGEMENT_PATTERNS = [
+    r"\bshare\s+di\s+kolom\s+komentar\b",
+    r"\btulis\s+di\s+kolom\s+komentar\b",
+    r"\btulis\s+komentar(mu| kalian| sobat)?\b",
+    r"\bkomen\s+di\s+bawah\b",
+    r"\bkomentar\s+di\s+bawah\b",
+    r"\btinggalkan\s+komentar\b",
+    r"\bmenurut\s+(kamu|mu|kalian|sobat)\b",
+    r"\bgimana\s+menurut\s+(kamu|mu|kalian|sobat)\b",
+    r"\bbagaimana\s+menurut\s+(kamu|mu|kalian|sobat)\b",
+    r"\bshare\s+pendapat(mu| kalian| sobat)?\b",
+    r"\byuk\s+share\b",
+    r"\bshare.*yuk\b",
+    r"\bjangan\s+lupa\s+(like|subscribe)\b",
+]
+
+_SOCIAL_ENGAGEMENT_REGEX = re.compile("|".join(SOCIAL_MEDIA_ENGAGEMENT_PATTERNS), re.IGNORECASE)
+
+
+def is_social_media_engagement_noise(title: str = "", text: str = "") -> bool:
+    """
+    Mendeteksi konten interaktif media sosial (YouTube Shorts / Reels / TikTok)
+    berupa polling, Q&A santai, atau ajakan komentar (Call-to-Action) yang bukan
+    berita substantif kebijakan industri atau data komoditas.
+    """
+    title_clean = (title or "").strip()
+    if not title_clean:
+        return False
+    return bool(_SOCIAL_ENGAGEMENT_REGEX.search(title_clean))
+
+
 def is_likely_relevant(title: str) -> bool:
     """
     Memeriksa relevansi awal berdasarkan judul menggunakan regex word boundary:
     - Return False jika judul mengandung salah satu HEALTH_LIFESTYLE_WORDS
       DAN tidak mengandung satu pun INDUSTRY_CONTEXT_WORDS.
+    - Return False jika judul merupakan ajakan interaksi / CTA komentar media sosial.
     - Return True untuk kasus lainnya.
     """
     if not title:
         return True
+
+    if is_social_media_engagement_noise(title):
+        return False
+
+    title_lower = title.lower()
+    # Tolak judul event non-Agro / otomotif murni
+    if any(p in title_lower for p in ["gaikindo auto week", "pameran otomotif", "penjualan mobil", "dealer mobil", "pembiayaan kendaraan"]):
+        return False
 
     has_health_word = any_word_boundary_match(HEALTH_LIFESTYLE_WORDS, title)
     has_industry_word = any_word_boundary_match(INDUSTRY_CONTEXT_WORDS, title)
@@ -135,15 +176,102 @@ def is_recipe(title: str = "", text: str = "") -> bool:
     return False
 
 
+# Kata kunci indikator promosi ritel / supermarket / belanja konsumen langsung (BUANG)
+RETAIL_PROMO_PATTERNS = [
+    r"\bsyarat\s+dan\s+ketentuan\b",
+    r"\bsyarat\s*&\s*ketentuan\b",
+    r"\bs&k\s+berlaku\b",
+    r"\bperiode\s+promo\b",
+    r"\bdiskon\b",
+    r"\bsupermarket\b",
+    r"\bminimarket\b",
+    r"\bhypermarket\b",
+    r"\bminimal\s+pembelian\b",
+    r"\bminimum\s+transaksi\b",
+    r"\bcashback\b",
+    r"\bvoucher\b",
+    r"\bkatalog\s+promo\b",
+    r"\bharga\s+promo\b",
+    r"\bpromo\s+bca\b",
+    r"\bpromo\s+mingguan\b",
+    r"\bpromo\s+ssr\b",
+    r"\bpromo\s+jsm\b",
+    r"\bbeli\s+1\s+gratis\s+1\b",
+    r"\bbeli\s+2\s+gratis\s+1\b",
+    r"\bpotongan\s+harga\b",
+    r"\bkupon\s+belanja\b",
+]
+
+# Pola nama event pameran industri resmi
+OFFICIAL_EVENT_PATTERNS = [
+    r"\bfi\s+asia\b",
+    r"\bfood\s+ingredients\s+asia\b",
+    r"\btrade\s+expo\b",
+    r"\btei\b",
+    r"\bsial\s+interfood\b",
+    r"\binterfood\b",
+    r"\bfood\s*&\s*hotel\b",
+    r"\bfhi\b",
+    r"\ballpack\b",
+    r"\biffina\b",
+    r"\bindo\s+livestock\b",
+    r"\bagrinex\b",
+    r"\bpameran\b",
+    r"\bexpo\b",
+    r"\bexhibition\b",
+]
+
+# Pola tindakan partisipasi brand/perusahaan di pameran/event industri
+BRAND_EVENT_ACTION_PATTERNS = [
+    r"\b(hadir\s+di|hadir\s+dalam)\b",
+    r"\b(perkenalkan|memperkenalkan)\b",
+    r"\b(pamerkan|memamerkan)\b",
+    r"\b(tampilkan|menampilkan)\b",
+    r"\b(unjuk\s+gigi\s+di)\b",
+    r"\b(ramaikan|meramaikan)\b",
+    r"\b(berpartisipasi\s+di|berpartisipasi\s+dalam|partisipasi\s+di|partisipasi\s+dalam)\b",
+    r"\b(ikut\s+serta\s+di|ikut\s+serta\s+dalam)\b",
+    r"\b(luncurkan|meluncurkan)\b",
+]
+
+
+def is_brand_event_participation(title: str = "", text: str = "") -> bool:
+    """
+    Mendeteksi apakah artikel merupakan liputan partisipasi brand/perusahaan di pameran/event industri resmi.
+    Contoh: '[Brand] Hadir di [Nama Event]', '[Brand] Perkenalkan [Produk] di [Nama Pameran]'.
+    """
+    t_clean = (title or "").lower()
+    snip_clean = (text[:400] if text else "").lower()
+    combined = f"{t_clean} {snip_clean}"
+
+    has_event = any(re.search(pat, combined) for pat in OFFICIAL_EVENT_PATTERNS)
+    has_action = any(re.search(pat, t_clean) for pat in BRAND_EVENT_ACTION_PATTERNS) or \
+                 (has_event and any(re.search(pat, snip_clean) for pat in BRAND_EVENT_ACTION_PATTERNS))
+
+    return bool(has_event and has_action)
+
+
 def is_promotional(title: str = "", text: str = "") -> bool:
     """
-    Mendeteksi apakah artikel merupakan materi promosi / iklan ritel komersial:
-    - Judul atau 300 karakter awal teks memuat frasa PROMO_WORDS
+    Mendeteksi apakah artikel merupakan materi promosi / iklan komersial:
+    1. BUANG: Promosi ritel/supermarket, diskon, cashback, voucher, katalog promo, syarat dan ketentuan berlaku.
+    2. LOLOSKAN: Partisipasi brand/perusahaan di event/pameran industri resmi (Fi Asia, TEI, SIAL InterFOOD, dll.)
+       tanpa pola promosi ritel konsumen langsung.
+    3. BUANG: Materi promo lainnya yang memuat PROMO_WORDS.
     """
     title_text = title or ""
     snippet = text[:300] if text else ""
     combined = f"{title_text} {snippet}"
 
+    # 1. Cek promosi ritel / belanja konsumen langsung (BUANG)
+    if any(re.search(p, combined, flags=re.IGNORECASE) for p in RETAIL_PROMO_PATTERNS):
+        return True
+
+    # 2. Cek partisipasi brand di event industri resmi (LOLOSKAN)
+    if is_brand_event_participation(title_text, text):
+        return False
+
+    # 3. Fallback promo words biasa
     return any_word_boundary_match(PROMO_WORDS, combined)
 
 
@@ -190,15 +318,17 @@ def is_job_posting(title: str = "", text: str = "", url: str = "") -> bool:
 CRITICAL_INCIDENT_TITLE_PHRASES = [
     "meninggal dunia", "ditemukan tewas", "tewas", "mayat", "pembunuhan",
     "diserang beruang", "diterkam buaya", "diserang buaya", "kebakaran lahan",
-    "pemadaman", "laka lantas", "kecelakaan maut", "orang hilang",
-    "serangan jantung", "bakar lahan", "membakar lahan", "karhutla",
+    "pemadaman", "laka lantas", "kecelakaan maut", "kecelakaan fatal", "tabrakan beruntun",
+    "tabrakan", "orang hilang", "serangan jantung", "bakar lahan", "membakar lahan", "karhutla",
     "diterkam", "meninggal", "gantung diri", "bunuh diri",
+    "densus 88", "terduga teroris", "teroris", "giro kosong", "bilyet giro kosong",
 ]
 
 CRIME_ACCIDENT_TITLE_KEYWORDS = [
     "bobol", "pembobolan", "curi", "mencuri", "pencurian",
     "residivis", "maling", "perampokan", "rampok", "kebakaran",
     "korban", "pembunuhan", "mayat", "laka lantas", "tewas",
+    "teroris", "ditangkap", "dibekuk", "diringkus", "tabrakan",
 ]
 
 CELEBRITY_TITLE_KEYWORDS = [
@@ -225,11 +355,32 @@ def is_crime_or_accident(title: str = "", text: str = "") -> bool:
     return False
 
 
-CRIME_ACCIDENT_SIGNALS = [
-    "kebakaran", "terbakar", "puntung rokok", "hangus", "dilalap api", "kobaran api",
-    "curi", "pencuri", "pencurian", "digerebek", "gerebek", "sabu", "narkoba",
-    "tertangkap", "ditangkap polisi", "diamankan polisi", "maling",
+CRIME_ACCIDENT_PHRASES = [
+    # Multi-word phrases safe to match directly
+    "puntung rokok", "dilalap api", "kobaran api",
+    "densus 88", "terduga teroris", "tabrakan beruntun", "kecelakaan maut",
+    "kecelakaan fatal", "laka lantas", "truk terbalik", "truk terguling",
+    "korban tewas", "meninggal dunia", "ditemukan tewas", "bunuh diri",
+    "habisi pelajar", "habisi nyawa", "buang jasad", "pelaku nekat",
+    "polisi amankan ibadah", "bhabinkamtibmas", "naik penyidikan",
+    "giro kosong", "bilyet giro kosong", "bilyet giro",
+    "ular piton", "ular kobra", "teror ular", "diserang buaya",
+    "diterkam buaya", "diserang beruang", "penunggu kebun",
 ]
+
+CRIME_ACCIDENT_SINGLE_WORDS = [
+    # Single words that MUST match word boundary (mencegah false match seperti 'Kolaka' -> 'laka')
+    "kebakaran", "terbakar", "hangus", "curi", "pencuri", "pencurian",
+    "maling", "rampok", "perampokan", "bobol", "pembobolan",
+    "digerebek", "gerebek", "penggerebekan", "sabu", "narkoba",
+    "narkotika", "ganja", "ekstasi", "ditangkap", "tertangkap",
+    "tangkap", "diamankan", "dibekuk", "diringkus", "terciduk",
+    "tersangka", "residivis", "buronan", "teroris", "terorisme",
+    "radikalisme", "tabrakan", "kecelakaan", "menabrak", "ditabrak",
+    "tewas", "mayat", "pembunuhan", "penipuan", "penggelapan", "hantu",
+]
+
+CRIME_ACCIDENT_SIGNALS = CRIME_ACCIDENT_PHRASES + CRIME_ACCIDENT_SINGLE_WORDS
 
 POLICY_INSTITUTION_TITLE_SIGNALS = [
     "kemenperin", "kementerian perindustrian", "menperin", "wamenperin",
@@ -249,11 +400,13 @@ def is_crime_accident_noise(title: str = "", text: str = "") -> bool:
     if not title_lower:
         return False
 
-    has_crime_signal = any(
-        matches_word_boundary(sig, title_lower) or sig in title_lower
-        for sig in CRIME_ACCIDENT_SIGNALS
-    )
-    if not has_crime_signal:
+    # Pengecualian khusus: penindakan rokok ilegal / cukai oleh Bea Cukai / DJBC adalah bagian dari monitoring hasil tembakau
+    if any(k in title_lower for k in ["rokok ilegal", "pita cukai", "bea cukai", "djbc"]):
+        return False
+
+    has_phrase = any(p in title_lower for p in CRIME_ACCIDENT_PHRASES)
+    has_word = any(matches_word_boundary(w, title_lower) for w in CRIME_ACCIDENT_SINGLE_WORDS)
+    if not (has_phrase or has_word):
         return False
 
     has_policy_exception = any(
@@ -304,6 +457,115 @@ def is_non_article_document_noise(title: str = "", text: str = "") -> bool:
 
     # 2. Cek judul terlalu pendek & generik (misal: "BAB 2", "COVER", "LAMPIRAN")
     if len(title_clean) < 15 and re.match(r"^(bab|cover|lampiran|skripsi|tesis)\b", title_clean):
+        return True
+
+    return False
+
+
+GENERIC_PLACEHOLDER_TITLES = {
+    "resource discovery", "untitled", "no title", "error", "404 not found",
+    "access denied", "blocked", "document", "halaman tidak ditemukan",
+    "search results", "katalog induk", "informasi paket", "garba rujukan digital",
+    "index", "home", "beranda", "loading", "sipp", "das kelapa", "daftar umkm",
+    "pencarian data umkm", "icgab 2026", "proyek tunggal", "simponi sumut",
+    "kelapaaa", "pecinta kopi",
+}
+
+NON_NEWS_DOMAINS = [
+    "order.lottemart.co.id", "tiket.com", "chandrakarya.com", "jadesta.kemenpar.go.id",
+    "eorder-bppbj.jakarta.go.id", "jobrapido.com", "confbeam.org", "hidrologi.net",
+    "data-umkm.babelprov.go.id", "nimbuflyk.digital", "simponisumut.sumutprov.go.id",
+    "pustaka.badanpangan.go.id", "spse.inaproc.id", "garuda.kemdiktisaintek.go.id",
+    "katalog.kemendikdasmen.go.id", "sipp.pn-",
+]
+
+
+def is_placeholder_or_error_title(title: str = "", text: str = "", url: str = "") -> bool:
+    """
+    Mendeteksi judul placeholder / pesan error / artifact halaman sistem non-berita:
+    1. Judul sama persis / diawali string generik ('Resource discovery', 'Untitled', 'No title', 'Error', '404', 'Beranda', 'SIPP', 'Informasi Paket', dll)
+    2. Judul terlalu pendek (< 5 karakter) atau format non-berita.
+    3. Berasal dari domain katalog/pengadaan/hotel/e-commerce non-berita.
+    """
+    t_clean = (title or "").strip().lower()
+    if not t_clean or len(t_clean) < 5:
+        return True
+    if t_clean in GENERIC_PLACEHOLDER_TITLES:
+        return True
+    if any(t_clean.startswith(prefix) for prefix in ["search results", "katalog induk", "informasi paket", "garba rujukan digital", "error 404", "halaman tidak ditemukan"]):
+        return True
+    url_lower = (url or "").lower()
+    if any(d in url_lower for d in NON_NEWS_DOMAINS):
+        return True
+    return False
+
+
+def is_viral_social_media_drama(title: str = "", text: str = "") -> bool:
+    """
+    Mendeteksi berita drama / video viral / kontroversi media sosial non-industri:
+    Contoh: 'Video Bupati Siak Viral di Medsos, Wapres Gibran Kirim Tim Khusus ke Wilayah 3T'.
+    True jika memuat frasa 'viral di medsos', 'viral di media sosial', 'video viral', 'heboh di medsos'
+    dan TIDAK memuat konteks industri/kebijakan formal (kemenperin, ekspor, impor, produksi, hilirisasi, pabrik, harga, investasi).
+    """
+    title_lower = (title or "").lower()
+    if any(p in title_lower for p in ["viral di medsos", "viral di media sosial", "video viral", "heboh di medsos", "viral tiktok"]):
+        has_industry_context = any(k in title_lower for k in POLICY_INSTITUTION_TITLE_SIGNALS + ["harga", "pabrik", "tbs", "petani sawit", "sawit rakyat", "kebun sawit"])
+        if not has_industry_context:
+            return True
+    return False
+
+
+SHORTS_ENTERTAINMENT_PATTERNS = [
+    r"#shorts\b", r"#fyp\b", r"#viral\b", r"#trending\b", r"#shortvideo\b",
+    r"#short\b", r"#reels\b", r"#tiktok\b",
+]
+
+FORMAL_NEWS_INSTITUTIONS_MEDIA = [
+    "kemenperin", "kementerian", "ditjen", "dinas", "bps", "ojk", "bi",
+    "presiden", "wapres", "menteri", "menperin", "wamenperin", "dirjen",
+    "antara", "kompas", "detik", "tempo", "kontan", "bisnis.com", "tribun",
+    "republika", "liputan6", "suara.com", "metrotv", "kompastv", "tvone",
+    "cnn", "cnbc", "inews", "rri", "tvri", "bumn", "ptpn", "holding",
+]
+
+JOURNALISTIC_VERBS = [
+    "resmikan", "meresmikan", "umumkan", "mengumumkan", "laporkan", "melaporkan",
+    "capai", "mencapai", "targetkan", "menargetkan", "tegaskan", "menegaskan",
+    "dorong", "mendorong", "tinjau", "meninjau", "luncurkan", "meluncurkan",
+    "gelar", "menggelar", "buka", "membuka", "bahas", "soroti", "ungkap",
+    "paparkan", "beberkan", "catat", "mencatat", "tumbuh", "meningkat",
+    "anjlok", "turun", "ekspor", "impor", "investasi", "hilirisasi", "produksi",
+]
+
+
+def is_shorts_entertainment_noise(title: str = "", text: str = "") -> bool:
+    """
+    Mendeteksi konten hiburan pendek (YouTube Shorts / Reels / TikTok) tanpa substansi berita formal:
+    1. Title memuat 3+ hashtag (#kata1 #kata2 #kata3).
+    2. ATAU title memuat hashtag/pola hiburan (#shorts, #fyp, #viral, #trending, #shortvideo)
+       DIGABUNG dengan tidak adanya nama media/institusi formal dan tidak ada kata kerja jurnalistik.
+    3. ATAU memuat pola gaming/meme/lucu/hewan peliharaan murni (#roblox, #minecraft, smackdown, lucu, kocak, prank).
+    """
+    title_text = (title or "").strip()
+    if not title_text:
+        return False
+    title_lower = title_text.lower()
+
+    # 1. Title mengandung 3+ hashtag
+    tags = re.findall(r"#\w+", title_text)
+    if len(tags) >= 3:
+        return True
+
+    # 2. Pola umum konten hiburan pendek digabung tidak ada format berita formal
+    has_short_pattern = any(re.search(p, title_lower) for p in SHORTS_ENTERTAINMENT_PATTERNS)
+    if has_short_pattern:
+        has_formal_inst = any(matches_word_boundary(w, title_lower) or w in title_lower for w in FORMAL_NEWS_INSTITUTIONS_MEDIA)
+        has_journalistic_verb = any(matches_word_boundary(v, title_lower) or v in title_lower for v in JOURNALISTIC_VERBS)
+        if not (has_formal_inst or has_journalistic_verb):
+            return True
+
+    # 3. Konten gaming / meme / hewan peliharaan / humor pendek
+    if any(g in title_lower for g in ["#roblox", "#minecraft", "roblox", "smackdown", "kocak", "#lucu", "prank"]):
         return True
 
     return False
@@ -560,7 +822,10 @@ def is_tar_context_valid(title: str, text: str) -> bool:
 
 
 TEH_EXCLUDE_TITLE_PHRASES = [
-    "teh cely", "teh rina", "teh nia", "teh melly", "teh nita", "lirik lagu",
+    "teh cely", "teh rina", "teh nia", "teh melly", "teh nita", "teh novi",
+    "tulus", "cover", "singing battle", "dj teh", "remix", "chord", "kunci gitar",
+    "ami awards", "lagu", "music video", "official lyric", "song", "lirik lagu",
+    "makna lagu", "lagu pop", "single baru",
 ]
 TEH_INDUSTRY_TERMS = [
     "kebun teh", "perkebunan teh", "petani teh", "daun teh", "pabrik teh",
@@ -571,7 +836,8 @@ TEH_INDUSTRY_TERMS = [
 
 def is_teh_context_valid(title: str, text: str) -> bool:
     """
-    Memvalidasi keyword 'teh' agar tidak mencocokkan panggilan kehormatan Sunda ('Teh Cely', dsb).
+    Memvalidasi keyword 'teh' agar tidak mencocokkan panggilan kehormatan Sunda ('Teh Cely', dsb)
+    atau judul lagu/musik/penyanyi (Tulus - Teh Hijau, cover, singing battle, remix).
     """
     title_lower = (title or "").lower()
     if any(p in title_lower for p in TEH_EXCLUDE_TITLE_PHRASES):
@@ -624,22 +890,189 @@ def is_kopi_context_valid(title: str, text: str) -> bool:
     return True
 
 
-FAME_EXCLUDE_PHRASES = ["hall of fame", "walk of fame"]
+FAME_EXCLUDE_PHRASES = [
+    "hall of fame", "walk of fame", "the fame", "fame and fortune", "fame got",
+    "rise to fame", "claim to fame", "star", "celebrity", "hollywood", "actress",
+    "actor", "barbie", "movie", "song", "album",
+]
 FAME_INDUSTRY_TERMS = [
-    "fatty acid", "methyl ester", "biodiesel", "sawit", "b35", "b40", "b50",
-    "bioenergi", "ebt", "bahan bakar nabati", "bbn", "cpo", "solar",
+    "fatty acid", "methyl ester", "metil ester", "biodiesel", "oleokimia",
+    "sawit", "minyak sawit", "b35", "b40", "b50", "bioenergi", "ebt",
+    "bahan bakar nabati", "bbn", "cpo", "solar",
 ]
 
 
 def is_fame_context_valid(title: str, text: str) -> bool:
     """
-    Memvalidasi keyword 'fame' agar merujuk pada Fatty Acid Methyl Ester (FAME) bahan baku biodiesel,
-    BUKAN penghargaan olahraga/hiburan 'Hall of Fame' atau 'Walk of Fame'.
+    Memvalidasi keyword 'fame' agar merujuk pada Fatty Acid Methyl Ester (FAME) bahan baku biodiesel/oleokimia,
+    BUKAN penghargaan olahraga/hiburan 'Hall of Fame' atau ketenaran selebriti/bahasa Inggris sehari-hari.
+    Syarat:
+    1. Tidak memuat frasa eksklusi hiburan / selebriti.
+    2. HARUS memuat konteks industri/kimia (biodiesel, oleokimia, metil ester, minyak sawit, sawit, bbn, dll).
     """
-    combined = f"{title} {text}".lower()
-    if any(p in combined for p in FAME_EXCLUDE_PHRASES):
+    combined = f"{title or ''} {text or ''}"
+    combined_lower = combined.lower()
+
+    if any(p in combined_lower for p in FAME_EXCLUDE_PHRASES):
         return False
-    return any(matches_word_boundary(t, combined) for t in FAME_INDUSTRY_TERMS)
+
+    return any(matches_word_boundary(t, combined_lower) for t in FAME_INDUSTRY_TERMS)
+
+
+POME_REJECT_WORDS = [
+    "dog", "pomeranian", "anjing", "pet", "pets", "puppy", "cute", "cutedog",
+]
+POME_INDUSTRY_WORDS = [
+    "limbah", "sawit", "pabrik", "pengolahan", "cpo", "biogas", "ebt",
+    "palm oil mill effluent", "palmco", "sludge", "bioetanol", "energi bersih",
+    "energi terbarukan", "emisi karbon", "kek sei mangkei",
+]
+
+
+def is_pome_context_valid(title: str = "", text: str = "") -> bool:
+    """
+    Memvalidasi keyword 'pome' agar merujuk pada Palm Oil Mill Effluent (limbah cair pabrik kelapa sawit),
+    BUKAN anjing Pomeranian, suplemen permen gummy colagen, atau musik produser.
+    Syarat:
+    1. TOLAK jika disertai kata anjing/pomeranian/pet/puppy.
+    2. WAJIB disertai konteks industri limbah/sawit/biogas/pabrik/pengolahan di title ATAU text.
+    """
+    combined = f"{title or ''} {text or ''}".lower()
+    if any(matches_word_boundary(w, combined) for w in POME_REJECT_WORDS):
+        return False
+    return any(matches_word_boundary(term, combined) or term in combined for term in POME_INDUSTRY_WORDS)
+
+
+# ==============================================================================
+# FILTER RELEVANSI SUBSTANTIF DITJEN INDUSTRI AGRO
+# ==============================================================================
+
+NON_AGRO_TOPIC_PATTERNS = [
+    r"\brangkap\s+jabatan\b",
+    r"\bbupati\s+gowa\b",
+    r"\btipidkor\b",
+    r"\bbatik\b",
+    r"\bnet\s+zero\s+emission\b",
+    r"\bdekarbonisasi\b",
+    r"\bemisi\s+karbon\b",
+    r"\bindustri\s+hijau\b",
+    r"\bsertifikasi\s+halal\b",
+    r"\bwajib\s+halal\b",
+    r"\bindustri\s+halal\b",
+    r"\bhalal\s+industry\s+awards\b",
+    r"\bkonsultasi\s+bisnis\b",
+    r"\bperguruan\s+tinggi\b",
+    r"\bdaya\s+saing\s+ikm\b",
+    r"\bindustrial\s+festival\b",
+    r"\bfestival\s+industri\b",
+    r"\botomotif\b",
+    r"\bgaikindo\b",
+]
+
+SPECIFIC_AGRO_COMMODITIES = [
+    # Sawit & Turunan
+    r"\bsawit\b", r"\bkelapa\s+sawit\b", r"\bcpo\b", r"\bcrude\s+palm\s+oil\b", r"\bminyak\s+sawit\b",
+    r"\bminyak\s+goreng\b", r"\btbs\b", r"\bbiodiesel\b", r"\bfame\b", r"\bpome\b", r"\bbioethanol\b",
+    r"\boleokimia\b", r"\bb35\b", r"\bb40\b", r"\bb50\b",
+    # Makanan & Minuman
+    r"\bmamin\b", r"\bmakanan\s+dan\s+minuman\b", r"\bindustri\s+makanan\b", r"\bindustri\s+minuman\b",
+    r"\bmakanan\s+kemasan\b", r"\bbiskuit\b", r"\bolahan\s+daging\b", r"\bdaging\s+olahan\b",
+    r"\bmi\s+instan\b", r"\bmie\s+instan\b", r"\bikan\s+kaleng\b", r"\bsarden\b",
+    # Kelapa
+    r"\bkelapa\b", r"\bkopra\b", r"\bsantan\b", r"\bnata\s+de\s+coco\b",
+    # Gula
+    r"\bgula\b", r"\bgula\s+rafinasi\b", r"\bgkm\b", r"\btebu\b", r"\bpabrik\s+gula\b",
+    # Tepung & Pati
+    r"\btepung\b", r"\bterigu\b", r"\btapioka\b", r"\bsingkong\b", r"\bsagu\b", r"\bpati\b",
+    # Hasil Laut & Perikanan
+    r"\brumput\s+laut\b", r"\balga\b", r"\bspirulina\b",
+    # Kertas, Pulp & Kayu
+    r"\bpulp\b", r"\bbubur\s+kertas\b", r"\bkertas\b", r"\bkayu\s+lapis\b", r"\bplywood\b",
+    r"\bmebel\b", r"\bfurniture\b", r"\bfurnitur\b", r"\bbambu\b", r"\bolahan\s+bambu\b",
+    # Atsiri
+    r"\batsiri\b", r"\bminyak\s+atsiri\b", r"\bnilam\b", r"\bserai\s+wangi\b",
+    # Karet
+    r"\bkaret\b", r"\blateks\b", r"\bcrumb\s+rubber\b",
+    # Tembakau & Rokok
+    r"\btembakau\b", r"\bhasil\s+tembakau\b", r"\brokok\b", r"\bcukai\s+rokok\b",
+    r"\brokok\s+ilegal\b", r"\brokok\s+elektrik\b", r"\brokok\s+tanpa\s+pita\s+cukai\b",
+    r"\btar\b", r"\bnikotin\b",
+    # Kakao & Cokelat
+    r"\bkakao\b", r"\bbiji\s+kakao\b", r"\bcokelat\b", r"\bcoklat\b",
+    # Minuman
+    r"\bminuman\s+beralkohol\b", r"\bminuman\s+berpemanis\b", r"\bamdk\b",
+    r"\bair\s+minum\s+dalam\s+kemasan\b", r"\bgalon\b",
+    # Teh
+    r"\bteh\b", r"\bpucuk\s+teh\b",
+    # Susu
+    r"\bsusu\b", r"\bproduk\s+susu\b", r"\bolahan\s+susu\b",
+    # Kopi
+    r"\bkopi\b", r"\bbiji\s+kopi\b",
+    # Pakan
+    r"\bpakan\s+ternak\b", r"\bpakan\b",
+]
+
+DITJEN_AGRO_EXPLICIT = [
+    r"\bditjen\s+agro\b", r"\bditjen\s+industri\s+agro\b", r"\bdirektorat\s+jenderal\s+industri\s+agro\b",
+    r"\bindustri\s+agro\b", r"\bsektor\s+agro\b",
+    r"\bhasil\s+hutan\s+dan\s+perkebunan\b", r"\bmakanan\s+hasil\s+laut\s+dan\s+perikanan\b",
+    r"\bminuman\s+hasil\s+tembakau\b", r"\bkemurgi\b",
+    r"\bakademi\s+komunitas\s+bambu\b",
+]
+
+_NON_AGRO_REGEX = re.compile("|".join(NON_AGRO_TOPIC_PATTERNS), re.IGNORECASE)
+_SPECIFIC_COMMODITY_REGEX = re.compile("|".join(SPECIFIC_AGRO_COMMODITIES), re.IGNORECASE)
+_DITJEN_AGRO_REGEX = re.compile("|".join(DITJEN_AGRO_EXPLICIT), re.IGNORECASE)
+
+
+def is_agro_relevant_content(title: str = "", text: str = "") -> bool:
+    """
+    Memeriksa apakah isi artikel BENAR-BENAR menyinggung salah satu dari 48 keyword komoditas Agro
+    ATAU istilah Ditjen Industri Agro secara substantif:
+    1. Menolak noise selebriti / hiburan / kementerian luar negeri (Margot Robbie, Barbie, Afghanistan).
+    2. True jika judul atau teks secara eksplisit menyebutkan Ditjen Industri Agro / direktorat bawahnya.
+    3. Jika topik didominasi isu non-agro (halal/batik/net zero/politik/hukum/tipidkor/ikm umum),
+       HANYA lolos jika judul secara spesifik mengangkat komoditas Agro.
+    4. True jika judul mengangkat komoditas Agro, atau komoditas muncul berulang (>= 2x) secara substantif.
+    """
+    title_clean = (title or "").strip()
+    title_lower = title_clean.lower()
+    combined = f"{title_clean} {text or ''}"
+    combined_lower = combined.lower()
+
+    if not combined.strip():
+        return False
+
+    # 1. False positive selebriti / hiburan / luar negeri / drama / sosmed CTA
+    if any(p in title_lower for p in ["margot robbie", "barbie", "afghanistan", "imarah islam"]):
+        return False
+    if is_social_media_engagement_noise(title, text):
+        return False
+
+    # 2. Cek apakah ada istilah Ditjen Industri Agro eksplisit di judul
+    if _DITJEN_AGRO_REGEX.search(title_lower):
+        return True
+
+    # 3. Cek apakah judul secara spesifik mengangkat komoditas Agro
+    title_has_commodity = bool(_SPECIFIC_COMMODITY_REGEX.search(title_lower))
+
+    # 4. Cek apakah topik didominasi isu non-agro (halal/batik/net zero/politik/hukum/ikm umum)
+    has_non_agro_topic = bool(_NON_AGRO_REGEX.search(combined))
+    if has_non_agro_topic and not title_has_commodity:
+        return False
+
+    # 5. Cek kemunculan komoditas di judul atau substantif di teks (minimal 2x)
+    if title_has_commodity:
+        return True
+
+    commodity_matches = _SPECIFIC_COMMODITY_REGEX.findall(combined)
+    if len(commodity_matches) >= 2:
+        return True
+
+    if _DITJEN_AGRO_REGEX.search(combined):
+        return True
+
+    return False
 
 
 def count_keyword_occurrences(text: str, keyword: str) -> int:
@@ -818,8 +1251,8 @@ def is_industry_policy_topic(title: str = "", text: str = "", sumber_data: str =
         if health_score >= ind_score:
             return False
 
-        # 6. Transkrip YouTube wajib memiliki minimal 2 sinyal industri agar tidak tertipu 1 kata lepas
-        if ind_score < 2:
+        # 6. Transkrip YouTube wajib memiliki minimal 3 sinyal industri agar tidak tertipu kata lepas
+        if ind_score < 3:
             return False
 
         return True
@@ -835,6 +1268,7 @@ EXPLICIT_KEMENPERIN_SIGNALS = [
     "kemenperin", "kementerian perindustrian", "menteri perindustrian",
     "menperin", "wamenperin", "wakil menteri perindustrian",
     "direktorat jenderal industri agro", "ditjen agro", "ditjen industri agro",
+    "akademi komunitas bambu", "akademi komunitas bambu kemenperin",
 ]
 
 
@@ -848,35 +1282,68 @@ def get_kemenperin_signal(
     """
     Pengecekan KETAT dan SPESIFIK keterkaitan Kemenperin:
     HANYA bernilai True jika:
-    1. Menyebut nama institusi secara eksplisit: "kemenperin", "kementerian perindustrian",
+    1. Relevan dengan Ditjen Industri Agro secara substantif via is_agro_relevant_content(), ATAU
+       menyebutkan pejabat spesifik Ditjen Industri Agro.
+    2. Menyebut nama institusi secara eksplisit: "kemenperin", "kementerian perindustrian",
        "menperin", "wamenperin", "wakil menteri perindustrian", "direktorat jenderal industri agro",
        "ditjen agro", "ditjen industri agro" (word boundary matching), ATAU
-    2. Mengutip salah satu dari 13 nama pejabat di database (via find_spokespersons / match_name_in_text), ATAU
-    3. Berasal dari pencarian institusi khusus (keyword == 'kemenperin_institusi' atau 'pejabat_kemenperin')
-       atau Direct Crawl (sumber_data == 'Direct Crawl').
-
-    Kata-kata umum industri/produksi/ekspor/pabrik/dll BUKAN sinyal Kemenperin.
+    3. Mengutip salah satu nama pejabat di database (via find_spokespersons / match_name_in_text).
+    
+    Untuk pejabat lintas-direktorat (Menteri/Wamen/Sekjen/Irjen): HANYA lolos jika isi artikel
+    BENAR-BENAR menyinggung komoditas Agro / Ditjen Industri Agro (bukan soal halal/batik/net zero/politik).
     """
     from entity_mapper import find_spokespersons
 
-    # 1. Cek Sumber Khusus Institusi / Pejabat / Direct Crawl
     clean_kw = (keyword or "").strip().lower()
-    if clean_kw in ("kemenperin_institusi", "pejabat_kemenperin", "pejabat kemenperin", "kemenperin_pejabat"):
-        return True, "EKSPLISIT", "pejabat_kemenperin"
-    if (sumber_data or "").strip().lower() == "direct crawl":
-        return True, "EKSPLISIT", "Direct Crawl"
-
     combined = f"{title or ''} {text or ''}"
+    combined_lower = combined.lower()
+
+    # Tolak kementerian luar negeri (misal Imarah Islam Afghanistan / Malaysia tanpa konteks RI)
+    if "afghanistan" in combined_lower or "imarah islam" in combined_lower:
+        return False, "NONE", ""
+
+    # Tolak konten noise engagement media sosial (Shorts CTA / Q&A polling)
+    if is_social_media_engagement_noise(title, text):
+        return False, "NONE", ""
+
+    # Cek apakah artikel substantif menyangkut Agro
+    is_agro = is_agro_relevant_content(title, text)
+
+    # Cek Spokesperson
+    sp1, sp2, sp_unit = find_spokespersons(combined)
+    is_specific_agro_official = (sp1.lower() in {
+        "putu juli ardika", "merrijantij punguan", "dyan garneta",
+        "rr citra rapati", "krisna septiningrum",
+    })
+
+    # 1. Cek Sumber Khusus Institusi / Pejabat / Direct Crawl
+    if "pejabat_presisi" in clean_kw:
+        if is_specific_agro_official or is_agro:
+            return True, "EKSPLISIT", "pejabat_presisi"
+        return False, "NONE", ""
+
+    if clean_kw in ("pejabat_kemenperin", "pejabat kemenperin", "kemenperin_pejabat"):
+        if is_specific_agro_official or is_agro:
+            return True, "EKSPLISIT", "pejabat_kemenperin"
+        return False, "NONE", ""
+
+    if (sumber_data or "").strip().lower() == "direct crawl":
+        if is_specific_agro_official or is_agro:
+            return True, "EKSPLISIT", "Direct Crawl"
+        return False, "NONE", ""
 
     # 2. Cek Sinyal Eksplisit Institusi
     for signal in EXPLICIT_KEMENPERIN_SIGNALS:
         if matches_word_boundary(signal, combined):
-            return True, "EKSPLISIT", signal
+            if is_specific_agro_official or is_agro:
+                return True, "EKSPLISIT", signal
+            return False, "NONE", ""
 
-    # 3. Cek Sinyal Pejabat di Database (13 pejabat)
-    sp1, sp2, sp_unit = find_spokespersons(combined)
+    # 3. Cek Sinyal Pejabat di Database
     if sp1:
-        return True, "IMPLISIT", sp1
+        if is_specific_agro_official or is_agro:
+            return True, "IMPLISIT", sp1
+        return False, "NONE", ""
 
     return False, "NONE", ""
 
@@ -946,6 +1413,34 @@ if __name__ == "__main__":
     assert is_non_article_document_noise("BAB 1. PENDAHULUAN 1 1.1 Latar Belakang Tepung terigu ...", "") is True
     assert is_non_article_document_noise("Daftar Isi", "") is True
     assert is_non_article_document_noise("Harga Kelapa Sumsel Terjun Bebas", "") is False
+    assert is_social_media_engagement_noise("Menurut kamu, pelayanan publik yang ideal itu yang seperti apa sih? Share di kolom komentar, yuk!", "") is True
+    assert is_social_media_engagement_noise("Yuk share di kolom komentar!", "") is True
+    assert is_social_media_engagement_noise("Aturan Pasokan GKM Rafinasi: Kemenperin Tegaskan Tidak Ada Penambahan", "") is False
+    # Check shorts
+    assert is_shorts_entertainment_noise("part 1 Momen divine muncul diserver mamin #roblox #fyp #shorts #stealanegg", "") is True
+    assert is_shorts_entertainment_noise("Kemenperin Resmikan Fasilitas Pengolahan Bambu di Bali", "") is False
+    # Check pome
+    assert is_pome_context_valid("Funny pome walking while hanging his one leg #pomeranian #dog #pets", "") is False
+    assert is_pome_context_valid("PTPN IV PalmCo Olah Limbah POME Jadi Biogas EBT", "") is True
+    # Check teh
+    assert is_teh_context_valid("Tulus Masuk Nominasi AMI Awards Lewat Teh Hijau", "") is False
+    assert is_teh_context_valid("TEH HIJAU Cover Trending ( Singing Battle ) #shorts", "") is False
+    assert is_teh_context_valid("Petani Perkebunan Teh Jawa Barat Ekspor Daun Teh", "") is True
+    # Check crime & accident
+    assert is_crime_accident_noise("Densus 88 tangkap tiga terduga teroris di Sulteng", "") is True
+    assert is_crime_accident_noise("Tabrakan Beruntun Truk Muatan Motor hingga Truk Sawit", "") is True
+    assert is_crime_accident_noise("Order Makanan dan Minuman Rp1,2 Miliar, Dibayar Bilyet Giro Kosong, Pria di Baron Ditangkap di Depok", "") is True
+    assert is_crime_accident_noise("Bea Cukai Sita 1 Juta Batang Rokok Ilegal di Kudus", "") is False
+    assert is_crime_accident_noise("OJK dan Pemkab Kolaka Utara Bangun Ekosistem Kakao Terintegrasi", "") is False
+    # Check placeholder & error titles
+    assert is_placeholder_or_error_title("Resource discovery", "") is True
+    assert is_placeholder_or_error_title("SIPP", "") is True
+    assert is_placeholder_or_error_title("Beranda", "") is True
+    assert is_placeholder_or_error_title("Informasi Paket", "") is True
+    assert is_placeholder_or_error_title("Hilirisasi Sawit Nasional Capai Target", "") is False
+    # Check viral medsos
+    assert is_viral_social_media_drama("Video Bupati Siak Viral di Medsos, Wapres Gibran Kirim Tim Khusus ke Wilayah 3T", "") is True
+    assert is_viral_social_media_drama("Harga TBS Sawit Riau Naik Pekan Ini", "") is False
     print("All relevance_filter self-checks passed successfully!")
 
 

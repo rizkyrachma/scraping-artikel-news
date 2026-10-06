@@ -120,9 +120,46 @@ Catatan: `openpyxl` dipakai dua arah, sebagai engine baca `keyword_nama.xlsx` (l
     5. **Category**: Mapping unit eselon (`IA` -> `"03. Industri Agro"`, `MENTERI`/`WAMEN`/`SETJEN`/`ITJEN` -> `"01. Kementerian Perindustrian"`, dst.).
     6. **Tone & Keterangan Tone**: Sentimen rule-based 3 kelas (`Positif`, `Netral`, `Negatif`) dilengkapi kolom keterangan `"Estimasi Otomatis (Dapat Direvisi Manual)"`.
   - Formatting Hyperlink Excel: Kolom `Link Website` menggunakan relasi hyperlink aktif OOXML dengan styling biru `#0563C1` dan single underline (`Font(color="0563C1", underline="single")`).
-
-
-
-
-
+- **Karakteristik Aliran Berita Industri Agro: Pola "Bursty" Berbasis Event & Penyesuaian Pipeline**:
+  - **Temuan Data Referensi Pusdatin (10–17 September 2026, 1.655 baris total, 54 baris Unit Eselon "IA"/Industri Agro)**:
+    1. **Pola Aliran Berita Bersifat "Bursty" (Bukan Bug Pipeline)**:
+       - 4 dari 8 hari sample referensi (50%) memiliki **0 artikel Industri Agro sama sekali**.
+       - Sebanyak 87% (47 dari 54 baris) liputan Industri Agro terkonsentrasi pada hari-hari diselenggarakannya event/pameran industri besar (khususnya *Fi Asia Indonesia 2026*).
+       - Volume berita harian yang rendah (0 sampai sedikit artikel) pada hari tanpa agenda pameran/kebijakan besar adalah **kondisi riil dan representatif di industri**, bukan tanda kegagalan scraping atau bug pipeline.
+    2. **Perubahan Strategi Deduplikasi: Dari "Hapus Duplikat" Menjadi "Kelompokkan Duplikat" (Kolom `Isu`)**:
+       - Sebanyak 41 dari 54 baris Industri Agro di data referensi merupakan liputan sindikasi dari SATU siaran pers yang sama (kunjungan Wamenperin di Fi Asia 2026).
+       - Pusdatin **TIDAK menghapus** sindikasi ini menjadi 1 baris karena jumlah media peliput merupakan metrik *exposure/reach* esensial dalam media monitoring pemerintah.
+       - Seluruh baris sindikasi dipertahankan dan dikelompokkan dengan nilai seragam pada kolom baru `Isu` (mengambil judul artikel paling representatif/lengkap di kelompok tersebut).
+       - Deduplikasi URL persis sama (`exact duplicate link`) tetap dibuang sebagai duplikat teknis.
+    3. **Deteksi Event & Pameran Industri Agro Tahunan**:
+       - Ditambahkan daftar `INDUSTRY_EVENT_KEYWORDS` di `config.py` (*Fi Asia Indonesia*, *Trade Expo Indonesia*, *SIAL InterFOOD*, *Food & Hotel Indonesia*, *AllPack Indonesia*, *IFFINA*, *Indo Livestock*, *Agrinex Expo*).
+       - Pencarian event ini dijalankan berkala berdampingan dengan 48 komoditas untuk menangkap lonjakan liputan publikasi pameran.
+    4. **Pelonggaran `is_promotional()` Khusus Partisipasi Brand di Pameran Industri Resmi**:
+       - Konten promosi ritel/supermarket konsumen langsung (diskon, katalog JSM, voucher, cashback, syarat dan ketentuan berlaku) tetap dibuang ketat.
+       - Konten partisipasi brand/perusahaan di pameran industri resmi (pola `"[Brand] Hadir di [Event]"`, `"[Brand] Perkenalkan [Produk] di [Pameran]"`) diloloskan sebagai berita industri relevan sesuai standar Pusdatin.
+    5. **Pembaruan Keyword Spesifik Komoditas & Institusi Baru**:
+       - **Gula**: Keyword `"gula"` standalone dihapus permanen untuk mencegah noise resep/kesehatan non-industri, digantikan dengan grup query presisi `"gula rafinasi"` OR `"industri gula rafinasi"`.
+       - **Institusi Baru (Akademi Komunitas Bambu)**: Ditambahkan keyword institusi `"akademi komunitas bambu kemenperin"` (frasa langsung) di `config.py` dan `keyword_kemenperin.csv`. Terverifikasi sebagai program strategis binaan Ditjen Industri Agro (bekerja sama dengan BDI Denpasar) untuk pencetakan Master Bambu dan pusat logistik industri bambu nasional, dengan pemetaan otomatis `Unit Eselon` = `"IA"` dan `Terkait Kemenperin` = `"Ya"`.
+    6. **Pergantian Menteri Perindustrian (Reshuffle Kabinet 1 Oktober 2026 & Sertijab 2 Oktober 2026)**:
+       - **Menteri Aktif**: Muhammad Sarmuji resmi dilantik Presiden Prabowo Subianto sebagai Menteri Perindustrian pada Kamis, 1 Oktober 2026 menggantikan Agus Gumiwang Kartasasmita. Serah terima jabatan (sertijab) dilaksanakan pada Jumat, 2 Oktober 2026.
+       - **Mantan Menteri**: Agus Gumiwang Kartasasmita dicatat sebagai entri terpisah *"Mantan Menteri Perindustrian (hingga 1 Oktober 2026)"* di `keyword_nama.xlsx` agar artikel retrospektif/evaluasi kinerja tetap dapat terdeteksi tanpa terhapus.
+       - **Pencarian Presisi & Entity Mapping**:
+         - `pejabat_keyword_mapping.csv` memperbarui posisi Menteri kepada Muhammad Sarmuji dipasangkan ke seluruh 48 komoditas agro.
+         - `entity_mapper.py` dan `config.py` mendeteksi alias wajar (`Muhammad Sarmuji`, `Menperin Sarmuji`, `Menteri Perindustrian Sarmuji`, `M. Sarmuji`, `Sarmuji`) dan memetakannya ke `Spokesperson 1/2` serta `Unit Eselon` = `"MENTERI"`.
+         - Faisol Riza tetap menjabat sebagai Wakil Menteri Perindustrian.
+     7. **Pembersihan Noise YouTube Shorts, Tabrakan Makna Kata (Pome & Teh), dan Penegakan Seragam Anti-Kriminal/Kecelakaan (6 Oktober 2026)**:
+        - **YouTube Shorts & Entertainment Noise (is_shorts_entertainment_noise)**:
+          - Deteksi 3+ hashtag, atau kombinasi tag hiburan pendek (#shorts, #fyp, #viral, #trending, #shortvideo) tanpa kata format berita formal (nama media/institusi resmi atau kata kerja jurnalistik seperti *resmikan, umumkan, laporkan, capai, targetkan*).
+          - Tolak konten gaming/meme/lucu/hewan (#roblox, #minecraft, smackdown, lucu, kocak, prank).
+          - Ambang is_industry_policy_topic() khusus sumber YouTube dinaikkan menjadi minimal 3 sinyal industri (ind_score >= 3).
+        - **Tabrakan Kata 'Pome' vs Anjing Pomeranian (is_pome_context_valid)**:
+          - Keyword pome wajib memuat konteks industri limbah/sawit/biogas/pabrik/pengolahan/CPO/EBT di judul atau teks.
+          - Tolak mutlak jika disertai kata anjing, pomeranian, pet, puppy, cute, suplemen permen gummy, atau musik beat producer.
+        - **Tabrakan Kata 'Teh' vs Lagu 'Teh Hijau' (is_teh_context_valid)**:
+          - Tolak artikel/video bertema lagu/musik/penyanyi (Tulus, cover, singing battle, DJ teh, remix, AMI Awards, chord gitar, dsb) atau sapaan honorifik Sunda ('Teh Novi', dsb) tanpa konteks industri perkebunan/daun/pabrik teh.
+        - **Penegakan Seragam Anti-Kriminal/Kecelakaan ke Semua Sumber (is_crime_accident_noise)**:
+          - Diterapkan sama rata ke seluruh sumber data (RSS, YouTube, Exa, Serper).
+          - Kamus sinyal diperluas mencakup Densus 88, teroris, tabrakan beruntun, kecelakaan fatal, penipuan bilyet giro kosong, razia miras, satwa liar (ular piton), dan mistis/hantu.
+          - Menggunakan boundary matching kata utuh (regex laka) agar tidak salah mendeteksi nama daerah sentra industri seperti *Kolaka* (sentra kakao Sultra).
+          - Pengecualian khusus: penindakan rokok ilegal dan pita cukai oleh Bea Cukai / DJBC tetap dilindungi dan diloloskan sebagai bagian dari pemantauan hasil tembakau Ditjen Industri Agro.
 

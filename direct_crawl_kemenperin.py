@@ -77,8 +77,11 @@ def crawl_kemenperin_siaran_pers(target_date: date | None = None, max_pages: int
 
                     full_url = href if href.startswith("http") else f"https://kemenperin.go.id{href}"
 
-                    if target_date is not None and pub_date != target_date:
-                        continue
+                    if target_date is not None:
+                        from config import get_date_range
+                        start_d, end_d = get_date_range(target_date)
+                        if pub_date is None or not (start_d <= pub_date <= end_d):
+                            continue
 
                     # Ekstraksi isi artikel penuh
                     article_text = title

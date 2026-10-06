@@ -50,6 +50,7 @@ from fetch_news import (
     dedup_by_link,
     dedup_by_title,
     GoogleCaptchaBlockedError,
+    determine_session_source,
 )
 from extract_content import (
     extract_article_text,
@@ -82,9 +83,16 @@ from relevance_filter import (
     is_crime_accident_noise,
     is_sawit_context_valid,
     is_non_article_document_noise,
+    is_social_media_engagement_noise,
+    is_shorts_entertainment_noise,
+    is_pome_context_valid,
+    is_placeholder_or_error_title,
+    is_viral_social_media_drama,
     has_ditjen_agro_override,
     has_kemenperin_or_agro_override,
+    is_agro_relevant_content,
 )
+from config import ENABLE_YOUTUBE
 from entity_mapper import find_spokespersons
 from sentiment import classify_tone
 from export_excel import save_to_excel
@@ -92,7 +100,7 @@ from serper_search import search_serper_news
 from exa_search import search_exa_news
 from youtube_search import search_youtube_videos, get_kemenperin_channel_videos
 
-USE_SERPER_ONLY: bool = os.environ.get("USE_SERPER_ONLY", "false").lower() in ("true", "1", "yes")
+USE_SERPER_ONLY = os.environ.get("USE_SERPER_ONLY", "false").lower() in ("true", "1", "yes")
 
 OUTPUT_DIR = "hasil_scrapping"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
@@ -171,6 +179,34 @@ def filter_valid_articles(
         link = item.get("resolved_url") or item.get("link", "")
         keyword = item.get("keyword") or default_keyword
 
+        # 1-yt-disabled. Skip YouTube jika flag ENABLE_YOUTUBE = False
+        if not ENABLE_YOUTUBE and item.get("sumber_data", "").strip().lower() == "youtube":
+            item_copy = dict(item)
+            item_copy["discard_reason"] = "youtube_disabled"
+            discarded.append(item_copy)
+            continue
+
+        # 1-bca. Pulihkan judul asli jika title hanya nama media 'BCA Sekuritas'
+        if title.strip() == "BCA Sekuritas":
+            first_line = (text or "").split("\n")[0].strip()
+            if first_line and len(first_line) > 10:
+                item["title"] = first_line.title() if first_line.isupper() else first_line
+                title = item["title"]
+
+        # 1-placeholder. Cek judul placeholder / error / artifact halaman sistem non-berita
+        if is_placeholder_or_error_title(title=title, text=text, url=link):
+            item_copy = dict(item)
+            item_copy["discard_reason"] = "placeholder_or_error_title"
+            discarded.append(item_copy)
+            continue
+
+        # 1-viral. Cek video viral / medsos tanpa konteks kebijakan/industri
+        if is_viral_social_media_drama(title, text):
+            item_copy = dict(item)
+            item_copy["discard_reason"] = "viral_social_media_drama"
+            discarded.append(item_copy)
+            continue
+
         # 1-pdf. Cek dokumen PDF (diblokir total sesuai instruksi)
         if (item.get("sumber_data", "").upper() == "PDF" or
             is_pdf_document(url=link, title=title, sumber_data=item.get("sumber_data", ""))):
@@ -234,6 +270,47 @@ def filter_valid_articles(
             item_copy["discard_reason"] = "non_article_document_noise"
             discarded.append(item_copy)
             continue
+
+        # 1j. Cek konten interaktif / engagement media sosial (Shorts CTA / Q&A polling)
+        if is_social_media_engagement_noise(title, text):
+            item_copy = dict(item)
+            item_copy["discard_reason"] = "social_media_engagement_noise"
+            discarded.append(item_copy)
+            continue
+
+        # 1k. Cek konten hiburan YouTube Shorts / meme / hashtag spam
+        if (item.get("sumber_data", "").strip().lower() == "youtube" or "#shorts" in title.lower()) and is_shorts_entertainment_noise(title, text):
+            item_copy = dict(item)
+            item_copy["discard_reason"] = "shorts_entertainment_noise"
+            discarded.append(item_copy)
+            continue
+
+        # 1l. Validasi khusus keyword 'pome' (wajib lolos konteks industri limbah sawit/biogas, tolak anjing Pomeranian)
+        if keyword and keyword.lower() == "pome" and not is_pome_context_valid(title, text):
+            item_copy = dict(item)
+            item_copy["discard_reason"] = "pome_pomeranian_or_non_industrial"
+            discarded.append(item_copy)
+            continue
+
+        # 1h. Validasi khusus keyword 'fame' (wajib lolos konteks industri biodiesel/oleokimia, tidak boleh di-override)
+        if keyword and keyword.lower() == "fame" and not is_fame_context_valid(title, text):
+            item_copy = dict(item)
+            item_copy["discard_reason"] = "fame_non_industrial"
+            discarded.append(item_copy)
+            continue
+
+        # 1i. Validasi khusus pencarian pejabat (wajib substantif Agro untuk pejabat lintas-direktorat)
+        if keyword in ("pejabat_presisi", "pejabat_kemenperin"):
+            sp1, _, _ = find_spokespersons(f"{title} {text}")
+            is_specific_agro = sp1.lower() in {
+                "putu juli ardika", "merrijantij punguan", "dyan garneta",
+                "rr citra rapati", "krisna septiningrum",
+            }
+            if not is_specific_agro and not is_agro_relevant_content(title, text):
+                item_copy = dict(item)
+                item_copy["discard_reason"] = "non_agro_pejabat_topic"
+                discarded.append(item_copy)
+                continue
 
         # OVERRIDE: Artikel yang menyebut Kemenperin, Menperin/Wamenperin, Ditjen Industri Agro,
         # atau salah satu dari 13 pejabat Kemenperin langsung lolos is_keyword_primary_topic dan is_industry_policy_topic
@@ -305,6 +382,12 @@ def filter_valid_articles(
                 discarded.append(item_copy)
                 continue
 
+            if keyword and keyword.lower() == "pome" and not is_pome_context_valid(title, text):
+                item_copy = dict(item)
+                item_copy["discard_reason"] = "pome_pomeranian_or_non_industrial"
+                discarded.append(item_copy)
+                continue
+
             if keyword and keyword.lower() in ("sawit", "minyak sawit") and not is_sawit_context_valid(title, text):
                 item_copy = dict(item)
                 item_copy["discard_reason"] = "sawit_location_duren_sawit"
@@ -330,29 +413,8 @@ def filter_valid_articles(
                 discarded.append(item_copy)
                 continue
 
-        # 6. Deduplikasi kemiripan judul (threshold = 85)
-        matched_idx = -1
-        for idx, existing in enumerate(valid):
-            if is_near_duplicate_title(title, existing.get("title", ""), threshold=85):
-                matched_idx = idx
-                break
-
-        if matched_idx == -1:
-            valid.append(item)
-        else:
-            existing_text = valid[matched_idx].get("text", "")
-            is_any_rss = valid[matched_idx].get("sumber_data") == "RSS" or item.get("sumber_data") == "RSS"
-            if len(text) > len(existing_text):
-                discarded.append({**valid[matched_idx], "discard_reason": "near_duplicate_title"})
-                valid[matched_idx] = item
-                if is_any_rss:
-                    valid[matched_idx]["sumber_data"] = "RSS"
-            else:
-                item_copy = dict(item)
-                item_copy["discard_reason"] = "near_duplicate_title"
-                discarded.append(item_copy)
-                if is_any_rss:
-                    valid[matched_idx]["sumber_data"] = "RSS"
+        # 6. Seluruh artikel yang lolos filter konten & relevansi tetap disimpan (sindikasi dikelompokkan via 'Isu')
+        valid.append(item)
 
     return valid, discarded
 
@@ -399,12 +461,15 @@ def process_single_keyword(
         log_granular(f"     [2/6] Fetch Exa (jika keyword 1 kata)...  -> dilewati (keyword > 1 kata)")
 
     # Fetch YouTube (1x per keyword, hemat kuota: 100 unit)
-    yt_items = search_youtube_videos(keyword)
-    if yt_items:
-        log_granular(f"     [+] Fetch YouTube (search 1x)...          -> selesai, {len(yt_items)} video")
-        raw_results = raw_results + yt_items
+    if ENABLE_YOUTUBE:
+        yt_items = search_youtube_videos(keyword)
+        if yt_items:
+            log_granular(f"     [+] Fetch YouTube (search 1x)...          -> selesai, {len(yt_items)} video")
+            raw_results = raw_results + yt_items
+        else:
+            log_granular(f"     [-] Fetch YouTube (search 1x)...          -> 0 video (atau API key kosong)")
     else:
-        log_granular(f"     [-] Fetch YouTube (search 1x)...          -> 0 video (atau API key kosong)")
+        log_granular(f"     [-] Fetch YouTube (search 1x)...          -> dilewati (ENABLE_YOUTUBE=False)")
 
     candidates = dedup_by_link(raw_results)
     init_count = len(candidates)
@@ -533,6 +598,7 @@ def finalize_and_export(
 
         records.append({
             "Tanggal": art.get("published", ""),
+            "Isu": art.get("Isu") or art.get("isu") or art["title"],
             "Title": art["title"],
             "Link Website": art.get("link", ""),
             "Media Name": art.get("media_name") or "",
@@ -828,9 +894,8 @@ if __name__ == "__main__":
     if args.api_key:
         os.environ["SERPER_API_KEY"] = args.api_key.strip()
 
-    if args.serper_only:
-        USE_SERPER_ONLY = True
-        os.environ["USE_SERPER_ONLY"] = "true"
+    USE_SERPER_ONLY, source_msg = determine_session_source(force_serper=args.serper_only)
+    print(f"\n[STATUS SUMBER SESI] {source_msg}\n")
 
     start_heartbeat()
 

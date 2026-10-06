@@ -34,18 +34,29 @@ def load_env_file(env_path: Path | str | None = None) -> None:
 
 load_env_file()
 
+# Flag YouTube: dinonaktifkan sementara sesuai instruksi user (default: False)
+ENABLE_YOUTUBE = os.environ.get("ENABLE_YOUTUBE", "false").lower() in ("true", "1", "yes")
 
-def get_date_range(target_date: datetime | None = None):
+
+def get_date_range(target_date: date | datetime | tuple | list | None = None):
     """
-    Menghitung rentang tanggal dinamis: persis kemarin (H-1 dari hari eksekusi).
-    Tidak menggunakan hardcode tanggal. Mendukung OVERRIDE_DATE di environment untuk pengujian.
+    Menghitung rentang tanggal dinamis: persis kemarin (H-1 dari hari eksekusi)
+    atau rentang tanggal (start_date, end_date) jika diberikan.
     """
     if target_date is not None:
+        if isinstance(target_date, (tuple, list)):
+            d1 = target_date[0].date() if isinstance(target_date[0], datetime) else target_date[0]
+            d2 = target_date[1].date() if isinstance(target_date[1], datetime) else target_date[1]
+            return d1, d2
         d = target_date.date() if isinstance(target_date, datetime) else target_date
         return d, d
     override = os.environ.get("OVERRIDE_DATE", "").strip()
     if override:
         try:
+            for sep in (":", "_sd_", "..", " to ", " - "):
+                if sep in override:
+                    p1, p2 = override.split(sep, 1)
+                    return datetime.strptime(p1.strip(), "%Y-%m-%d").date(), datetime.strptime(p2.strip(), "%Y-%m-%d").date()
             d = datetime.strptime(override, "%Y-%m-%d").date()
             return d, d
         except Exception:
@@ -53,39 +64,35 @@ def get_date_range(target_date: datetime | None = None):
     today = datetime.now().date()
     yesterday = today - timedelta(days=1)
     return yesterday, yesterday
+
+
 def get_date_range_custom(target_date):
     """
     Override tanggal spesifik untuk pengujian/backfill (bukan rolling 'kemarin').
-    Menerima target_date sebagai date, datetime, atau string format 'YYYY-MM-DD'.
+    Menerima target_date sebagai date, datetime, string format 'YYYY-MM-DD', atau tuple/list.
     """
-    if isinstance(target_date, str):
-        target_date = datetime.strptime(target_date.strip(), "%Y-%m-%d").date()
-    elif isinstance(target_date, datetime):
-        target_date = target_date.date()
-    return target_date, target_date
+    return get_date_range(target_date)
 
-def get_date_folder(target_date: date | datetime | None = None) -> str:
+
+def get_date_folder(target_date: date | datetime | tuple | list | None = None) -> str:
     """
-    Menghasilkan path folder terorganisir per tanggal: hasil_scrapping/<YYYY-MM-DD>
+    Menghasilkan path folder terorganisir per tanggal atau rentang tanggal:
+    hasil_scrapping/<YYYY-MM-DD> atau hasil_scrapping/<YYYY-MM-DD>_sd_<YYYY-MM-DD>
     Membuat folder jika belum ada (os.makedirs(folder, exist_ok=True)).
-    Panggil fungsi ini di AWAL proses sebelum fetch keyword pertama.
     """
-    if target_date is None:
-        eval_date, _ = get_date_range()
-    elif isinstance(target_date, datetime):
-        eval_date = target_date.date()
+    start_d, end_d = get_date_range(target_date)
+    if start_d == end_d:
+        folder = f"hasil_scrapping/{start_d.strftime('%Y-%m-%d')}"
     else:
-        eval_date = target_date
-    folder = f"hasil_scrapping/{eval_date.strftime('%Y-%m-%d')}"
+        folder = f"hasil_scrapping/{start_d.strftime('%Y-%m-%d')}_sd_{end_d.strftime('%Y-%m-%d')}"
     os.makedirs(folder, exist_ok=True)
     return folder
 
 
-def is_published_yesterday(published_str: str, target_date: datetime | None = None) -> bool:
+def is_published_yesterday(published_str: str, target_date: date | datetime | tuple | list | None = None) -> bool:
     """
-    Memeriksa apakah tanggal publikasi artikel sama persis dengan 'kemarin'.
-    Artikel yang lolos HANYA yang tanggal publikasinya persis sama dengan 'kemarin',
-    bukan hari ini, bukan juga tanggal sebelum kemarin.
+    Memeriksa apakah tanggal publikasi artikel berada dalam rentang target_date
+    (persis kemarin atau rentang start_date..end_date).
     Mendukung format absolut maupun relatif (misal '1 day ago' dari Serper).
     """
     if not published_str:
@@ -102,8 +109,8 @@ def is_published_yesterday(published_str: str, target_date: datetime | None = No
             dt = dt.tz_convert("Asia/Jakarta")
         elif str(published_str).endswith("Z"):
             dt = pd.to_datetime(published_str).tz_localize("UTC").tz_convert("Asia/Jakarta")
-        yesterday_start, _ = get_date_range(target_date)
-        return dt.date() == yesterday_start
+        start_d, end_d = get_date_range(target_date)
+        return start_d <= dt.date() <= end_d
     except Exception:
         return False
 
@@ -177,8 +184,24 @@ def build_keyword_groups(path: str | Path = "keyword_data.txt") -> dict[str, lis
                 if line_clean not in groups[best_base]:
                     groups[best_base].append(line_clean)
                 matched = True
-            else:
-                groups[line_clean] = [line_clean]
+    # Perkaya varian pencarian Google News agar tidak kehilangan artikel di lapangan:
+    # 1. Rokok Ilegal: jurnalis sering tidak menulis 'djbc', melainkan 'rokok ilegal'
+    if "djbc rokok ilegal" in groups:
+        for extra in ["rokok ilegal"]:
+            if extra not in groups["djbc rokok ilegal"]:
+                groups["djbc rokok ilegal"].append(extra)
+
+    # 2. Rokok Elektrik: jurnalis sering tidak menulis 'bnn', melainkan 'rokok elektrik' / 'rokok elektronik'
+    if "bnn rokok elektrik" in groups:
+        for extra in ["rokok elektrik", "rokok elektronik"]:
+            if extra not in groups["bnn rokok elektrik"]:
+                groups["bnn rokok elektrik"].append(extra)
+
+    # 3. Gula Rafinasi: pastikan mencakup 'industri gula rafinasi'
+    if "gula rafinasi" in groups:
+        for extra in ["industri gula rafinasi"]:
+            if extra not in groups["gula rafinasi"]:
+                groups["gula rafinasi"].append(extra)
 
     return groups
 
@@ -198,7 +221,9 @@ def get_officials_query_variants(path: str | Path = "keyword_nama.xlsx", max_per
         n = d.get("nama", "").strip()
         if not n:
             continue
-        if "Agus Gumiwang" in n:
+        if "Muhammad Sarmuji" in n or "Sarmuji" in n:
+            query_parts.append("Sarmuji")
+        elif "Agus Gumiwang" in n:
             query_parts.append("Agus Gumiwang")
         elif "Eko S.A. Cahyanto" in n:
             query_parts.append("Eko Cahyanto")
@@ -209,6 +234,41 @@ def get_officials_query_variants(path: str | Path = "keyword_nama.xlsx", max_per
 
     chunks = [query_parts[i : i + max_per_chunk] for i in range(0, len(query_parts), max_per_chunk)]
     return chunks
+
+
+def load_pejabat_precision_mapping(path: str | Path = "pejabat_keyword_mapping.csv", active_only: bool = True) -> list[dict]:
+    """
+    Memuat daftar pemetaan pejabat dan keyword spesifik komoditas dari pejabat_keyword_mapping.csv.
+    Jika active_only=True, hanya memuat 9 pejabat relevan (Menteri, Wamen, Sekjen, Irjen, Dirjen Agro,
+    dan 4 Direktur Agro), mengecualikan 4 pejabat non-Agro yang berada di luar scope saat ini.
+    """
+    if not os.path.exists(path):
+        return []
+    import csv
+    results = []
+    out_of_scope_names = {"taufiek bawazier", "setia diarta", "reni yanita", "tri supondy"}
+    with open(path, mode="r", encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            nama = row.get("nama_pejabat", "").strip()
+            jabatan = row.get("jabatan", "").strip()
+            raw_kws = row.get("keyword_terkait", "").strip()
+            if not nama:
+                continue
+            is_out_of_scope = (
+                nama.lower() in out_of_scope_names
+                or "di luar scope" in raw_kws.lower()
+            )
+            if active_only and is_out_of_scope:
+                continue
+            kws = [k.strip() for k in raw_kws.split(";") if k.strip() and "di luar scope" not in k.lower()]
+            results.append({
+                "nama": nama,
+                "jabatan": jabatan,
+                "keywords": kws,
+                "is_out_of_scope": is_out_of_scope,
+            })
+    return results
 
 
 
@@ -254,6 +314,37 @@ JOB_URL_PATTERNS = [
 ]
 
 
+# Daftar nama event pameran industri rutin/tahunan (agro, pangan, mamin, kemasan, furnitur)
+# Terpisah dari 48 komoditas dasar untuk menangkap lonjakan liputan berbasis event
+INDUSTRY_EVENT_KEYWORDS = [
+    "Fi Asia Indonesia",
+    "Trade Expo Indonesia",
+    "SIAL InterFOOD",
+    "Food & Hotel Indonesia",
+    "AllPack Indonesia",
+    "IFFINA",
+    "Indo Livestock",
+    "Agrinex Expo",
+]
+
+
+def load_industry_event_keywords() -> list[str]:
+    """Mengembalikan daftar keyword nama event dan pameran industri agro/pangan rutin di Indonesia."""
+    return list(INDUSTRY_EVENT_KEYWORDS)
+
+
+# Daftar keyword institusi khusus / program strategis Kemenperin (frasa langsung)
+INSTITUTIONAL_KEYWORDS = [
+    "akademi komunitas bambu kemenperin",
+]
+
+
+def load_institutional_keywords() -> list[str]:
+    """Mengembalikan daftar keyword institusi khusus Kemenperin (frasa langsung)."""
+    return list(INSTITUTIONAL_KEYWORDS)
+
+
+
 def load_keywords(path: str | Path = "keyword_data.txt") -> list[str]:
     """
     Membaca keyword_data.txt, kembalikan list keyword (strip whitespace, buang baris kosong).
@@ -276,13 +367,16 @@ def load_spokesperson_map(path: str | Path = "keyword_nama.xlsx") -> dict[str, s
         raise ValueError(f"Kolom 'nama' dan 'jabatan' harus ada di file {path}. Kolom ditemukan: {list(df.columns)}")
 
     spokesperson_map = {}
+    out_of_scope_names = {"taufiek bawazier", "setia diarta", "reni yanita", "tri supondy"}
     for _, row in df.iterrows():
         raw_nama = str(row["nama"]).strip() if pd.notna(row["nama"]) else ""
         raw_jabatan = str(row["jabatan"]).strip() if pd.notna(row["jabatan"]) else ""
         if not raw_nama:
             continue
-
         clean_nama = " ".join(raw_nama.split()).lower()
+        if clean_nama in out_of_scope_names:
+            continue
+
         clean_jabatan = " ".join(raw_jabatan.split()).title()
         spokesperson_map[clean_nama] = clean_jabatan
 
@@ -293,22 +387,26 @@ def load_spokesperson_details(path: str | Path = "keyword_nama.xlsx") -> list[di
     """
     Membaca keyword_nama.xlsx secara lengkap termasuk unit_eselon, kategori, dan level,
     serta menghasilkan alias pencocokan nama yang fleksibel.
+    Mengecualikan 4 pejabat non-Agro (Taufiek Bawazier, Setia Diarta, Reni Yanita, Tri Supondy).
     """
     df = pd.read_excel(path)
     df.columns = [str(c).strip().lower() for c in df.columns]
 
     records = []
+    out_of_scope_names = {"taufiek bawazier", "setia diarta", "reni yanita", "tri supondy"}
     for _, row in df.iterrows():
         raw_nama = str(row.get("nama", "")).strip() if pd.notna(row.get("nama")) else ""
         if not raw_nama:
             continue
+        canonical_name = " ".join(raw_nama.split())
+        lower_name = canonical_name.lower()
+        if lower_name in out_of_scope_names:
+            continue
+
         jabatan = str(row.get("jabatan", "")).strip() if pd.notna(row.get("jabatan")) else ""
         unit_eselon = str(row.get("unit_eselon", "-")).strip() if pd.notna(row.get("unit_eselon")) else "-"
         kategori = str(row.get("kategori", "")).strip() if pd.notna(row.get("kategori")) else ""
         level = str(row.get("level", "")).strip() if pd.notna(row.get("level")) else ""
-
-        canonical_name = " ".join(raw_nama.split())
-        lower_name = canonical_name.lower()
 
         aliases = [lower_name]
         # Buat variasi alias umum di media
@@ -323,8 +421,10 @@ def load_spokesperson_details(path: str | Path = "keyword_nama.xlsx") -> list[di
             aliases.extend(["m. rum", "m rum"])
         elif "putu" in lower_name and "juli" in lower_name:
             aliases.extend(["putu juli ardika", "putu juli"])
+        elif "sarmuji" in lower_name:
+            aliases.extend(["muhammad sarmuji", "menperin sarmuji", "menteri perindustrian sarmuji", "m. sarmuji", "m sarmuji", "sarmuji"])
         elif "agus" in lower_name and "gumiwang" in lower_name:
-            aliases.extend(["agus gumiwang kartasasmita", "agus gumiwang"])
+            aliases.extend(["agus gumiwang kartasasmita", "agus gumiwang", "menperin agus gumiwang", "menteri perindustrian agus gumiwang"])
         elif "faisol" in lower_name and "riza" in lower_name:
             aliases.extend(["faisol riza", "wamenperin", "wakil menteri perindustrian"])
 

@@ -20,10 +20,10 @@ def normalize_rokok_keywords(kw_str: str, title: str = "", text: str = "") -> st
         return kw_str
 
     kws = [k.strip() for k in str(kw_str).split(",") if k.strip()]
-    if not any(k.lower() == "rokok" for k in kws):
+    if not any("rokok" in k.lower() for k in kws):
         return kw_str
 
-    non_rokok = [k for k in kws if k.lower() != "rokok"]
+    non_rokok = [k for k in kws if "rokok" not in k.lower()]
 
     combined = f"{title or ''} {text or ''}".lower()
     title_lower = (title or "").lower()
@@ -31,17 +31,19 @@ def normalize_rokok_keywords(kw_str: str, title: str = "", text: str = "") -> st
     specific = []
 
     # 1. BNN rokok elektrik
-    if any(term in title_lower for term in ["rokok elektrik", "rokok elektronik", "vape", "vapor", "rokok sintetis"]) or \
+    if any(term in title_lower for term in ["rokok elektrik", "rokok elektronik", "vape", "vapor", "rokok sintetis", "electric"]) or \
        ("elektrik" in title_lower and "rokok" in title_lower) or \
        ("bnn" in combined and any(v in combined for v in ["vape", "elektrik", "narkotika"])) or \
-       ("rokok elektrik" in combined or "rokok elektronik" in combined or "vape" in combined):
+       ("rokok elektrik" in combined or "rokok elektronik" in combined or "vape" in combined) or \
+       any("elektrik" in k.lower() or "electric" in k.lower() for k in kws):
         specific.append("bnn rokok elektrik")
 
     # 2. Rokok tanpa pita cukai
     if any(term in title_lower for term in ["tanpa pita cukai", "pita cukai", "cukai rokok"]) or \
        "tanpa pita cukai" in combined or \
        ("pita cukai" in combined) or \
-       ("cukai rokok" in combined):
+       ("cukai rokok" in combined) or \
+       any("tanpa pita cukai" in k.lower() for k in kws):
         specific.append("rokok tanpa pita cukai")
 
     # 3. DJBC rokok ilegal
@@ -49,7 +51,8 @@ def normalize_rokok_keywords(kw_str: str, title: str = "", text: str = "") -> st
        "rokok ilegal" in combined or \
        ("bea cukai" in combined and "rokok" in combined) or \
        ("djbc" in combined and "rokok" in combined) or \
-       ("gempur rokok ilegal" in combined):
+       ("gempur rokok ilegal" in combined) or \
+       any("ilegal" in k.lower() for k in kws):
         specific.append("djbc rokok ilegal")
 
     # Fallback jika belum terpetakan ke salah satu dari tiga di atas
@@ -68,7 +71,7 @@ def normalize_rokok_keywords(kw_str: str, title: str = "", text: str = "") -> st
 def save_to_excel(records: list[dict], output_path: str, merge_existing: bool = False):
     """
     Menyimpan hasil scraping dan NLP ke file Excel dengan styling:
-    - Kolom wajib: Tanggal, Title, Link Website, Media Name, Tone, Spokesperson 1, Spokesperson 2, Unit Eselon, Terkait Kemenperin, Keywords, Sumber Data
+    - Kolom wajib: Tanggal, Isu, Title, Link Website, Media Name, Tone, Spokesperson 1, Spokesperson 2, Unit Eselon, Terkait Kemenperin, Keywords, Sumber Data
     - Mendukung merge_existing=True untuk menggabungkan dengan file yang sudah ada (dedup URL dan judul)
     - Header bold dan lebar kolom auto-fit
     - Kolom Link Website berupa hyperlink aktif
@@ -92,6 +95,7 @@ def save_to_excel(records: list[dict], output_path: str, merge_existing: bool = 
 
     columns = [
         "Tanggal",
+        "Isu",
         "Title",
         "Link Website",
         "Media Name",
@@ -107,6 +111,7 @@ def save_to_excel(records: list[dict], output_path: str, merge_existing: bool = 
     if not df.empty:
         # 1. Normalisasi nama kolom dari berbagai variasi key dictionary pipeline
         mappings = {
+            "Isu": ["Isu", "isu", "issue", "topik_isu"],
             "Title": ["Title", "title", "judul"],
             "Link Website": ["Link Website", "link", "url", "resolved_url", "link_website"],
             "Tanggal": ["Tanggal", "published", "tanggal", "pub_date"],
@@ -126,6 +131,18 @@ def save_to_excel(records: list[dict], output_path: str, merge_existing: bool = 
             for alt in alt_keys:
                 if alt in df.columns and alt != target_col:
                     df[target_col] = df[target_col].fillna(df[alt])
+
+        # Fallback default untuk Isu jika kosong: gunakan Title yang dibersihkan dari suffix media
+        def _get_fallback_isu(row):
+            isu_val = row.get("Isu")
+            if pd.notna(isu_val) and str(isu_val).strip() and str(isu_val).strip().lower() not in ("nan", "none", ""):
+                return str(isu_val).strip()
+            title_val = str(row.get("Title") or "").strip()
+            if " - " in title_val:
+                return title_val.rsplit(" - ", 1)[0].strip()
+            return title_val
+
+        df["Isu"] = df.apply(_get_fallback_isu, axis=1)
 
         # Fallback default untuk Sumber Data
         if "Sumber Data" not in df.columns or df["Sumber Data"].isna().all():
@@ -179,6 +196,13 @@ def save_to_excel(records: list[dict], output_path: str, merge_existing: bool = 
             if not curr_rel or curr_rel in ["nan", "None"]:
                 is_rel = is_kemenperin_related(title=t, text=txt, keyword=kw, sumber_data=sd)
                 df.at[idx, "Terkait Kemenperin"] = "Ya" if is_rel else "Tidak"
+
+            # Khusus Akademi Komunitas Bambu: program strategis binaan Ditjen Industri Agro
+            if "akademi komunitas bambu" in combined.lower() or "akademi komunitas bambu" in kw.lower():
+                df.at[idx, "Terkait Kemenperin"] = "Ya"
+                curr_u = str(df.at[idx, "Unit Eselon"] or "").strip()
+                if not curr_u or curr_u in ["-", "nan", "None"]:
+                    df.at[idx, "Unit Eselon"] = "IA"
 
             # 3. Tone
             if pd.isna(df.at[idx, "Tone"]) or str(df.at[idx, "Tone"]).strip() in ["", "nan", "None"]:

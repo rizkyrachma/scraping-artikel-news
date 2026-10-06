@@ -103,11 +103,9 @@ def search_youtube_videos(
     if not api_key:
         return []
 
-    if target_date is None:
-        target_date, _ = get_date_range()
-
-    pub_after = f"{target_date.isoformat()}T00:00:00Z"
-    pub_before = f"{(target_date + timedelta(days=1)).isoformat()}T00:00:00Z"
+    start_d, end_d = get_date_range(target_date)
+    pub_after = f"{start_d.isoformat()}T00:00:00Z"
+    pub_before = f"{(end_d + timedelta(days=1)).isoformat()}T00:00:00Z"
 
     url = f"{YOUTUBE_API_BASE}/search"
     params = {
@@ -188,10 +186,7 @@ def get_kemenperin_channel_videos(
     if not api_key:
         return []
 
-    if target_date is None:
-        target_date, _ = get_date_range()
-
-    target_date_str = target_date.isoformat()
+    start_d, end_d = get_date_range(target_date)
 
     playlists = [
         ("Kementerian Perindustrian RI", KEMENPERIN_UPLOADS_PLAYLIST),
@@ -222,8 +217,13 @@ def get_kemenperin_channel_videos(
                 sn = it.get("snippet", {})
                 published_at = sn.get("publishedAt", "")
 
-                # Filter apakah video diupload pada target_date
-                if published_at.startswith(target_date_str):
+                # Filter apakah video diupload dalam rentang target_date
+                pub_d = None
+                try:
+                    pub_d = datetime.fromisoformat(published_at.replace("Z", "+00:00")).date()
+                except Exception:
+                    pass
+                if pub_d and (start_d <= pub_d <= end_d):
                     vid = sn.get("resourceId", {}).get("videoId")
                     if not vid:
                         continue

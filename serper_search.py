@@ -62,36 +62,64 @@ def search_serper_query(query: str, api_key: str, page: int = 1, timeout: int = 
         return []
 
 
-def search_serper_news(query: str, api_key: str | None = None, max_pages: int = 2) -> list[dict]:
+def search_serper_news(
+    query: str,
+    api_key: str | None = None,
+    max_pages: int = 2,
+    target_date: date | None = None,
+) -> list[dict]:
     """
     Mencari berita via Serper.dev (https://google.serper.dev/news).
     Membersihkan operator 'site:' atau '-site:' jika ada, karena akun gratis Serper
     menolak dork query tersebut (HTTP 400). Penyaringan domain tetap dilakukan 100%
     secara presisi di kode Python via is_valid_domain().
     
+    Mendukung ekspansi grup varian untuk komoditas dan 13 nama pejabat Kemenperin.
+    Mendukung filter tanggal target YYYY-MM-DD via after/before operator.
     API key dibaca dari parameter atau environment variable 'SERPER_API_KEY'.
     Jika API key tidak ditemukan, fungsi nonaktif secara aman (skip, return [], tidak crash).
-    
-    Mengembalikan format dict yang identik dengan fetch_news.py:
-    - keyword
-    - title
-    - raw_title
-    - link (DIRECT publisher URL, bukan token news.google.com!)
-    - media_name
-    - source
-    - source_url
-    - published
     """
     key = (api_key or os.environ.get("SERPER_API_KEY", "")).strip()
     if not key:
         return []
 
     import re
-    # Bersihkan dork site: yang memicu HTTP 400 di Serper free account
-    clean_q = re.sub(r"-?site:[^\s]+", "", query)
-    clean_q = " ".join(clean_q.split()).strip()
-    if not clean_q:
-        clean_q = query.strip()
+    from datetime import timedelta
+
+    base_kw = query.strip()
+
+    # Khusus pejabat Kemenperin umum: panggil chunk nama pejabat
+    if base_kw.lower() in ("pejabat_kemenperin", "pejabat kemenperin", "kemenperin_pejabat"):
+        from config import get_officials_query_variants
+        chunks = get_officials_query_variants()
+        all_res = []
+        for chunk in chunks:
+            q_chunk = "(" + " OR ".join(f'"{n}"' for n in chunk) + ")"
+            sub_res = search_serper_news(q_chunk, api_key=key, max_pages=max_pages, target_date=target_date)
+            for r in sub_res:
+                r["keyword"] = "pejabat_kemenperin"
+            all_res.extend(sub_res)
+        return dedup_by_link(all_res)
+
+    # Perluas query jika berupa kata dasar komoditas yang memiliki varian
+    from config import build_keyword_groups
+    groups = build_keyword_groups()
+    if base_kw.lower() in groups and len(groups[base_kw.lower()]) > 1:
+        variants = groups[base_kw.lower()]
+        clean_q = "(" + " OR ".join(f'"{v}"' if ' ' in v else v for v in variants) + ")"
+    else:
+        # Bersihkan dork site: yang memicu HTTP 400 di Serper free account
+        clean_q = re.sub(r"-?site:[^\s]+", "", base_kw)
+        clean_q = " ".join(clean_q.split()).strip()
+        if not clean_q:
+            clean_q = base_kw
+
+    # Sisipkan rentang tanggal target jika diberikan
+    if target_date is not None:
+        start_d, end_d = get_date_range(target_date)
+        prev_d = start_d - timedelta(days=1)
+        next_d = end_d + timedelta(days=1)
+        clean_q = f"{clean_q} after:{prev_d.strftime('%Y-%m-%d')} before:{next_d.strftime('%Y-%m-%d')}"
 
     raw_items = []
     for p in range(1, max_pages + 1):
@@ -119,7 +147,7 @@ def search_serper_news(query: str, api_key: str | None = None, max_pages: int = 
             continue
 
         results.append({
-            "keyword": clean_q,
+            "keyword": base_kw,
             "title": clean_title,
             "raw_title": raw_title,
             "link": link,
