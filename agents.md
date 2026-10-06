@@ -162,4 +162,59 @@ Catatan: `openpyxl` dipakai dua arah, sebagai engine baca `keyword_nama.xlsx` (l
           - Kamus sinyal diperluas mencakup Densus 88, teroris, tabrakan beruntun, kecelakaan fatal, penipuan bilyet giro kosong, razia miras, satwa liar (ular piton), dan mistis/hantu.
           - Menggunakan boundary matching kata utuh (regex laka) agar tidak salah mendeteksi nama daerah sentra industri seperti *Kolaka* (sentra kakao Sultra).
           - Pengecualian khusus: penindakan rokok ilegal dan pita cukai oleh Bea Cukai / DJBC tetap dilindungi dan diloloskan sebagai bagian dari pemantauan hasil tembakau Ditjen Industri Agro.
+     8. **Keputusan Scope Industri Nasional vs Penegakan Ritel Lokal & Katalog Lengkap Pola Noise (6 Oktober 2026)**:
+        - **Keputusan Scope Monitoring**:
+          - Fokus pipeline adalah **INDUSTRI MANUFAKTUR & KOMODITAS AGRO** (produksi nasional, kapasitas pabrik, investasi industri, ekspor-impor, hilirisasi, pasokan bahan baku, dan regulasi/kebijakan formal Kemenperin).
+          - Seluruh berita **PENEGAKAN HUKUM RITEL LOKAL & KETERTIBAN UMUM DAERAH** ditetapkan sebagai **DI LUAR SCOPE** (Satpol PP menyegel toko eceran/kios, pansus/raperda pengendalian miras DPRD kota/kabupaten, moratorium perizinan Rumah Hiburan Umum/RHU/diskotek, dan pengawasan izin karaoke).
+          - **Pengecualian Mutlak**: Razia rokok ilegal, penindakan rokok tanpa pita cukai, dan operasi Gempur Rokok Ilegal oleh Direktorat Jenderal Bea dan Cukai (DJBC) / Kemenkeu **TETAP DIPERTAHANKAN** sebagai bagian penting dari monitoring ekosistem Industri Hasil Tembakau (IHT) Ditjen Industri Agro.
+        - **Katalog Lengkap Pola Noise yang Berhasil Diidentifikasi & Ditangkal**:
+          1. **Title Placeholder, Error & Artifact Web (`is_placeholder_or_error_title`)**:
+             - Software katalog perpustakaan OPAC/VuFind Kemendikdasmen: *"Resource discovery - Katalog Induk Kemendikdasmen"*.
+             - Sistem Informasi Penelusuran Perkara Pengadilan Negeri: *"SIPP"*.
+             - Sistem e-procurement pengadaan tender ESDM/DKI: *"Informasi Paket"* (SPSE INAPROC) dan e-Order BPPBJ DKI.
+             - Portal repositori/indeks akademik: *"Garba Rujukan Digital"*, *"ICGAB 2026"*, *"Beranda"* Pustaka Bapanas.
+             - Hasil pencarian peraturan: *"62.484 Peraturan ditemukan"* (`peraturan.go.id`).
+             - Katalog toko & Flash sale: Kasur pegas Alga Ellery/Jullie/Nara Chandra Karya, biskuit Lotte Grosir, buku tulis SIPLah Intan Pariwara.
+             - Lowongan kerja & direktori: *"Staff Teknisi AMDK"* Jobrapido, *"Daftar UMKM Babel"*, *"SimPONI SUMUT"*.
+          2. **Penegakan Hukum Ritel Lokal (`is_local_retail_enforcement`)**:
+             - Penyegelan toko miras/eceran oleh Satpol PP (Surabaya, Padang, Wonokromo, Padang).
+             - Raperda pembatasan/pengendalian miras oleh DPRD Kota/Kabupaten (Surabaya, Purbalingga, Buol).
+             - Moratorium RHU / izin diskotek baru oleh Walikota Surabaya.
+             - Pengawasan tempat karaoke oleh Satpol PP Tulang Bawang.
+             - Pemusnahan barang kedaluwarsa toko oleh Satpol PP Nunukan.
+          3. **Kamtibmas & Kegiatan Kepolisian Lokal Non-Industri (`is_crime_accident_noise`)**:
+             - Patroli dialogis & Jumat curhat Polsek (seperti Polsek Pangkalan Susu di Langkat yang terseret keyword *susu*).
+             - Patroli dialogis polisi di warung kopi / warung makan.
+             - Pengamanan turnamen olahraga (basket DBL Kopi Goodday Polresta Sleman).
+             - Penindakan miras arak/trobas kriminal umum oleh Polres Malang/Kaur/Ngampilan.
+             - Patroli skala besar Brimob di perkebunan PT PAL.
+             - Kriminal murni (pembunuhan di kebun kopi, penggelapan kakao non-industri).
+          4. **Rekreasi Wisata, Tiket Masuk, Kafe & Resep (`is_lifestyle_tourism_noise`, `is_recipe`)**:
+             - Destinasi wisata edukasi anak & ulasan tiket masuk (Kampung Coklat Blitar, Festival Nyusu Bareng Brau Batu).
+             - Ulasan kedai kafe & nongkrong (OSMA Osmanthus Tea Solo, Library Cafe Bandung, Kedai Kopi Bah Sipit, Catra Kopi Batang).
+             - Tips kuliner memasak/meracik (tips bawang goreng kriuk maizena, cara seduh kopi nikmat).
+          5. **Blog & Esai Pribadi Platform UGC (`is_personal_blog_noise`)**:
+             - Catatan perjalanan hiking (Tektok Part 2 Bukit Lincing).
+             - Curhat personal & kenangan (Ketika Kebahagiaan Cukup Segelas Kopi, Bapak Orang Pertama Mengenalkanku Kopi, Bosan Nunggu Kerja Mending Bisnis Rumahan).
+             - Esai lepas non-kebijakan (Tiga Buah Kakao & Wajah Keadilan, LIRA playdate Boyolali, Mahasiswa UNNES Cegah CVS).
+          6. **Drama Medsos Viral Tanpa Konteks Kebijakan (`is_viral_social_media_drama`)**:
+             - Video kontroversi pejabat/bupati viral di medsos (kasus Bupati Siak) yang terseret tag komoditas daerah tanpa substansi harga/pabrik/hilirisasi.
+          7. **Pola Struktural Murah Tanpa AI (Tahap 1 Pre-AI)**:
+             - **Deteksi Nomor HP / WA di Judul (`has_phone_number_or_wa_in_title`)**: Regex nomor HP 08xx / +628xx atau prefix WA/Telp (listing bisnis / iklan baris, e.g. *"Search - WA 0859 3970 0884 [[Hatiga Furniture]]"*).
+             - **Deteksi Halaman Placeholder Agregator (`is_aggregator_placeholder_title`)**: Judul berpola *"Berita Terbaru Hari Ini - {topik}"*, *"Berita Terkini - {topik}"*, *"Kumpulan Berita {topik}"*, *"Tag: {topik}"*.
+             - **Deteksi Halaman Galeri Foto / Stock Image (`is_photo_stock_gallery_noise`)**: Judul berpola *"{angka}+ Foto ... Pictures, Gambar dan Background untuk Unduh Gratis"* atau memuat *"stock photo"*, *"download gratis"*.
+             - **Deteksi Campaign Donasi / Crowdfunding (`is_donation_campaign_noise`)**: Judul diawali *"Campaign -"* atau memuat *"wujudkan renovasi musholla"*, *"galang dana"*, platform Kitabisa, sedekah, dsb.
+             - **Deteksi Profil Sekolah / Direktori Pendidikan Statis (`is_static_educational_profile_noise`)**: Judul berpola nama sekolah (*"SMK Negeri X"*, *"SMA..."*, *"Universitas..."*) tanpa kata kerja berita formal (*"resmikan"*, *"gelar"*, *"umumkan"*, dst).
+             - **Katalog Ritel / Toko Alat Rumah Tangga (`is_promotional`)**: Judul berpola *"Toko Alat Rumah Tangga..."* tanpa konteks industri manufaktur.
+             - **Idiom Kertas (`is_kertas_context_valid`)**: Frasa kiasan non-komoditas (*"Di Atas Kertas Semua Setara"*).
+        - **Penonaktifan Sementara YouTube**:
+          - Flag `ENABLE_YOUTUBE = False` (default) di `config.py` membungkus seluruh pemanggilan YouTube search dan channel crawling. 133 baris YouTube disisihkan dari dataset akhir hingga siap diaktifkan kembali.
+        - **Hasil Dataset Final Periode 1–4 Oktober 2026**:
+          - Total awal: 768 baris.
+          - Total dibuang: 242 baris (133 YouTube dinonaktifkan + 109 baris noise non-industri, ritel lokal, placeholder, kamtibmas, rekreasi, blog, dan drama medsos).
+          - **Total bersih final: 526 baris**, tersimpan di:
+            - `hasil_scrapping/2026-10-01_sd_2026-10-04/all_2026-10-01_sd_2026-10-04.xlsx`
+            - `hasil_scrapping/2026-10-01_sd_2026-10-04/all_2026-10-01_sd_2026-10-04_terbaru.xlsx`
+            - `hasil_scrapping/2026-10-01_sd_2026-10-04/progress.json`
+          - **Hasil audit komprehensif ke 526 baris akhir: 0 noise tersisa**, 100% berita relevan kebijakan & industri agro.
 

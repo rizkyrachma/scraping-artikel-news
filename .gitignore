@@ -19,8 +19,14 @@ ENV/
 # Scratch & Temporary Testing Scripts (sering memuat debug/test API key)
 scratch/
 
+# Output Data Hasil Scraping
+hasil_scrapping/
+
 # Temporary / OS files
 .DS_Store
 Thumbs.db
 *.tmp
 *.log
+~$*
+
+

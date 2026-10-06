@@ -88,10 +88,15 @@ from relevance_filter import (
     is_pome_context_valid,
     is_placeholder_or_error_title,
     is_viral_social_media_drama,
+    is_lifestyle_tourism_noise,
+    is_personal_blog_noise,
+    is_local_retail_enforcement,
+    is_non_article_structural_noise,
     has_ditjen_agro_override,
     has_kemenperin_or_agro_override,
     is_agro_relevant_content,
 )
+from ai_relevance_classifier import classify_agro_relevance, log_ai_rejection
 from config import ENABLE_YOUTUBE
 from entity_mapper import find_spokespersons
 from sentiment import classify_tone
@@ -193,6 +198,14 @@ def filter_valid_articles(
                 item["title"] = first_line.title() if first_line.isupper() else first_line
                 title = item["title"]
 
+        # BAGIAN 1: Filter pola struktural (nomor telepon/WA, placeholder agregator, galeri stock foto, campaign donasi, profil sekolah statis)
+        # Filter paling awal sebelum filter relevansi lain (gratis, rule-based)
+        if is_non_article_structural_noise(title):
+            item_copy = dict(item)
+            item_copy["discard_reason"] = "structural_noise"
+            discarded.append(item_copy)
+            continue
+
         # 1-placeholder. Cek judul placeholder / error / artifact halaman sistem non-berita
         if is_placeholder_or_error_title(title=title, text=text, url=link):
             item_copy = dict(item)
@@ -268,6 +281,27 @@ def filter_valid_articles(
         if is_non_article_document_noise(title, text):
             item_copy = dict(item)
             item_copy["discard_reason"] = "non_article_document_noise"
+            discarded.append(item_copy)
+            continue
+
+        # 1h-tourism. Cek konten rekreasi wisata / kafe / nongkrong non-industri
+        if is_lifestyle_tourism_noise(title, text):
+            item_copy = dict(item)
+            item_copy["discard_reason"] = "lifestyle_tourism_noise"
+            discarded.append(item_copy)
+            continue
+
+        # 1h-blog. Cek esai pribadi / curhat / diary non-industri (Kompasiana dll)
+        if is_personal_blog_noise(title, text, url=link):
+            item_copy = dict(item)
+            item_copy["discard_reason"] = "personal_blog_noise"
+            discarded.append(item_copy)
+            continue
+
+        # 1h-retail. Cek penegakan hukum ritel lokal (Satpol PP segel toko, Raperda DPRD kota/kabupaten)
+        if is_local_retail_enforcement(title, text):
+            item_copy = dict(item)
+            item_copy["discard_reason"] = "local_retail_enforcement"
             discarded.append(item_copy)
             continue
 
@@ -411,7 +445,21 @@ def filter_valid_articles(
                 item_copy = dict(item)
                 item_copy["discard_reason"] = "health_personal_topic"
                 discarded.append(item_copy)
-                continue
+        # BAGIAN 2: AI Relevance Classifier (Google Gemini API) sebagai lapis terakhir
+        # Hanya dievaluasi untuk artikel yang telah lolos semua filter rule-based di atas
+        is_rel, ai_reason = classify_agro_relevance(title=title, text_snippet=(text or "")[:200])
+        if is_rel is False:
+            item_copy = dict(item)
+            item_copy["discard_reason"] = "ai_irrelevant"
+            item_copy["ai_reason"] = ai_reason
+            discarded.append(item_copy)
+            log_ai_rejection(
+                title=title,
+                reason=ai_reason,
+                published=item.get("published", ""),
+                keyword=keyword or item.get("keyword", "")
+            )
+            continue
 
         # 6. Seluruh artikel yang lolos filter konten & relevansi tetap disimpan (sindikasi dikelompokkan via 'Isu')
         valid.append(item)

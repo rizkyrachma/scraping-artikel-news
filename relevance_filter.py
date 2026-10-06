@@ -60,6 +60,7 @@ HEALTH_LIFESTYLE_WORDS = [
 RECIPE_WORDS = [
     "resep", "bahan-bahan", "cara membuat", "cara memasak", "sendok teh",
     "sendok makan", "bumbu halus", "adonan", "kukus", "panggang", "tumis",
+    "tips membuat", "cara seduh", "tips memasak",
 ]
 
 # Kata kunci promosi / iklan ritel
@@ -124,9 +125,182 @@ def is_social_media_engagement_noise(title: str = "", text: str = "") -> bool:
     return bool(_SOCIAL_ENGAGEMENT_REGEX.search(title_clean))
 
 
+# =====================================================================================
+# TAHAP 1: Pola Struktural Murah Tanpa AI
+# =====================================================================================
+
+def has_phone_number_or_wa_in_title(title: str = "") -> bool:
+    """
+    1. Deteksi nomor telepon / WhatsApp di judul:
+    Regex pola nomor HP Indonesia (08xx, +628xx, 628xx) atau prefix WA/Telp.
+    Digunakan untuk membuang iklan/listing bisnis, bukan artikel berita.
+    Contoh: 'Search - WA 0859 3970 0884 [[Hatiga Furniture]]...', 'Jual Mebel WA 081234567890'.
+    """
+    if not title:
+        return False
+    # Prefix eksplisit WA / Telp / Hubungi / Call
+    if re.search(r"\b(?:wa|whatsapp|telp|no\.?\s*hp|call|hubungi|kontak)\b[\s.:-]*\+?[0-9\s.-]{7,18}", title, re.IGNORECASE):
+        return True
+    # Pola nomor HP Indonesia mandiri: r'0\d{2,4}[-\s]?\d{3,4}[-\s]?\d{3,4}'
+    if re.search(r"\b0\d{2,4}[-\s]?\d{3,4}[-\s]?\d{3,4}\b", title):
+        return True
+    # Pola nomor HP internasional (+628xx atau 628xx) dengan 9-14 digit angka
+    for m in re.finditer(r"\b(?:\+?62|0)8[1-9][0-9\s.-]{6,16}\b", title):
+        digits = re.sub(r"\D", "", m.group(0))
+        if 9 <= len(digits) <= 14:
+            return True
+    return False
+
+
+AGGREGATOR_PLACEHOLDER_PREFIXES = [
+    r"^berita\s+(terbaru|terkini|hari\s+ini)(\s+hari\s+ini)?\s*[-–—:]\s*",
+    r"^(kumpulan\s+berita|berita\s+dan\s+informasi)\b",
+    r"^(tag|topik|indeks\s+berita)\s*[-–—:]\s*",
+]
+_AGGREGATOR_REGEX = re.compile("|".join(AGGREGATOR_PLACEHOLDER_PREFIXES), re.IGNORECASE)
+
+
+def is_aggregator_placeholder_title(title: str = "") -> bool:
+    """
+    2. Deteksi halaman placeholder agregator / kategori / tag arsip otomatis:
+    Pola 'Berita Terbaru Hari Ini - {apa saja}', 'Berita Terkini - {apa saja}',
+    'Kumpulan Berita {apa saja}', 'Tag: {apa saja}' tanpa judul artikel spesifik.
+    """
+    if not title:
+        return False
+    t_clean = title.strip().lower()
+    return bool(_AGGREGATOR_REGEX.search(t_clean))
+
+
+def is_photo_stock_gallery_noise(title: str = "", text: str = "") -> bool:
+    """
+    3. Deteksi halaman galeri foto / stock image:
+    Title mengandung kombinasi angka+'+' diikuti 'Foto', atau mengandung
+    frasa 'pictures', 'stock photo', 'download gratis', 'unduh gratis'
+    bersamaan dengan 'gambar'/'background'.
+    Contoh: '84+ Foto Stik Biskuit Pictures, Gambar Dan Background Untuk Unduh Gratis'.
+    """
+    if not title:
+        return False
+    t_lower = title.lower()
+    # Angka + '+' diikuti 'Foto' (misal: '84+ Foto', '900 + Foto')
+    if re.search(r"\b\d+\s*\+\s*foto\b", t_lower):
+        return True
+    if re.search(r"\b\d+\+?\s+foto\b.*\b(pictures|gambar|background)\b.*\b(unduh|download)\s+gratis\b", t_lower):
+        return True
+    if re.search(r"pictures,\s*gambar\s+dan\s+background\s+untuk\s+(unduh|download)\s+gratis", t_lower):
+        return True
+    has_stock = any(s in t_lower for s in ["stock photo", "stock photography", "royalty-free", "royalty free"])
+    if has_stock:
+        return True
+    has_gallery_terms = any(s in t_lower for s in ["pictures", "gambar dan background", "vektor & foto", "vektor dan foto", "images", "download gratis", "unduh gratis"])
+    has_image_terms = any(g in t_lower for g in ["gambar", "background", "foto", "vektor"])
+    if has_gallery_terms and has_image_terms and any(d in t_lower for d in ["unduh gratis", "download gratis", "free download"]):
+        return True
+    if re.search(r"^\d+[\d.,]*\+?\s+(foto|gambar|vektor)\s+.*\b(gratis|free)\b", t_lower):
+        return True
+    return False
+
+
+DONATION_CAMPAIGN_PATTERNS = [
+    r"^campaign\s*[-–—:]",
+    r"\b(galang\s+dana|penggalangan\s+dana|donasi\s+online|bantu\s+wujudkan|patungan\s+untuk|sedekah\s+subuh|sedekah\s+jariyah|wakaf\s+produktif)\b",
+    r"\b(kitabisa|amalsholeh|ayobantu|rumahzakat|dompetdhuafa|wecare\.id)\b",
+    r"\b(sedekah|infaq|zakat|donasi)\s+(untuk\s+pembangunan|musholla|masjid|yatim|dhuafa|pesantren)\b",
+    r"\b(bantu\s+renovasi|renovasi\s+musholla|pembangunan\s+musholla|pembangunan\s+masjid)\b",
+]
+_DONATION_REGEX = re.compile("|".join(DONATION_CAMPAIGN_PATTERNS), re.IGNORECASE)
+
+
+def is_donation_campaign_noise(title: str = "", text: str = "") -> bool:
+    """
+    4. Deteksi campaign donasi / crowdfunding / sedekah:
+    Title diawali 'Campaign -' atau memuat 'bantu wujudkan', 'galang dana',
+    nama platform donasi umum (Kitabisa, dll), atau sedekah pembangunan ibadah.
+    Contoh: 'Campaign - Bantu Wujudkan Musholla Terang untuk Pejuang Iman...'.
+    """
+    if not title:
+        return False
+    t_lower = title.lower()
+    if _DONATION_REGEX.search(t_lower):
+        return True
+    if "wujudkan" in t_lower and any(w in t_lower for w in ["musholla", "masjid", "pesantren", "donasi", "sedekah", "bantu"]):
+        return True
+    return False
+
+
+SCHOOL_PREFIX_PATTERN = r"^(profil\s+|akreditasi\s+|sejarah\s+)?(smk|smkn|sma|sman|smp|smpn|sd|sdn|madrasah|man|mts|mis|universitas|institut|politeknik|akademi|sekolah tinggi)\b"
+SCHOOL_DIRECTORY_PATTERN = r"\b(data pokok pendidikan|dapodik|profil sekolah|akreditasi sekolah)\b"
+
+EDUCATIONAL_JOURNALISTIC_VERBS = {
+    "resmikan", "meresmikan", "gelar", "menggelar", "adakan", "mengadakan",
+    "umumkan", "mengumumkan", "raih", "meraih", "juara", "kunjungi", "mengunjungi",
+    "lepas", "melepas", "teken", "tandatangani", "menandatangani", "terima", "menerima",
+    "buka", "membuka", "luncurkan", "meluncurkan", "ciptakan", "menciptakan",
+    "inovasi", "kembangkan", "kolaborasi", "kerjasama", "kerja sama", "bantu",
+    "dukung", "dorong", "siapkan", "tinjau", "meninjau", "panen", "produksi",
+    "pamerkan", "wisuda", "workshop", "pelatihan", "sosialisasi", "seminar",
+    "gagas", "rilis", "pameran", "capai", "mencapai",
+}
+
+
+def is_static_educational_profile_noise(title: str = "", text: str = "") -> bool:
+    """
+    5. Deteksi profil sekolah / institusi pendidikan tanpa konten berita:
+    Title berpola nama sekolah ('SMK Negeri...', 'SMA...', 'SMP...', 'Universitas...', 'Politeknik...')
+    TANPA kata kerja berita di sekitarnya ('resmikan', 'gelar', 'umumkan', 'raih', 'capai', 'luncurkan', dst).
+    Contoh: 'SMK Negeri 4 Teknologi dan Rekayasa Sarmi', 'SMK Negeri 5 Seni Dan Industri Kreatif Kota Jayapura'.
+    """
+    if not title:
+        return False
+    t_clean = title.strip().lower()
+
+    is_school = bool(re.search(SCHOOL_PREFIX_PATTERN, t_clean)) or bool(re.search(SCHOOL_DIRECTORY_PATTERN, t_clean))
+    if not is_school:
+        return False
+
+    # Pengecualian mutlak: unit pendidikan resmi Kemenperin
+    if "kemenperin" in t_clean or "kementerian perindustrian" in t_clean:
+        return False
+
+    # Jika mengandung kata kerja jurnalistik, LOLOSKAN (bukan profil statis)
+    has_news_verb = any_word_boundary_match(list(EDUCATIONAL_JOURNALISTIC_VERBS), t_clean)
+    if has_news_verb:
+        return False
+
+    return True
+
+
+def is_non_article_structural_noise(title: str = "") -> bool:
+    """
+    BAGIAN 1: FILTER POLA STRUKTURAL (RULE-BASED, GRATIS, DIJALANKAN LEBIH DULU)
+    Mendeteksi 5 pola noise non-artikel di judul:
+    1. NOMOR TELEPON/WA DI JUDUL (iklan/listing bisnis)
+    2. HALAMAN PLACEHOLDER AGREGATOR ('Berita Terbaru Hari Ini - {topik}' dll)
+    3. HALAMAN GALERI FOTO/STOCK (angka+'+' diikuti 'Foto', stock photo, pictures, download gratis)
+    4. CAMPAIGN DONASI ('Campaign -', 'bantu wujudkan', 'galang dana', platform Kitabisa, dll)
+    5. PROFIL SEKOLAH/INSTITUSI STATIS (nama sekolah tanpa kata kerja berita di sekitarnya)
+    """
+    if not title:
+        return False
+    if has_phone_number_or_wa_in_title(title):
+        return True
+    if is_aggregator_placeholder_title(title):
+        return True
+    if is_photo_stock_gallery_noise(title):
+        return True
+    if is_donation_campaign_noise(title):
+        return True
+    if is_static_educational_profile_noise(title):
+        return True
+    return False
+
+
 def is_likely_relevant(title: str) -> bool:
     """
     Memeriksa relevansi awal berdasarkan judul menggunakan regex word boundary:
+    - Return False jika judul memuat pola struktural murah tanpa AI (nomor HP/WA,
+      agregator placeholder, galeri stock foto, campaign donasi, profil sekolah statis).
     - Return False jika judul mengandung salah satu HEALTH_LIFESTYLE_WORDS
       DAN tidak mengandung satu pun INDUSTRY_CONTEXT_WORDS.
     - Return False jika judul merupakan ajakan interaksi / CTA komentar media sosial.
@@ -135,6 +309,9 @@ def is_likely_relevant(title: str) -> bool:
     if not title:
         return True
 
+    # Tahap 1: Pola struktural murah tanpa AI
+    if is_non_article_structural_noise(title):
+        return False
     if is_social_media_engagement_noise(title):
         return False
 
@@ -200,6 +377,8 @@ RETAIL_PROMO_PATTERNS = [
     r"\bbeli\s+2\s+gratis\s+1\b",
     r"\bpotongan\s+harga\b",
     r"\bkupon\s+belanja\b",
+    r"\btoko\s+alat\s+rumah\s+tangga\b",
+    r"^(toko|grosir|distributor)\s+.*\b(murah|terlengkap|terdekat|diskon)\b",
 ]
 
 # Pola nama event pameran industri resmi
@@ -335,6 +514,7 @@ CELEBRITY_TITLE_KEYWORDS = [
     "ji chang-wook", "aktor korea", "artis korea", "drakor", "k-pop", "konser",
     "lirik lagu", "chord gitar", "kunci gitar", "makna lagu", "viral tiktok", "ig nobel",
     "minidrama", "mini drama", "sinetron", "film pendek", "trailer", "teaser", "webseries",
+    "betrand peto", "karaoke betrand", "ruben onsu", "sarwendah",
 ]
 
 
@@ -363,6 +543,9 @@ CRIME_ACCIDENT_PHRASES = [
     "korban tewas", "meninggal dunia", "ditemukan tewas", "bunuh diri",
     "habisi pelajar", "habisi nyawa", "buang jasad", "pelaku nekat",
     "polisi amankan ibadah", "bhabinkamtibmas", "naik penyidikan",
+    "patroli dialogis", "jumat curhat", "cipta kondisi", "operasi cipta kondisi",
+    "razia miras", "botol miras", "miras ilegal", "beasiswa sawit", "toko miras",
+    "faktor kasus kriminal", "polwan sapa",
     "giro kosong", "bilyet giro kosong", "bilyet giro",
     "ular piton", "ular kobra", "teror ular", "diserang buaya",
     "diterkam buaya", "diserang beruang", "penunggu kebun",
@@ -378,6 +561,7 @@ CRIME_ACCIDENT_SINGLE_WORDS = [
     "tersangka", "residivis", "buronan", "teroris", "terorisme",
     "radikalisme", "tabrakan", "kecelakaan", "menabrak", "ditabrak",
     "tewas", "mayat", "pembunuhan", "penipuan", "penggelapan", "hantu",
+    "polsek", "polresta", "polres", "kamtibmas", "brimob",
 ]
 
 CRIME_ACCIDENT_SIGNALS = CRIME_ACCIDENT_PHRASES + CRIME_ACCIDENT_SINGLE_WORDS
@@ -433,6 +617,13 @@ NON_ARTICLE_TITLE_PATTERNS = [
     r"^\s*(daftar\s+isi|daftar\s+tabel|daftar\s+gambar|daftar\s+pustaka|lembar\s+pengesahan|kata\s+pengantar|halaman\s+judul|lampiran)\b",
     r"^\s*(abstrak|abstract)\b",
     r"\b(ijccs|ijccs-style)\b",
+    r"\blaporan\s+magang\b",
+    r"\bbuku\s+karya\s+ilmiah\b",
+    r"\bbuku\s+tulis\b",
+    r"\bjurnal\s+ilmiah\s+kesehatan\b",
+    r"\bkejadian\s+ispa\b",
+    r"\bstudi\s+kasus\s+pada\s+konsumen\b",
+    r"\bjenis\s+packing\s+agar\s+barang\s+aman\b",
 ]
 
 _NON_ARTICLE_REGEX = re.compile("|".join(NON_ARTICLE_TITLE_PATTERNS), re.IGNORECASE)
@@ -469,6 +660,8 @@ GENERIC_PLACEHOLDER_TITLES = {
     "index", "home", "beranda", "loading", "sipp", "das kelapa", "daftar umkm",
     "pencarian data umkm", "icgab 2026", "proyek tunggal", "simponi sumut",
     "kelapaaa", "pecinta kopi",
+    "berita terbaru hari ini", "berita terkini", "berita hari ini", "kumpulan berita",
+    "indeks berita", "berita dan informasi",
 }
 
 NON_NEWS_DOMAINS = [
@@ -476,7 +669,8 @@ NON_NEWS_DOMAINS = [
     "eorder-bppbj.jakarta.go.id", "jobrapido.com", "confbeam.org", "hidrologi.net",
     "data-umkm.babelprov.go.id", "nimbuflyk.digital", "simponisumut.sumutprov.go.id",
     "pustaka.badanpangan.go.id", "spse.inaproc.id", "garuda.kemdiktisaintek.go.id",
-    "katalog.kemendikdasmen.go.id", "sipp.pn-",
+    "katalog.kemendikdasmen.go.id", "sipp.pn-", "siplah.", "repository.", "repositori.",
+    "multidisipliner.org", "kailogistik.id",
 ]
 
 
@@ -484,15 +678,16 @@ def is_placeholder_or_error_title(title: str = "", text: str = "", url: str = ""
     """
     Mendeteksi judul placeholder / pesan error / artifact halaman sistem non-berita:
     1. Judul sama persis / diawali string generik ('Resource discovery', 'Untitled', 'No title', 'Error', '404', 'Beranda', 'SIPP', 'Informasi Paket', dll)
-    2. Judul terlalu pendek (< 5 karakter) atau format non-berita.
-    3. Berasal dari domain katalog/pengadaan/hotel/e-commerce non-berita.
+    2. Judul merupakan halaman agregator tag / arsip berita otomatis ('Berita Terbaru Hari Ini - {topik}', dll)
+    3. Judul terlalu pendek (< 5 karakter) atau format non-berita.
+    4. Berasal dari domain katalog/pengadaan/hotel/e-commerce non-berita.
     """
     t_clean = (title or "").strip().lower()
     if not t_clean or len(t_clean) < 5:
         return True
-    if t_clean in GENERIC_PLACEHOLDER_TITLES:
+    if t_clean in GENERIC_PLACEHOLDER_TITLES or is_aggregator_placeholder_title(title):
         return True
-    if any(t_clean.startswith(prefix) for prefix in ["search results", "katalog induk", "informasi paket", "garba rujukan digital", "error 404", "halaman tidak ditemukan"]):
+    if any(t_clean.startswith(prefix) for prefix in ["search results", "katalog induk", "informasi paket", "garba rujukan digital", "error 404", "halaman tidak ditemukan"]) or "peraturan ditemukan" in t_clean:
         return True
     url_lower = (url or "").lower()
     if any(d in url_lower for d in NON_NEWS_DOMAINS):
@@ -512,6 +707,93 @@ def is_viral_social_media_drama(title: str = "", text: str = "") -> bool:
         has_industry_context = any(k in title_lower for k in POLICY_INSTITUTION_TITLE_SIGNALS + ["harga", "pabrik", "tbs", "petani sawit", "sawit rakyat", "kebun sawit"])
         if not has_industry_context:
             return True
+    return False
+
+
+def is_lifestyle_tourism_noise(title: str = "", text: str = "") -> bool:
+    """
+    Mendeteksi konten rekreasi wisata, liburan, ulasan kedai kopi/kafe, dan panduan nongkrong
+    yang tidak memuat konteks kebijakan industri atau korporasi manufaktur.
+    Contoh: 'Kampung Coklat Blitar', 'OSMA Osmanthus Tea, Kedai Teh Baru Solo', '3 Rekomendasi Library Cafe di Bandung'.
+    """
+    t_clean = (title or "").lower()
+    tourism_signals = [
+        "kampung coklat blitar", "library cafe", "kedai teh", "kedai kopi bah sipit",
+        "catra kopi batang", "ketika kopi dan seni bertemu", "festival nyusu bareng",
+        "kampung susu brau", "ekowisata berbasis masyarakat", "harga tiket masuk",
+        "oleh-oleh cokelat",
+    ]
+    return any(s in t_clean for s in tourism_signals)
+
+
+def is_personal_blog_noise(title: str = "", text: str = "", url: str = "") -> bool:
+    """
+    Mendeteksi esai pribadi, diary, puisi, atau renungan personal dari platform blog/UGC (seperti Kompasiana)
+    yang bukan artikel berita industri maupun kebijakan resmi.
+    """
+    u_lower = (url or "").lower()
+    if "kompasiana.com" not in u_lower:
+        return False
+    t_clean = (title or "").lower()
+    blog_markers = [
+        "tektok part 2", "ketika kebahagiaan tidak butuh mahal", "bapak, orang pertama",
+        "bosan nunggu panggilan kerja", "lira playdate", "festival kali maro",
+        "tiga buah kakao", "pabrik energi di dalam sel", "pencegahan cvs",
+        "rahasia genetik karang", "roti gandum vs roti tawar",
+    ]
+    return any(m in t_clean for m in blog_markers)
+
+
+RETAIL_ENFORCEMENT_SIGNALS = [
+    "satpol pp", "disegel", "penyegelan", "raperda", "ranperda",
+    "moratorium izin", "moratorium perizinan", "moratorium rhu",
+    "ketenagakerjaan", "pengawasan usaha karaoke", "usaha karaoke",
+    "izin usaha", "penertiban minol", "penertiban miras", "riuh malam",
+    "diskotek baru", "pembatasan miras", "pengendalian miras",
+]
+
+RETAIL_INDUSTRY_EXCEPTIONS = [
+    "pabrik", "fasilitas produksi", "kapasitas produksi", "hilirisasi",
+    "ekspor", "impor", "kemenperin", "kementerian perindustrian",
+    "ditjen agro", "investasi", "kawasan industri",
+]
+
+
+def is_local_retail_enforcement(title: str = "", text: str = "") -> bool:
+    """
+    Mendeteksi berita penegakan hukum ritel lokal, penertiban perizinan oleh Pemda/Satpol PP,
+    raperda/pansus DPRD kota/kabupaten terkait miras/RHU, atau penyegelan toko eceran yang berada
+    di luar lingkup industri (produksi, pabrik, ekspor, hilirisasi, kebijakan nasional Kemenperin).
+
+    True jika judul/teks mengandung RETAIL_ENFORCEMENT_SIGNALS dan tidak memuat konteks industri/pabrik.
+    Pengecualian khusus: Razia/penindakan rokok ilegal dan pita cukai oleh Bea Cukai / DJBC tetap dipertahankan.
+    """
+    title_lower = (title or "").lower()
+    text_lower = (text or "").lower()
+
+    # Pengecualian mutlak: monitoring DJBC / Bea Cukai / pita cukai / rokok ilegal di title tetap dipertahankan
+    if any(k in title_lower for k in ["rokok ilegal", "pita cukai", "bea cukai", "djbc"]):
+        return False
+
+    # Pengecualian: Moratorium sawit perkebunan nasional
+    if "moratorium sawit" in title_lower or ("moratorium" in title_lower and "sawit" in title_lower):
+        return False
+
+    # Pengecualian: Investigasi atau perlindungan investasi pabrik industri
+    if any(matches_word_boundary(ind, title_lower) or ind in title_lower for ind in RETAIL_INDUSTRY_EXCEPTIONS):
+        return False
+
+    # Cek sinyal penegakan ritel lokal pada title
+    for sig in RETAIL_ENFORCEMENT_SIGNALS:
+        if sig in title_lower:
+            return True
+
+    # Cek sinyal pada text jika title berkaitan dengan miras/karaoke/toko eceran
+    if any(w in title_lower for w in ["miras", "mihol", "minol", "minuman beralkohol", "karaoke", "rhu"]):
+        for sig in ["satpol pp", "disegel", "penyegelan", "moratorium", "penertiban", "raperda"]:
+            if sig in text_lower:
+                return True
+
     return False
 
 
@@ -1441,6 +1723,54 @@ if __name__ == "__main__":
     # Check viral medsos
     assert is_viral_social_media_drama("Video Bupati Siak Viral di Medsos, Wapres Gibran Kirim Tim Khusus ke Wilayah 3T", "") is True
     assert is_viral_social_media_drama("Harga TBS Sawit Riau Naik Pekan Ini", "") is False
+    # Check lifestyle tourism
+    assert is_lifestyle_tourism_noise("Kampung Coklat Blitar, Wisata Edukasi Kakao yang Menarik untuk Anak", "") is True
+    assert is_lifestyle_tourism_noise("Kementan Perkuat Hilirisasi Kakao Nasional", "") is False
+    # Check personal blog
+    assert is_personal_blog_noise("Tektok Part 2, Bukit Lincing 1860 mdpL Halaman 1", "", "https://www.kompasiana.com/foo") is True
+    assert is_personal_blog_noise("Harga Kopi Robusta Naik", "", "https://www.antaranews.com/bar") is False
+    # Check police / kamtibmas
+    assert is_crime_accident_noise("Polsek Pangkalan Susu Giatkan Patroli Dialogis, Pastikan Kamtibmas Desa Alur Cempedak Tetap Kondusi", "") is True
+    assert is_crime_accident_noise("Gabungan Brimob Polda Lampung dan Polres Mesuji laksanakan patroli skala besar di areal PT PAL", "") is True
+    assert is_crime_accident_noise("Polres Tuba Polda Lampung Gagalkan Penyelundupan 1,68 Juta Batang Rokok Ilegal", "") is False
+    # Check celebrity gossip
+    assert is_celebrity_entertainment("Singgung soal Minuman Beralkohol di Ruang Karaoke Betrand Peto", "") is True
+    # Check retail enforcement
+    assert is_local_retail_enforcement("Satpol PP Surabaya segel toko penjual minuman beralkohol eceran", "") is True
+    assert is_local_retail_enforcement("Dukung Moratorium RHU, DPRD Surabaya Gagas Raperda Pengendalian Miras", "") is True
+    assert is_local_retail_enforcement("Satpol PP Tulang Bawang Perkuat Pengawasan Usaha Karaoke", "") is True
+    assert is_local_retail_enforcement("Bea Cukai Musnahkan Rokok Ilegal dan Minuman Beralkohol", "") is False
+    assert is_local_retail_enforcement("DPRD Pasuruan Soroti Perlindungan Investasi Pabrik", "") is False
+    # Check search result count placeholder
+    assert is_placeholder_or_error_title("62.484 Peraturan ditemukan", "") is True
+
+    # 5 POLA STRUKTURAL BARU (TAHAP 1)
+    # 1. Deteksi nomor telepon / WA di judul
+    assert has_phone_number_or_wa_in_title("Search - WA 0859 3970 0884 [[Hatiga Furniture]]...") is True
+    assert has_phone_number_or_wa_in_title("Jual Mebel WA 081234567890") is True
+    assert has_phone_number_or_wa_in_title("Pabrik Baru Dibuka Pukul 08.00 WIB Kemarin") is False
+    # 2. Deteksi agregator placeholder
+    assert is_aggregator_placeholder_title("Berita Terbaru Hari Ini - Kelapa") is True
+    assert is_aggregator_placeholder_title("Berita Terkini - Industri Mebel") is True
+    assert is_placeholder_or_error_title("Berita Terbaru Hari Ini - Kelapa", "") is True
+    assert is_aggregator_placeholder_title("Menperin Resmikan Pabrik Pengolahan Kelapa") is False
+    # 3. Deteksi galeri stock foto
+    assert is_photo_stock_gallery_noise("900+ Foto Biskuit Pictures, Gambar dan Background untuk Unduh Gratis") is True
+    assert is_photo_stock_gallery_noise("Biskuit Stock Photo and Royalty Free Images") is True
+    assert is_photo_stock_gallery_noise("Presiden Resmikan Pabrik Biskuit Terbesar di Asia Tenggara") is False
+    # 4. Deteksi campaign donasi
+    assert is_donation_campaign_noise("Campaign - Bantu Wujudkan Renovasi Musholla Al-Ikhlas") is True
+    assert is_donation_campaign_noise("Galang Dana Pembangunan Musholla") is True
+    assert is_donation_campaign_noise("Kemenperin Wujudkan Kemandirian Industri Agro Nasional") is False
+    # 5. Deteksi profil sekolah statis
+    assert is_static_educational_profile_noise("SMK Negeri 1 Sarmi") is True
+    assert is_static_educational_profile_noise("Profil SMKN 2 Kendal") is True
+    assert is_static_educational_profile_noise("SMK Negeri 1 Sarmi Gelar Pameran Olahan Sagu") is False
+    assert is_static_educational_profile_noise("Akademi Komunitas Bambu Kemenperin Buka Pendaftaran") is False
+    # 6. Toko alat rumah tangga & di atas kertas
+    assert is_promotional("Toko Alat Rumah Tangga Murah Meriah", "") is True
+    assert is_kertas_context_valid("Di Atas Kertas Semua Setara", "") is False
+
     print("All relevance_filter self-checks passed successfully!")
 
 

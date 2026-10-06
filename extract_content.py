@@ -16,6 +16,20 @@ socket.setdefaulttimeout(15)
 
 try:
     import googlenewsdecoder  # type: ignore
+    if hasattr(googlenewsdecoder, "new_decoderv1") and hasattr(googlenewsdecoder.new_decoderv1, "__globals__"):
+        g_req = googlenewsdecoder.new_decoderv1.__globals__.get("requests")
+        if g_req and not getattr(g_req, "_patched_timeout", False):
+            _orig_get = g_req.get
+            _orig_post = g_req.post
+            def _safe_get(*a, **kw):
+                kw.setdefault("timeout", 6)
+                return _orig_get(*a, **kw)
+            def _safe_post(*a, **kw):
+                kw.setdefault("timeout", 6)
+                return _orig_post(*a, **kw)
+            g_req.get = _safe_get
+            g_req.post = _safe_post
+            g_req._patched_timeout = True
 except ImportError:
     googlenewsdecoder = None
 
@@ -29,68 +43,44 @@ _DECODER_LOCK = threading.Lock()
 _LAST_DECODE_TIME = 0.0
 
 
-def resolve_article_url(url: str, min_interval: float = 0.4, max_retries: int = 2) -> str:
+def resolve_article_url(url: str, min_interval: float = 0.2, max_retries: int = 1) -> str:
     """
     Menyelesaikan URL Google News (news.google.com/rss/articles/...)
-    menjadi URL asli situs penerbit dengan:
-    1. Jeda dasar thread-safe 3-5 detik antar request.
-    2. Deteksi CAPTCHA gate (google.com/sorry/index): langsung stop (raise GoogleCaptchaBlockedError).
-    3. Exponential backoff untuk HTTP 429 murni: [30s, 60s, 120s] maksimal 3 percobaan.
-    4. Caching URL yang sudah berhasil di-decode.
+    menjadi URL asli situs penerbit secara thread-safe, cepat, dan anti-hanging.
     """
     global _LAST_DECODE_TIME
     if not url or "news.google.com" not in url or googlenewsdecoder is None:
         return url
 
-    if url in _DECODED_URL_CACHE:
-        return _DECODED_URL_CACHE[url]
-
     with _DECODER_LOCK:
         if url in _DECODED_URL_CACHE:
             return _DECODED_URL_CACHE[url]
-
-        # 1. Jeda dasar antar-request (3-5 detik)
         now = time.time()
         elapsed = now - _LAST_DECODE_TIME
         if elapsed < min_interval:
             time.sleep(min_interval - elapsed)
+        _LAST_DECODE_TIME = time.time()
 
-        backoff_delays = [30, 60, 120]
-        decoded = url
-
-        for attempt in range(max_retries + 1):
-            try:
-                res = googlenewsdecoder.new_decoderv1(url, interval=1)
-                _LAST_DECODE_TIME = time.time()
-
-                if isinstance(res, dict) and res.get("status") and res.get("decoded_url"):
-                    decoded = res["decoded_url"]
-                    break
-
-                msg = str(res.get("message", "") if isinstance(res, dict) else "")
-
-                # 2. Deteksi CAPTCHA gate (google.com/sorry/index): LANGSUNG HENTIKAN, JANGAN RETRY
+    decoded = url
+    try:
+        res = googlenewsdecoder.new_decoderv1(url, interval=0)
+        if isinstance(res, dict):
+            if res.get("status") and res.get("decoded_url"):
+                decoded = res["decoded_url"]
+            else:
+                msg = str(res.get("message", ""))
                 if "sorry/index" in msg or "sorry" in msg.lower():
                     raise GoogleCaptchaBlockedError(
-                        f"CAPTCHA gate terdeteksi ({msg[:120]}). Proses dihentikan langsung untuk mencegah penalti lebih parah."
+                        f"CAPTCHA gate terdeteksi ({msg[:120]})."
                     )
+    except GoogleCaptchaBlockedError:
+        raise
+    except Exception:
+        pass
 
-                # 3. Exponential backoff untuk rate limit 429
-                if "429" in msg and attempt < max_retries:
-                    wait_sec = backoff_delays[attempt]
-                    print(f"  [!] Terkena HTTP 429. Melakukan backoff {wait_sec} detik (percobaan {attempt + 1}/{max_retries})...", flush=True)
-                    time.sleep(wait_sec)
-                    continue
-
-            except GoogleCaptchaBlockedError:
-                raise
-            except Exception as e:
-                if attempt >= max_retries:
-                    break
-
-        _LAST_DECODE_TIME = time.time()
+    with _DECODER_LOCK:
         _DECODED_URL_CACHE[url] = decoded
-        return decoded
+    return decoded
 
 
 def check_google_news_access(test_url: str | None = None) -> tuple[bool, str]:

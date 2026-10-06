@@ -464,6 +464,7 @@ def main():
     # Preload cache ekstraksi dari progress file yang ada agar URL yang pernah diekstrak tidak diulang
     for p_candidate in [
         os.path.join(date_folder, "progress.json"),
+        "hasil_scrapping/2026-10-01_sd_2026-10-04/progress.json",
         "hasil_scrapping/2026-10-01/progress.json",
         "hasil_scrapping/2026-09-30/progress.json",
     ]:
