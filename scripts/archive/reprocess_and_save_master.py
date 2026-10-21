@@ -329,7 +329,7 @@ def main():
 
     # Urutkan ringkasan negatif berdasarkan tanggal
     for n in processed_neg:
-        n["_dt"] = pd.to_datetime(str(n.get("Tanggal") or ""), errors="coerce")
+        n["_dt"] = pd.to_datetime(n.get("Tanggal") or "", errors="coerce")
     processed_neg.sort(key=lambda x: x["_dt"] if pd.notna(x["_dt"]) else pd.Timestamp.min)
     for n in processed_neg:
         n.pop("_dt", None)
