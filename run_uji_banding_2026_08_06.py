@@ -10,6 +10,9 @@ Menjalankan pipeline scraping khusus tanggal 6 AGUSTUS 2026:
 
 import os
 import sys
+
+# Tambahkan src ke sys.path agar seluruh modul dalam src/ dapat diimpor langsung
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "src")))
 import json
 import time
 from datetime import date, datetime
@@ -19,34 +22,35 @@ from rapidfuzz import fuzz
 
 if sys.platform == "win32":
     try:
-        sys.stdout.reconfigure(encoding="utf-8")
+        if hasattr(sys.stdout, "reconfigure"):
+            getattr(sys.stdout, "reconfigure")(encoding="utf-8")
     except Exception:
         pass
 
-from config import (
+from src.config import (
     get_date_range_custom,
     is_published_yesterday,
     is_single_word_keyword,
     load_spokesperson_map,
 )
-from fetch_news import (
+from src.fetch_news import (
     search_keyword,
     dedup_by_link,
     dedup_by_title,
     dedup_across_keywords,
     GoogleCaptchaBlockedError,
 )
-from exa_search import search_exa_news
-from extract_content import extract_article_text, resolve_article_url
+from src.exa_search import search_exa_news
+from src.extract_content import extract_article_text, resolve_article_url
 from main import extract_one_article, filter_valid_articles
-from relevance_filter import get_kemenperin_signal
-from entity_mapper import find_spokespersons
-from sentiment import classify_tone
-from direct_crawl_kemenperin import crawl_kemenperin_siaran_pers
-from export_excel import save_to_excel
+from src.relevance_filter import get_kemenperin_signal
+from src.entity_mapper import find_spokespersons
+from src.sentiment import classify_tone
+from src.direct_crawl_kemenperin import crawl_kemenperin_siaran_pers
+from src.export_excel import save_to_excel
 
 TARGET_DATE = date(2026, 8, 6)
-OUTPUT_EXCEL = os.path.join("hasil_scrapping", "uji_banding_2026-08-06.xlsx")
+OUTPUT_EXCEL = os.path.join("hasil_scrapping", "Agustus", "2026-08-06", "uji_banding_2026-08-06.xlsx")
 REFERENCE_EXCEL = r"C:\1.Pupud\MAGANG AGRO\Data\excel\Kompilasi Data Monitoring Media Massa Periode 06 - 13 Agustus 2026.xlsx"
 
 BATCHES = [
@@ -142,7 +146,7 @@ def run_pipeline_for_date():
     print(f"Target Date Custom: {start_d} s.d. {end_d}")
     print("=" * 80)
 
-    name_map = load_spokesperson_map("keyword_nama.xlsx")
+    name_map = load_spokesperson_map("keyword/keyword_nama.xlsx")
     print(f"Pejabat terdaftar: {len(name_map)} orang\n")
 
     all_articles = []
@@ -256,7 +260,8 @@ def compare_with_reference(scraped_articles: list[dict]):
     ref_target = ref_df[ref_df["parsed_date"] == TARGET_DATE].copy()
 
     total_ref = len(ref_target)
-    agro_ref = len(ref_target[ref_target["Category"].str.contains("Agro", case=False, na=False)])
+    cat_series = pd.Series(ref_target["Category"]).astype(str)
+    agro_ref = len(ref_target[cat_series.str.contains("Agro", case=False, na=False)])
     kemenperin_ref = len(
         ref_target[
             (ref_target["Category"] == "01. Kementerian Perindustrian")
@@ -268,7 +273,8 @@ def compare_with_reference(scraped_articles: list[dict]):
     print(f"   - Total baris referensi                : {total_ref} artikel")
     print(f"   - Kategori '03. Industri Agro'         : {agro_ref} artikel")
     print(f"   - Kategori '01. Kemenperin' (Kemenperin): {kemenperin_ref} artikel")
-    print(f"   - Media Type referensi                 : {dict(ref_target['Media Type'].value_counts())}")
+    media_series = pd.Series(ref_target["Media Type"])
+    print(f"   - Media Type referensi                 : {dict(media_series.value_counts())}")
 
     total_scraped = len(scraped_articles)
     kemenperin_yes = sum(1 for a in scraped_articles if a.get("terkait_kemenperin") == "Ya")
@@ -302,7 +308,7 @@ def compare_with_reference(scraped_articles: list[dict]):
                 best_score = score
                 best_match = s
 
-        if best_score >= 80:
+        if best_score >= 80 and best_match is not None:
             matched_ref_indices.add(r_idx)
             match_details.append({
                 "ref_title": r_title,

@@ -29,4 +29,10 @@ Thumbs.db
 *.log
 ~$*
 
+# Internal Tooling & Worktrees
+.kilo/
+.vscode/
+.idea/
+
+
 

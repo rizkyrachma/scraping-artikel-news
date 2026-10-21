@@ -1,0 +1,3 @@
+search-path = [".", "src"]
+disable-search-path-heuristics = true
+project-excludes = ["scratch/**"]

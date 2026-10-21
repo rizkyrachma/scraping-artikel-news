@@ -4,7 +4,11 @@ Menjalankan seluruh 46 keyword komoditas dari keyword_data.txt secara batch (5-6
 dengan proteksi anti-CAPTCHA lengkap, checkpoint per keyword ke progress.json, dan integrasi Exa.
 """
 
+import sys
 import os
+
+# Tambahkan src ke sys.path agar seluruh modul dalam src/ dapat diimpor langsung
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "src")))
 import json
 import time
 import random
@@ -13,7 +17,7 @@ from datetime import date
 import pandas as pd
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-from config import (
+from src.config import (
     load_spokesperson_map,
     get_date_range,
     is_published_yesterday,
@@ -26,7 +30,7 @@ from config import (
     INDUSTRY_EVENT_KEYWORDS,
     INSTITUTIONAL_KEYWORDS,
 )
-from fetch_news import (
+from src.fetch_news import (
     search_keyword,
     search_pejabat_presisi,
     dedup_by_link,
@@ -41,19 +45,20 @@ from fetch_news import (
     GoogleCaptchaBlockedError,
     get_progress_filepath,
 )
-from exa_search import search_exa_news
-from extract_content import extract_article_text, resolve_article_url
+from src.exa_search import search_exa_news
+from src.extract_content import extract_article_text, resolve_article_url
 from main import filter_valid_articles, extract_one_article, extract_single_article_with_timer
-from relevance_filter import get_kemenperin_signal, is_agro_relevant_content
-from entity_mapper import find_spokespersons
-from sentiment import classify_tone
-from export_excel import save_to_excel
-from serper_search import search_serper_news
-from youtube_search import search_youtube_videos, get_kemenperin_channel_videos, get_youtube_quota_used
-from pdf_search import search_pdf_documents
-from pdf_ocr import process_pdf_input_folder
-from direct_crawl_kemenperin import crawl_kemenperin_siaran_pers
-from config import ENABLE_YOUTUBE
+from src.relevance_filter import get_kemenperin_signal, is_agro_relevant_content
+from src.entity_mapper import find_spokespersons
+from src.sentiment import classify_tone
+from src.export_excel import save_to_excel
+from src.serper_search import search_serper_news
+from src.youtube_search import search_youtube_videos, get_kemenperin_channel_videos, get_youtube_quota_used
+from src.pdf_search import search_pdf_documents
+from src.pdf_ocr import process_pdf_input_folder
+from src.direct_crawl_kemenperin import crawl_kemenperin_siaran_pers
+from src.direct_crawl_agro import fetch_agro_kemenperin, cocokkan_rilis_resmi
+from src.config import ENABLE_YOUTUBE
 
 USE_SERPER_ONLY = os.environ.get("USE_SERPER_ONLY", "false").lower() in ("true", "1", "yes")
 
@@ -86,7 +91,7 @@ _EXTRACTED_CACHE: dict[str, dict] = {}
 def get_cached_article(url: str) -> dict | None:
     if not url:
         return None
-    key = str(url).strip().split("?")[0].rstrip("/").lower()
+    key = url.strip().split("?")[0].rstrip("/").lower()
     return _EXTRACTED_CACHE.get(key)
 
 
@@ -240,7 +245,7 @@ def process_keyword(kw: str, name_map: dict, serper_only: bool = False, target_d
 
 def process_pejabat_presisi(
     name_map: dict,
-    target_date: date | None = None,
+    target_date: date | tuple | list | None = None,
     specific_pejabat: list[dict] | None = None,
     serper_only: bool = False,
 ) -> dict:
@@ -346,7 +351,7 @@ def process_pejabat_presisi(
 def run_remaining_via_exa(
     remaining_keywords: list[str],
     name_map: dict,
-    target_date: date | None = None,
+    target_date: date | tuple | list | None = None,
 ) -> list[dict]:
     """Fallback otomatis jika CAPTCHA gate terdeteksi dan EXA_API_KEY tersedia."""
     print(f"\n" + "=" * 70)
@@ -455,7 +460,7 @@ def main():
     print(f"================================================================================")
     print(f"Tanggal evaluasi : {yesterday_date}")
     print(f"Folder Output    : {date_folder}")
-    name_map = load_spokesperson_map("keyword_nama.xlsx")
+    name_map = load_spokesperson_map("keyword/keyword_nama.xlsx")
     print(f"Daftar Pejabat   : {len(name_map)} nama")
     print(f"Status Sumber    : {source_msg}\n")
 
@@ -464,9 +469,9 @@ def main():
     # Preload cache ekstraksi dari progress file yang ada agar URL yang pernah diekstrak tidak diulang
     for p_candidate in [
         os.path.join(date_folder, "progress.json"),
-        "hasil_scrapping/2026-10-01_sd_2026-10-04/progress.json",
-        "hasil_scrapping/2026-10-01/progress.json",
-        "hasil_scrapping/2026-09-30/progress.json",
+        "hasil_scrapping/Oktober/2026-10-01_sd_2026-10-04/progress.json",
+        "hasil_scrapping/Oktober/2026-10-01/progress.json",
+        "hasil_scrapping/September/2026-09-30/progress.json",
     ]:
         if os.path.exists(p_candidate):
             try:
@@ -482,7 +487,7 @@ def main():
     # Seeding progress artikel awal jika range baru dibuat dan ada data dari 2026-10-01
     prog_file = get_progress_filepath(yesterday_date)
     if not os.path.exists(prog_file) and isinstance(yesterday_date, (tuple, list)):
-        seed_source = "hasil_scrapping/2026-10-01/progress.json"
+        seed_source = "hasil_scrapping/Oktober/2026-10-01/progress.json"
         if os.path.exists(seed_source):
             try:
                 with open(seed_source, "r", encoding="utf-8") as f:
@@ -835,6 +840,53 @@ def main():
             )
             print(f"[+] Berhasil menambahkan {len(crawl_flagged)} siaran pers resmi ke checkpoint progres.")
 
+    # Direct Crawl Ditjen Industri Agro (agro.kemenperin.go.id)
+    print("\n" + "=" * 70)
+    print("=== DIRECT CRAWL DITJEN INDUSTRI AGRO (AGRO.KEMENPERIN.GO.ID) ===")
+    print("=" * 70)
+    agro_items = fetch_agro_kemenperin(date_from=yesterday_date, date_to=yesterday_date, include_content=True)
+    print(f"Total berita agro.kemenperin.go.id pada {yesterday_date}: {len(agro_items)} artikel")
+    if agro_items:
+        agro_flagged = []
+        for a in agro_items:
+            t = a.get("Title", "")
+            txt = a.get("isi", "")
+            sp1, sp2, unit = find_spokespersons(f"{t} {txt}", name_map)
+            tone = classify_tone(txt, t) if txt else ""
+            a_copy = {
+                "title": t,
+                "link": a.get("Link Website", ""),
+                "published": a.get("Tanggal"),
+                "media_name": a.get("Media Name", "Kemenperin (agro.kemenperin.go.id)"),
+                "tone": tone,
+                "spokesperson_1": sp1 or "",
+                "spokesperson_2": sp2 or "",
+                "unit_eselon": a.get("Unit Eselon", "IA"),
+                "terkait_kemenperin": "Ya",
+                "status_review": "",
+                "keyword": "agro_kemenperin_resmi",
+                "sumber_data": "agro.kemenperin.go.id",
+                "text": txt,
+                "status": "relevan",
+                "status_ai": "relevan",
+            }
+            agro_flagged.append(a_copy)
+        if agro_flagged:
+            save_keyword_progress(
+                "direct_crawl_agro_kemenperin",
+                agro_flagged,
+                report_data={
+                    "initial": len(agro_items),
+                    "date_valid": len(agro_items),
+                    "final_valid": len(agro_flagged),
+                    "kemenperin_yes": len(agro_flagged),
+                    "kemenperin_no": 0,
+                    "source": "agro.kemenperin.go.id",
+                },
+                target_date=yesterday_date,
+            )
+            print(f"[+] Berhasil menambahkan {len(agro_flagged)} rilis resmi Ditjen Agro ke checkpoint progres.")
+
     # Direct Pull File Manual dari folder pdf_input/ jika ada - DIBLOKIR / DINONAKTIFKAN
     # Dokumen PDF tidak lagi diambil sesuai instruksi user
     # manual_pdfs = process_pdf_input_folder("pdf_input")
@@ -850,12 +902,21 @@ def main():
 
     if all_articles:
         final_unique = dedup_across_keywords(all_articles, threshold=85)
+        
+        # Verifikasi silang judul media lain terhadap rilis resmi agro.kemenperin.go.id
+        official_agro = [
+            a for a in all_articles
+            if a.get("sumber_data") == "agro.kemenperin.go.id" or "agro.kemenperin.go.id" in str(a.get("media_name", ""))
+        ]
+        if official_agro:
+            df_temp = pd.DataFrame(final_unique)
+            df_temp = cocokkan_rilis_resmi(df_temp, official_agro, ambang=80)
+            final_unique = df_temp.to_dict(orient="records")
+
         final_excel_path = os.path.join(date_folder, f"all_{date_str}.xlsx")
 
         saved_final = save_to_excel(final_unique, final_excel_path, merge_existing=True)
         print(f"[SUKSES] File Excel berhasil disimpan / di-merge ke: {saved_final}")
-        terbaru_excel_path = os.path.join(date_folder, f"all_{date_str}_terbaru.xlsx")
-        save_to_excel(final_unique, terbaru_excel_path, merge_existing=False)
 
         # Laporan Ringkasan Akhir
         try:

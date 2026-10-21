@@ -1,0 +1,13 @@
+{
+  "include": [
+    ".",
+    "src"
+  ],
+  "extraPaths": [
+    ".",
+    "src"
+  ],
+  "exclude": [
+    "scratch"
+  ]
+}

@@ -19,20 +19,25 @@ Orkestrasi pipeline scraping berita industri end-to-end:
 
 import sys
 import os
+
+# Tambahkan src ke sys.path agar seluruh modul dalam src/ dapat diimpor langsung
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "src")))
 import json
 import time
 import threading
 import argparse
 from datetime import date
+import pandas as pd
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 if sys.platform == "win32":
     try:
-        sys.stdout.reconfigure(encoding="utf-8")
+        if hasattr(sys.stdout, "reconfigure"):
+            getattr(sys.stdout, "reconfigure")(encoding="utf-8")
     except Exception:
         pass
 
-from config import (
+from src.config import (
     load_keywords,
     load_spokesperson_map,
     get_date_range,
@@ -43,7 +48,7 @@ from config import (
     start_heartbeat,
     format_display_url,
 )
-from fetch_news import (
+from src.fetch_news import (
     collect_all,
     search_keyword,
     is_near_duplicate_title,
@@ -52,12 +57,12 @@ from fetch_news import (
     GoogleCaptchaBlockedError,
     determine_session_source,
 )
-from extract_content import (
+from src.extract_content import (
     extract_article_text,
     is_suspiciously_short,
     resolve_article_url,
 )
-from relevance_filter import (
+from src.relevance_filter import (
     is_pdf_document,
     is_recipe,
     is_promotional,
@@ -92,28 +97,96 @@ from relevance_filter import (
     is_personal_blog_noise,
     is_local_retail_enforcement,
     is_non_article_structural_noise,
+    is_ecommerce_product_listing,
+    is_vendor_advertorial,
+    is_farmgate_tbs_or_retail_price_noise,
+    is_crime_wildlife_or_pure_seizure_noise,
+    is_non_agro_or_general_politics_topic,
     has_ditjen_agro_override,
     has_kemenperin_or_agro_override,
     is_agro_relevant_content,
 )
-from ai_relevance_classifier import classify_agro_relevance, log_ai_rejection
-from config import ENABLE_YOUTUBE
-from entity_mapper import find_spokespersons
-from sentiment import classify_tone
-from export_excel import save_to_excel
-from serper_search import search_serper_news
-from exa_search import search_exa_news
-from youtube_search import search_youtube_videos, get_kemenperin_channel_videos
+from src.ai_relevance_classifier import (
+    classify_agro_relevance,
+    log_ai_rejection,
+    classify_articles_in_batches,
+)
+from src.tone_classifier import classify_tone_batch, classify_tone
+from src.negative_summarizer import summarize_negative_articles
+from src.config import ENABLE_YOUTUBE
+from src.entity_mapper import find_spokespersons
+from src.export_excel import save_to_excel
+from src.serper_search import search_serper_news
+from src.exa_search import search_exa_news
+from src.youtube_search import search_youtube_videos, get_kemenperin_channel_videos
+from src.direct_crawl_agro import (
+    fetch_agro_kemenperin,
+    cocokkan_rilis_resmi,
+    integrate_agro_kemenperin_pipeline,
+)
 
 USE_SERPER_ONLY = os.environ.get("USE_SERPER_ONLY", "false").lower() in ("true", "1", "yes")
 
 OUTPUT_DIR = "hasil_scrapping"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
+_EXTRACTED_CACHE: dict[str, dict] = {}
+
+
+def get_cached_article(url: str) -> dict | None:
+    if not url:
+        return None
+    key = url.strip().split("?")[0].rstrip("/").lower()
+    return _EXTRACTED_CACHE.get(key)
+
+
+def cache_article(art: dict) -> None:
+    link = (art.get("link") or art.get("Link Website") or art.get("url") or art.get("resolved_url") or "").strip()
+    text = str(art.get("text") or "").strip()
+    if link and text:
+        key = link.split("?")[0].rstrip("/").lower()
+        _EXTRACTED_CACHE[key] = art
+        res_url = (art.get("resolved_url") or "").strip()
+        if res_url:
+            res_key = res_url.split("?")[0].rstrip("/").lower()
+            _EXTRACTED_CACHE[res_key] = art
+
+
+def preload_cache(target_dates: list[str] | None = None) -> None:
+    candidates = [
+        "hasil_scrapping/Oktober/2026-10-13_sd_2026-10-19/progress.json",
+        "hasil_scrapping/Oktober/2026-10-13/progress.json",
+        "hasil_scrapping/Oktober/2026-10-12/progress.json",
+        "hasil_scrapping/Oktober/2026-10-11/progress.json",
+        "hasil_scrapping/Oktober/2026-10-09_sd_2026-10-12/progress.json",
+        "hasil_scrapping/Oktober/2026-10-08/progress.json",
+    ]
+    for p in candidates:
+        if os.path.exists(p):
+            try:
+                with open(p, "r", encoding="utf-8") as f:
+                    p_data = json.load(f)
+                    for a in p_data.get("articles", []):
+                        cache_article(a)
+            except Exception:
+                pass
+    if _EXTRACTED_CACHE:
+        print(f"[Cache Preload] Siap menggunakan cache teks untuk {len(_EXTRACTED_CACHE)} URL.", flush=True)
+
 
 def extract_one_article(item: dict) -> dict:
     """Helper untuk ekstraksi konten satu artikel secara concurrent (mendukung resolusi URL Google News & direct URL Serper/Exa)."""
     link = item.get("link", "")
+    cached = get_cached_article(link)
+    if cached and len(str(cached.get("text", "")).strip()) >= 300:
+        item_copy = dict(item)
+        item_copy["text"] = cached["text"]
+        item_copy["resolved_url"] = cached.get("resolved_url") or link
+        if item_copy["resolved_url"] and "news.google.com" not in item_copy["resolved_url"]:
+            item_copy["link"] = item_copy["resolved_url"]
+        item_copy["is_suspiciously_short"] = False
+        return item_copy
+
     if "news.google.com" in link:
         try:
             resolved = resolve_article_url(link)
@@ -122,6 +195,17 @@ def extract_one_article(item: dict) -> dict:
     else:
         # Tautan langsung dari Serper.dev / Exa tidak membutuhkan resolusi Google decoder
         resolved = link
+
+    # Cek cache lagi dengan resolved URL
+    if resolved != link:
+        cached = get_cached_article(resolved)
+        if cached and len(str(cached.get("text", "")).strip()) >= 300:
+            item_copy = dict(item)
+            item_copy["text"] = cached["text"]
+            item_copy["resolved_url"] = resolved
+            item_copy["link"] = resolved
+            item_copy["is_suspiciously_short"] = False
+            return item_copy
 
     # Jika teks sudah disediakan oleh Exa / YouTube dan memadai (>= 300 char), gunakan langsung
     text = item.get("text", "")
@@ -140,6 +224,7 @@ def extract_one_article(item: dict) -> dict:
     if resolved and "news.google.com" not in resolved:
         item_copy["link"] = resolved
     item_copy["is_suspiciously_short"] = is_suspiciously_short(text)
+    cache_article(item_copy)
     return item_copy
 
 
@@ -163,7 +248,7 @@ def extract_single_article_with_timer(item: dict) -> tuple[dict, str]:
 
 
 def filter_valid_articles(
-    articles: list[dict], min_length: int = 300, default_keyword: str = None
+    articles: list[dict], min_length: int = 300, default_keyword: str | None = None
 ) -> tuple[list[dict], list[dict]]:
     """
     Menyaring artikel yang valid secara konten:
@@ -177,12 +262,23 @@ def filter_valid_articles(
     """
     valid: list[dict] = []
     discarded: list[dict] = []
+    candidates_for_ai: list[dict] = []
 
     for item in articles:
         title = item.get("title", "")
         text = item.get("text", "")
         link = item.get("resolved_url") or item.get("link", "")
         keyword = item.get("keyword") or default_keyword
+        # 0-agro. Berita dari agro.kemenperin.go.id otomatis relevan: lewati filter penolakan & Gemini
+        if item.get("sumber_data") == "agro.kemenperin.go.id" or "agro.kemenperin.go.id" in str(item.get("media_name", "")):
+            item["status"] = "relevan"
+            item["status_ai"] = "relevan"
+            item["alasan"] = "Rilis resmi Ditjen Industri Agro (agro.kemenperin.go.id)"
+            item["terkait_kemenperin"] = "Ya"
+            item["unit_eselon"] = "IA"
+            item["Status Review"] = ""
+            valid.append(item)
+            continue
 
         # 1-yt-disabled. Skip YouTube jika flag ENABLE_YOUTUBE = False
         if not ENABLE_YOUTUBE and item.get("sumber_data", "").strip().lower() == "youtube":
@@ -191,18 +287,32 @@ def filter_valid_articles(
             discarded.append(item_copy)
             continue
 
-        # 1-bca. Pulihkan judul asli jika title hanya nama media 'BCA Sekuritas'
-        if title.strip() == "BCA Sekuritas":
-            first_line = (text or "").split("\n")[0].strip()
-            if first_line and len(first_line) > 10:
-                item["title"] = first_line.title() if first_line.isupper() else first_line
-                title = item["title"]
-
-        # BAGIAN 1: Filter pola struktural (nomor telepon/WA, placeholder agregator, galeri stock foto, campaign donasi, profil sekolah statis)
+        # BAGIAN 1: Filter pola struktural (nomor telepon/WA, placeholder agregator, galeri stock foto, campaign donasi, profil sekolah statis, e-commerce, vendor, OJS, BCA Sekuritas / entitas tanpa berita, pendanaan korporasi)
         # Filter paling awal sebelum filter relevansi lain (gratis, rule-based)
-        if is_non_article_structural_noise(title):
+        if is_non_article_structural_noise(title=title, url=link, text=text):
             item_copy = dict(item)
             item_copy["discard_reason"] = "structural_noise"
+            discarded.append(item_copy)
+            continue
+
+        # 1-tbs. Cek harga TBS sawit tingkat petani harian / harga pangan eceran lokal
+        if is_farmgate_tbs_or_retail_price_noise(title, text):
+            item_copy = dict(item)
+            item_copy["discard_reason"] = "farmgate_tbs_or_retail_price"
+            discarded.append(item_copy)
+            continue
+
+        # 1-crime-wildlife. Cek kriminal murni, satwa liar, atau razia sita rokok lokal tanpa kebijakan industri
+        if is_crime_wildlife_or_pure_seizure_noise(title, text):
+            item_copy = dict(item)
+            item_copy["discard_reason"] = "crime_wildlife_or_pure_seizure"
+            discarded.append(item_copy)
+            continue
+
+        # 1-non-agro. Cek topik non-agro (emas, kriya keramik, perombakan kabinet umum, hilirisasi ESDM Bahlil, penutupan perkebunan sepihak)
+        if is_non_agro_or_general_politics_topic(title, text):
+            item_copy = dict(item)
+            item_copy["discard_reason"] = "non_agro_or_general_politics"
             discarded.append(item_copy)
             continue
 
@@ -445,24 +555,50 @@ def filter_valid_articles(
                 item_copy = dict(item)
                 item_copy["discard_reason"] = "health_personal_topic"
                 discarded.append(item_copy)
-        # BAGIAN 2: AI Relevance Classifier (Google Gemini API) sebagai lapis terakhir
-        # Hanya dievaluasi untuk artikel yang telah lolos semua filter rule-based di atas
-        is_rel, ai_reason = classify_agro_relevance(title=title, text_snippet=(text or "")[:200])
-        if is_rel is False:
-            item_copy = dict(item)
-            item_copy["discard_reason"] = "ai_irrelevant"
-            item_copy["ai_reason"] = ai_reason
-            discarded.append(item_copy)
-            log_ai_rejection(
-                title=title,
-                reason=ai_reason,
-                published=item.get("published", ""),
-                keyword=keyword or item.get("keyword", "")
-            )
-            continue
+                continue
+        # Lolos seluruh filter rule-based -> kumpulkan untuk evaluasi AI batch
+        candidates_for_ai.append(item)
 
-        # 6. Seluruh artikel yang lolos filter konten & relevansi tetap disimpan (sindikasi dikelompokkan via 'Isu')
-        valid.append(item)
+    # BAGIAN 2: AI Relevance Classifier (Google Gemini API) Mode Batch
+    # Mengevaluasi kandidat yang lolos rule-based dalam batch efisien (tanpa terkena RPM limit)
+    if candidates_for_ai:
+        for idx, c in enumerate(candidates_for_ai, start=1):
+            c["id"] = idx
+        batch_res = classify_articles_in_batches(candidates_for_ai, batch_size=25, delay_between_batches=1.0)
+        by_id = batch_res.get("by_id", {})
+
+        for c in candidates_for_ai:
+            info = by_id.get(c["id"]) or by_id.get(str(c["id"])) or {}
+            status_ai = info.get("status", "review")
+            is_rel = status_ai in ["relevan", "review"]
+            ai_reason = info.get("alasan", "")
+            sub_sektor = info.get("sub_sektor", "-")
+
+            if is_rel is False:
+                c_copy = dict(c)
+                c_copy["discard_reason"] = "ai_irrelevant"
+                c_copy["ai_reason"] = ai_reason
+                c_copy["status"] = "buang"
+                discarded.append(c_copy)
+                log_ai_rejection(
+                    title=c.get("title", ""),
+                    reason=ai_reason,
+                    published=c.get("published", ""),
+                    keyword=c.get("keyword") or default_keyword or ""
+                )
+            else:
+                c["status"] = status_ai
+                c["status_ai"] = status_ai
+                c["alasan"] = ai_reason
+                c["alasan_ai"] = ai_reason
+                c["sub_sektor"] = sub_sektor
+                if "ai tidak dijalankan" in str(ai_reason).lower():
+                    c["Status Review"] = ai_reason
+                elif status_ai == "review":
+                    c["Status Review"] = f"Perlu Dicek Manual: {ai_reason}" if ai_reason else "Perlu Dicek Manual"
+                else:
+                    c["Status Review"] = ""
+                valid.append(c)
 
     return valid, discarded
 
@@ -473,6 +609,7 @@ def process_single_keyword(
     max_workers: int = 8,
     name_map: dict[str, str] | None = None,
     serper_only: bool = False,
+    target_date: date | tuple | list | None = None,
 ) -> dict:
     """
     Mengambil, mengekstrak, dan menyaring berita untuk satu kata kunci,
@@ -481,16 +618,19 @@ def process_single_keyword(
     """
     t_start = time.time()
     if name_map is None:
-        name_map = load_spokesperson_map("keyword_nama.xlsx")
+        name_map = load_spokesperson_map("keyword/keyword_nama.xlsx")
+
+    start_d, end_d = get_date_range(target_date)
+    eval_target_date = (start_d, end_d)
 
     use_serper = serper_only or USE_SERPER_ONLY
     log_granular(f"  [>] Memproses keyword: '{keyword}'...")
 
     # [1/6] Fetch RSS (media + gov)
     if use_serper:
-        raw_results = search_serper_news(keyword)
+        raw_results = search_serper_news(keyword, target_date=eval_target_date)
     else:
-        raw_results = search_keyword(keyword, delay=delay)
+        raw_results = search_keyword(keyword, delay=delay, target_date=eval_target_date)
     log_granular(f"     [1/6] Fetch RSS (media + gov)...          -> selesai, {len(raw_results)} kandidat")
 
     for item in raw_results:
@@ -499,7 +639,7 @@ def process_single_keyword(
 
     # [2/6] Fetch Exa (jika keyword 1 kata)
     if is_single_word_keyword(keyword):
-        exa_items = search_exa_news(keyword)
+        exa_items = search_exa_news(keyword, target_date=eval_target_date)
         if exa_items:
             log_granular(f"     [2/6] Fetch Exa (jika keyword 1 kata)...  -> selesai, {len(exa_items)} kandidat")
             raw_results = raw_results + exa_items
@@ -510,7 +650,7 @@ def process_single_keyword(
 
     # Fetch YouTube (1x per keyword, hemat kuota: 100 unit)
     if ENABLE_YOUTUBE:
-        yt_items = search_youtube_videos(keyword)
+        yt_items = search_youtube_videos(keyword, target_date=eval_target_date)
         if yt_items:
             log_granular(f"     [+] Fetch YouTube (search 1x)...          -> selesai, {len(yt_items)} video")
             raw_results = raw_results + yt_items
@@ -523,7 +663,7 @@ def process_single_keyword(
     init_count = len(candidates)
 
     # [3/6] Filter tanggal kemarin
-    yesterday_candidates = [c for c in candidates if is_published_yesterday(c.get("published", ""))]
+    yesterday_candidates = [c for c in candidates if is_published_yesterday(c.get("published", ""), target_date=eval_target_date)]
     date_dropped_count = init_count - len(yesterday_candidates)
     log_granular(f"     [3/6] Filter tanggal kemarin...            -> {len(yesterday_candidates)} lolos")
 
@@ -532,7 +672,7 @@ def process_single_keyword(
     log_granular(f"     [4/6] Ekstraksi konten ({total_yest} artikel)...")
     extracted = []
     if yesterday_candidates:
-        workers = min(max_workers, 4 if use_serper else 2)
+        workers = min(max_workers, 10 if use_serper else 6)
         with ThreadPoolExecutor(max_workers=workers) as executor:
             futures = [executor.submit(extract_single_article_with_timer, item) for item in yesterday_candidates]
             completed = 0
@@ -606,6 +746,31 @@ def finalize_and_export(
     print("=== TAHAP FINAL: DEDUPLIKASI LINTAS KEYWORD & NLP ===", flush=True)
     print("=" * 60, flush=True)
 
+    # 0. Direct crawl portal resmi Ditjen Industri Agro (agro.kemenperin.go.id)
+    try:
+        start_date, end_date = get_date_range()
+        print(f"\n[Direct Crawl Ditjen Agro] Memeriksa portal agro.kemenperin.go.id ({start_date} s.d {end_date})...", flush=True)
+        agro_articles = fetch_agro_kemenperin(start_date, end_date, include_content=True)
+        if agro_articles:
+            print(f"  -> Ditemukan {len(agro_articles)} rilis resmi Ditjen Agro. Menggabungkan ke antrean...", flush=True)
+            for a in agro_articles:
+                tgl_val = a.get("Tanggal")
+                tgl_str = tgl_val.strftime("%Y-%m-%d %H:%M:%S") if hasattr(tgl_val, "strftime") else str(tgl_val or "")
+                articles.append({
+                    "title": a.get("Title", ""),
+                    "link": a.get("Link Website", ""),
+                    "resolved_url": a.get("Link Website", ""),
+                    "published": tgl_str,
+                    "media_name": "Kemenperin (agro.kemenperin.go.id)",
+                    "sumber_data": "agro.kemenperin.go.id",
+                    "text": a.get("isi", ""),
+                    "keyword": "Rilis Resmi Ditjen Agro",
+                })
+        else:
+            print("  -> Tidak ada rilis baru di agro.kemenperin.go.id pada rentang tanggal tersebut.", flush=True)
+    except Exception as e:
+        print(f"  -> Peringatan direct crawl agro.kemenperin.go.id: {e}", flush=True)
+
     total_before = len(articles)
 
     # 1. Dedup lintas keyword berdasarkan URL dasar
@@ -625,16 +790,24 @@ def finalize_and_export(
     print(f"Total artikel sebelum dedup lintas keyword : {total_before}", flush=True)
     print(f"Total artikel setelah dedup URL & judul   : {total_after} (Dieliminasi: {total_before - total_after})", flush=True)
 
-    # 3. Entity Mapping & Sentiment Analysis
-    print(f"\nMenjalankan Entity Mapping dan Sentiment Analysis pada {total_after} artikel...", flush=True)
+    # 3. Entity Mapping & Gemini AI Tone Analysis
+    print(f"\nMenjalankan Entity Mapping dan Gemini AI Tone Analysis pada {total_after} artikel...", flush=True)
     records = []
     sp_count = 0
     tone_dist = {"Positif": 0, "Netral": 0, "Negatif": 0}
 
+    # Beri ID untuk batch tone classification
+    for idx, art in enumerate(final_unique, start=1):
+        art["id"] = idx
+
+    print(f"Menginspeksi tone dengan Gemini AI API untuk {total_after} artikel...", flush=True)
+    tone_batch_results = classify_tone_batch(final_unique, use_ai=True)
+    tone_map = {res["id"]: res.get("tone", "Netral") for res in tone_batch_results}
+
     for idx, art in enumerate(final_unique, start=1):
         text = art.get("text", "")
         sp1, sp2, unit = find_spokespersons(text, name_map)
-        tone = classify_tone(text)
+        tone = tone_map.get(art.get("id"), "Netral")
         is_rel, sig_type, sig_det = get_kemenperin_signal(
             art.get("title", ""), text, name_map
         )
@@ -655,6 +828,7 @@ def finalize_and_export(
             "Spokesperson 2": sp2,
             "Unit Eselon": unit,
             "Terkait Kemenperin": terkait_kemenperin,
+            "Status Review": art.get("Status Review", ""),
             "Keywords": art.get("keyword", ""),
             "Sumber Data": art.get("sumber_data", "RSS"),
         })
@@ -662,15 +836,42 @@ def finalize_and_export(
     print(f"Entity Mapping: {sp_count} artikel memiliki Spokesperson terisi, {total_after - sp_count} kosong.", flush=True)
     print(f"Distribusi Tone: Positif={tone_dist.get('Positif', 0)}, Netral={tone_dist.get('Netral', 0)}, Negatif={tone_dist.get('Negatif', 0)}", flush=True)
 
+    # 3b. Verifikasi silang judul media lain dengan rilis resmi Ditjen Agro jika ada
+    official_agro = [
+        r for r in records
+        if r.get("Sumber Data") == "agro.kemenperin.go.id" or "agro.kemenperin.go.id" in str(r.get("Media Name", ""))
+    ]
+    if official_agro:
+        df_recs = pd.DataFrame(records)
+        df_recs = cocokkan_rilis_resmi(df_recs, official_agro, ambang=80)
+        records = df_recs.to_dict(orient="records")
+
+    # 3c. Ringkasan Otomatis Berita Bertone Negatif (5W+1H + Stakeholders)
+    neg_summaries = None
+    if any(r.get("Tone") == "Negatif" for r in records):
+        print(f"\nMenjalankan ringkasan otomatis 5W+1H untuk berita bertone Negatif...", flush=True)
+        txt_map = {
+            str(a.get("link") or "").strip(): str(a.get("text") or "").strip()
+            for a in final_unique if a.get("link")
+        }
+        neg_summaries = summarize_negative_articles(records, progress_text_map=txt_map)
+
     # 4. Simpan ke file Excel (merge jika file sudah ada)
-    save_to_excel(records, output_excel, merge_existing=True)
+    save_to_excel(records, output_excel, merge_existing=True, negative_summaries=neg_summaries)
     print(f"\nHasil akhir berhasil disimpan / di-merge ke: {output_excel}", flush=True)
+
+    if neg_summaries:
+        base_dir, base_file = os.path.split(output_excel)
+        if not base_file.endswith("_ringkasan.xlsx"):
+            ringkasan_path = os.path.join(base_dir, base_file.replace(".xlsx", "_ringkasan.xlsx"))
+            save_to_excel(records, ringkasan_path, merge_existing=False, negative_summaries=neg_summaries)
+            print(f"Salinan dengan ringkasan negatif disimpan ke: {ringkasan_path}", flush=True)
 
     return records, tone_dist
 
 
 def run_pipeline(
-    keywords_or_file: str | list[str] = "keyword_data.txt",
+    keywords_or_file: str | list[str] = "keyword/keyword_data.txt",
     output_excel: str | None = None,
 ):
     """
@@ -679,9 +880,9 @@ def run_pipeline(
     """
     print("=== MEMULAI PIPELINE SCRAPING BERITA INDUSTRI ===")
 
-    yesterday_date, _ = get_date_range()
-    date_folder = get_date_folder(yesterday_date)
-    date_str = yesterday_date.strftime("%Y-%m-%d")
+    start_date, end_date = get_date_range()
+    date_folder = get_date_folder((start_date, end_date))
+    date_str = start_date.strftime("%Y-%m-%d") if start_date == end_date else f"{start_date.strftime('%Y-%m-%d')}_sd_{end_date.strftime('%Y-%m-%d')}"
 
     if isinstance(keywords_or_file, list):
         keywords = keywords_or_file
@@ -696,14 +897,15 @@ def run_pipeline(
     elif not os.path.dirname(output_excel):
         output_excel = os.path.join(date_folder, output_excel)
 
-    name_map = load_spokesperson_map("keyword_nama.xlsx")
+    name_map = load_spokesperson_map("keyword/keyword_nama.xlsx")
     print(f"Loaded: {len(keywords)} keyword ({keywords[:5]}...), {len(name_map)} pejabat.")
 
+    eval_target_date = (start_date, end_date)
     if USE_SERPER_ONLY:
         print(f"  [>] Mode USE_SERPER_ONLY aktif: Mengambil kandidat via Serper.dev...", flush=True)
         raw_results = []
         for kw in keywords:
-            raw_results.extend(search_serper_news(kw))
+            raw_results.extend(search_serper_news(kw, target_date=eval_target_date))
     else:
         raw_results = collect_all(keywords)
 
@@ -715,7 +917,7 @@ def run_pipeline(
     for kw in keywords:
         if is_single_word_keyword(kw):
             print(f"  [>] [Exa.ai] Fetching berita pelengkap untuk keyword 1 kata '{kw}'...", flush=True)
-            exa_items = search_exa_news(kw)
+            exa_items = search_exa_news(kw, target_date=eval_target_date)
             if exa_items:
                 print(f"      -> {len(exa_items)} kandidat pelengkap ditemukan oleh Exa Search.", flush=True)
                 raw_results.extend(exa_items)
@@ -725,10 +927,9 @@ def run_pipeline(
     raw_results = dedup_by_link(raw_results)
     print(f"Kandidat berita setelah domain filter & dedup awal: {len(raw_results)}")
 
-    # Filter Tanggal: HANYA KEMARIN (sebelum ekstraksi untuk kecepatan)
-    start_date, end_date = get_date_range()
-    print(f"\n[Filter Tanggal] Menyaring artikel tanggal publikasi persis kemarin: {start_date}...")
-    yesterday_candidates = [item for item in raw_results if is_published_yesterday(item.get("published", ""))]
+    # Filter Tanggal: HANYA TARGET DATE (sebelum ekstraksi untuk kecepatan)
+    print(f"\n[Filter Tanggal] Menyaring artikel tanggal publikasi target: {start_date} s.d. {end_date}...")
+    yesterday_candidates = [item for item in raw_results if is_published_yesterday(item.get("published", ""), target_date=eval_target_date)]
     date_dropped_count = len(raw_results) - len(yesterday_candidates)
     print(f"Total sebelum filter tanggal : {len(raw_results)} artikel")
     print(f"Artikel gugur filter tanggal: {date_dropped_count} artikel")
@@ -765,7 +966,7 @@ def run_pipeline(
     for item in content_valid:
         text = item["text"]
         sp1, sp2, unit = find_spokespersons(text, name_map)
-        tone = classify_tone(text)
+        tone = classify_tone(text=text, title=item.get("title", ""))
         is_rel, sig_type, sig_det = get_kemenperin_signal(
             item.get("title", ""), text, name_map
         )
@@ -800,7 +1001,7 @@ def run_pipeline(
 
 
 def run_batch_pipeline(
-    keywords_or_file: str | list[str] = "keyword_data.txt",
+    keywords_or_file: str | list[str] = "keyword/keyword_data.txt",
     batch_size: int = 5,
     target_batch: int | None = None,
     checkpoint_file: str | None = None,
@@ -810,35 +1011,39 @@ def run_batch_pipeline(
     Menjalankan scraping per batch (misal 5 keyword per batch),
     menyimpan progress ke checkpoint_file di dalam folder tanggal, dan mengekspor hasil gabungan.
     """
-    yesterday_date, _ = get_date_range()
-    date_folder = get_date_folder(yesterday_date)
-    date_str = yesterday_date.strftime("%Y-%m-%d")
+    start_date, end_date = get_date_range()
+    date_folder = get_date_folder((start_date, end_date))
+    date_str = start_date.strftime("%Y-%m-%d") if start_date == end_date else f"{start_date.strftime('%Y-%m-%d')}_sd_{end_date.strftime('%Y-%m-%d')}"
 
     if not checkpoint_file:
-        checkpoint_file = os.path.join(date_folder, "progress.json")
+        checkpoint_path = os.path.join(date_folder, "progress.json")
     elif not os.path.dirname(checkpoint_file):
-        checkpoint_file = os.path.join(date_folder, checkpoint_file)
+        checkpoint_path = os.path.join(date_folder, checkpoint_file)
+    else:
+        checkpoint_path = checkpoint_file
 
     if not output_excel:
-        output_excel = os.path.join(date_folder, f"all_{date_str}.xlsx")
+        out_excel_path = os.path.join(date_folder, f"all_{date_str}.xlsx")
     elif not os.path.dirname(output_excel):
-        output_excel = os.path.join(date_folder, output_excel)
+        out_excel_path = os.path.join(date_folder, output_excel)
+    else:
+        out_excel_path = output_excel
 
     if isinstance(keywords_or_file, list):
         keywords = keywords_or_file
     else:
         keywords = load_keywords(keywords_or_file)
 
-    name_map = load_spokesperson_map("keyword_nama.xlsx")
+    name_map = load_spokesperson_map("keyword/keyword_nama.xlsx")
     batches = [keywords[i : i + batch_size] for i in range(0, len(keywords), batch_size)]
     total_batches = len(batches)
 
     print(f"Total keyword: {len(keywords)} dibagi menjadi {total_batches} batch (ukuran batch: {batch_size})", flush=True)
 
     checkpoint = {"batches_done": [], "batch_reports": [], "articles": []}
-    if os.path.exists(checkpoint_file):
+    if os.path.exists(checkpoint_path):
         try:
-            with open(checkpoint_file, "r", encoding="utf-8") as f:
+            with open(checkpoint_path, "r", encoding="utf-8") as f:
                 checkpoint = json.load(f)
                 print(f"Checkpoint dimuat: Batch yang sudah selesai: {checkpoint.get('batches_done', [])}", flush=True)
         except Exception as e:
@@ -868,7 +1073,7 @@ def run_batch_pipeline(
         batch_kw_stats = []
 
         for kw in current_kws:
-            res = process_single_keyword(kw, name_map=name_map)
+            res = process_single_keyword(kw, name_map=name_map, target_date=(start_date, end_date))
             batch_initial += res["initial_candidates"]
             batch_content_valid += res["content_valid_count"]
             batch_date_dropped += res["date_dropped_count"]
@@ -898,7 +1103,7 @@ def run_batch_pipeline(
             "details": batch_kw_stats,
         })
 
-        with open(checkpoint_file, "w", encoding="utf-8") as f:
+        with open(checkpoint_path, "w", encoding="utf-8") as f:
             json.dump(checkpoint, f, ensure_ascii=False, indent=2)
 
         print("\n" + "-" * 50, flush=True)
@@ -910,17 +1115,48 @@ def run_batch_pipeline(
         print(f"Terkait Kemenperin (Ya)  : {batch_kemenperin_yes} | Tidak: {batch_final_valid - batch_kemenperin_yes}", flush=True)
         print("Rincian per keyword:", flush=True)
         for s in batch_kw_stats:
+            kw_init = int(s.get("initial", 0) or 0)
+            kw_dropped = int(s.get("date_dropped", 0) or 0)
+            kw_final = int(s.get("final_valid", 0) or 0)
+            kw_kem_yes = int(s.get("kemenperin_yes", 0) or 0)
+            kw_kem_no = kw_final - kw_kem_yes
             print(
-                f"  - '{s['keyword']}': Awal={s['initial']} -> LolosKemarin={s['initial'] - s['date_dropped']} -> "
-                f"FINAL={s['final_valid']} (Kemenperin: Ya={s.get('kemenperin_yes', 0)} / Tidak={s['final_valid'] - s.get('kemenperin_yes', 0)})",
+                f"  - '{s.get('keyword', '')}': Awal={kw_init} -> LolosKemarin={kw_init - kw_dropped} -> "
+                f"FINAL={kw_final} (Kemenperin: Ya={kw_kem_yes} / Tidak={kw_kem_no})",
                 flush=True,
             )
-        print(f"Checkpoint tersimpan ke: {checkpoint_file}", flush=True)
+        print(f"Checkpoint tersimpan ke: {checkpoint_path}", flush=True)
         print("-" * 50, flush=True)
 
     if len(checkpoint["batches_done"]) == total_batches:
         print("\nSeluruh batch telah selesai! Melanjutkan ke finalisasi...", flush=True)
-        finalize_and_export(checkpoint["articles"], name_map, output_excel=output_excel)
+        try:
+            from direct_crawl_kemenperin import crawl_kemenperin_siaran_pers
+            from direct_crawl_agro import fetch_agro_kemenperin
+            c_items = crawl_kemenperin_siaran_pers(target_date=(start_date, end_date), max_pages=3)
+            if c_items:
+                print(f"[Direct Crawl] Ditemukan {len(c_items)} siaran pers kemenperin.go.id", flush=True)
+                for a in c_items:
+                    checkpoint["articles"].append(a)
+            a_items = fetch_agro_kemenperin(date_from=start_date, date_to=end_date, include_content=True)
+            if a_items:
+                print(f"[Direct Crawl] Ditemukan {len(a_items)} rilis resmi Ditjen Agro", flush=True)
+                for a in a_items:
+                    checkpoint["articles"].append({
+                        "title": a.get("Title", ""),
+                        "link": a.get("Link Website", ""),
+                        "published": a.get("Tanggal"),
+                        "media_name": a.get("Media Name", "Kemenperin (agro.kemenperin.go.id)"),
+                        "unit_eselon": a.get("Unit Eselon", "IA"),
+                        "terkait_kemenperin": "Ya",
+                        "keyword": "agro_kemenperin_resmi",
+                        "sumber_data": "agro.kemenperin.go.id",
+                        "text": a.get("isi", ""),
+                    })
+        except Exception as e:
+            print(f"[Direct Crawl Warning] {e}", flush=True)
+
+        finalize_and_export(checkpoint["articles"], name_map, output_excel=out_excel_path)
     elif target_batch is not None:
         batch_out = os.path.join(date_folder, f"checkpoint_batch_{target_batch}.xlsx")
         print(f"\nBatch {target_batch} selesai diproses. Mengekspor hasil batch ke {batch_out}...", flush=True)
@@ -936,15 +1172,33 @@ if __name__ == "__main__":
     parser.add_argument("--all", action="store_true", help="Jalankan semua batch dari awal / lanjutkan checkpoint")
     parser.add_argument("--serper-only", action="store_true", help="Pakai Serper.dev SAJA untuk fetch berita (bypass Google News RSS)")
     parser.add_argument("--api-key", type=str, default=None, help="Serper.dev API Key")
+    parser.add_argument("--date", "--target-date", dest="target_date", type=str, default=None, help="Tanggal target evaluasi YYYY-MM-DD atau range YYYY-MM-DD:YYYY-MM-DD")
+    parser.add_argument("--start-date", type=str, default=None, help="Tanggal awal rentang evaluasi YYYY-MM-DD")
+    parser.add_argument("--end-date", type=str, default=None, help="Tanggal akhir rentang evaluasi YYYY-MM-DD")
 
     args = parser.parse_args()
 
     if args.api_key:
         os.environ["SERPER_API_KEY"] = args.api_key.strip()
 
+    if args.start_date and args.end_date:
+        os.environ["OVERRIDE_DATE"] = f"{args.start_date.strip()}_sd_{args.end_date.strip()}"
+    elif args.target_date:
+        t_raw = args.target_date.strip()
+        parsed = False
+        for sep in (":", "_sd_", "..", " to ", " - "):
+            if sep in t_raw:
+                p1, p2 = t_raw.split(sep, 1)
+                os.environ["OVERRIDE_DATE"] = f"{p1.strip()}_sd_{p2.strip()}"
+                parsed = True
+                break
+        if not parsed:
+            os.environ["OVERRIDE_DATE"] = t_raw
+
     USE_SERPER_ONLY, source_msg = determine_session_source(force_serper=args.serper_only)
     print(f"\n[STATUS SUMBER SESI] {source_msg}\n")
 
+    preload_cache()
     start_heartbeat()
 
     if args.keyword and not args.keyword.startswith("--"):
