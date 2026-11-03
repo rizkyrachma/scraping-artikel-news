@@ -343,20 +343,16 @@ def save_to_excel(
 
         ws.freeze_panes = "A2"
 
-        # Highlight kuning untuk baris yang pasti masuk sektor IA (Status Review kosong / bukan 'Perlu Dicek Manual')
+        # Highlight kuning untuk baris yang berstatus 'PERLU CEK MANUAL' (sesuai instruksi user)
         yellow_fill = PatternFill(start_color="FFFF00", end_color="FFFF00", fill_type="solid")
         status_col_idx = columns.index("Status Review") + 1 if "Status Review" in columns else None
 
-        for row_idx in range(2, len(df) + 2):
-            is_pasti_ia = True
-            if status_col_idx:
-                status_val = str(ws.cell(row=row_idx, column=status_col_idx).value or "").strip()
-                if status_val.lower().startswith("perlu dicek manual"):
-                    is_pasti_ia = False
-            
-            if is_pasti_ia:
-                for col_idx in range(1, len(columns) + 1):
-                    ws.cell(row=row_idx, column=col_idx).fill = yellow_fill
+        if status_col_idx:
+            for row_idx in range(2, len(df) + 2):
+                status_val = str(ws.cell(row=row_idx, column=status_col_idx).value or "").strip().upper()
+                if "PERLU CEK MANUAL" in status_val:
+                    for col_idx in range(1, len(columns) + 1):
+                        ws.cell(row=row_idx, column=col_idx).fill = yellow_fill
 
         # Buat Link Website jadi hyperlink aktif (href) dengan warna biru dan garis bawah
         link_col_idx = columns.index("Link Website") + 1

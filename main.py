@@ -154,6 +154,10 @@ def cache_article(art: dict) -> None:
 
 def preload_cache(target_dates: list[str] | None = None) -> None:
     candidates = [
+        "hasil_scrapping/Oktober/2026-10-21_sd_2026-10-26/progress_unfiltered.json",
+        "hasil_scrapping/Oktober/2026-10-21_sd_2026-10-26_backup_26okt/progress_unfiltered.json",
+        "hasil_scrapping/Oktober/2026-10-21/progress.json",
+        "hasil_scrapping/Oktober/2026-10-20/progress.json",
         "hasil_scrapping/Oktober/2026-10-13_sd_2026-10-19/progress.json",
         "hasil_scrapping/Oktober/2026-10-13/progress.json",
         "hasil_scrapping/Oktober/2026-10-12/progress.json",
@@ -790,21 +794,62 @@ def finalize_and_export(
     print(f"Total artikel sebelum dedup lintas keyword : {total_before}", flush=True)
     print(f"Total artikel setelah dedup URL & judul   : {total_after} (Dieliminasi: {total_before - total_after})", flush=True)
 
-    # 3. Entity Mapping & Gemini AI Tone Analysis
-    print(f"\nMenjalankan Entity Mapping dan Gemini AI Tone Analysis pada {total_after} artikel...", flush=True)
+    base_dir, base_file = os.path.split(output_excel)
+    if not base_dir:
+        base_dir = OUTPUT_DIR
+
+    # Backup dataset mentah lengkap sebelum auto cek ulang
+    mentah_backup = os.path.join(base_dir, base_file.replace(".xlsx", "_mentah_unfiltered.xlsx"))
+    if not os.path.exists(mentah_backup):
+        try:
+            save_to_excel(final_unique, mentah_backup, merge_existing=False)
+            print(f"[Backup] Dataset mentah lengkap dicadangkan ke: {mentah_backup}", flush=True)
+        except Exception as e:
+            print(f"[Backup Warning] {e}", flush=True)
+
+    # Backup checkpoint progress_unfiltered.json jika ada
+    prog_file = os.path.join(base_dir, "progress.json")
+    if os.path.exists(prog_file):
+        prog_unfiltered = os.path.join(base_dir, "progress_unfiltered.json")
+        if not os.path.exists(prog_unfiltered):
+            try:
+                import shutil
+                shutil.copy2(prog_file, prog_unfiltered)
+            except Exception:
+                pass
+
+    # 3. TAHAP AUTO CEK ULANG (Pass 1 Aturan Pasti -> Pass 2 AI Batch -> Pass 3+ Audit Loop)
+    from src.auto_recheck import run_auto_recheck
+    hilir_articles, discarded_list = run_auto_recheck(final_unique, target_dir=base_dir)
+    total_hilir = len(hilir_articles)
+
+    # Sinkronisasi checkpoint progress.json dengan artikel hilir
+    if os.path.exists(prog_file):
+        try:
+            with open(prog_file, "r", encoding="utf-8") as f:
+                prog_data = json.load(f)
+            prog_data["articles"] = hilir_articles
+            prog_data["discarded_count"] = len(discarded_list)
+            with open(prog_file, "w", encoding="utf-8") as f:
+                json.dump(prog_data, f, ensure_ascii=False, indent=2, default=str)
+        except Exception as e:
+            print(f"[Warning] Gagal sinkronisasi progress.json: {e}", flush=True)
+
+    # 4. Entity Mapping & Gemini AI Tone Analysis PADA ARTIKEL HILIR
+    print(f"\nMenjalankan Entity Mapping dan Gemini AI Tone Analysis pada {total_hilir} artikel hilir...", flush=True)
     records = []
     sp_count = 0
     tone_dist = {"Positif": 0, "Netral": 0, "Negatif": 0}
 
     # Beri ID untuk batch tone classification
-    for idx, art in enumerate(final_unique, start=1):
+    for idx, art in enumerate(hilir_articles, start=1):
         art["id"] = idx
 
-    print(f"Menginspeksi tone dengan Gemini AI API untuk {total_after} artikel...", flush=True)
-    tone_batch_results = classify_tone_batch(final_unique, use_ai=True)
+    print(f"Menginspeksi tone dengan Gemini AI API untuk {total_hilir} artikel...", flush=True)
+    tone_batch_results = classify_tone_batch(hilir_articles, use_ai=True)
     tone_map = {res["id"]: res.get("tone", "Netral") for res in tone_batch_results}
 
-    for idx, art in enumerate(final_unique, start=1):
+    for idx, art in enumerate(hilir_articles, start=1):
         text = art.get("text", "")
         sp1, sp2, unit = find_spokespersons(text, name_map)
         tone = tone_map.get(art.get("id"), "Netral")
@@ -833,10 +878,10 @@ def finalize_and_export(
             "Sumber Data": art.get("sumber_data", "RSS"),
         })
 
-    print(f"Entity Mapping: {sp_count} artikel memiliki Spokesperson terisi, {total_after - sp_count} kosong.", flush=True)
+    print(f"Entity Mapping: {sp_count} artikel memiliki Spokesperson terisi, {total_hilir - sp_count} kosong.", flush=True)
     print(f"Distribusi Tone: Positif={tone_dist.get('Positif', 0)}, Netral={tone_dist.get('Netral', 0)}, Negatif={tone_dist.get('Negatif', 0)}", flush=True)
 
-    # 3b. Verifikasi silang judul media lain dengan rilis resmi Ditjen Agro jika ada
+    # 4b. Verifikasi silang judul media lain dengan rilis resmi Ditjen Agro jika ada
     official_agro = [
         r for r in records
         if r.get("Sumber Data") == "agro.kemenperin.go.id" or "agro.kemenperin.go.id" in str(r.get("Media Name", ""))
@@ -846,22 +891,21 @@ def finalize_and_export(
         df_recs = cocokkan_rilis_resmi(df_recs, official_agro, ambang=80)
         records = df_recs.to_dict(orient="records")
 
-    # 3c. Ringkasan Otomatis Berita Bertone Negatif (5W+1H + Stakeholders)
+    # 4c. Ringkasan Otomatis Berita Bertone Negatif (5W+1H + Stakeholders) HANYA UNTUK ARTIKEL TERSISA
     neg_summaries = None
     if any(r.get("Tone") == "Negatif" for r in records):
-        print(f"\nMenjalankan ringkasan otomatis 5W+1H untuk berita bertone Negatif...", flush=True)
+        print(f"\nMenjalankan ringkasan otomatis 5W+1H untuk berita bertone Negatif (khusus artikel hilir tersisa)...", flush=True)
         txt_map = {
             str(a.get("link") or "").strip(): str(a.get("text") or "").strip()
-            for a in final_unique if a.get("link")
+            for a in hilir_articles if a.get("link")
         }
         neg_summaries = summarize_negative_articles(records, progress_text_map=txt_map)
 
-    # 4. Simpan ke file Excel (merge jika file sudah ada)
-    save_to_excel(records, output_excel, merge_existing=True, negative_summaries=neg_summaries)
-    print(f"\nHasil akhir berhasil disimpan / di-merge ke: {output_excel}", flush=True)
+    # 5. Simpan ke file Excel
+    save_to_excel(records, output_excel, merge_existing=False, negative_summaries=neg_summaries)
+    print(f"\nHasil akhir berhasil disimpan ke: {output_excel}", flush=True)
 
     if neg_summaries:
-        base_dir, base_file = os.path.split(output_excel)
         if not base_file.endswith("_ringkasan.xlsx"):
             ringkasan_path = os.path.join(base_dir, base_file.replace(".xlsx", "_ringkasan.xlsx"))
             save_to_excel(records, ringkasan_path, merge_existing=False, negative_summaries=neg_summaries)
@@ -1175,6 +1219,7 @@ if __name__ == "__main__":
     parser.add_argument("--date", "--target-date", dest="target_date", type=str, default=None, help="Tanggal target evaluasi YYYY-MM-DD atau range YYYY-MM-DD:YYYY-MM-DD")
     parser.add_argument("--start-date", type=str, default=None, help="Tanggal awal rentang evaluasi YYYY-MM-DD")
     parser.add_argument("--end-date", type=str, default=None, help="Tanggal akhir rentang evaluasi YYYY-MM-DD")
+    parser.add_argument("--recheck", action="store_true", help="Jalankan Auto Cek Ulang pada data yang sudah di-scrape tanpa scrape ulang")
 
     args = parser.parse_args()
 
@@ -1194,6 +1239,25 @@ if __name__ == "__main__":
                 break
         if not parsed:
             os.environ["OVERRIDE_DATE"] = t_raw
+
+    if args.recheck:
+        start_date, end_date = get_date_range()
+        date_folder = get_date_folder((start_date, end_date))
+        date_str = start_date.strftime("%Y-%m-%d") if start_date == end_date else f"{start_date.strftime('%Y-%m-%d')}_sd_{end_date.strftime('%Y-%m-%d')}"
+        out_excel = os.path.join(date_folder, f"all_{date_str}.xlsx")
+        chk_file = os.path.join(date_folder, "progress.json")
+        prog_unf = os.path.join(date_folder, "progress_unfiltered.json")
+        source_chk = prog_unf if os.path.exists(prog_unf) else chk_file
+        if os.path.exists(source_chk):
+            print(f"Menjalankan Auto Cek Ulang dari berkas sumber: {source_chk}...", flush=True)
+            with open(source_chk, "r", encoding="utf-8") as f:
+                chk_data = json.load(f)
+            name_map = load_spokesperson_map("keyword/keyword_nama.xlsx")
+            finalize_and_export(chk_data["articles"], name_map, output_excel=out_excel)
+            sys.exit(0)
+        else:
+            print(f"[Error] File sumber checkpoint tidak ditemukan di: {source_chk}", flush=True)
+            sys.exit(1)
 
     USE_SERPER_ONLY, source_msg = determine_session_source(force_serper=args.serper_only)
     print(f"\n[STATUS SUMBER SESI] {source_msg}\n")
