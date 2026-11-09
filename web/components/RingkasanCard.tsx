@@ -11,21 +11,38 @@ interface RingkasanCardProps {
   netCount?: number;
   negCount?: number;
   lastUpdatedLabel?: string;
+  noiseDibuangPct?: number | null;
+  toneCadanganPct?: number | null;
+  perluReviewCount?: number | null;
+  noSpokespersonCount?: number | null;
 }
 
 export default function RingkasanCard({
   isRunning,
-  dateStr = "5 Nov 2026",
-  count = 158,
-  posCount = 71,
-  netCount = 80,
-  negCount = 7,
-  lastUpdatedLabel = "06 Nov, 07.12",
+  dateStr = "—",
+  count = 0,
+  posCount = 0,
+  netCount = 0,
+  negCount = 0,
+  lastUpdatedLabel = "—",
+  noiseDibuangPct = null,
+  toneCadanganPct = null,
+  perluReviewCount = null,
+  noSpokespersonCount = null,
 }: RingkasanCardProps) {
   const tot = posCount + netCount + negCount;
   const pctPos = tot > 0 ? Math.round((posCount / tot) * 100) : 0;
   const pctNet = tot > 0 ? Math.round((netCount / tot) * 100) : 0;
   const pctNeg = tot > 0 ? Math.max(0, 100 - pctPos - pctNet) : 0;
+
+  const reviewBarPct =
+    perluReviewCount != null && count > 0
+      ? Math.min(100, Math.round((perluReviewCount / count) * 100))
+      : 0;
+  const noSpBarPct =
+    noSpokespersonCount != null && count > 0
+      ? Math.min(100, Math.round((noSpokespersonCount / count) * 100))
+      : 0;
 
   return (
     <>
@@ -41,7 +58,7 @@ export default function RingkasanCard({
         )}
 
         <div className={`metric-headline ${isRunning ? "opacity-60" : ""}`}>
-          <span className="big-num">{count}</span>
+          <span className="big-num">{count.toLocaleString("id-ID")}</span>
           <span className="unit-label">berita terpantau</span>
         </div>
 
@@ -80,40 +97,60 @@ export default function RingkasanCard({
           <div className="kpi-item">
             <div className="kpi-label-row">
               <span className="kpi-label">Noise domain dibuang</span>
-              <span className="kpi-val">68%</span>
+              <span className="kpi-val">
+                {noiseDibuangPct != null ? `${noiseDibuangPct}%` : "—"}
+              </span>
             </div>
             <div className="kpi-progress-track">
-              <div className="kpi-progress-fill bg-blue" style={{ width: "68%" }} />
+              <div
+                className="kpi-progress-fill bg-blue"
+                style={{ width: `${noiseDibuangPct ?? 0}%` }}
+              />
             </div>
           </div>
 
           <div className="kpi-item">
             <div className="kpi-label-row">
               <span className="kpi-label">Tone cadangan aturan</span>
-              <span className="kpi-val">11%</span>
+              <span className="kpi-val">
+                {toneCadanganPct != null ? `${toneCadanganPct}%` : "—"}
+              </span>
             </div>
             <div className="kpi-progress-track">
-              <div className="kpi-progress-fill bg-blue" style={{ width: "11%" }} />
+              <div
+                className="kpi-progress-fill bg-blue"
+                style={{ width: `${toneCadanganPct ?? 0}%` }}
+              />
             </div>
           </div>
 
           <div className="kpi-item">
             <div className="kpi-label-row">
               <span className="kpi-label">Perlu review manual</span>
-              <span className="kpi-val">8 berita</span>
+              <span className="kpi-val">
+                {perluReviewCount != null ? `${perluReviewCount} berita` : "—"}
+              </span>
             </div>
             <div className="kpi-progress-track">
-              <div className="kpi-progress-fill bg-red" style={{ width: "14%" }} />
+              <div
+                className="kpi-progress-fill bg-red"
+                style={{ width: `${reviewBarPct}%` }}
+              />
             </div>
           </div>
 
           <div className="kpi-item">
             <div className="kpi-label-row">
               <span className="kpi-label">Tanpa spokesperson</span>
-              <span className="kpi-val">23 berita</span>
+              <span className="kpi-val">
+                {noSpokespersonCount != null ? `${noSpokespersonCount} berita` : "—"}
+              </span>
             </div>
             <div className="kpi-progress-track">
-              <div className="kpi-progress-fill bg-muted" style={{ width: "24%" }} />
+              <div
+                className="kpi-progress-fill bg-muted"
+                style={{ width: `${noSpBarPct}%` }}
+              />
             </div>
           </div>
         </div>

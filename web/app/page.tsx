@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import Sidebar from "@/components/Sidebar";
 import BottomNav from "@/components/BottomNav";
 import DataStatusBar from "@/components/DataStatusBar";
@@ -18,7 +18,7 @@ import { SummaryData, RunHistoryItem } from "@/lib/types";
 
 const MONTHS_SHORT_ID = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agt", "Sep", "Okt", "Nov", "Des"];
 
-function formatShortDateId(iso?: string, fallback = "5 Nov 2026"): string {
+function formatShortDateId(iso?: string, fallback = "—"): string {
   if (!iso) return fallback;
   const parts = iso.slice(0, 10).split("-").map(Number);
   if (parts.length !== 3 || parts.some(Number.isNaN)) return fallback;
@@ -29,45 +29,52 @@ function formatShortDateId(iso?: string, fallback = "5 Nov 2026"): string {
 export default function DashboardPage() {
   const [activeTab, setActiveTab] = useState("overview");
   const [isRunning, setIsRunning] = useState(false);
-  const [activeRunId, setActiveRunId] = useState<number | null>(null);
+  const [activeRunInfo, setActiveRunInfo] = useState<{ id: number; currentStepName?: string | null } | null>(null);
   const [runningStepLabel, setRunningStepLabel] = useState<string | null>(null);
   const [isScrapeModalOpen, setIsScrapeModalOpen] = useState(false);
   const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
-  const [selectedDate, setSelectedDate] = useState("2026-11-05");
+  const [selectedDate, setSelectedDate] = useState("");
 
   // State data
   const [summaryData, setSummaryData] = useState<SummaryData | null>(null);
-  const [latestRun, setLatestRun] = useState<RunHistoryItem | null>(null);
+  const [runsList, setRunsList] = useState<RunHistoryItem[]>([]);
 
-  const loadSummary = () => {
-    fetch(`/data/summary.json?t=${Date.now()}`, { cache: "no-store" })
-      .then((res) => res.json())
+  // Mencegah polling /api/status membatalkan status running tepat setelah dispatch (race 1-3 detik di GitHub API)
+  const dispatchGraceUntilRef = useRef<number>(0);
+  const prevRunningRef = useRef<boolean>(false);
+
+  const loadSummary = useCallback((selectLatest = false) => {
+    fetch(`/api/data/summary.json?t=${Date.now()}`, { cache: "no-store" })
+      .then((res) => (res.ok ? res.json() : Promise.reject(new Error(`HTTP ${res.status}`))))
       .then((data: SummaryData) => {
         setSummaryData(data);
+        const latestIso = data.recent_days?.[0]?.fileDate || data.metadata?.last_updated || "";
+        if (latestIso) {
+          setSelectedDate((prev) => (selectLatest || !prev ? latestIso : prev));
+        }
       })
       .catch((err) => {
-        console.warn("Gagal memuat summary.json statis:", err);
+        console.warn("Gagal memuat summary.json:", err);
       });
 
-    fetch(`/data/runs.json?t=${Date.now()}`, { cache: "no-store" })
-      .then((res) => res.json())
+    fetch(`/api/data/runs.json?t=${Date.now()}`, { cache: "no-store" })
+      .then((res) => (res.ok ? res.json() : Promise.reject(new Error(`HTTP ${res.status}`))))
       .then((data: RunHistoryItem[]) => {
-        if (Array.isArray(data) && data.length > 0) {
-          setLatestRun(data[0]);
+        if (Array.isArray(data)) {
+          setRunsList(data);
         }
       })
       .catch(() => {});
-  };
-
-  // Muat data awal dari public/data/summary.json
-  useEffect(() => {
-    loadSummary();
   }, []);
+
+  // Muat data awal dari /api/data (sinkron dengan branch data GitHub / lokal)
+  useEffect(() => {
+    loadSummary(true);
+  }, [loadSummary]);
 
   // Polling status GitHub Actions dari /api/status
   useEffect(() => {
     let cancelled = false;
-    let wasRunning = isRunning;
 
     const checkStatus = async () => {
       try {
@@ -76,19 +83,35 @@ export default function DashboardPage() {
         const data = await res.json();
         if (cancelled || !data.ok) return;
 
-        const nowRunning = Boolean(data.isRunning);
-        setIsRunning(nowRunning);
-        setActiveRunId(data.activeRun?.id ?? null);
-        setRunningStepLabel(
-          data.activeRun?.currentStepName
-            ? `Sedang berjalan: ${data.activeRun.currentStepName}`
-            : null
-        );
+        const serverRunning = Boolean(data.isRunning);
+        const inGrace = !serverRunning && Date.now() < dispatchGraceUntilRef.current;
 
-        if (wasRunning && !nowRunning) {
-          loadSummary();
+        if (serverRunning) {
+          dispatchGraceUntilRef.current = 0;
+          setIsRunning(true);
+          setActiveRunInfo(
+            data.activeRun
+              ? { id: data.activeRun.id, currentStepName: data.activeRun.currentStepName }
+              : null
+          );
+          setRunningStepLabel(
+            data.activeRun?.currentStepName
+              ? `Sedang berjalan: ${data.activeRun.currentStepName}`
+              : "Sedang berjalan: Menunggu runner GitHub Actions"
+          );
+          prevRunningRef.current = true;
+        } else if (inGrace) {
+          prevRunningRef.current = true;
+        } else {
+          const wasRunning = prevRunningRef.current;
+          setIsRunning(false);
+          setActiveRunInfo(null);
+          setRunningStepLabel(null);
+          prevRunningRef.current = false;
+          if (wasRunning) {
+            loadSummary(true);
+          }
         }
-        wasRunning = nowRunning;
       } catch {
         // Abaikan error jaringan sementara
       }
@@ -101,7 +124,7 @@ export default function DashboardPage() {
       cancelled = true;
       clearInterval(timer);
     };
-  }, [isRunning]);
+  }, [isRunning, loadSummary]);
 
   const handleStartScraping = async (
     mode: "auto" | "manual",
@@ -109,6 +132,8 @@ export default function DashboardPage() {
     startDate?: string,
     endDate?: string
   ) => {
+    dispatchGraceUntilRef.current = Date.now() + 12000;
+    prevRunningRef.current = true;
     setIsRunning(true);
     setRunningStepLabel("Memicu workflow di GitHub Actions...");
     try {
@@ -119,42 +144,66 @@ export default function DashboardPage() {
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok || data.ok === false) {
+        dispatchGraceUntilRef.current = 0;
+        prevRunningRef.current = false;
         setIsRunning(false);
         setRunningStepLabel(null);
       }
     } catch {
-      // Biarkan state simulasi lokal bila offline
+      dispatchGraceUntilRef.current = 0;
+      prevRunningRef.current = false;
+      setIsRunning(false);
+      setRunningStepLabel(null);
     }
   };
 
   const handleCancelScraping = async () => {
-    if (activeRunId) {
+    if (activeRunInfo?.id) {
       try {
         await fetch("/api/status", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ action: "cancel", runId: activeRunId }),
+          body: JSON.stringify({ action: "cancel", runId: activeRunInfo.id }),
         });
       } catch {
         // Abaikan jika gagal membatalkan
       }
     }
+    dispatchGraceUntilRef.current = 0;
+    prevRunningRef.current = false;
     setIsRunning(false);
-    setActiveRunId(null);
+    setActiveRunInfo(null);
     setRunningStepLabel(null);
   };
 
+  const latestRun = runsList[0] || null;
   const latestDay = summaryData?.recent_days?.[0];
-  const targetDateStr = formatShortDateId(
-    latestDay?.fileDate || summaryData?.metadata?.last_updated,
-    "5 Nov 2026"
-  );
+  const latestDateIso = latestDay?.fileDate || summaryData?.metadata?.last_updated || "";
+  const targetDateStr = formatShortDateId(latestDateIso, "—");
   const lastUpdatedStr = latestRun?.waktu_display
     ? `${latestRun.waktu_display} WIB`
-    : "6 Nov, 07.12 WIB";
-  const latestCount = latestDay?.count ?? 148;
-  const runCountStr = `${latestCount.toLocaleString("id-ID")} berita`;
-  const totalArchiveStr = `${(summaryData?.metadata?.total_articles ?? 4127).toLocaleString("id-ID")} berita`;
+    : summaryData
+    ? formatShortDateId(latestDateIso, "—")
+    : "Memuat...";
+  const latestCount =
+    latestDay?.count ??
+    (latestDateIso ? summaryData?.metadata?.calendar_counts?.[latestDateIso] ?? 0 : 0);
+  const runCountStr = summaryData ? `${latestCount.toLocaleString("id-ID")} berita` : "—";
+  const totalArchiveStr = summaryData
+    ? `${(summaryData.metadata?.total_articles ?? 0).toLocaleString("id-ID")} berita`
+    : "—";
+
+  const effectiveDate = selectedDate || latestDateIso;
+  const selectedDay = summaryData?.recent_days?.find((d) => d.fileDate === effectiveDate);
+  const ringkasanDateStr = formatShortDateId(effectiveDate, targetDateStr);
+  const ringkasanCount =
+    selectedDay?.count ??
+    (effectiveDate ? summaryData?.metadata?.calendar_counts?.[effectiveDate] ?? 0 : 0);
+  const ringkasanPos = selectedDay?.pos ?? 0;
+  const ringkasanNet = selectedDay?.net ?? 0;
+  const ringkasanNeg = selectedDay?.neg ?? 0;
+  const isViewingLatest = !effectiveDate || effectiveDate === latestDateIso;
+  const runStats = isViewingLatest ? latestRun?.stats : undefined;
 
   return (
     <div className="dashboard-outer">
@@ -180,13 +229,23 @@ export default function DashboardPage() {
               />
 
               {/* Hero Visual Pipeline 8 Tahap */}
-              <PipelineVisualizer isRunning={isRunning} />
+              <PipelineVisualizer
+                isRunning={isRunning}
+                activeRun={activeRunInfo}
+                latestRun={latestRun}
+                targetDateStr={targetDateStr}
+                latestCount={latestCount}
+              />
 
               {/* Baris Dua Kartu Bawah: Unduh Harian & Riwayat Run */}
               <div className="bottom-cards-row">
-                <UnduhHarianCard onOpenDownloadModal={() => setIsDownloadModalOpen(true)} />
+                <UnduhHarianCard
+                  onOpenDownloadModal={() => setIsDownloadModalOpen(true)}
+                  recentDays={summaryData?.recent_days || []}
+                />
                 <RiwayatRunCard
                   isRunning={isRunning}
+                  runs={runsList}
                   onViewAll={() => setActiveTab("riwayat")}
                 />
               </div>
@@ -196,15 +255,21 @@ export default function DashboardPage() {
             <aside className="right-column">
               <RingkasanCard
                 isRunning={isRunning}
-                dateStr={targetDateStr}
-                count={latestCount}
-                posCount={latestDay?.pos ?? 68}
-                netCount={latestDay?.net ?? 79}
-                negCount={latestDay?.neg ?? 1}
-                lastUpdatedLabel={latestRun?.waktu_display || "06 Nov, 07.12"}
+                dateStr={ringkasanDateStr}
+                count={ringkasanCount}
+                posCount={ringkasanPos}
+                netCount={ringkasanNet}
+                negCount={ringkasanNeg}
+                lastUpdatedLabel={latestRun?.waktu_display || "—"}
+                noiseDibuangPct={runStats?.noise_dibuang_pct ?? null}
+                toneCadanganPct={runStats?.tone_cadangan_pct ?? null}
+                perluReviewCount={runStats?.perlu_review ?? null}
+                noSpokespersonCount={runStats?.tanpa_spokesperson ?? null}
               />
 
               <KalenderKompakCard
+                summaryData={summaryData}
+                selectedDate={effectiveDate}
                 onSelectDate={(date) => setSelectedDate(date)}
                 onViewNewsTab={() => setActiveTab("berita")}
               />
@@ -224,7 +289,10 @@ export default function DashboardPage() {
 
         {/* Tampilan Tab Unduh Data Lengkap */}
         {activeTab === "unduh" && (
-          <HalamanUnduhData onOpenDownloadModal={() => setIsDownloadModalOpen(true)} />
+          <HalamanUnduhData
+            onOpenDownloadModal={() => setIsDownloadModalOpen(true)}
+            isRunning={isRunning}
+          />
         )}
       </div>
 
@@ -242,6 +310,7 @@ export default function DashboardPage() {
       <ModalUnduh
         isOpen={isDownloadModalOpen}
         onClose={() => setIsDownloadModalOpen(false)}
+        summaryData={summaryData}
       />
     </div>
   );

@@ -21,23 +21,32 @@ _DEFAULT_BROWSER_HEADERS = {
 
 try:
     import googlenewsdecoder  # type: ignore
-    if hasattr(googlenewsdecoder, "new_decoderv1") and hasattr(googlenewsdecoder.new_decoderv1, "__globals__"):
-        g_req = googlenewsdecoder.new_decoderv1.__globals__.get("requests")
-        if g_req and not getattr(g_req, "_patched_timeout", False):
-            _orig_get = g_req.get
-            _orig_post = g_req.post
-            def _safe_get(*a, **kw):
-                kw.setdefault("timeout", 6)
-                kw.setdefault("headers", _DEFAULT_BROWSER_HEADERS)
-                return _orig_get(*a, **kw)
-            def _safe_post(*a, **kw):
-                kw.setdefault("timeout", 6)
-                return _orig_post(*a, **kw)
-            g_req.get = _safe_get
-            g_req.post = _safe_post
-            g_req._patched_timeout = True
+    _decoder_fn = (
+        getattr(googlenewsdecoder, "gnewsdecoder", None)
+        or getattr(googlenewsdecoder, "new_decoderv1", None)
+    )
+    _req_holder = getattr(
+        getattr(getattr(googlenewsdecoder, "GoogleDecoder", None), "get_decoding_params", None),
+        "__globals__",
+        None,
+    ) or getattr(_decoder_fn, "__globals__", {})
+    g_req = _req_holder.get("requests") if isinstance(_req_holder, dict) else None
+    if g_req and not getattr(g_req, "_patched_timeout", False):
+        _orig_get = g_req.get
+        _orig_post = g_req.post
+        def _safe_get(*a, **kw):
+            kw.setdefault("timeout", 6)
+            kw.setdefault("headers", _DEFAULT_BROWSER_HEADERS)
+            return _orig_get(*a, **kw)
+        def _safe_post(*a, **kw):
+            kw.setdefault("timeout", 6)
+            return _orig_post(*a, **kw)
+        g_req.get = _safe_get
+        g_req.post = _safe_post
+        g_req._patched_timeout = True
 except ImportError:
     googlenewsdecoder = None
+    _decoder_fn = None
 
 try:
     from fetch_news import GoogleCaptchaBlockedError
@@ -59,7 +68,7 @@ def resolve_article_url(url: str, min_interval: float = 0.4, max_retries: int = 
     menjadi URL asli situs penerbit secara thread-safe, cepat, dan anti-hanging.
     """
     global _LAST_DECODE_TIME, _LOGGED_DECODE_ERROR
-    if not url or "news.google.com" not in url or googlenewsdecoder is None:
+    if not url or "news.google.com" not in url or _decoder_fn is None:
         return url
 
     with _DECODER_LOCK:
@@ -76,9 +85,9 @@ def resolve_article_url(url: str, min_interval: float = 0.4, max_retries: int = 
             _LAST_DECODE_TIME = time.time()
 
         try:
-            res = googlenewsdecoder.new_decoderv1(url, interval=0)
+            res = _decoder_fn(url)
             if isinstance(res, dict):
-                if res.get("status") and res.get("decoded_url"):
+                if (res.get("status") or res.get("success")) and res.get("decoded_url"):
                     decoded = res["decoded_url"]
                     break
                 msg = str(res.get("message", ""))
@@ -112,7 +121,7 @@ def check_google_news_access(test_url: str | None = None) -> tuple[bool, str]:
     Returns:
         (is_accessible: bool, message: str)
     """
-    if googlenewsdecoder is None:
+    if _decoder_fn is None:
         return False, "Modul googlenewsdecoder tidak tersedia."
 
     if not test_url:
@@ -126,9 +135,9 @@ def check_google_news_access(test_url: str | None = None) -> tuple[bool, str]:
             return False, f"Gagal membaca RSS feed Google: {e}"
 
     try:
-        res = googlenewsdecoder.new_decoderv1(test_url)
+        res = _decoder_fn(test_url)
         if isinstance(res, dict):
-            if res.get("status") and res.get("decoded_url"):
+            if (res.get("status") or res.get("success")) and res.get("decoded_url"):
                 dec = res["decoded_url"]
                 if "news.google.com" not in dec:
                     return True, f"Akses Google News bersih dan lancar. Target: {dec[:70]}"

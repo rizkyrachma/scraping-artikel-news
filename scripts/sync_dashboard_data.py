@@ -313,6 +313,31 @@ def merge_all_data_excel(src_xlsx: Path, dest_xlsx: Path) -> None:
     shutil.move(str(tmp_xlsx), str(dest_xlsx))
 
 
+def build_run_stats(new_articles: list[dict], folder: Path) -> dict | None:
+    if not new_articles:
+        return None
+    stats: dict = {
+        "final": len(new_articles),
+        "perlu_review": sum(1 for a in new_articles if a.get("has_review")),
+        "tanpa_spokesperson": sum(1 for a in new_articles if not (a.get("spokesperson") or "").strip()),
+    }
+    prog_json = load_json(folder / "progress.json", {})
+    reports = prog_json.get("batch_reports") or []
+    if reports:
+        mentah = sum(int(r.get("total_initial", 0) or 0) for r in reports)
+        dropped_tgl = sum(int(r.get("total_date_dropped", 0) or 0) for r in reports)
+        unik_raw = sum(int(r.get("total_final_valid", 0) or 0) for r in reports)
+        prog_unf = load_json(folder / "progress_unfiltered.json", {})
+        unik = len(prog_unf.get("articles") or []) or unik_raw
+        stats.update({
+            "mentah": mentah,
+            "filter_tgl": max(0, mentah - dropped_tgl),
+            "unik": unik,
+            "noise_dibuang_pct": round(((mentah - len(new_articles)) / mentah) * 100) if mentah > 0 else 0,
+        })
+    return stats
+
+
 def sync_after_run(
     start_date: str,
     end_date: str,
@@ -337,6 +362,7 @@ def sync_after_run(
         rentang_str = f"{format_short_date_indo(start_date)} – {format_short_date_indo(end_date)}"
 
     new_articles: list[dict] = []
+    run_stats: dict | None = None
     if status == "Berhasil":
         d1 = datetime.date.fromisoformat(start_date)
         d2 = datetime.date.fromisoformat(end_date)
@@ -364,6 +390,8 @@ def sync_after_run(
             if WEB_FILES_DIR.exists():
                 shutil.copy2(all_data_dest, WEB_FILES_DIR / "Media_Monitoring_Agro_Semua_Data.xlsx")
 
+            run_stats = build_run_stats(new_articles, folder)
+
     # Merge ke articles_all.json jika ada artikel baru
     if new_articles:
         existing_articles = load_json(DATA_EXPORT_DIR / "articles_all.json", [])
@@ -388,6 +416,8 @@ def sync_after_run(
         "pemicu": trigger,
         "rentang_data": rentang_str if status == "Berhasil" else "-",
     }
+    if run_stats:
+        run_entry["stats"] = run_stats
     if note:
         run_entry["catatan"] = note
     if log_url:
@@ -444,6 +474,11 @@ def run_self_check():
         merge_all_data_excel(p_new, p_old)
         df_res = pd.read_excel(p_old, sheet_name="Berita")
         assert len(df_res) == 3, f"Harusnya 3 baris Excel, dapat {len(df_res)}"
+
+        with open(Path(tmpd) / "progress.json", "w", encoding="utf-8") as f:
+            json.dump({"batch_reports": [{"total_initial": 100, "total_date_dropped": 40, "total_final_valid": 20}]}, f)
+        rs = build_run_stats([{"has_review": True, "spokesperson": ""}, {"has_review": False, "spokesperson": "Budi"}], Path(tmpd))
+        assert rs and rs["mentah"] == 100 and rs["filter_tgl"] == 60 and rs["unik"] == 20 and rs["final"] == 2 and rs["perlu_review"] == 1 and rs["tanpa_spokesperson"] == 1 and rs["noise_dibuang_pct"] == 98
 
     print("[Self-Check] OK: Semua fungsi sync_dashboard_data terverifikasi.")
 

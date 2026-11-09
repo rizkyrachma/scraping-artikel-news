@@ -52,10 +52,10 @@ export default function HalamanBerita({ summaryData }: HalamanBeritaProps) {
     return () => clearTimeout(timer);
   }, [searchQuery]);
 
-  // Muat data artikel lengkap (articles_all.json)
+  // Muat data artikel lengkap (articles_all.json via /api/data untuk sinkronisasi live)
   useEffect(() => {
     setIsLoading(true);
-    fetch("/data/articles_all.json")
+    fetch(`/api/data/articles_all.json?t=${Date.now()}`, { cache: "no-store" })
       .then((res) => {
         if (!res.ok) throw new Error("Gagal mengambil articles_all.json");
         return res.json();
@@ -254,7 +254,7 @@ export default function HalamanBerita({ summaryData }: HalamanBeritaProps) {
       {/* 1. Header Kartu Halaman Berita */}
       <PageHeaderCard
         title="Arsip Berita Industri Agro"
-        description={`Pencarian, pemfilteran komoditas, dan pemantauan sentimen dari ${formatNumberIndo(articles.length || 4127)} berita sektor agro terverifikasi.`}
+        description={`Pencarian, pemfilteran komoditas, dan pemantauan sentimen dari ${formatNumberIndo(articles.length || summaryData?.metadata?.total_articles || 0)} berita sektor agro terverifikasi.`}
       />
 
       {/* 2. Kartu Utama Halaman Berita */}

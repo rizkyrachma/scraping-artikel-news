@@ -21,10 +21,10 @@ export default function DataStatusBar({
   onOpenDownloadModal,
   onCancelScraping,
   runningStepLabel,
-  lastUpdatedStr = "6 Nov, 07.12 WIB",
-  targetDateStr = "5 Nov 2026",
-  runCountStr = "158 berita",
-  totalArchiveStr = "4.127 berita",
+  lastUpdatedStr = "—",
+  targetDateStr = "—",
+  runCountStr = "—",
+  totalArchiveStr = "—",
 }: DataStatusBarProps) {
   return (
     <div className={`data-status-bar panel-primary ${isRunning ? "running" : ""}`}>
@@ -44,7 +44,7 @@ export default function DataStatusBar({
           </div>
           <div className="status-value highlight">
             {isRunning
-              ? runningStepLabel || "Sedang mengambil data (Tahap 5: 62%)"
+              ? runningStepLabel || "Sedang berjalan: Menunggu runner GitHub Actions"
               : lastUpdatedStr}
           </div>
         </div>

@@ -25,23 +25,22 @@ export default function HalamanRiwayatRun({ isRunning }: HalamanRiwayatRunProps)
   const [statusFilter, setStatusFilter] = useState<"Semua" | "Berhasil" | "Gagal">("Semua");
   const [searchDate, setSearchDate] = useState("");
 
-  // Muat data dari /data/runs.json
+  // Muat data live dari /api/data/runs.json setiap mount atau status isRunning berubah
   useEffect(() => {
-    setIsLoading(true);
-    fetch("/data/runs.json")
+    fetch(`/api/data/runs.json?t=${Date.now()}`, { cache: "no-store" })
       .then((res) => {
         if (!res.ok) throw new Error("Gagal mengambil runs.json");
         return res.json();
       })
       .then((data: RunHistoryItem[]) => {
-        setRuns(data);
+        if (Array.isArray(data)) setRuns(data);
         setIsLoading(false);
       })
       .catch((err) => {
         console.warn("Gagal memuat runs.json:", err);
         setIsLoading(false);
       });
-  }, []);
+  }, [isRunning]);
 
   // Filter runs
   const filteredRuns = useMemo(() => {
@@ -76,8 +75,8 @@ export default function HalamanRiwayatRun({ isRunning }: HalamanRiwayatRunProps)
         countedDur += 1;
       }
     });
-    const avgSec = countedDur > 0 ? Math.round(totalSec / countedDur) : 230;
-    const avgDurStr = `${Math.floor(avgSec / 60)}m ${avgSec % 60}s`;
+    const avgSec = countedDur > 0 ? Math.round(totalSec / countedDur) : 0;
+    const avgDurStr = countedDur > 0 ? `${Math.floor(avgSec / 60)}m ${avgSec % 60}s` : "—";
 
     const lastRun = runs[0] || null;
 
@@ -175,12 +174,19 @@ export default function HalamanRiwayatRun({ isRunning }: HalamanRiwayatRunProps)
             </div>
             <div className="kpi-mini-val-row">
               <span className="kpi-mini-val text-sm font-bold">
-                {stats.lastRun?.waktu_display || "06 Nov, 07.12"} <span className="kpi-wib">WIB</span>
+                {stats.lastRun?.waktu_display ? (
+                  <>
+                    {stats.lastRun.waktu_display} <span className="kpi-wib">WIB</span>
+                  </>
+                ) : (
+                  "—"
+                )}
               </span>
-              <span className="badge-status-selesai text-xs py-0.5">
-                <CheckCircle size={11} strokeWidth={2.5} />
-                <span>Berhasil</span>
-              </span>
+              {stats.lastRun ? (
+                statusBadge(isRunning ? "Berjalan" : stats.lastRun.status)
+              ) : (
+                <span className="text-xs text-slate-400">—</span>
+              )}
             </div>
           </div>
         </div>

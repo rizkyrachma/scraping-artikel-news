@@ -1,79 +1,141 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { SummaryData } from "@/lib/types";
 
 interface KalenderProps {
+  summaryData: SummaryData | null;
+  selectedDate: string;
   onSelectDate: (date: string) => void;
   onViewNewsTab: () => void;
 }
 
-const FALLBACK_NEWS = [
-  { mediaDate: "Antaranews • 5 Nov", tone: "Positif", title: "Kemenperin Pacu Hilirisasi Industri Sawit Nasional" },
-  { mediaDate: "Kompas • 5 Nov", tone: "Positif", title: "Implementasi B40 Perkuat Kemandirian Energi Agro" },
-  { mediaDate: "Detik • 4 Nov", tone: "Netral", title: "Kesiapan Pasokan Tebu Musim Giling Pabrik Gula" },
-  { mediaDate: "Bisnis Indonesia • 4 Nov", tone: "Positif", title: "Optimisme Ekspor Minyak Atsiri dan Oleokimia" },
-  { mediaDate: "CNN Indonesia • 2 Nov", tone: "Negatif", title: "Investigasi Pelepasan Gas Pabrik Kertas Karawang" },
-  { mediaDate: "Investor Daily • 2 Nov", tone: "Positif", title: "Percepatan Sertifikasi Halal Mamin Olahan Ekspor" },
-  { mediaDate: "Kontan • 1 Nov", tone: "Netral", title: "Stabilitas Pasokan Gandum dan Tepung Industri" },
-  { mediaDate: "Republika • 31 Okt", tone: "Positif", title: "Penguatan Industri Pengolahan Kakao dan Cokelat" },
+const MONTHS_FULL_ID = [
+  "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+  "Juli", "Agustus", "September", "Oktober", "November", "Desember",
 ];
 
-export default function KalenderKompakCard({ onSelectDate, onViewNewsTab }: KalenderProps) {
-  const [selectedDay, setSelectedDay] = useState(5);
-  const [newsList, setNewsList] = useState(FALLBACK_NEWS);
+function formatMiniDate(iso?: string): string {
+  if (!iso || iso.length < 10) return "Terbaru";
+  const m = Number(iso.slice(5, 7));
+  const d = Number(iso.slice(8, 10));
+  const shortM = ["", "Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agt", "Sep", "Okt", "Nov", "Des"];
+  return `${d} ${shortM[m] || ""}`;
+}
+
+export default function KalenderKompakCard({
+  summaryData,
+  selectedDate,
+  onSelectDate,
+  onViewNewsTab,
+}: KalenderProps) {
+  const latestDate = summaryData?.metadata?.last_updated || "";
+  const [viewYearMonth, setViewYearMonth] = useState<string>("2026-11");
 
   useEffect(() => {
-    fetch("/data/summary.json")
-      .then((res) => res.json())
-      .then((data) => {
-        if (data && Array.isArray(data.recent_articles) && data.recent_articles.length > 0) {
-          const mapped = data.recent_articles.slice(0, 10).map((a: any) => ({
-            mediaDate: `${a.media || "Media"} • ${a.date ? a.date.slice(5) : "Terbaru"}`,
-            tone: a.tone || "Netral",
-            title: a.title || "Berita Industri Agro",
-          }));
-          setNewsList(mapped);
-        }
-      })
-      .catch(() => {});
-  }, []);
+    if (selectedDate && selectedDate.length >= 7) {
+      setViewYearMonth(selectedDate.slice(0, 7));
+    } else if (latestDate && latestDate.length >= 7) {
+      setViewYearMonth(latestDate.slice(0, 7));
+    }
+  }, [selectedDate, latestDate]);
+
+  const calendarCounts = useMemo(
+    () => summaryData?.metadata?.calendar_counts || {},
+    [summaryData]
+  );
+
+  const [viewYear, viewMonth] = useMemo(() => {
+    const parts = viewYearMonth.split("-").map(Number);
+    if (parts.length === 2 && !Number.isNaN(parts[0]) && !Number.isNaN(parts[1])) {
+      return [parts[0], parts[1]];
+    }
+    return [2026, 11];
+  }, [viewYearMonth]);
+
+  const monthTitle = `${MONTHS_FULL_ID[viewMonth - 1] || "Bulan"} ${viewYear}`;
+
+  const shiftMonth = (delta: number) => {
+    const dt = new Date(Date.UTC(viewYear, viewMonth - 1 + delta, 1));
+    setViewYearMonth(`${dt.getUTCFullYear()}-${String(dt.getUTCMonth() + 1).padStart(2, "0")}`);
+  };
+
+  const monthGrid = useMemo(() => {
+    const firstDayUtc = new Date(Date.UTC(viewYear, viewMonth - 1, 1));
+    const startOffset = (firstDayUtc.getUTCDay() + 6) % 7; // Senin = 0 .. Minggu = 6
+    const daysInMonth = new Date(Date.UTC(viewYear, viewMonth, 0)).getUTCDate();
+    const totalCells = startOffset + daysInMonth <= 35 ? 35 : 42;
+
+    const weeks: Array<Array<{ iso: string; day: number; isOther: boolean; hasData: boolean }>> = [];
+    let currentWeek: Array<{ iso: string; day: number; isOther: boolean; hasData: boolean }> = [];
+
+    for (let i = 0; i < totalCells; i++) {
+      const dt = new Date(Date.UTC(viewYear, viewMonth - 1, 1 - startOffset + i));
+      const y = dt.getUTCFullYear();
+      const m = dt.getUTCMonth() + 1;
+      const d = dt.getUTCDate();
+      const iso = `${y}-${String(m).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
+      const isOther = y !== viewYear || m !== viewMonth;
+      const hasData = !isOther && (calendarCounts[iso] || 0) > 0;
+      currentWeek.push({ iso, day: d, isOther, hasData });
+      if (currentWeek.length === 7) {
+        weeks.push(currentWeek);
+        currentWeek = [];
+      }
+    }
+    return weeks;
+  }, [viewYear, viewMonth, calendarCounts]);
+
+  const newsList = useMemo(() => {
+    const allRecent = summaryData?.recent_articles || [];
+    const forSelected = allRecent.filter((a) => a.date === selectedDate);
+    const chosen = forSelected.length > 0 ? forSelected : allRecent;
+    return chosen.slice(0, 10).map((a) => ({
+      mediaDate: `${a.media || "Media"} • ${formatMiniDate(a.date)}`,
+      tone: a.tone || "Netral",
+      title: a.title || "Berita Industri Agro",
+    }));
+  }, [summaryData, selectedDate]);
 
   const daysHeader = ["Sen", "Sel", "Rab", "Kam", "Jum", "Sab", "Min"];
-
-  // Grid November 2026 (6 minggu)
-  const monthGrid = [
-    [["26", true, false, 26], ["27", true, false, 27], ["28", true, false, 28], ["29", true, false, 29], ["30", true, true, 30], ["31", true, true, 31], ["1", false, true, 1]],
-    [["2", false, true, 2], ["3", false, true, 3], ["4", false, true, 4], ["5", false, true, 5], ["6", false, false, 6], ["7", false, false, 7], ["8", false, false, 8]],
-    [["9", false, false, 9], ["10", false, false, 10], ["11", false, false, 11], ["12", false, false, 12], ["13", false, false, 13], ["14", false, false, 14], ["15", false, false, 15]],
-    [["16", false, false, 16], ["17", false, false, 17], ["18", false, false, 18], ["19", false, false, 19], ["20", false, false, 20], ["21", false, false, 21], ["22", false, false, 22]],
-    [["23", false, false, 23], ["24", false, false, 24], ["25", false, false, 25], ["26", false, false, 26], ["27", false, false, 27], ["28", false, false, 28], ["29", false, false, 29]],
-    [["30", false, false, 30], ["1", true, false, 1], ["2", true, false, 2], ["3", true, false, 3], ["4", true, false, 4], ["5", true, false, 5], ["6", true, false, 6]],
-  ];
-
-  const handleDayClick = (dayNum: number, isOther: boolean, hasData: boolean) => {
-    if (!isOther && hasData) {
-      setSelectedDay(dayNum);
-      const dateStr = `2026-11-${String(dayNum).padStart(2, "0")}`;
-      onSelectDate(dateStr);
-    }
-  };
 
   return (
     <>
       {/* 1. Kalender Mini (Panel Sekunder) */}
       <div className="card-box card-kalender panel-secondary">
         <div className="card-header-row">
-          <h3 className="card-title">November 2026</h3>
-          <button
-            type="button"
-            onClick={() => {
-              setSelectedDay(5);
-              onSelectDate("2026-11-05");
-            }}
-            className="pill-dark-btn"
-          >
-            Ke data terbaru
-          </button>
+          <div className="flex items-center gap-1">
+            <button
+              type="button"
+              onClick={() => shiftMonth(-1)}
+              className="p-0.5 rounded hover:bg-slate-100 text-slate-600"
+              aria-label="Bulan sebelumnya"
+            >
+              <ChevronLeft size={14} />
+            </button>
+            <h3 className="card-title">{monthTitle}</h3>
+            <button
+              type="button"
+              onClick={() => shiftMonth(1)}
+              className="p-0.5 rounded hover:bg-slate-100 text-slate-600"
+              aria-label="Bulan berikutnya"
+            >
+              <ChevronRight size={14} />
+            </button>
+          </div>
+          {latestDate && (
+            <button
+              type="button"
+              onClick={() => {
+                setViewYearMonth(latestDate.slice(0, 7));
+                onSelectDate(latestDate);
+              }}
+              className="pill-dark-btn"
+            >
+              Ke data terbaru
+            </button>
+          )}
         </div>
 
         <div className="cal-sub-label">Pilih tanggal untuk melihat ringkasan</div>
@@ -90,23 +152,20 @@ export default function KalenderKompakCard({ onSelectDate, onViewNewsTab }: Kale
           <div className="cal-weeks-body">
             {monthGrid.map((week, wIdx) => (
               <div key={wIdx} className="cal-week-row">
-                {week.map(([dStr, isOther, hasData, dayNum], dIdx) => {
-                  const isSelected = !isOther && dayNum === selectedDay;
-
+                {week.map((cell) => {
+                  const isSelected = !cell.isOther && cell.iso === selectedDate;
                   return (
                     <button
-                      key={dIdx}
+                      key={cell.iso}
                       type="button"
-                      disabled={Boolean(isOther) || !Boolean(hasData)}
-                      onClick={() =>
-                        handleDayClick(dayNum as number, Boolean(isOther), Boolean(hasData))
-                      }
+                      disabled={cell.isOther || !cell.hasData}
+                      onClick={() => onSelectDate(cell.iso)}
                       className={`cal-day-cell ${isSelected ? "selected" : ""} ${
-                        Boolean(isOther) ? "other-month" : ""
-                      } ${Boolean(hasData) ? "has-data" : ""}`}
+                        cell.isOther ? "other-month" : ""
+                      } ${cell.hasData ? "has-data" : ""}`}
                     >
-                      <span className="cal-day-num">{dStr}</span>
-                      {Boolean(hasData) && !isSelected && <span className="cal-data-dot" />}
+                      <span className="cal-day-num">{cell.day}</span>
+                      {cell.hasData && !isSelected && <span className="cal-data-dot" />}
                     </button>
                   );
                 })}
@@ -126,28 +185,32 @@ export default function KalenderKompakCard({ onSelectDate, onViewNewsTab }: Kale
         </div>
 
         <div className="cuplikan-list custom-scrollbar">
-          {newsList.map((item, idx) => (
-            <div key={idx} className="cuplikan-item">
-              <div className="cuplikan-meta">
-                <span className="cuplikan-source">{item.mediaDate}</span>
-                <span
-                  className={`badge-tone ${
-                    item.tone === "Positif"
-                      ? "badge-tone-pos"
-                      : item.tone === "Negatif"
-                      ? "badge-tone-neg"
-                      : "badge-tone-net"
-                  }`}
-                >
-                  {item.tone}
-                </span>
+          {newsList.length === 0 ? (
+            <div className="p-3 text-xs text-slate-400 text-center">Memuat cuplikan berita...</div>
+          ) : (
+            newsList.map((item, idx) => (
+              <div key={idx} className="cuplikan-item">
+                <div className="cuplikan-meta">
+                  <span className="cuplikan-source">{item.mediaDate}</span>
+                  <span
+                    className={`badge-tone ${
+                      item.tone === "Positif"
+                        ? "badge-tone-pos"
+                        : item.tone === "Negatif"
+                        ? "badge-tone-neg"
+                        : "badge-tone-net"
+                    }`}
+                  >
+                    {item.tone}
+                  </span>
+                </div>
+                <div className="cuplikan-headline" title={item.title}>
+                  {item.title}
+                </div>
+                {idx < newsList.length - 1 && <div className="cuplikan-divider" />}
               </div>
-              <div className="cuplikan-headline" title={item.title}>
-                {item.title}
-              </div>
-              {idx < newsList.length - 1 && <div className="cuplikan-divider" />}
-            </div>
-          ))}
+            ))
+          )}
         </div>
       </div>
     </>

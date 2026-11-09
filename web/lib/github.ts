@@ -48,3 +48,39 @@ export function buildGitHubHeaders(token: string | null): Record<string, string>
   }
   return headers;
 }
+
+export async function fetchRemoteDataFile(repoRelativePath: string): Promise<Response | null> {
+  const { repo, token } = getGitHubConfig();
+  let ref = "data";
+
+  // Pakai SHA commit terbaru jika token tersedia agar melewati cache CDN raw.githubusercontent.com
+  if (token) {
+    try {
+      const commitRes = await fetch(`https://api.github.com/repos/${repo}/commits/data`, {
+        headers: buildGitHubHeaders(token),
+        cache: "no-store",
+        signal: AbortSignal.timeout(4000),
+      });
+      if (commitRes.ok) {
+        const commitJson = await commitRes.json();
+        if (commitJson?.sha) ref = commitJson.sha;
+      }
+    } catch {
+      // Abaikan dan pakai ref "data" langsung
+    }
+  }
+
+  const rawUrl = `https://raw.githubusercontent.com/${repo}/${ref}/${repoRelativePath}${
+    ref === "data" ? `?t=${Date.now()}` : ""
+  }`;
+  try {
+    const res = await fetch(rawUrl, {
+      headers: token ? { Authorization: `Bearer ${token}`, "Cache-Control": "no-cache" } : { "Cache-Control": "no-cache" },
+      cache: "no-store",
+      signal: AbortSignal.timeout(8000),
+    });
+    return res.ok ? res : null;
+  } catch {
+    return null;
+  }
+}

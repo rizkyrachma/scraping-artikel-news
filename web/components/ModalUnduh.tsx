@@ -1,24 +1,75 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Download, X, Calendar, CheckCircle2 } from "lucide-react";
+import { SummaryData } from "@/lib/types";
 
 interface ModalUnduhProps {
   isOpen: boolean;
   onClose: () => void;
+  summaryData?: SummaryData | null;
 }
 
-export default function ModalUnduh({ isOpen, onClose }: ModalUnduhProps) {
-  const [format, setFormat] = useState<"zip" | "merged">("zip");
-  const [startDate, setStartDate] = useState("2026-11-01");
-  const [endDate, setEndDate] = useState("2026-11-02");
+const MONTHS_SHORT = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agt", "Sep", "Okt", "Nov", "Des"];
+
+function fmtShort(iso: string): string {
+  const parts = iso.split("-").map(Number);
+  if (parts.length !== 3 || parts.some(Number.isNaN)) return iso;
+  return `${parts[2]} ${MONTHS_SHORT[parts[1] - 1] || ""} ${parts[0]}`;
+}
+
+export default function ModalUnduh({ isOpen, onClose, summaryData }: ModalUnduhProps) {
+  const latestDate = summaryData?.metadata?.last_updated || "";
+  const [format, setFormat] = useState<"daily" | "merged">("daily");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+
+  useEffect(() => {
+    if (latestDate && !startDate && !endDate) {
+      setStartDate(latestDate);
+      setEndDate(latestDate);
+    }
+  }, [latestDate, startDate, endDate]);
+
+  const rangeInfo = useMemo(() => {
+    const counts = summaryData?.metadata?.calendar_counts || {};
+    if (!startDate || !endDate) {
+      return { daysWithData: 0, totalArticles: 0, totalDays: 0 };
+    }
+    const d1 = new Date(`${startDate}T00:00:00Z`);
+    const d2 = new Date(`${endDate}T00:00:00Z`);
+    if (Number.isNaN(d1.getTime()) || Number.isNaN(d2.getTime()) || d1 > d2) {
+      return { daysWithData: 0, totalArticles: 0, totalDays: 0 };
+    }
+    let daysWithData = 0;
+    let totalArticles = 0;
+    let totalDays = 0;
+    const cur = new Date(d1);
+    while (cur <= d2 && totalDays < 365) {
+      const iso = cur.toISOString().slice(0, 10);
+      const cnt = counts[iso] || 0;
+      if (cnt > 0) {
+        daysWithData += 1;
+        totalArticles += cnt;
+      }
+      totalDays += 1;
+      cur.setUTCDate(cur.getUTCDate() + 1);
+    }
+    return { daysWithData, totalArticles, totalDays };
+  }, [startDate, endDate, summaryData]);
 
   if (!isOpen) return null;
 
+  const isSingleDay = Boolean(startDate && startDate === endDate);
+
   const handleDownload = () => {
+    const targetFile =
+      format === "daily" && isSingleDay
+        ? `Media_Monitoring_Agro_${startDate}.xlsx`
+        : "Media_Monitoring_Agro_Semua_Data.xlsx";
     const link = document.createElement("a");
-    link.href = `/files/Media_Monitoring_Agro_Semua_Data.xlsx`;
-    link.download = `Media_Monitoring_Agro_${startDate}_sd_${endDate}_ringkasan.xlsx`;
+    link.href = `/api/files/${targetFile}`;
+    link.download = targetFile;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -32,7 +83,7 @@ export default function ModalUnduh({ isOpen, onClose }: ModalUnduhProps) {
         <div className="modal-header">
           <div className="modal-title-wrap">
             <Download size={18} strokeWidth={2.2} />
-            <span className="modal-title">Unduh Excel Harian</span>
+            <span className="modal-title">Unduh Excel Media Monitoring</span>
           </div>
           <button type="button" onClick={onClose} className="btn-modal-close" aria-label="Tutup">
             <X size={18} strokeWidth={2.5} />
@@ -75,24 +126,30 @@ export default function ModalUnduh({ isOpen, onClose }: ModalUnduhProps) {
           {/* Info Banner */}
           <div className="info-banner-green">
             <CheckCircle2 size={16} className="text-emerald-700" strokeWidth={2.2} />
-            <span>2 hari dipilih (1 sampai 2 Nov 2026), total 193 berita</span>
+            <span>
+              {startDate && endDate
+                ? `${rangeInfo.daysWithData} hari berdata (${fmtShort(startDate)} – ${fmtShort(endDate)}), total ${rangeInfo.totalArticles.toLocaleString("id-ID")} berita`
+                : "Pilih rentang tanggal untuk mengunduh dataset"}
+            </span>
           </div>
 
           {/* Format Unduhan Radio */}
           <div className="radio-group-container">
-            <div className="format-section-title">Format Unduhan:</div>
+            <div className="format-section-title">Pilihan Unduhan:</div>
 
-            <label className={`radio-card ${format === "zip" ? "active" : ""}`}>
+            <label className={`radio-card ${format === "daily" ? "active" : ""}`}>
               <input
                 type="radio"
                 name="downloadFormat"
-                checked={format === "zip"}
-                onChange={() => setFormat("zip")}
+                checked={format === "daily"}
+                onChange={() => setFormat("daily")}
               />
               <div className="radio-text">
-                <div className="radio-title">Satu file per hari (ZIP)</div>
+                <div className="radio-title">
+                  {isSingleDay ? `File Excel Harian (${fmtShort(startDate)})` : "File Excel Harian / Rekap Terbaru"}
+                </div>
                 <div className="radio-desc">
-                  Berisi file Excel harian lengkap dengan Sheet Berita & Sheet Ringkasan Negatif
+                  Berisi file Excel lengkap dengan Sheet Berita &amp; Sheet Ringkasan Negatif
                 </div>
               </div>
             </label>
@@ -105,9 +162,9 @@ export default function ModalUnduh({ isOpen, onClose }: ModalUnduhProps) {
                 onChange={() => setFormat("merged")}
               />
               <div className="radio-text">
-                <div className="radio-title">Gabung jadi satu file Excel (dengan Ringkasan)</div>
+                <div className="radio-title">Gabung seluruh arsip dalam satu file Excel (.xlsx)</div>
                 <div className="radio-desc">
-                  Mencakup Sheet Berita dan Sheet Ringkasan Negatif (.xlsx)
+                  Mencakup arsip Media_Monitoring_Agro_Semua_Data.xlsx dan Sheet Ringkasan Negatif
                 </div>
               </div>
             </label>
@@ -121,7 +178,9 @@ export default function ModalUnduh({ isOpen, onClose }: ModalUnduhProps) {
           </button>
           <button type="button" onClick={handleDownload} className="btn-modal-submit">
             <Download size={14} strokeWidth={2} />
-            <span>{format === "zip" ? "Unduh ZIP (2 file)" : "Unduh Excel Gabungan"}</span>
+            <span>
+              {format === "daily" && isSingleDay ? "Unduh Excel Harian" : "Unduh Semua Data Excel"}
+            </span>
           </button>
         </div>
       </div>

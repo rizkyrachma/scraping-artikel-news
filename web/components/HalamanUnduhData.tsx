@@ -30,23 +30,24 @@ interface DayDownloadItem {
 
 interface HalamanUnduhDataProps {
   onOpenDownloadModal: () => void;
+  isRunning?: boolean;
 }
 
-export default function HalamanUnduhData({ onOpenDownloadModal }: HalamanUnduhDataProps) {
+export default function HalamanUnduhData({ onOpenDownloadModal, isRunning }: HalamanUnduhDataProps) {
   const [allDays, setAllDays] = useState<DayDownloadItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedMonth, setSelectedMonth] = useState<string>("Semua");
   const [displayLimit, setDisplayLimit] = useState(14);
 
-  // Muat data dari /data/summary.json
+  // Muat data live dari /api/data/summary.json
   useEffect(() => {
-    setIsLoading(true);
-    fetch("/data/summary.json")
+    fetch(`/api/data/summary.json?t=${Date.now()}`, { cache: "no-store" })
       .then((res) => {
         if (!res.ok) throw new Error("Gagal mengambil summary.json");
         return res.json();
       })
       .then((data) => {
+        const latestDate: string = data.metadata?.last_updated || "";
         const calendarCounts: Record<string, number> = data.metadata?.calendar_counts || {};
         const recentDays: DayDownloadItem[] = data.recent_days || [];
 
@@ -54,7 +55,7 @@ export default function HalamanUnduhData({ onOpenDownloadModal }: HalamanUnduhDa
         const hariIndo = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"];
         const bulanIndo = ["", "Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agt", "Sep", "Okt", "Nov", "Des"];
 
-        // Estimasi ukuran file dinamis (rata-rata 1.5 KB per baris + 40 KB base workbook)
+        // Estimasi ukuran file dinamis (rata-rata 1.3 KB per baris + 42 KB base workbook)
         const formatSize = (cnt: number) => {
           if (cnt === 0) return "—";
           const kb = Math.round(42 + cnt * 1.3);
@@ -72,6 +73,7 @@ export default function HalamanUnduhData({ onOpenDownloadModal }: HalamanUnduhDa
             if (existing) {
               return {
                 ...existing,
+                isNew: dStr === latestDate,
                 fileSizeStr: formatSize(existing.count),
                 hasFile: existing.count > 0,
               };
@@ -92,7 +94,7 @@ export default function HalamanUnduhData({ onOpenDownloadModal }: HalamanUnduhDa
             return {
               fileDate: dStr,
               tglDisplay: display,
-              isNew: dStr === "2026-11-05",
+              isNew: dStr === latestDate,
               count,
               countStr: `${formatNumberIndo(count)} berita`,
               pos: Math.round(count * 0.52),
@@ -110,30 +112,41 @@ export default function HalamanUnduhData({ onOpenDownloadModal }: HalamanUnduhDa
         console.warn("Gagal memuat summary harian:", err);
         setIsLoading(false);
       });
-  }, []);
+  }, [isRunning]);
 
-  // Opsi filter bulan untuk CustomSelect
-  const monthOptions: CustomSelectOption[] = useMemo(
-    () => [
-      { label: "Semua Bulan", value: "Semua", count: "4.127", isAll: true },
-      { label: "November 2026", value: "2026-11", count: "417" },
-      { label: "Oktober 2026", value: "2026-10", count: "1.986" },
-      { label: "September 2026", value: "2026-09", count: "1.496" },
-      { label: "Agustus 2026", value: "2026-08", count: "228" },
-    ],
-    []
-  );
+  // Opsi filter bulan dinamis dari daftar dataset
+  const monthOptions: CustomSelectOption[] = useMemo(() => {
+    const total = allDays.reduce((acc, d) => acc + d.count, 0);
+    const byMonth = new Map<string, number>();
+    allDays.forEach((d) => {
+      const ym = d.fileDate.slice(0, 7);
+      if (ym.length === 7) byMonth.set(ym, (byMonth.get(ym) || 0) + d.count);
+    });
+    const bulanNama = [
+      "", "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+      "Juli", "Agustus", "September", "Oktober", "November", "Desember",
+    ];
+    const opts: CustomSelectOption[] = [
+      { label: "Semua Bulan", value: "Semua", count: formatNumberIndo(total), isAll: true },
+    ];
+    Array.from(byMonth.keys())
+      .sort()
+      .reverse()
+      .forEach((ym) => {
+        const [y, m] = ym.split("-").map(Number);
+        opts.push({
+          label: `${bulanNama[m] || ym} ${y}`,
+          value: ym,
+          count: formatNumberIndo(byMonth.get(ym) || 0),
+        });
+      });
+    return opts;
+  }, [allDays]);
 
   // Filter berdasarkan bulan
   const filteredDays = useMemo(() => {
     if (selectedMonth === "Semua") return allDays;
-    return allDays.filter((d) => {
-      if (selectedMonth === "2026-11") return d.fileDate.startsWith("2026-11");
-      if (selectedMonth === "2026-10") return d.fileDate.startsWith("2026-10");
-      if (selectedMonth === "2026-09") return d.fileDate.startsWith("2026-09");
-      if (selectedMonth === "2026-08") return d.fileDate.startsWith("2026-08");
-      return true;
-    });
+    return allDays.filter((d) => d.fileDate.startsWith(selectedMonth));
   }, [allDays, selectedMonth]);
 
   const visibleDays = useMemo(() => {
@@ -142,7 +155,7 @@ export default function HalamanUnduhData({ onOpenDownloadModal }: HalamanUnduhDa
 
   const handleDownloadFile = (fileDate: string) => {
     const link = document.createElement("a");
-    link.href = `/files/Media_Monitoring_Agro_${fileDate}.xlsx`;
+    link.href = `/api/files/Media_Monitoring_Agro_${fileDate}.xlsx`;
     link.download = `Media_Monitoring_Agro_${fileDate}.xlsx`;
     document.body.appendChild(link);
     link.click();

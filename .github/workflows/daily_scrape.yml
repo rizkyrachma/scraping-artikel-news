@@ -70,16 +70,15 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Cache AI Recheck, Ringkasan & Progress Scraping
+      - name: Cache AI Recheck & Ringkasan
         uses: actions/cache@v4
         with:
           path: |
             hasil_scrapping/cache_ai_recheck.json
             hasil_scrapping/cache_ringkasan.json
-            hasil_scrapping/**/progress*.json
-          key: agro-scrape-cache-${{ runner.os }}-${{ github.run_id }}
+          key: agro-ai-cache-${{ runner.os }}-${{ github.run_id }}
           restore-keys: |
-            agro-scrape-cache-${{ runner.os }}-
+            agro-ai-cache-${{ runner.os }}-
 
       - name: Tentukan rentang tanggal target (WIB)
         id: target_dates
