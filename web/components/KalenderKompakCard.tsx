@@ -105,11 +105,11 @@ export default function KalenderKompakCard({
       {/* 1. Kalender Mini (Panel Sekunder) */}
       <div className="card-box card-kalender panel-secondary">
         <div className="card-header-row">
-          <div className="flex items-center gap-1">
+          <div className="cal-month-nav">
             <button
               type="button"
               onClick={() => shiftMonth(-1)}
-              className="p-0.5 rounded hover:bg-slate-100 text-slate-600"
+              className="cal-nav-btn"
               aria-label="Bulan sebelumnya"
             >
               <ChevronLeft size={14} />
@@ -118,7 +118,7 @@ export default function KalenderKompakCard({
             <button
               type="button"
               onClick={() => shiftMonth(1)}
-              className="p-0.5 rounded hover:bg-slate-100 text-slate-600"
+              className="cal-nav-btn"
               aria-label="Bulan berikutnya"
             >
               <ChevronRight size={14} />

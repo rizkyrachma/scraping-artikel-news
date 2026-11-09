@@ -49,6 +49,8 @@ export function buildGitHubHeaders(token: string | null): Record<string, string>
   return headers;
 }
 
+const _shaDataCache = new Map<string, ArrayBuffer>();
+
 export async function fetchRemoteDataFile(repoRelativePath: string): Promise<Response | null> {
   const { repo, token } = getGitHubConfig();
   let ref = "data";
@@ -70,6 +72,12 @@ export async function fetchRemoteDataFile(repoRelativePath: string): Promise<Res
     }
   }
 
+  // SHA commit bersifat immutable: kembalikan salinan cache bila commit data tidak berubah
+  const cacheKey = `${repo}:${ref}:${repoRelativePath}`;
+  if (ref !== "data" && _shaDataCache.has(cacheKey)) {
+    return new Response(_shaDataCache.get(cacheKey)!);
+  }
+
   const rawUrl = `https://raw.githubusercontent.com/${repo}/${ref}/${repoRelativePath}${
     ref === "data" ? `?t=${Date.now()}` : ""
   }`;
@@ -79,7 +87,19 @@ export async function fetchRemoteDataFile(repoRelativePath: string): Promise<Res
       cache: "no-store",
       signal: AbortSignal.timeout(8000),
     });
-    return res.ok ? res : null;
+    if (!res.ok) return null;
+    if (ref !== "data") {
+      const buf = await res.arrayBuffer();
+      if (buf.byteLength <= 5 * 1024 * 1024) {
+        if (_shaDataCache.size >= 8) {
+          const oldest = _shaDataCache.keys().next().value;
+          if (oldest) _shaDataCache.delete(oldest);
+        }
+        _shaDataCache.set(cacheKey, buf);
+      }
+      return new Response(buf);
+    }
+    return res;
   } catch {
     return null;
   }

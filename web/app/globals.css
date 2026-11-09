@@ -277,7 +277,7 @@ a {
     padding: 8px 10px !important;
   }
   .data-status-bar {
-    height: 46px !important;
+    height: auto !important;
     min-height: 46px !important;
   }
   .pipeline-card {
@@ -384,7 +384,7 @@ a {
    DATA STATUS BAR
    ========================================================================== */
 .data-status-bar {
-  height: 52px;
+  height: auto;
   min-height: 52px;
   background-color: var(--bg-card);
   border: var(--border-width) solid var(--navy);
@@ -393,7 +393,8 @@ a {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 clamp(10px, 1vw, 16px);
+  gap: 10px;
+  padding: 6px clamp(10px, 1vw, 16px);
   position: relative;
   overflow: hidden;
   box-sizing: border-box;
@@ -403,12 +404,20 @@ a {
   display: flex;
   align-items: center;
   gap: clamp(8px, 1vw, 14px);
+  min-width: 0;
+  flex: 1;
 }
 
 .status-icon-bubble {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
+}
+
+.status-text-block {
+  min-width: 0;
+  max-width: 245px;
 }
 
 .status-text-block .status-label {
@@ -416,25 +425,31 @@ a {
   color: #64748B;
   font-weight: 500;
   line-height: 1.1;
+  white-space: nowrap;
 }
 
 .status-text-block .status-value {
-  font-size: 13.5px;
+  font-size: 13px;
   font-weight: 800;
   color: var(--navy);
   margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .status-vert-div {
   width: 1px;
   height: 24px;
   background-color: #CBD5E1;
+  flex-shrink: 0;
 }
 
 .status-metrics-row {
   display: flex;
   align-items: center;
   gap: clamp(8px, 1vw, 14px);
+  flex-shrink: 0;
 }
 
 .metric-item {
@@ -447,13 +462,15 @@ a {
   color: #64748B;
   font-weight: 500;
   line-height: 1.1;
+  white-space: nowrap;
 }
 
 .metric-item .metric-val {
-  font-size: 13.5px;
+  font-size: 13px;
   font-weight: 800;
   color: var(--navy);
   margin-top: 2px;
+  white-space: nowrap;
 }
 
 .metric-mini-div {
@@ -466,6 +483,7 @@ a {
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-shrink: 0;
 }
 
 .btn-status-action {
@@ -1059,6 +1077,36 @@ a {
 /* Kalender Mini */
 .card-kalender {
   gap: 3px;
+}
+
+.cal-month-nav {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.cal-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 5px;
+  color: #475569;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.cal-nav-btn:hover {
+  background-color: #F1F5F9;
+  color: var(--navy);
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
 }
 
 .pill-dark-btn {

@@ -12,6 +12,7 @@ import {
   RotateCcw
 } from "lucide-react";
 import { formatNumberIndo } from "@/lib/utils";
+import { SummaryData } from "@/lib/types";
 import PageHeaderCard from "@/components/PageHeaderCard";
 import CustomSelect, { CustomSelectOption } from "@/components/ui/CustomSelect";
 
@@ -31,13 +32,76 @@ interface DayDownloadItem {
 interface HalamanUnduhDataProps {
   onOpenDownloadModal: () => void;
   isRunning?: boolean;
+  summaryData?: SummaryData | null;
 }
 
-export default function HalamanUnduhData({ onOpenDownloadModal, isRunning }: HalamanUnduhDataProps) {
-  const [allDays, setAllDays] = useState<DayDownloadItem[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+function buildDayListFromSummary(data: SummaryData): DayDownloadItem[] {
+  const latestDate: string = data.metadata?.last_updated || "";
+  const calendarCounts: Record<string, number> = data.metadata?.calendar_counts || {};
+  const recentDays = data.recent_days || [];
+
+  const hariIndo = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"];
+  const bulanIndo = ["", "Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agt", "Sep", "Okt", "Nov", "Des"];
+  const formatSize = (cnt: number) => (cnt === 0 ? "—" : `${Math.round(42 + cnt * 1.3)} KB`);
+
+  const existingMap = new Map<string, NonNullable<SummaryData["recent_days"]>[number]>();
+  recentDays.forEach((d) => existingMap.set(d.fileDate, d));
+
+  return Object.keys(calendarCounts)
+    .sort()
+    .reverse()
+    .map((dStr) => {
+      const existing = existingMap.get(dStr);
+      if (existing) {
+        return {
+          ...existing,
+          isNew: dStr === latestDate,
+          fileSizeStr: formatSize(existing.count),
+          hasFile: existing.count > 0,
+        };
+      }
+
+      const count = calendarCounts[dStr] || 0;
+      let display = dStr;
+      try {
+        const [y, m, d] = dStr.split("-").map(Number);
+        const dt = new Date(y, m - 1, d);
+        const hari = hariIndo[dt.getDay() === 0 ? 6 : dt.getDay() - 1];
+        const bulan = bulanIndo[m];
+        display = `${hari}, ${d} ${bulan} ${y}`;
+      } catch {
+        // fallback
+      }
+
+      return {
+        fileDate: dStr,
+        tglDisplay: display,
+        isNew: dStr === latestDate,
+        count,
+        countStr: `${formatNumberIndo(count)} berita`,
+        pos: Math.round(count * 0.52),
+        net: Math.round(count * 0.35),
+        neg: Math.max(0, count - Math.round(count * 0.52) - Math.round(count * 0.35)),
+        fileSizeStr: formatSize(count),
+        hasFile: count > 0,
+      };
+    });
+}
+
+export default function HalamanUnduhData({ onOpenDownloadModal, isRunning, summaryData }: HalamanUnduhDataProps) {
+  const [allDays, setAllDays] = useState<DayDownloadItem[]>(() =>
+    summaryData ? buildDayListFromSummary(summaryData) : []
+  );
+  const [isLoading, setIsLoading] = useState(!summaryData);
   const [selectedMonth, setSelectedMonth] = useState<string>("Semua");
   const [displayLimit, setDisplayLimit] = useState(14);
+
+  useEffect(() => {
+    if (summaryData) {
+      setAllDays(buildDayListFromSummary(summaryData));
+      setIsLoading(false);
+    }
+  }, [summaryData]);
 
   // Muat data live dari /api/data/summary.json
   useEffect(() => {
@@ -46,66 +110,8 @@ export default function HalamanUnduhData({ onOpenDownloadModal, isRunning }: Hal
         if (!res.ok) throw new Error("Gagal mengambil summary.json");
         return res.json();
       })
-      .then((data) => {
-        const latestDate: string = data.metadata?.last_updated || "";
-        const calendarCounts: Record<string, number> = data.metadata?.calendar_counts || {};
-        const recentDays: DayDownloadItem[] = data.recent_days || [];
-
-        // Buat daftar lengkap berdasarkan semua tanggal di calendar_counts
-        const hariIndo = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"];
-        const bulanIndo = ["", "Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agt", "Sep", "Okt", "Nov", "Des"];
-
-        // Estimasi ukuran file dinamis (rata-rata 1.3 KB per baris + 42 KB base workbook)
-        const formatSize = (cnt: number) => {
-          if (cnt === 0) return "—";
-          const kb = Math.round(42 + cnt * 1.3);
-          return `${kb} KB`;
-        };
-
-        const existingMap = new Map<string, DayDownloadItem>();
-        recentDays.forEach((d) => existingMap.set(d.fileDate, d));
-
-        const fullList: DayDownloadItem[] = Object.keys(calendarCounts)
-          .sort()
-          .reverse()
-          .map((dStr) => {
-            const existing = existingMap.get(dStr);
-            if (existing) {
-              return {
-                ...existing,
-                isNew: dStr === latestDate,
-                fileSizeStr: formatSize(existing.count),
-                hasFile: existing.count > 0,
-              };
-            }
-
-            const count = calendarCounts[dStr] || 0;
-            let display = dStr;
-            try {
-              const [y, m, d] = dStr.split("-").map(Number);
-              const dt = new Date(y, m - 1, d);
-              const hari = hariIndo[dt.getDay() === 0 ? 6 : dt.getDay() - 1];
-              const bulan = bulanIndo[m];
-              display = `${hari}, ${d} ${bulan} ${y}`;
-            } catch {
-              // fallback
-            }
-
-            return {
-              fileDate: dStr,
-              tglDisplay: display,
-              isNew: dStr === latestDate,
-              count,
-              countStr: `${formatNumberIndo(count)} berita`,
-              pos: Math.round(count * 0.52),
-              net: Math.round(count * 0.35),
-              neg: Math.max(0, count - Math.round(count * 0.52) - Math.round(count * 0.35)),
-              fileSizeStr: formatSize(count),
-              hasFile: count > 0,
-            };
-          });
-
-        setAllDays(fullList);
+      .then((data: SummaryData) => {
+        setAllDays(buildDayListFromSummary(data));
         setIsLoading(false);
       })
       .catch((err) => {

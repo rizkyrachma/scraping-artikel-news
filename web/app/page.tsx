@@ -292,6 +292,7 @@ export default function DashboardPage() {
           <HalamanUnduhData
             onOpenDownloadModal={() => setIsDownloadModalOpen(true)}
             isRunning={isRunning}
+            summaryData={summaryData}
           />
         )}
       </div>
