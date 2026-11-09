@@ -4,7 +4,8 @@ Konfigurasi filtering domain (denylist-first), blocklist marketplace/aset, dan l
 """
 
 from pathlib import Path
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, timedelta, timezone
+from email.utils import parsedate_to_datetime
 import pandas as pd
 import os
 import time
@@ -112,36 +113,64 @@ def get_date_folder(target_date: date | datetime | tuple | list | None = None) -
     return folder
 
 
-def is_published_yesterday(published_str: str, target_date: date | datetime | tuple | list | None = None) -> bool:
-    """
-    Memeriksa apakah tanggal publikasi artikel berada dalam rentang target_date
-    (persis kemarin atau rentang start_date..end_date).
-    Mendukung format absolut maupun relatif (misal '1 day ago' dari Serper).
-    """
-    if not published_str:
-        return False
+_WIB_TZ = timezone(timedelta(hours=7))
+
+
+def parse_to_wib(val) -> pd.Timestamp | None:
+    """Parse tanggal RSS/ISO/relatif/Excel dan konversi tz-aware ke WIB (UTC+7) naive."""
+    if val is None or (not isinstance(val, str) and pd.isna(val)):
+        return None
+    if isinstance(val, datetime):
+        ts = pd.Timestamp(val)
+        return ts.tz_convert(_WIB_TZ).tz_localize(None) if ts.tzinfo else ts
+
+    s = str(val).strip()
+    if not s or s.lower() in ("nan", "none", "nat"):
+        return None
+
+    for fn in (
+        parsedate_to_datetime,
+        lambda x: datetime.fromisoformat(f"{x[:-1]}+00:00" if x.endswith("Z") else x),
+    ):
+        try:
+            dt = fn(s)
+            if dt is not None:
+                if dt.tzinfo is not None:
+                    dt = dt.astimezone(_WIB_TZ).replace(tzinfo=None)
+                return pd.Timestamp(dt)
+        except Exception:
+            pass
+
     try:
-        dt = pd.to_datetime(published_str, errors="coerce")
+        dt = pd.to_datetime(s, errors="coerce")
         if pd.isna(dt):
             import dateparser  # type: ignore
-            parsed_dt = dateparser.parse(published_str)
-            if parsed_dt is None:
-                return False
-            dt = pd.Timestamp(parsed_dt)
-        elif not isinstance(dt, pd.Timestamp):
-            dt = pd.Timestamp(dt)
-        # Konversi timezone jika ada ke waktu lokal WIB (Asia/Jakarta)
-        if dt.tzinfo is not None:
-            dt = dt.tz_convert("Asia/Jakarta")
-        elif published_str.endswith("Z"):
-            dt = dt.tz_localize("UTC").tz_convert("Asia/Jakarta")
-        start_d, end_d = get_date_range(target_date)
-        dt_date = dt.date()
-        if isinstance(dt_date, date):
-            return start_d <= dt_date <= end_d
-        return False
+            parsed = dateparser.parse(s)
+            if parsed is None:
+                return None
+            if parsed.tzinfo is not None:
+                parsed = parsed.astimezone(_WIB_TZ).replace(tzinfo=None)
+            return pd.Timestamp(parsed)
+        ts = pd.Timestamp(dt)
+        if ts.tzinfo is not None:
+            return ts.tz_convert(_WIB_TZ).tz_localize(None)
+        if s.endswith(("Z", "GMT", "UTC")):
+            return ts.tz_localize("UTC").tz_convert(_WIB_TZ).tz_localize(None)
+        return ts
     except Exception:
+        return None
+
+
+def is_published_yesterday(published_str: str, target_date: date | datetime | tuple | list | None = None) -> bool:
+    """
+    Memeriksa apakah tanggal publikasi artikel berada dalam rentang target_date (waktu lokal WIB).
+    Mendukung format absolut (RFC-2822, ISO) maupun relatif (misal '1 day ago' dari Serper).
+    """
+    dt = parse_to_wib(published_str)
+    if dt is None:
         return False
+    start_d, end_d = get_date_range(target_date)
+    return start_d <= dt.date() <= end_d
 
 
 def is_single_word_keyword(keyword: str | list[str]) -> bool:

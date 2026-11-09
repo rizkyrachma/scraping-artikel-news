@@ -19,7 +19,7 @@ import pandas as pd
 BASE_DIR = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(BASE_DIR))
 
-from src.config import get_date_folder
+from src.config import get_date_folder, is_published_yesterday, parse_to_wib
 
 DATA_EXPORT_DIR = BASE_DIR / "data_export"
 FILES_EXPORT_DIR = DATA_EXPORT_DIR / "files"
@@ -338,6 +338,28 @@ def build_run_stats(new_articles: list[dict], folder: Path) -> dict | None:
     return stats
 
 
+def export_split_daily_excel(src_xlsx: Path, ds: str, dest_xlsx: Path) -> bool:
+    """Menyaring baris multi-hari berdasarkan Tanggal == ds untuk file Excel harian."""
+    sheets = pd.read_excel(src_xlsx, sheet_name=None)
+    filtered: dict[str, pd.DataFrame] = {}
+    for s_name, df in sheets.items():
+        if "Tanggal" in df.columns and not df.empty:
+            tgl_str = pd.to_datetime(df["Tanggal"], errors="coerce").dt.strftime("%Y-%m-%d").fillna(
+                df["Tanggal"].astype(str).str.slice(0, 10)
+            )
+            sub = df[tgl_str == ds].reset_index(drop=True)
+            if not sub.empty:
+                filtered[s_name] = sub
+        elif not df.empty and "Berita" in filtered:
+            filtered[s_name] = df
+    if "Berita" not in filtered or filtered["Berita"].empty:
+        return False
+    with pd.ExcelWriter(dest_xlsx, engine="openpyxl") as writer:
+        for s_name, df in filtered.items():
+            df.to_excel(writer, sheet_name=s_name[:31], index=False)
+    return True
+
+
 def sync_after_run(
     start_date: str,
     end_date: str,
@@ -374,14 +396,19 @@ def sync_after_run(
 
         if src_xlsx.exists():
             new_articles = read_excel_articles(src_xlsx, fallback_date=end_date)
-            # Salin file Excel per tanggal
+            # Salin file Excel per tanggal (pisahkan per tanggal jika multi-hari)
             curr = d1
             while curr <= d2:
                 ds = curr.isoformat()
                 dest_name = f"Media_Monitoring_Agro_{ds}.xlsx"
-                shutil.copy2(src_xlsx, FILES_EXPORT_DIR / dest_name)
-                if WEB_FILES_DIR.exists():
-                    shutil.copy2(src_xlsx, WEB_FILES_DIR / dest_name)
+                dest_path = FILES_EXPORT_DIR / dest_name
+                copied = True
+                if d1 == d2:
+                    shutil.copy2(src_xlsx, dest_path)
+                else:
+                    copied = export_split_daily_excel(src_xlsx, ds, dest_path)
+                if copied and WEB_FILES_DIR.exists():
+                    shutil.copy2(dest_path, WEB_FILES_DIR / dest_name)
                 curr += datetime.timedelta(days=1)
 
             # Gabungkan ke file Semua_Data tanpa menimpa data historis
@@ -479,6 +506,22 @@ def run_self_check():
             json.dump({"batch_reports": [{"total_initial": 100, "total_date_dropped": 40, "total_final_valid": 20}]}, f)
         rs = build_run_stats([{"has_review": True, "spokesperson": ""}, {"has_review": False, "spokesperson": "Budi"}], Path(tmpd))
         assert rs and rs["mentah"] == 100 and rs["filter_tgl"] == 60 and rs["unik"] == 20 and rs["final"] == 2 and rs["perlu_review"] == 1 and rs["tanpa_spokesperson"] == 1 and rs["noise_dibuang_pct"] == 98
+
+        # Verifikasi split harian tidak menyatukan tanggal berbeda
+        p_multi = Path(tmpd) / "multi.xlsx"
+        p_d6 = Path(tmpd) / "d6.xlsx"
+        pd.DataFrame([
+            {"Tanggal": "2026-11-06 10:00:00", "Title": "Berita 6 Nov"},
+            {"Tanggal": "2026-11-07 11:00:00", "Title": "Berita 7 Nov"},
+        ]).to_excel(p_multi, sheet_name="Berita", index=False)
+        assert export_split_daily_excel(p_multi, "2026-11-06", p_d6)
+        assert len(pd.read_excel(p_d6, sheet_name="Berita")) == 1
+
+    # Verifikasi konversi timezone RSS GMT/UTC ke WIB (tidak mundur H-1)
+    assert str(parse_to_wib("Sat, 07 Nov 2026 23:02:51 GMT")) == "2026-11-08 06:02:51"
+    assert str(parse_to_wib("2026-11-08 08:00:00")) == "2026-11-08 08:00:00"
+    assert is_published_yesterday("Sat, 07 Nov 2026 23:02:51 GMT", datetime.date(2026, 11, 8))
+    assert not is_published_yesterday("Sat, 07 Nov 2026 23:02:51 GMT", datetime.date(2026, 11, 7))
 
     print("[Self-Check] OK: Semua fungsi sync_dashboard_data terverifikasi.")
 

@@ -298,29 +298,9 @@ def save_to_excel(
 
 
 
-    # Konversi field Tanggal ke datetime Excel tanpa timezone
+    # Konversi field Tanggal ke datetime Excel WIB (UTC+7) tanpa timezone
+    from config import parse_to_wib as _parse_date
     if "Tanggal" in df.columns and not df.empty:
-        import dateparser  # type: ignore
-
-        def _parse_date(val):
-            if pd.isna(val) or not val:
-                return None
-            if isinstance(val, pd.Timestamp):
-                return val.tz_localize(None) if val.tzinfo else val
-            try:
-                dt = pd.to_datetime(val, utc=True)
-                if not pd.isna(dt):
-                    return dt.tz_localize(None) if dt.tzinfo else dt
-            except Exception:
-                pass
-            try:
-                parsed = dateparser.parse(str(val))
-                if parsed:
-                    return pd.Timestamp(parsed)
-            except Exception:
-                pass
-            return None
-
         df["Tanggal"] = df["Tanggal"].apply(_parse_date)
 
     def _write_excel(target_writer):
