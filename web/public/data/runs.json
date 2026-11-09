@@ -1,5 +1,17 @@
 [
   {
+    "id": "run-20261109-090551",
+    "waktu_display": "09 Nov, 09.05",
+    "timestamp": "2026-11-09T09:05:51",
+    "durasi": "0m 43s",
+    "hasil_berita": 3,
+    "status": "Berhasil",
+    "target_date": "2026-11-08",
+    "pemicu": "Manual",
+    "rentang_data": "8 Nov 2026",
+    "log_url": "https://github.com/rizkyrachma/scraping-artikel-news/actions/runs/42548772697"
+  },
+  {
     "id": "run-20261106-0712",
     "waktu_display": "06 Nov, 07.12",
     "timestamp": "2026-11-06T07:12:00",
