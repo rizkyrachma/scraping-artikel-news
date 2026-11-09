@@ -88,7 +88,7 @@ export default function PipelineVisualizer({
       num,
       name,
       counts: idleCounts[idx],
-      dur: num === 8 ? durLabel : "✓",
+      dur: num === 8 ? durLabel : "",
       state: "done",
       prog: undefined as string | undefined,
     };
