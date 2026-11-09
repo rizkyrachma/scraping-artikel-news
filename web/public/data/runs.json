@@ -1,5 +1,18 @@
 [
   {
+    "id": "run-20261109-085318",
+    "waktu_display": "09 Nov, 08.53",
+    "timestamp": "2026-11-09T08:53:18",
+    "durasi": "0m 01s",
+    "hasil_berita": 0,
+    "status": "Gagal",
+    "target_date": "2026-11-06_sd_2026-11-07",
+    "pemicu": "Manual",
+    "rentang_data": "-",
+    "catatan": "Job dihentikan / timeout",
+    "log_url": "https://github.com/rizkyrachma/scraping-artikel-news/actions/runs/42547145737"
+  },
+  {
     "id": "run-20261109-083615",
     "waktu_display": "09 Nov, 08.36",
     "timestamp": "2026-11-09T08:36:15",
