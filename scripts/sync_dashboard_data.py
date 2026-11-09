@@ -92,7 +92,7 @@ def format_short_date_indo(d_str: str) -> str:
 
 
 def format_duration(seconds: int) -> str:
-    seconds = max(1, int(seconds))
+    seconds = max(1, seconds)
     m, s = divmod(seconds, 60)
     return f"{m}m {s:02d}s"
 
@@ -432,7 +432,7 @@ def sync_after_run(
 
     # Catat ke runs.json
     runs = load_json(DATA_EXPORT_DIR / "runs.json", [])
-    run_entry = {
+    run_entry: dict[str, object] = {
         "id": run_id,
         "waktu_display": waktu_display,
         "timestamp": now_wib.strftime("%Y-%m-%dT%H:%M:%S"),
