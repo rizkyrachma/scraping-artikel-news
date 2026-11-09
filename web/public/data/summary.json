@@ -3,14 +3,15 @@
     "last_updated": "2026-11-08",
     "last_updated_display": "Minggu, 8 November 2026",
     "earliest_date": "2026-08-06",
-    "total_articles": 4130,
+    "total_articles": 4156,
     "tone_summary": {
-      "Positif": 2192,
-      "Netral": 1309,
-      "Negatif": 629
+      "Positif": 2216,
+      "Netral": 1310,
+      "Negatif": 630
     },
     "calendar_counts": {
-      "2026-11-08": 3,
+      "2026-11-08": 25,
+      "2026-11-07": 4,
       "2026-11-05": 148,
       "2026-11-04": 164,
       "2026-11-03": 52,
@@ -63,31 +64,31 @@
   "commodities": [
     {
       "name": "Kelapa Sawit & CPO",
-      "count": 701
+      "count": 713
     },
     {
       "name": "Lainnya",
-      "count": 601
+      "count": 603
     },
     {
       "name": "Makanan & Minuman",
-      "count": 481
+      "count": 482
     },
     {
       "name": "Hasil Tembakau",
-      "count": 363
+      "count": 367
     },
     {
       "name": "Tepung, Sagu & Pati",
-      "count": 301
+      "count": 302
     },
     {
       "name": "Kakao & Cokelat",
-      "count": 233
+      "count": 236
     },
     {
       "name": "Kopi & Teh",
-      "count": 232
+      "count": 233
     },
     {
       "name": "Kelapa & Olahan",
@@ -119,17 +120,17 @@
     },
     {
       "name": "Susu & Olahan",
-      "count": 104
+      "count": 105
     },
     {
       "name": "Pakan Ternak",
-      "count": 50
+      "count": 51
     }
   ],
   "spokespersons": [
     {
       "name": "Muhammad Sarmuji",
-      "count": 417
+      "count": 420
     },
     {
       "name": "Putu Juli Ardika",
@@ -137,7 +138,7 @@
     },
     {
       "name": "Faisol Riza",
-      "count": 64
+      "count": 67
     },
     {
       "name": "Agus Gumiwang Kartasasmita",
@@ -171,6 +172,214 @@
   "recent_articles": [
     {
       "id": 1,
+      "title": "Melihat Canggihnya Instalasi Biogas Limbah Sawit Kolaborasi BRIN-PTPN IV di Sei Pagar",
+      "link": "https://riauraya.tv/riau-raya/2026/11/08/melihat-canggihnya-instalasi-biogas-limbah-sawit-kolaborasi-brinptpn-iv-di-sei-pagar",
+      "media": "riauraya.tv",
+      "tone": "Positif",
+      "date": "2026-11-08",
+      "datetime": "2026-11-08T16:01:53",
+      "time": "16:01",
+      "date_display": "Minggu, 8 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Kelapa Sawit & CPO",
+      "has_review": true,
+      "review_text": "Perlu Dicek Manual: Berita mengenai instalasi biogas limbah sawit masuk kategori review."
+    },
+    {
+      "id": 2,
+      "title": "Purnomo Yusgiantoro: Hilirisasi Perkebunan Perkuat Ketahanan Nasional Menuju Indonesia Emas 2045",
+      "link": "https://news.majalahhortus.com/purnomo-yusgiantoro-hilirisasi-perkebunan-perkuat-ketahanan-nasional-menuju-indonesia-emas-2045/",
+      "media": "Majalah HORTUS Archipelago",
+      "tone": "Positif",
+      "date": "2026-11-08",
+      "datetime": "2026-11-08T15:38:22",
+      "time": "15:38",
+      "date_display": "Minggu, 8 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Kakao & Cokelat",
+      "has_review": true,
+      "review_text": "Perlu Dicek Manual: Pernyataan strategis mengenai hilirisasi perkebunan untuk penguatan industri."
+    },
+    {
+      "id": 3,
+      "title": "Ekspor Minyak Atsiri RI Ditarget Tembus USD500 Juta Sebelum 2029",
+      "link": "https://www.akurat.co/riil/905218/ekspor-minyak-atsiri-ri-ditarget-tembus-usd500-juta-sebelum-2029",
+      "media": "Akurat.co",
+      "tone": "Positif",
+      "date": "2026-11-08",
+      "datetime": "2026-11-08T12:50:00",
+      "time": "12:50",
+      "date_display": "Minggu, 8 November 2026",
+      "spokesperson": "Faisol Riza",
+      "unit": "WAMEN",
+      "commodity": "Hasil Tembakau",
+      "has_review": false,
+      "review_text": ""
+    },
+    {
+      "id": 4,
+      "title": "BRIN dan PTPN IV Kembangkan Biogas dari Limbah Sawit di Sei Pagar",
+      "link": "https://www.goriau.com/berita/baca/brin-dan-ptpn-iv-kembangkan-biogas-dari-limbah-sawit-di-sei-pagar.html",
+      "media": "GoRiau.com",
+      "tone": "Positif",
+      "date": "2026-11-08",
+      "datetime": "2026-11-08T12:34:00",
+      "time": "12:34",
+      "date_display": "Minggu, 8 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Kelapa Sawit & CPO",
+      "has_review": true,
+      "review_text": "Perlu Dicek Manual: Pengembangan riset energi baru terbarukan dari limbah cair sawit (POME) oleh BRIN."
+    },
+    {
+      "id": 5,
+      "title": "Industri Manufaktur Tumbuh 5,88 Persen di Triwulan III-2026, Tiga Indikator Kompak Naik",
+      "link": "https://www.rctiplus.com/news/detail/terkini/5512233/industri-manufaktur-tumbuh-5-88-persen-di-triwulan-iii-2026--tiga-indikator-kompak-naik",
+      "media": "RCTI+",
+      "tone": "Positif",
+      "date": "2026-11-08",
+      "datetime": "2026-11-08T11:40:05",
+      "time": "11:40",
+      "date_display": "Minggu, 8 November 2026",
+      "spokesperson": "Muhammad Sarmuji",
+      "unit": "MENTERI",
+      "commodity": "Lainnya",
+      "has_review": false,
+      "review_text": ""
+    },
+    {
+      "id": 6,
+      "title": "ICExPO 2026: BPDP Resmi Dorong Hilirisasi Tiga Komoditas Unggulan Perkebunan",
+      "link": "https://www.jpnn.com/news/icexpo-2026-bpdp-resmi-dorong-hilirisasi-tiga-komoditas-unggulan-perkebunan",
+      "media": "JPNN.com",
+      "tone": "Positif",
+      "date": "2026-11-08",
+      "datetime": "2026-11-08T11:26:07",
+      "time": "11:26",
+      "date_display": "Minggu, 8 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Kakao & Cokelat",
+      "has_review": false,
+      "review_text": ""
+    },
+    {
+      "id": 7,
+      "title": "Ekspor Minyak Atsiri RI Ditargetkan Lampaui USD500 Juta sebelum 2029",
+      "link": "https://www.idxchannel.com/amp/economics/ekspor-minyak-atsiri-ri-ditargetkan-lampaui-usd500-juta-sebelum-2029",
+      "media": "IDX Channel",
+      "tone": "Positif",
+      "date": "2026-11-08",
+      "datetime": "2026-11-08T11:00:00",
+      "time": "11:00",
+      "date_display": "Minggu, 8 November 2026",
+      "spokesperson": "Faisol Riza",
+      "unit": "WAMEN",
+      "commodity": "Hasil Tembakau",
+      "has_review": false,
+      "review_text": ""
+    },
+    {
+      "id": 8,
+      "title": "Tren Teh Susu Dorong Produsen Perluas Portofolio Minuman",
+      "link": "https://investor.id/business/461171/tren-teh-susu-dorong-produsen-perluas-portofolio-minuman",
+      "media": "investor.id",
+      "tone": "Positif",
+      "date": "2026-11-08",
+      "datetime": "2026-11-08T10:58:00",
+      "time": "10:58",
+      "date_display": "Minggu, 8 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Kopi & Teh",
+      "has_review": false,
+      "review_text": ""
+    },
+    {
+      "id": 9,
+      "title": "PTPN IV PalmCo Siap Kembangkan Limbah Sawit",
+      "link": "https://www.sorotdesa.id/ptpn-iv-palmco-siap-kembangkan-limbah-sawit/",
+      "media": "sorotdesa.id",
+      "tone": "Positif",
+      "date": "2026-11-08",
+      "datetime": "2026-11-08T10:35:35",
+      "time": "10:35",
+      "date_display": "Minggu, 8 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Kelapa Sawit & CPO",
+      "has_review": true,
+      "review_text": "Perlu Dicek Manual: Berita mengenai pemanfaatan limbah cair kelapa sawit masuk kategori review."
+    },
+    {
+      "id": 10,
+      "title": "Dukung Ketahanan Energi Nasional, PTPN IV PalmCo Terus Kembangkan Pemanfaatan POME",
+      "link": "https://sawitsumatera.id/amp/2026/11/08/684/dukung-ketahanan-energi-nasional-ptpn-iv-palmco-terus-kembangkan-pemanfaatan-pome/",
+      "media": "sawitsumatera.id",
+      "tone": "Positif",
+      "date": "2026-11-08",
+      "datetime": "2026-11-08T08:46:22",
+      "time": "08:46",
+      "date_display": "Minggu, 8 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Kelapa Sawit & CPO",
+      "has_review": true,
+      "review_text": "Perlu Dicek Manual: Berita mengenai pemanfaatan limbah POME untuk ketahanan energi nasional masuk kategori review."
+    },
+    {
+      "id": 11,
+      "title": "Sejalan dengan Visi BRIN, PTPN IV PalmCo Optimalkan Limbah Sawit Jadi Energi Alternatif - https://jambiekspres.disway.id/",
+      "link": "https://jambiekspres.disway.id/amp/725874/sejalan-dengan-visi-brin-ptpn-iv-palmco-optimalkan-limbah-sawit-jadi-energi-alternatif",
+      "media": "Jambi Ekspres",
+      "tone": "Positif",
+      "date": "2026-11-08",
+      "datetime": "2026-11-08T08:40:00",
+      "time": "08:40",
+      "date_display": "Minggu, 8 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Kelapa Sawit & CPO",
+      "has_review": true,
+      "review_text": "Perlu Dicek Manual: Berita mengenai optimalisasi limbah cair sawit (POME) sebagai energi terbarukan masuk kategori review."
+    },
+    {
+      "id": 12,
+      "title": "Dukungan Vokasi Bagi Industri Pengolahan Susu Segar",
+      "link": "https://perkivi.or.id/artikel/dukungan-vokasi-bagi-industri-pengolahan-susu-segar",
+      "media": "Perkivi",
+      "tone": "Positif",
+      "date": "2026-11-08",
+      "datetime": "2026-11-08T08:21:36",
+      "time": "08:21",
+      "date_display": "Minggu, 8 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Susu & Olahan",
+      "has_review": false,
+      "review_text": ""
+    },
+    {
+      "id": 13,
+      "title": "Sejalan dengan Visi BRIN Optimalkan Limbah Sawit, PTPN IV PalmCo Terus Akselerasi Pemanfaatan POME sebagai Energi Terbarukan",
+      "link": "https://matamedianews.co.id/sejalan-dengan-visi-brin-optimalkan-limbah-sawit-ptpn-iv-palmco-terus-akselerasi-pemanfaatan-pome-sebagai-energi-terbarukan/",
+      "media": "Matamedianews",
+      "tone": "Positif",
+      "date": "2026-11-08",
+      "datetime": "2026-11-08T08:05:16",
+      "time": "08:05",
+      "date_display": "Minggu, 8 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Kelapa Sawit & CPO",
+      "has_review": true,
+      "review_text": "Perlu Dicek Manual: Berita mengenai pemanfaatan limbah cair sawit (POME) sebagai energi terbarukan masuk kategori review."
+    },
+    {
+      "id": 14,
       "title": "ICExPO 2026 Gelar Agenda Strategis Perkuat Sawit, Kakao, Dan Kelapa Nasional",
       "link": "https://rm.id/baca-berita/ekonomi-bisnis/333559/icexpo-2026-gelar-agenda-strategis-perkuat-sawit-kakao-dan-kelapa-nasional",
       "media": "rm.id",
@@ -182,11 +391,155 @@
       "spokesperson": "",
       "unit": "-",
       "commodity": "Kelapa Sawit & CPO",
-      "has_review": true,
-      "review_text": "PERLU CEK MANUAL: Artikel membahas konferensi dan pameran (ICExPO 2026) terkait sawit, kakao, dan kelapa yang mencakup aspek hulu dan hilir."
+      "has_review": false,
+      "review_text": ""
     },
     {
-      "id": 2,
+      "id": 15,
+      "title": "Gusnar Ismail Pacu Pembangunan Pabrik Pakan Ternak di Gorontalo Utara",
+      "link": "https://gopos.id/gusnar-ismail-pacu-pembangunan-pabrik-pakan-ternak-di-gorontalo-utara/",
+      "media": "gopos.id",
+      "tone": "Positif",
+      "date": "2026-11-08",
+      "datetime": "2026-11-08T07:54:56",
+      "time": "07:54",
+      "date_display": "Minggu, 8 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Hasil Tembakau",
+      "has_review": false,
+      "review_text": ""
+    },
+    {
+      "id": 16,
+      "title": "ICExPO 2026, Tiga Komoditas Perkebunan Jadi Prioritas Hilirisasi",
+      "link": "https://www.jurnas.com/ekonomi/2144803/icexpo-2026-tiga-komoditas-perkebunan-jadi-prioritas-hilirisasi/",
+      "media": "jurnas.com",
+      "tone": "Positif",
+      "date": "2026-11-08",
+      "datetime": "2026-11-08T07:49:28",
+      "time": "07:49",
+      "date_display": "Minggu, 8 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Kelapa Sawit & CPO",
+      "has_review": true,
+      "review_text": "Perlu Dicek Manual: Pameran dan konferensi dagang umum yang membahas prioritas hilirisasi komoditas perkebunan."
+    },
+    {
+      "id": 17,
+      "title": "Pacu Industri, Menperin Ajak Produsen Rokok Ilegal Beralih Jadi Legal",
+      "link": "https://news.ddtc.co.id/berita/nasional/1823941/pacu-industri-menperin-ajak-produsen-rokok-ilegal-beralih-jadi-legal",
+      "media": "DDTCNews",
+      "tone": "Netral",
+      "date": "2026-11-08",
+      "datetime": "2026-11-08T07:30:00",
+      "time": "07:30",
+      "date_display": "Minggu, 8 November 2026",
+      "spokesperson": "Muhammad Sarmuji",
+      "unit": "MENTERI",
+      "commodity": "Hasil Tembakau",
+      "has_review": false,
+      "review_text": ""
+    },
+    {
+      "id": 18,
+      "title": "Pemprov Gorontalo dan PT Berdikari Matangkan Kerja Sama Pembangunan Pabrik Pakan Ternak",
+      "link": "https://dulohupa.id/pemprov-gorontalo-dan-pt-berdikari-matangkan-kerja-sama-pembangunan-pabrik-pakan-ternak/",
+      "media": "Dulohupa.id",
+      "tone": "Positif",
+      "date": "2026-11-08",
+      "datetime": "2026-11-08T05:08:11",
+      "time": "05:08",
+      "date_display": "Minggu, 8 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Pakan Ternak",
+      "has_review": false,
+      "review_text": ""
+    },
+    {
+      "id": 19,
+      "title": "PTPN IV PalmCo Kembangkan Limbah Sawit Jadi Energi Terbarukan, Dukung Target Swasembada Energi",
+      "link": "https://aksarakota.com/baca/ptpn-iv-palmco-kembangkan-limbah-sawit-jadi-energi-terbarukan-dukung-target-swasembada-energi",
+      "media": "Aksarakota.com",
+      "tone": "Positif",
+      "date": "2026-11-08",
+      "datetime": "2026-11-08T04:31:48",
+      "time": "04:31",
+      "date_display": "Minggu, 8 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Kelapa Sawit & CPO",
+      "has_review": true,
+      "review_text": "Perlu Dicek Manual: Berita mengenai pengembangan limbah sawit jadi energi terbarukan masuk kategori review."
+    },
+    {
+      "id": 20,
+      "title": "Kakao AS, Indonesia Bersaing Ketat Lawan Malaysia",
+      "link": "https://goexport.org/kakao-as-indonesia-bersaing-ketat-lawan-malaysia",
+      "media": "goexport.org",
+      "tone": "Positif",
+      "date": "2026-11-08",
+      "datetime": "2026-11-08T04:01:09",
+      "time": "04:01",
+      "date_display": "Minggu, 8 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Kakao & Cokelat",
+      "has_review": false,
+      "review_text": ""
+    },
+    {
+      "id": 21,
+      "title": "Limbah Sawit Berpotensi Hasilkan Listrik 3,9 GW, PalmCo Kembangkan Bio-CBG",
+      "link": "https://kabarindo.id/limbah-sawit-berpotensi-hasilkan-listrik-39-gw-palmco-kembangkan-bio-cbg/",
+      "media": "kabarindo.id",
+      "tone": "Positif",
+      "date": "2026-11-08",
+      "datetime": "2026-11-08T03:37:19",
+      "time": "03:37",
+      "date_display": "Minggu, 8 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Kelapa Sawit & CPO",
+      "has_review": true,
+      "review_text": "Perlu Dicek Manual: Berita mengenai potensi limbah industri sawit menjadi energi alternatif masuk kategori review."
+    },
+    {
+      "id": 22,
+      "title": "Pemerintah Perkuat Aliansi Sawit dan Hilirisasi Komoditas Perkebunan",
+      "link": "https://indoposco.id/2026/11/08/pemerintah-perkuat-aliansi-sawit-dan-hilirisasi-komoditas-perkebunan/",
+      "media": "indoposco.id",
+      "tone": "Positif",
+      "date": "2026-11-08",
+      "datetime": "2026-11-08T03:05:51",
+      "time": "03:05",
+      "date_display": "Minggu, 8 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Kelapa Sawit & CPO",
+      "has_review": false,
+      "review_text": ""
+    },
+    {
+      "id": 23,
+      "title": "DSI Didorong Jadi Perantara Tunggal Ekspor Sawit untuk Jaga Daya Saing Industri",
+      "link": "https://sawitsumatera.id/read/2026/11/08/683/dsi-didorong-jadi-perantara-tunggal-ekspor-sawit-untuk-jaga-daya-saing-industri/",
+      "media": "sawitsumatera.id",
+      "tone": "Negatif",
+      "date": "2026-11-08",
+      "datetime": "2026-11-08T02:21:41",
+      "time": "02:21",
+      "date_display": "Minggu, 8 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Kelapa Sawit & CPO",
+      "has_review": false,
+      "review_text": ""
+    },
+    {
+      "id": 24,
       "title": "Gapmmi Optimistic Food and Beverage Industry Will Grow Above 6 Percent in 2026",
       "link": "https://voi.id/en/economy/601651",
       "media": "voi.id",
@@ -202,7 +555,7 @@
       "review_text": ""
     },
     {
-      "id": 3,
+      "id": 25,
       "title": "Dongkrak Nilai Ekspor, Hilirisasi Sawit, Kakao, dan Kelapa Terus Dipacu",
       "link": "https://investor.id/business/461140/dongkrak-nilai-ekspor-hilirisasi-sawit-kakao-dan-kelapa-terus-dipacu",
       "media": "investor.id",
@@ -218,7 +571,71 @@
       "review_text": ""
     },
     {
-      "id": 4,
+      "id": 26,
+      "title": "Hilirisasi Sawit, Kakao, dan Kelapa Digenjot untuk Dongkrak Nilai Ekspor",
+      "link": "https://www.suaralandak.co.id/hilirisasi-sawit-kakao-dan-kelapa-digenjot-untuk-dongkrak-nilai-ekspor",
+      "media": "www.suaralandak.co.id",
+      "tone": "Positif",
+      "date": "2026-11-07",
+      "datetime": "2026-11-07T23:36:18",
+      "time": "23:36",
+      "date_display": "Sabtu, 7 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Kelapa Sawit & CPO",
+      "has_review": true,
+      "review_text": "Perlu Dicek Manual: Program hilirisasi BPDP untuk komoditas perkebunan yang memerlukan verifikasi lanjutan hulu-hilir."
+    },
+    {
+      "id": 27,
+      "title": "RI Gunakan Sagu untuk Pengeboran Minyak – Berita hari ini",
+      "link": "https://penanews.co.id/ri-gunakan-sagu-untuk-pengeboran-minyak/",
+      "media": "Banda Aceh",
+      "tone": "Positif",
+      "date": "2026-11-07",
+      "datetime": "2026-11-07T23:02:51",
+      "time": "23:02",
+      "date_display": "Sabtu, 7 November 2026",
+      "spokesperson": "Muhammad Sarmuji",
+      "unit": "MENTERI",
+      "commodity": "Tepung, Sagu & Pati",
+      "has_review": true,
+      "review_text": "PERLU CEK MANUAL: Artikel membahas pemanfaatan sagu untuk pengeboran minyak, yang merupakan irisan antara produk agro dan sektor energi/tambang."
+    },
+    {
+      "id": 28,
+      "title": "SIAL Innovation 2026 Jadi Ruang Apresiasi bagi Inovasi Industri Makanan dan Minuman",
+      "link": "https://indoposco.id/2026/11/08/sial-innovation-2026-jadi-ruang-apresiasi-bagi-inovasi-industri-makanan-dan-minuman/",
+      "media": "indoposco.id",
+      "tone": "Positif",
+      "date": "2026-11-07",
+      "datetime": "2026-11-07T18:15:40",
+      "time": "18:15",
+      "date_display": "Sabtu, 7 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Makanan & Minuman",
+      "has_review": true,
+      "review_text": "Perlu Dicek Manual: Berita pameran dan ajang inovasi produk industri makanan dan minuman."
+    },
+    {
+      "id": 29,
+      "title": "Kemenperin Bidik Ekspor Minyak Atsiri Tembus USD 500 Juta pada 2029",
+      "link": "https://www.agrofarm.co.id/2026/11/kemenperin-bidik-ekspor-minyak-atsiri-tembus-usd-500-juta-pada-2029/",
+      "media": "agrofarm.co.id",
+      "tone": "Positif",
+      "date": "2026-11-07",
+      "datetime": "2026-11-07T17:41:59",
+      "time": "17:41",
+      "date_display": "Sabtu, 7 November 2026",
+      "spokesperson": "Faisol Riza",
+      "unit": "WAMEN",
+      "commodity": "Lainnya",
+      "has_review": false,
+      "review_text": ""
+    },
+    {
+      "id": 30,
       "title": "KKP Benahi Aturan Sertifikasi Ikan Kaleng",
       "link": "https://pro.hukumonline.com/legal-intelligence/a/kkp-benahi-aturan-sertifikasi-ikan-kaleng-lt6aec5825d79c2/",
       "media": "Hukumonline",
@@ -234,7 +651,7 @@
       "review_text": ""
     },
     {
-      "id": 5,
+      "id": 31,
       "title": "Konsumsi pemerintah topang pertumbuhan ekonomi RI triwulan III-2026",
       "link": "https://mataram.antaranews.com/berita/580759/konsumsi-pemerintah-topang-pertumbuhan-ekonomi-ri-triwulan-iii-2026",
       "media": "ANTARA News Mataram",
@@ -250,7 +667,7 @@
       "review_text": "Perlu Dicek Manual: Berita kinerja ekonomi makro nasional yang mencakup pertumbuhan konsumsi pemerintah."
     },
     {
-      "id": 6,
+      "id": 32,
       "title": "Menperin matangkan insentif mobil hybrid bersama kementerian terkait",
       "link": "https://ambon.antaranews.com/berita/351299/menperin-matangkan-insentif-mobil-hybrid-bersama-kementerian-terkait",
       "media": "ANTARA News",
@@ -266,7 +683,7 @@
       "review_text": ""
     },
     {
-      "id": 7,
+      "id": 33,
       "title": "Konsumsi pemerintah topang pertumbuhan ekonomi RI triwulan III 2026",
       "link": "https://ambon.antaranews.com/berita/351275/konsumsi-pemerintah-topang-pertumbuhan-ekonomi-ri-triwulan-iii-2026",
       "media": "ANTARA News",
@@ -282,7 +699,7 @@
       "review_text": "Perlu Dicek Manual: Berita kinerja ekonomi makro nasional yang mencakup pertumbuhan konsumsi pemerintah."
     },
     {
-      "id": 8,
+      "id": 34,
       "title": "Gubernur Khofifah Pimpin Misi Dagang Dan Investasi Jatim Sulsel Sukses Catatkan Transaksi Rp5 693 Triliun",
       "link": "https://detak.co/kategori/nasional/gubernur-khofifah-pimpin-misi-dagang-dan-investasi-jatim-sulsel-sukses-catatkan-transaksi-rp5-693-triliun/",
       "media": "Detak.co",
@@ -298,7 +715,7 @@
       "review_text": "Perlu Dicek Manual: Pameran dagang antarprovinsi bersifat umum."
     },
     {
-      "id": 9,
+      "id": 35,
       "title": "Jokowi Bersaksi di Sidang soal Tudingan Ijazah Palsu",
       "link": "https://kumparan.com/kumparannews/jokowi-bersaksi-di-sidang-soal-tudingan-ijazah-palsu-28W6s4LgEbV",
       "media": "Kumparan.com",
@@ -314,7 +731,7 @@
       "review_text": "AI tidak dijalankan (alasan: error parsing JSON AI: Invalid control character at: line 54 column 10 (char 837))"
     },
     {
-      "id": 10,
+      "id": 36,
       "title": "PESONA RUMPUT LAUT NUSANTARA, KENALI RAGAM JENISNYA",
       "link": "https://dkp.jatimprov.go.id/unit/bapl//news/view/4854",
       "media": "DKP Jawa Timur",
@@ -330,7 +747,7 @@
       "review_text": "Perlu Dicek Manual: Potensi komoditas rumput laut untuk kebutuhan industri dan perekonomian."
     },
     {
-      "id": 11,
+      "id": 37,
       "title": "Konsumsi Pemerintah Melonjak 8,95 Persen, Topang Pertumbuhan Ekonomi RI 5,47 Persen di Kuartal III-2026",
       "link": "https://news.republika.co.id/berita/to1tsu3130000/konsumsi-pemerintah-melonjak-895-persen-topang-pertumbuhan-ekonomi-ri-547-persen-di-kuartal-iii2026",
       "media": "republika.co.id",
@@ -346,7 +763,7 @@
       "review_text": "Perlu Dicek Manual: Berita kinerja ekonomi makro nasional terkait lonjakan konsumsi pemerintah."
     },
     {
-      "id": 12,
+      "id": 38,
       "title": "Menperin dorong Pertamina pakai sagu dalam pengeboran sumur minyak",
       "link": "https://www.antaranews.com/berita/5835527/menperin-dorong-pertamina-pakai-sagu-dalam-pengeboran-sumur-minyak",
       "media": "ANTARA News",
@@ -362,7 +779,7 @@
       "review_text": ""
     },
     {
-      "id": 13,
+      "id": 39,
       "title": "Asmar Bidik Pasar Jepang, Sagu Meranti Didorong Tembus Pasar Internasional",
       "link": "https://www.beritariau.com/berita-54346-asmar-bidik-pasar-jepang-sagu-meranti-didorong-tembus-pasar-internasional.html",
       "media": "BeritaRiau.com",
@@ -378,7 +795,7 @@
       "review_text": ""
     },
     {
-      "id": 14,
+      "id": 40,
       "title": "Menperin Buka Opsi Kawasan Industri di Maluku, Tak Harus KEK - kumparan.com",
       "link": "https://kumparan.com/kumparanbisnis/menperin-buka-opsi-kawasan-industri-di-maluku-tak-harus-kek-28Vv1rZf5Ry",
       "media": "kumparan",
@@ -394,7 +811,7 @@
       "review_text": ""
     },
     {
-      "id": 15,
+      "id": 41,
       "title": "Hilirisasi Sagu Digenjot, Tingkatkan Nilai Tambah dan Perkuat Industri Olahan",
       "link": "https://aktual.com/hilirisasi-sagu-digenjot-tingkatkan-nilai-tambah-dan-perkuat-industri-olahan/",
       "media": "Aktual.com",
@@ -410,7 +827,7 @@
       "review_text": ""
     },
     {
-      "id": 16,
+      "id": 42,
       "title": "Pemerintah perluas dukungan BPDP untuk kakao dan kelapa",
       "link": "https://www.antaranews.com/berita/5835471/pemerintah-perluas-dukungan-bpdp-untuk-kakao-dan-kelapa",
       "media": "ANTARA News",
@@ -426,7 +843,7 @@
       "review_text": ""
     },
     {
-      "id": 17,
+      "id": 43,
       "title": "Indomie Goreng Cabe Ijo Kembali Hadir, Bawa Sensasi Pedas dan Gurih dengan",
       "link": "https://www.kompasiana.com/divaaulia/6aecbde734777c1217085a92/indomie-goreng-cabe-ijo-kembali-hadir-bawa-sensasi-pedas-dan-gurih-dengan",
       "media": "Kompasiana.com",
@@ -442,7 +859,7 @@
       "review_text": ""
     },
     {
-      "id": 18,
+      "id": 44,
       "title": "Kaltim Siapkan Enam Pabrik Pemurnian Sawit, Bidik Peningkatan Nilai Tambah dan Ekspor",
       "link": "https://diskominfo.kaltimprov.go.id/berita/kaltim-siapkan-enam-pabrik-pemurnian-sawit-bidik-peningkatan-nilai-tambah-dan-ekspor",
       "media": "Dinas Komunikasi dan Informatika Provinsi Kalimantan Timur",
@@ -458,7 +875,7 @@
       "review_text": ""
     },
     {
-      "id": 19,
+      "id": 45,
       "title": "MBG dan Kopdes Merah Putih Bakal Genjot Investasi dan Belanja Pemerintah",
       "link": "https://www.liputan6.com/bisnis/read/8329556/mbg-dan-kopdes-merah-putih-bakal-genjot-investasi-dan-belanja-pemerintah",
       "media": "Liputan6.com",
@@ -474,7 +891,7 @@
       "review_text": ""
     },
     {
-      "id": 20,
+      "id": 46,
       "title": "Pasar Pendingin Komersial Tumbuh, Peluang Bisnis Kian Terbuka",
       "link": "https://www.medcom.id/properti/news-properti/akWmR44N-pasar-pendingin-komersial-tumbuh-peluang-bisnis-kian-terbuka",
       "media": "Medcom.id",
@@ -490,7 +907,7 @@
       "review_text": "Perlu Dicek Manual: Perluasan pasar B2B perangkat pendingin komersial untuk memenuhi kebutuhan industri makanan dan minuman."
     },
     {
-      "id": 21,
+      "id": 47,
       "title": "Ribuan Pelaku Industri Makanan dan Minuman Bertemu di Krista Interfood 2026",
       "link": "https://adv.kompas.id/baca/ribuan-pelaku-industri-makanan-dan-minuman-bertemu-di-krista-interfood-2026/",
       "media": "Advertorial Kompas.id",
@@ -506,7 +923,7 @@
       "review_text": ""
     },
     {
-      "id": 22,
+      "id": 48,
       "title": "Dicecar Dokter Tifa soal Lulusan Teknologi Kayu, Jokowi: Waktu Saya Masuk Tidak Ada Jurusan",
       "link": "https://megapolitan.kompas.com/read/2026/11/05/23050061/dicecar-dokter-tifa-soal-lulusan-teknologi-kayu-jokowi-waktu-saya-masuk",
       "media": "Kompas.com",
@@ -522,7 +939,7 @@
       "review_text": "AI tidak dijalankan (alasan: error parsing JSON AI: Invalid control character at: line 54 column 10 (char 837))"
     },
     {
-      "id": 23,
+      "id": 49,
       "title": "Potensi Besar, Kuliner Indonesia Punya Peluang Mendunia",
       "link": "https://www.viva.co.id/gaya-hidup/1941395-potensi-besar-kuliner-indonesia-punya-peluang-mendunia",
       "media": "VIVA.co.id",
@@ -538,7 +955,7 @@
       "review_text": ""
     },
     {
-      "id": 24,
+      "id": 50,
       "title": "Pameran Industri Makanan dan Minuman Hadirkan 1.100 Peserta",
       "link": "https://digital.okezone.com/view/2026/11/05/1/106438/pameran-industri-makanan-dan-minuman-hadirkan-1-100-peserta",
       "media": "Digital Okezone",
@@ -554,7 +971,7 @@
       "review_text": ""
     },
     {
-      "id": 25,
+      "id": 51,
       "title": "Diplomat Meksiko Tertarik Mebel Ukir dan Batik Jepara, Bidik Pasar Amerika Latin",
       "link": "https://www.rmoljawatengah.id/diplomat-meksiko-tertarik-mebel-ukir-dan-batik-jepara-bidik-pasar-amerika-latin",
       "media": "rmol jateng",
@@ -570,7 +987,7 @@
       "review_text": "Perlu Dicek Manual: Membahas potensi ekspor IKM binaan Dekranasda."
     },
     {
-      "id": 26,
+      "id": 52,
       "title": "BRIN Uji Tepung Singkong untuk Padamkan Api Bawah Gambut Kalteng",
       "link": "https://www.detik.com/kalimantan/berita/d-8740360/brin-uji-tepung-singkong-untuk-padamkan-api-bawah-gambut-kalteng",
       "media": "detikcom",
@@ -586,7 +1003,7 @@
       "review_text": "Perlu Dicek Manual: Riset dan inovasi pemanfaatan tepung singkong untuk keperluan teknis."
     },
     {
-      "id": 27,
+      "id": 53,
       "title": "Menperin Dorong Hilirisasi Sagu untuk Perkuat Industri dan Kemandirian Pangan",
       "link": "https://borneoflash.com/2026/11/05/menperin-dorong-hilirisasi-sagu-untuk-perkuat-industri-dan-kemandirian-pangan",
       "media": "BorneoFlash.com",
@@ -602,7 +1019,7 @@
       "review_text": ""
     },
     {
-      "id": 28,
+      "id": 54,
       "title": "Ekonomi Kuartal III-2026 Tumbuh Solid, Airlangga: MBG dan Kopdes Merah Putih Jadi Penopang",
       "link": "https://www.inilah.com/ekonomi-kuartal-iii-2026-tumbuh-solid-airlangga-mbg-dan-kopdes-merah-putih-jadi-penopang",
       "media": "Inilah.com",
@@ -618,7 +1035,7 @@
       "review_text": ""
     },
     {
-      "id": 29,
+      "id": 55,
       "title": "OJK Racik Ekosistem Bisnis Daerah, Komoditas Lokal Jadi Senjata",
       "link": "https://wartaekonomi.co.id/read645947/ojk-racik-ekosistem-bisnis-daerah-komoditas-lokal-jadi-senjata",
       "media": "Warta Ekonomi",
@@ -634,7 +1051,7 @@
       "review_text": "Perlu Dicek Manual: Inisiatif OJK dalam pengembangan ekosistem komoditas unggulan daerah seperti rumput laut."
     },
     {
-      "id": 30,
+      "id": 56,
       "title": "Hilirisasi Sektor Agroindustri Terus Dorong Ketahanan Ekonomi Nasional",
       "link": "https://olenka.id/hilirisasi-sektor-agroindustri-terus-dorong-ketahanan-ekonomi-nasional",
       "media": "Olenka",
@@ -650,7 +1067,7 @@
       "review_text": ""
     },
     {
-      "id": 31,
+      "id": 57,
       "title": "Gubernur Khofifah Pimpin Misi Dagang dan Investasi Jatim-Sulsel di Makassar, Sukses Catatkan Transaksi Rp5,693 Triliun",
       "link": "https://sabdanews.com/gubernur-khofifah-pimpin-misi-dagang-dan-investasi-jatim-sulsel-di-makassar-sukses-catatkan-transaksi-rp5693-triliun/",
       "media": "Sabdanews",
@@ -666,7 +1083,7 @@
       "review_text": "Perlu Dicek Manual: Pameran dagang antarprovinsi bersifat umum."
     },
     {
-      "id": 32,
+      "id": 58,
       "title": "Ekspor Batu Bara Bengkulu Turun, Karet Anjlok 85,90 Persen - rakyatbengkulu.com",
       "link": "https://rakyatbengkulu.disway.id/bengkulu-raya/read/719060/ekspor-batu-bara-bengkulu-turun-karet-anjlok-8590-persen",
       "media": "Rakyat Bengkulu Online",
@@ -682,7 +1099,7 @@
       "review_text": ""
     },
     {
-      "id": 33,
+      "id": 59,
       "title": "Kemenperin dan Pertamina Jajaki Penggunaan Tepung Sagu untuk Pengeboran Migas",
       "link": "https://katadata.co.id/berita/energi/6aec8c0f7bd76/kemenperin-dan-pertamina-jajaki-penggunaan-tepung-sagu-untuk-pengeboran-migas",
       "media": "Katadata.co.id",
@@ -698,7 +1115,7 @@
       "review_text": ""
     },
     {
-      "id": 34,
+      "id": 60,
       "title": "Lexus Ajak keluarga Rayakan kebersamaan, Temukan Keceriaan dalam Momen Harian",
       "link": "https://voi.id/lifestyle/601455/lexus-ajak-keluarga-rayakan-kebersamaan-temukan-keceriaan-dalam-momen-harian",
       "media": "VOI.ID",
@@ -714,7 +1131,7 @@
       "review_text": "Perlu Dicek Manual: Artikel promosi/konsumen terkait produk makanan yang memerlukan peninjauan lebih lanjut."
     },
     {
-      "id": 35,
+      "id": 61,
       "title": "Pemanfaatan Biji Nangka sebagai Bahan Tepung: Tahapan Pengolahan dan Evaluasi Sifatnya",
       "link": "https://masoemuniversity.ac.id/artikel/pemanfaatan-biji-nangka-sebagai-bahan-tepung-tahapan-pengolahan-dan-evaluasi-sifatnya/",
       "media": "Masoem University",
@@ -730,7 +1147,7 @@
       "review_text": "Perlu Dicek Manual: Riset pengolahan komoditas agro (nangka) menjadi bahan baku tepung."
     },
     {
-      "id": 36,
+      "id": 62,
       "title": "Pengolahan Tepung Sukun sebagai Bahan Baku Pangan: Karakteristik Fisik dan Kesesuaian Aplikasi",
       "link": "https://masoemuniversity.ac.id/artikel/pengolahan-tepung-sukun-sebagai-bahan-baku-pangan-karakteristik-fisik-dan-kesesuaian-aplikasi/",
       "media": "Masoem University",
@@ -746,7 +1163,7 @@
       "review_text": "Perlu Dicek Manual: Riset karakteristik fisik pengolahan buah tropis menjadi tepung untuk industri pangan."
     },
     {
-      "id": 37,
+      "id": 63,
       "title": "Pengembangan Tepung Talas: Pengaruh Pengupasan dan Perlakuan Awal terhadap Mutu Bahan",
       "link": "https://masoemuniversity.ac.id/artikel/pengembangan-tepung-talas-pengaruh-pengupasan-dan-perlakuan-awal-terhadap-mutu-bahan/",
       "media": "Masoem University",
@@ -762,7 +1179,7 @@
       "review_text": "Perlu Dicek Manual: Riset pengembangan komoditas umbi lokal sebagai bahan baku industri pangan."
     },
     {
-      "id": 38,
+      "id": 64,
       "title": "Gubernur Khofifah Pimpin Misi Dagang dan Investasi Jatim-Sulsel di Makassar, Sukses Catatkan Transaksi Rp5,693 Triliun",
       "link": "https://dpmptsp.jatimprov.go.id/gubernur-khofifah-pimpin-misi-dagang-dan-investasi-jatim-sulsel-di-makassar-sukses-catatkan-transaksi-rp5693-triliun/",
       "media": "DPMPTSP Prov Jawa Timur",
@@ -778,7 +1195,7 @@
       "review_text": "Perlu Dicek Manual: Misi dagang antarprovinsi yang bersifat umum."
     },
     {
-      "id": 39,
+      "id": 65,
       "title": "SIAL 2026 Perluas Peluang Produk F&B Indonesia Tembus Pasar Global",
       "link": "https://riaupos.jawapos.com/ekonomi/2611050072/sial-2026-perluas-peluang-produk-fb-indonesia-tembus-pasar-global",
       "media": "Riau Pos",
@@ -794,7 +1211,7 @@
       "review_text": ""
     },
     {
-      "id": 40,
+      "id": 66,
       "title": "Jokowi Beberkan Riwayat Kuliah di UGM, dari Seleksi Masuk hingga Ujian Skripsi",
       "link": "https://www.kompas.id/artikel/jokowi-beberkan-riwayat-kuliah-di-ugm-dari-seleksi-masuk-hingga-ujian-skripsi",
       "media": "Kompas.id",
@@ -810,7 +1227,7 @@
       "review_text": "AI tidak dijalankan (alasan: error parsing JSON AI: Invalid control character at: line 54 column 10 (char 837))"
     },
     {
-      "id": 41,
+      "id": 67,
       "title": "UIN Jakarta Perkuat Kolaborasi Riset dan Hilirisasi Minyak Atsiri, Potensi Ekspor Indonesia Capai US$348,7 Juta",
       "link": "https://uinjkt.ac.id/id/uin-jakarta-perkuat-kolaborasi-riset-dan-hilirisasi-minyak-atsiri-potensi-ekspor-indonesia-capai-us3487-juta",
       "media": "UIN Jakarta",
@@ -826,7 +1243,7 @@
       "review_text": "Perlu Dicek Manual: Riset kampus dan hilirisasi agro terkait minyak atsiri."
     },
     {
-      "id": 42,
+      "id": 68,
       "title": "Peluang Investasi Industri Mamin Menguat, Pasar Gen Z Jadi Potensi Besar Halaman 1",
       "link": "https://www.kompasiana.com/dewi2021/6aec7a66c925c42b3c7f8e26/peluang-investasi-industri-mamin-menguat-pasar-gen-z-jadi-potensi-besar",
       "media": "Kompasiana.com",
@@ -842,7 +1259,7 @@
       "review_text": ""
     },
     {
-      "id": 43,
+      "id": 69,
       "title": "Gubernur Hendrik Lewerissa Dorong Hilirisasi Sagu Maluku Masuk PSN 2027",
       "link": "https://mediacenter.malukuprov.go.id/gubernur-hendrik-lewerissa-dorong-hilirisasi-sagu-maluku-masuk-psn-2027/",
       "media": "Pemerintah Provinsi Maluku",
@@ -858,7 +1275,7 @@
       "review_text": ""
     },
     {
-      "id": 44,
+      "id": 70,
       "title": "Model Usaha Kelapa Terpadu pada Perkebunan Rakyat: Mengelola Nilai dari Produk Samping",
       "link": "https://masoemuniversity.ac.id/artikel/model-usaha-kelapa-terpadu-pada-perkebunan-rakyat-mengelola-nilai-dari-produk-samping/",
       "media": "Masoem University",
@@ -874,7 +1291,7 @@
       "review_text": "Perlu Dicek Manual: Artikel mengenai model pengelolaan nilai tambah dan pengolahan produk sampingan industri kelapa."
     },
     {
-      "id": 45,
+      "id": 71,
       "title": "Ketergantungan Kebun Karet Rakyat pada Pembeli Tunggal: Membaca Risiko dalam Tata Niaga",
       "link": "https://masoemuniversity.ac.id/artikel/ketergantungan-kebun-karet-rakyat-pada-pembeli-tunggal-membaca-risiko-dalam-tata-niaga/",
       "media": "Masoem University",
@@ -890,7 +1307,7 @@
       "review_text": "Perlu Dicek Manual: Analisis tata niaga dan ketergantungan kebun karet rakyat pada pembeli tunggal."
     },
     {
-      "id": 46,
+      "id": 72,
       "title": "Pertamina Uji Coba Ngebor Sumur Minyak Pakai Sagu, Ini Hasilnya",
       "link": "https://www.cnbcindonesia.com/news/20261105173355-4-782726/pertamina-uji-coba-ngebor-sumur-minyak-pakai-sagu-ini-hasilnya",
       "media": "CNBC Indonesia",
@@ -906,7 +1323,7 @@
       "review_text": ""
     },
     {
-      "id": 47,
+      "id": 73,
       "title": "Usaha Budidaya Rumput Laut: Pengaruh Kebutuhan Sarana dan Tenaga Kerja terhadap Keuntungan",
       "link": "https://masoemuniversity.ac.id/artikel/usaha-budidaya-rumput-laut-pengaruh-kebutuhan-sarana-dan-tenaga-kerja-terhadap-keuntungan/",
       "media": "Masoem University",
@@ -922,7 +1339,7 @@
       "review_text": "Perlu Dicek Manual: Agribisnis budidaya rumput laut sebagai penyedia bahan baku industri."
     },
     {
-      "id": 48,
+      "id": 74,
       "title": "Tekan Biaya Produksi, Dispertahankan Ponorogo Gelontor DBHCHT Rp 3,3 Miliar Bagi Petani Tembakau",
       "link": "https://www.jatimpos.co/jatim/mataraman/22808-tekan-biaya-produksi-dispertahankan-ponorogo-gelontor-dbhcht-rp-3-3-miliar-bagi-petani-tembakau",
       "media": "JATIM POS online",
@@ -938,7 +1355,7 @@
       "review_text": "Perlu Dicek Manual: Alokasi DBHCHT untuk bantuan sarana produksi bagi petani tembakau."
     },
     {
-      "id": 49,
+      "id": 75,
       "title": "Gubernur Dorong Hilirisasi Sagu SBT Masuk PSN 2027",
       "link": "https://rakyatmaluku.fajar.co.id/2026/11/05/gubernur-dorong-hilirisasi-sagu-sbt-masuk-psn-2027/",
       "media": "Rakyat Maluku",
@@ -954,7 +1371,7 @@
       "review_text": ""
     },
     {
-      "id": 50,
+      "id": 76,
       "title": "MENPERIN : JEPANG NEGARA TERBESAR EKSPOR SAGU RI, NAIK JADI 14 PERSEN",
       "link": "https://post-pro.co.id/news-and-research/70365/menperin-jepang-negara-terbesar-ekspor-sagu-ri-naik-jadi-14-persen",
       "media": "post-pro.co.id",
@@ -970,7 +1387,7 @@
       "review_text": ""
     },
     {
-      "id": 51,
+      "id": 77,
       "title": "Gubernur Hendrik Lewerissa Dorong Hilirisasi Sagu Maluku Masuk PSN 2027",
       "link": "https://ambon.tribunnews.com/ambon/107788/gubernur-hendrik-lewerissa-dorong-hilirisasi-sagu-maluku-masuk-psn-2027",
       "media": "Tribunambon.com",
@@ -986,7 +1403,7 @@
       "review_text": ""
     },
     {
-      "id": 52,
+      "id": 78,
       "title": "GIMIT Apresiasi Keberhasilan Bupati SBT Gaet Investasi Hilirisasi Sagu",
       "link": "https://rri.co.id/bula/ekonomi/bisnis/2873920/gimit-apresiasi-keberhasilan-bupati-sbt-gaet-investasi-hilirisasi-sagu",
       "media": "RRI.co.id",
@@ -1002,7 +1419,7 @@
       "review_text": ""
     },
     {
-      "id": 53,
+      "id": 79,
       "title": "SIAL Innovation di SIAL Food & Drinks Indonesia 2026 Hari Kedua",
       "link": "https://dki.pikiran-rakyat.com/lifestyle/pr-30910544468/sial-innovation-di-sial-food-drinks-indonesia-2026-hari-kedua",
       "media": "Kabar DKI",
@@ -1018,7 +1435,7 @@
       "review_text": ""
     },
     {
-      "id": 54,
+      "id": 80,
       "title": "Lewat Business Forum 2026, Meranti Jajaki Potensi Ekspor Sagu ke Pasar Jepang",
       "link": "https://riaupos.jawapos.com/kepulauan-meranti/2611050065/lewat-business-forum-2026-meranti-jajaki-potensi-ekspor-sagu-ke-pasar-jepang",
       "media": "Riau Pos",
@@ -1034,7 +1451,7 @@
       "review_text": ""
     },
     {
-      "id": 55,
+      "id": 81,
       "title": "Pertamina Bakal Manfaatkan Sagu untuk Pengeboran Sumur Minyak",
       "link": "https://www.beritasatu.com/ekonomi/3038985/pertamina-bakal-manfaatkan-sagu-untuk-pengeboran-sumur-minyak",
       "media": "BeritaSatu.com",
@@ -1050,7 +1467,7 @@
       "review_text": ""
     },
     {
-      "id": 56,
+      "id": 82,
       "title": "Jokowi Luruskan Sebutan Jurusan Teknologi Kayu saat Dicecar Jaksa di Sidang Ijazah",
       "link": "https://www.cumicumi.com/articles/politik/6aec21f2a91b9a2c1b09e359/jokowi-luruskan-sebutan-jurusan-teknologi-kayu-saat-dicecar-jaksa-di-sidang-ijazah",
       "media": "Cumicumi",
@@ -1066,7 +1483,7 @@
       "review_text": "AI tidak dijalankan (alasan: error parsing JSON AI: Invalid control character at: line 54 column 10 (char 837))"
     },
     {
-      "id": 57,
+      "id": 83,
       "title": "Neraca Perdagangan Luar Negeri Jabar Surplus USD22,09 Miliar",
       "link": "https://jabarprov.go.id/berita/neraca-perdagangan-luar-negeri-jabar-surplus-usd22-09-miliar-26627",
       "media": "Jabarprov",
@@ -1082,7 +1499,7 @@
       "review_text": ""
     },
     {
-      "id": 58,
+      "id": 84,
       "title": "MENPERIN : JEPANG NEGARA TERBESAR EKSPOR SAGU RI, NAIK JADI 14 PERSEN",
       "link": "https://itrade.cgsi.co.id/menperin-jepang-negara-terbesar-ekspor-sagu-ri-naik-jadi-14-persen",
       "media": "iTrade CGS International",
@@ -1098,7 +1515,7 @@
       "review_text": ""
     },
     {
-      "id": 59,
+      "id": 85,
       "title": "CLEO Kantongi Penjualan Rp2,6 Triliun, Laba Bersih Tumbuh 23,6% hingga Kuartal III-2026",
       "link": "https://www.industry.co.id/read/158609/cleo-kantongi-penjualan-rp26-triliun-laba-bersih-tumbuh-236-hingga-kuartal-iii-2026",
       "media": "Industry.co.id",
@@ -1114,7 +1531,7 @@
       "review_text": ""
     },
     {
-      "id": 60,
+      "id": 86,
       "title": "Buka Peluang Pengembangan Industri Sagu Daerah Sekaligus Perluas Pasar ke Mancanegara",
       "link": "https://riausky.com/news/detail/96361/buka-peluang-pengembangan-industri-sagu-daerah-sekaligus-perluas-pasar-ke-mancanegara",
       "media": "RiauSky.com",
@@ -1130,7 +1547,7 @@
       "review_text": ""
     },
     {
-      "id": 61,
+      "id": 87,
       "title": "Bupati Asmar Hadiri Sagu Bisnis Forum 2026, Buka Peluang Pengembangan Industri Sagu Daerah Sekaligus Perluas Pasar ke Mancanegara",
       "link": "https://riausky.com/news/detail/96361/bupati-asmar-hadiri-sagu-bisnis-forum-2026-buka-peluang-pengembangan-industri-sagu-daerah-sekaligus-perluas-pasar-ke-mancanegara",
       "media": "RiauSky.com",
@@ -1146,7 +1563,7 @@
       "review_text": ""
     },
     {
-      "id": 62,
+      "id": 88,
       "title": "Hadiri Sagu Bisnis Forum 2026, Asmar Targetkan Pengembangan Industri Sagu Daerah",
       "link": "https://rri.co.id/pekanbaru/regional/2873727/hadiri-sagu-bisnis-forum-2026-asmar-targetkan-pengembangan-industri-sagu-daerah",
       "media": "RRI.co.id",
@@ -1162,7 +1579,7 @@
       "review_text": ""
     },
     {
-      "id": 63,
+      "id": 89,
       "title": "Bupati Asmar Jajaki Investasi dan Pasar Ekspor Sagu Meranti ke Jepang",
       "link": "https://www.tabloiddiksi.com/news/33492/bupati-asmar-jajaki-investasi-dan-pasar-ekspor-sagu-meranti-ke-jepang.html",
       "media": "Tabloid Diksi",
@@ -1178,7 +1595,7 @@
       "review_text": ""
     },
     {
-      "id": 64,
+      "id": 90,
       "title": "Sagu di RI Bakal Naik Kelas, Dipakai untuk Industri Migas dan Farmasi",
       "link": "https://www.cnbcindonesia.com/news/20261105150447-4-782663/sagu-di-ri-bakal-naik-kelas-dipakai-untuk-industri-migas-dan-farmasi",
       "media": "CNBC Indonesia",
@@ -1194,7 +1611,7 @@
       "review_text": ""
     },
     {
-      "id": 65,
+      "id": 91,
       "title": "MENPERIN : JEPANG NEGARA TERBESAR EKSPOR SAGU RI, NAIK JADI 14 PERSEN",
       "link": "https://www.iqplus.info/news/market_news/ekom-menperin---jepang-negara-terbesar-ekspor-sagu-ri--naik-jadi-14-persen,30858944.html",
       "media": "IQplus",
@@ -1210,7 +1627,7 @@
       "review_text": ""
     },
     {
-      "id": 66,
+      "id": 92,
       "title": "Ekonomi RI Melejit, Menko Airlangga: Ada Peran MBG dan KDMP!",
       "link": "https://nasional.kontan.co.id/news/ekonomi-ri-melejit-menko-airlangga-ada-peran-mbg-dan-kdmp",
       "media": "kontan.co.id",
@@ -1226,7 +1643,7 @@
       "review_text": "Perlu Dicek Manual: Kebijakan pemerintah terkait program makan bergizi yang berdampak pada ekosistem pangan namun bukan kebijakan teknis Kemenperin IA."
     },
     {
-      "id": 67,
+      "id": 93,
       "title": "Menperin: Jepang negara terbesar ekspor sagu RI, naik jadi 14 persen",
       "link": "https://m.antaranews.com/amp/berita/5834075/menperin-jepang-negara-terbesar-ekspor-sagu-ri-naik-jadi-14-persen",
       "media": "ANTARA News",
@@ -1242,7 +1659,7 @@
       "review_text": ""
     },
     {
-      "id": 68,
+      "id": 94,
       "title": "Midea Hadirkan 16 Produk Pendingin Komersial di Krista Interfood 2026",
       "link": "https://akurat.co/trend/904572/midea-hadirkan-16-produk-pendingin-komersial-di-krista-interfood-2026",
       "media": "Akurat.co",
@@ -1258,7 +1675,7 @@
       "review_text": "Perlu Dicek Manual: Pameran produk pendingin komersial tanpa kebijakan khusus Kemenperin Sektor Agro."
     },
     {
-      "id": 69,
+      "id": 95,
       "title": "RI Jajal Sagu untuk Pengeboran Minyak Pertamina, Dites di 2 Sumur",
       "link": "https://www.bloombergtechnoz.com/detail-news/126883/ri-jajal-sagu-untuk-pengeboran-minyak-pertamina-dites-di-2-sumur",
       "media": "Bloomberg Technoz",
@@ -1274,7 +1691,7 @@
       "review_text": ""
     },
     {
-      "id": 70,
+      "id": 96,
       "title": "Mitsubishi Fuso Bawa Canter FE71L Teknologi Cold Chain, Dukung Distribusi Pangan",
       "link": "https://www.liputan6.com/otomotif/read/8329105/mitsubishi-fuso-bawa-canter-fe71l-teknologi-cold-chain-dukung-distribusi-pangan",
       "media": "Liputan6.com",
@@ -1290,7 +1707,7 @@
       "review_text": "Perlu Dicek Manual: Solusi logistik rantai dingin (cold chain) untuk mendukung distribusi industri makanan dan minuman."
     },
     {
-      "id": 71,
+      "id": 97,
       "title": "Indonesia Baru Kuasai 14 Persen Pasar Sagu Jepang, Peluang Ekspor Masih Terbuka Lebar",
       "link": "https://money.kompas.com/read/2026/11/05/160207526/indonesia-baru-kuasai-14-persen-pasar-sagu-jepang-peluang-ekspor-masih-terbuka",
       "media": "Kompas.com",
@@ -1306,7 +1723,7 @@
       "review_text": ""
     },
     {
-      "id": 72,
+      "id": 98,
       "title": "Indonesia Punya Modal Strategis Kembangkan Industri Pengolahan Sagu",
       "link": "https://agroindonesia.co.id/indonesia-punya-modal-strategis-kembangkan-industri-pengolahan-sagu/",
       "media": "AgroIndonesia",
@@ -1322,7 +1739,7 @@
       "review_text": ""
     },
     {
-      "id": 73,
+      "id": 99,
       "title": "Mahasiswa UMY Dampingi Warga Garongan Olah Kelapa Jadi Minyak Bernilai Tambah",
       "link": "https://dikti.kemdiktisaintek.go.id/publikasi/berita/mahasiswa-umy-dampingi-warga-garongan-olah-kelapa-jadi-minyak-bernilai-tambah-2",
       "media": "Kementerian Pendidikan Tinggi, Sains, dan Teknologi",
@@ -1338,7 +1755,7 @@
       "review_text": "Perlu Dicek Manual: Pendampingan mahasiswa terkait pengolahan kelapa untuk meningkatkan nilai tambah produk."
     },
     {
-      "id": 74,
+      "id": 100,
       "title": "Bupati Asmar Hadiri Sagu Bisnis Forum 2026, Buka Peluang Pengembangan Industri Sagu Daerah Sekaligus Perluas Pasar ke Mancanegara.",
       "link": "https://riauterbit.com/news/detail/10163/bupati-asmar-hadiri-sagu-bisnis-forum-2026-buka-peluang-pengembangan-industri-sagu-daerah-sekaligus-perluas-pasar--ke-mancanegara",
       "media": "Riauterbit.com",
@@ -1352,422 +1769,6 @@
       "commodity": "Tepung, Sagu & Pati",
       "has_review": true,
       "review_text": ""
-    },
-    {
-      "id": 75,
-      "title": "Bupati Asmar Hadiri Sagu Bisnis Forum 2026, Buka Peluang Pengembangan Industri Sagu Daerah Sekaligus Perluas Pasar ke Mancanegara",
-      "link": "https://www.riaukepri.com/2026/11/05/bupati-asmar-hadiri-sagu-bisnis-forum-2026-buka-peluang-pengembangan-industri-sagu-daerah-sekaligus-perluas-pasar-ke-mancanegara/",
-      "media": "Riaukepri.com",
-      "tone": "Netral",
-      "date": "2026-11-05",
-      "datetime": "2026-11-05T08:38:00",
-      "time": "08:38",
-      "date_display": "Kamis, 5 November 2026",
-      "spokesperson": "Muhammad Sarmuji",
-      "unit": "Menteri",
-      "commodity": "Tepung, Sagu & Pati",
-      "has_review": true,
-      "review_text": ""
-    },
-    {
-      "id": 76,
-      "title": "Sekda Babel Hadiri Forum Bisnis Sagu 2026, PT Bangka Asindo Agri Bidik Peluang Pasar Internasional",
-      "link": "https://babelprov.go.id/siaran_pers/sekda-babel-hadiri-forum-bisnis-sagu-2026-pt-bangka-asindo-agri-bidik-peluang-pasar-internasional",
-      "media": "Pemerintah Provinsi Kepulauan Bangka Belitung",
-      "tone": "Positif",
-      "date": "2026-11-05",
-      "datetime": "2026-11-05T08:36:17",
-      "time": "08:36",
-      "date_display": "Kamis, 5 November 2026",
-      "spokesperson": "Putu Juli Ardika",
-      "unit": "Ditjen Industri Agro",
-      "commodity": "Tepung, Sagu & Pati",
-      "has_review": false,
-      "review_text": ""
-    },
-    {
-      "id": 77,
-      "title": "Menperin Apresiasi Potensi Sagu Meranti, Bupati Asmar Targetkan Ekspor Mandiri ke Jepang",
-      "link": "https://www.buser24.com/menperin-apresiasi-potensi-sagu-meranti-bupati-asmar-targetkan-ekspor-mandiri-ke-jepang/",
-      "media": "Buser24",
-      "tone": "Positif",
-      "date": "2026-11-05",
-      "datetime": "2026-11-05T08:34:15",
-      "time": "08:34",
-      "date_display": "Kamis, 5 November 2026",
-      "spokesperson": "Muhammad Sarmuji",
-      "unit": "Menteri",
-      "commodity": "Tepung, Sagu & Pati",
-      "has_review": false,
-      "review_text": ""
-    },
-    {
-      "id": 78,
-      "title": "RI Eksportir Pulp Terbesar Keempat Dunia, Menperin Sarmuji Dorong Hilirisasi Hingga Tekstil Rayon",
-      "link": "https://www.ayoindonesia.com/industri/0117861573/ri-eksportir-pulp-terbesar-keempat-dunia-menperin-sarmuji-dorong-hilirisasi-hingga-tekstil-rayon",
-      "media": "Ayo Indonesia",
-      "tone": "Positif",
-      "date": "2026-11-05",
-      "datetime": "2026-11-05T08:32:22",
-      "time": "08:32",
-      "date_display": "Kamis, 5 November 2026",
-      "spokesperson": "Muhammad Sarmuji",
-      "unit": "Menteri",
-      "commodity": "Gula & Tebu",
-      "has_review": false,
-      "review_text": ""
-    },
-    {
-      "id": 79,
-      "title": "Jokowi Coba Jawab Semua Keraguan Soal Keaslian Ijazahnya, Mulai dari Foto, Jarak Tanggal Kelulusan dan Penerbitan Ijazah yang Cuma 13 Hari, Font Skripsi, Sampai Jurusan Teknologi Kayu, Roy Suryo Tetap Skeptis",
-      "link": "https://afu.id/hukum-kriminal/jokowi-coba-jawab-semua-keraguan-soal-keaslian-ijazahnya-mulai-dari-foto-jarak-tanggal-kelulusan-dan-penerbitan-ijazah-yang-cuma-13-hari-font-skripsi-sampai-jurusan-teknologi-kayu-roy-suryo-tetap-skeptis",
-      "media": "AFU.id",
-      "tone": "Netral",
-      "date": "2026-11-05",
-      "datetime": "2026-11-05T08:30:10",
-      "time": "08:30",
-      "date_display": "Kamis, 5 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Kayu & Furnitur",
-      "has_review": true,
-      "review_text": "AI tidak dijalankan (alasan: error parsing JSON AI: Invalid control character at: line 54 column 10 (char 837))"
-    },
-    {
-      "id": 80,
-      "title": "Pemerintah Pacu Hilirisasi Sagu, Bidik Ekspansi Pasar Jepang",
-      "link": "https://katadata.co.id/berita/energi/6aec3ea652916/pemerintah-pacu-hilirisasi-sagu-bidik-ekspansi-pasar-jepang",
-      "media": "Katadata.co.id",
-      "tone": "Positif",
-      "date": "2026-11-05",
-      "datetime": "2026-11-05T08:30:00",
-      "time": "08:30",
-      "date_display": "Kamis, 5 November 2026",
-      "spokesperson": "Muhammad Sarmuji",
-      "unit": "Menteri",
-      "commodity": "Tepung, Sagu & Pati",
-      "has_review": false,
-      "review_text": ""
-    },
-    {
-      "id": 81,
-      "title": "UIN Jakarta melalui Program Studi Farmasi Menjadi Co-Host KNMA 2026, Perkuat Sinergi Akademisi dan Industri Minyak Atsiri Nasional | Fakultas Ilmu Kesehatan Universitas Islam Negeri Syarif Hidayatullah",
-      "link": "https://fikes.uinjkt.ac.id/id/uin-jakarta-melalui-program-studi-farmasi-menjadi-co-host-knma-2026-perkuat-sinergi-akademisi-dan-industri-minyak-atsiri-nasional",
-      "media": "fikes.uinjkt.ac.id",
-      "tone": "Netral",
-      "date": "2026-11-05",
-      "datetime": "2026-11-05T08:27:03",
-      "time": "08:27",
-      "date_display": "Kamis, 5 November 2026",
-      "spokesperson": "Faisol Riza",
-      "unit": "Wakil Menteri",
-      "commodity": "Lainnya",
-      "has_review": true,
-      "review_text": "Perlu Dicek Manual: Sinergi akademisi dan industri minyak atsiri nasional."
-    },
-    {
-      "id": 82,
-      "title": "Gandeng Karakter Lucu Mofusand, Biskuit Lexus Dorong Orang Tua Ciptakan Momen Quality Time Bareng Anak",
-      "link": "https://www.akurat.co/parenting/904546/gandeng-karakter-lucu-mofusand-biskuit-lexus-dorong-orang-tua-ciptakan-momen-quality-time-bareng-anak",
-      "media": "Akurat.co",
-      "tone": "Netral",
-      "date": "2026-11-05",
-      "datetime": "2026-11-05T08:21:57",
-      "time": "08:21",
-      "date_display": "Kamis, 5 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Makanan & Minuman",
-      "has_review": true,
-      "review_text": "Perlu Dicek Manual: Berita pemasaran produk biskuit dan kampanye konsumen yang memerlukan pengecekan konteks industri."
-    },
-    {
-      "id": 83,
-      "title": "Siapkan Karpet Merah untuk Investor! Gubernur Sumsel Tawarkan Hilirisasi Karet hingga Batu Bara ke Bangladesh - palpres.disway.id",
-      "link": "https://palpres.disway.id/news/read/781764/siapkan-karpet-merah-untuk-investor-gubernur-sumsel-tawarkan-hilirisasi-karet-hingga-batu-bara-ke-bangladesh",
-      "media": "PALPRES.COM",
-      "tone": "Netral",
-      "date": "2026-11-05",
-      "datetime": "2026-11-05T08:11:00",
-      "time": "08:11",
-      "date_display": "Kamis, 5 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Karet & Olahan",
-      "has_review": true,
-      "review_text": ""
-    },
-    {
-      "id": 84,
-      "title": "Sasar Pasar Jepang, Sagu Kepulauan Meranti Bidik Ekspor Mandiri",
-      "link": "https://www.goriau.com/berita/baca/sasar-pasar-jepang-sagu-kepulauan-meranti-bidik-ekspor-mandiri.html",
-      "media": "GoRiau.com",
-      "tone": "Positif",
-      "date": "2026-11-05",
-      "datetime": "2026-11-05T07:53:00",
-      "time": "07:53",
-      "date_display": "Kamis, 5 November 2026",
-      "spokesperson": "Muhammad Sarmuji, Putu Juli Ardika",
-      "unit": "Menteri",
-      "commodity": "Tepung, Sagu & Pati",
-      "has_review": false,
-      "review_text": ""
-    },
-    {
-      "id": 85,
-      "title": "Cerutu Legendaris Yogyakarta Mendunia, Taru Martani Ekspor ke Malaysia",
-      "link": "https://republika.co.id/berita//to0r4e423/cerutu-legendaris-yogyakarta-mendunia-taru-martani-ekspor-ke-malaysia",
-      "media": "Republika Online",
-      "tone": "Positif",
-      "date": "2026-11-05",
-      "datetime": "2026-11-05T07:50:38",
-      "time": "07:50",
-      "date_display": "Kamis, 5 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Hasil Tembakau",
-      "has_review": false,
-      "review_text": ""
-    },
-    {
-      "id": 86,
-      "title": "Tim Ekspedisi Patriot UGM Dorong Penguatan Kelembagaan dan Akses Permodalan Petani Sawit Mandiri di Muting",
-      "link": "https://pengabdian.ugm.ac.id/2026/11/05/tim-ekspedisi-patriot-ugm-dorong-penguatan-kelembagaan-dan-akses-permodalan-petani-sawit-mandiri-di-muting/",
-      "media": "Universitas Gadjah Mada",
-      "tone": "Netral",
-      "date": "2026-11-05",
-      "datetime": "2026-11-05T07:47:00",
-      "time": "07:47",
-      "date_display": "Kamis, 5 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Kelapa Sawit & CPO",
-      "has_review": true,
-      "review_text": "Perlu Dicek Manual: Program perguruan tinggi terkait penguatan kelembagaan dan akses permodalan bagi petani sawit."
-    },
-    {
-      "id": 87,
-      "title": "Bupati SBT Fachri Alkatiri Teken MoU Investasi Pabrik Sagu pada Forum Bisnis Indonesia-Jepang 2026",
-      "link": "https://ameks.fajar.co.id/2026/11/05/bupati-sbt-fachri-alkatiri-teken-mou-investasi-pabrik-sagu-pada-forum-bisnis-indonesia-jepang-2026/",
-      "media": "Ameks Online",
-      "tone": "Positif",
-      "date": "2026-11-05",
-      "datetime": "2026-11-05T07:40:18",
-      "time": "07:40",
-      "date_display": "Kamis, 5 November 2026",
-      "spokesperson": "Muhammad Sarmuji",
-      "unit": "Menteri",
-      "commodity": "Tepung, Sagu & Pati",
-      "has_review": false,
-      "review_text": ""
-    },
-    {
-      "id": 88,
-      "title": "Bupati Asmar Hadiri Sagu Bisnis Forum 2026, Buka Peluang Pengembangan Industri Sagu Daerah Sekaligus Perluas Pasar ke Mancanegara.",
-      "link": "https://disporapar.merantikab.go.id/berita/bupati-asmar-hadiri-sagu-bisnis-forum-2026-buka-peluang-pengembangan-industri-sagu-daerah-sekaligus-perluas-pasar-ke-mancanegara",
-      "media": "Merantikab",
-      "tone": "Positif",
-      "date": "2026-11-05",
-      "datetime": "2026-11-05T07:32:05",
-      "time": "07:32",
-      "date_display": "Kamis, 5 November 2026",
-      "spokesperson": "Muhammad Sarmuji",
-      "unit": "Menteri",
-      "commodity": "Tepung, Sagu & Pati",
-      "has_review": false,
-      "review_text": ""
-    },
-    {
-      "id": 89,
-      "title": "Cerutu Yogyakarta kian Mendunia, Catatkan Ekspor hingga ke Malaysia",
-      "link": "https://mediaindonesia.com/nusantara/952672/cerutu-yogyakarta-kian-mendunia-catatkan-ekspor-hingga-ke-malaysia",
-      "media": "Media Indonesia",
-      "tone": "Positif",
-      "date": "2026-11-05",
-      "datetime": "2026-11-05T07:29:51",
-      "time": "07:29",
-      "date_display": "Kamis, 5 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Hasil Tembakau",
-      "has_review": false,
-      "review_text": ""
-    },
-    {
-      "id": 90,
-      "title": "KRISTAInterFOOD 2026 Diikuti 1.100 Peserta dari 16 Negara",
-      "link": "https://akurat.co/food/904523/kristainterfood-2026-diikuti-1-100-peserta-dari-16-negara",
-      "media": "Akurat.co",
-      "tone": "Positif",
-      "date": "2026-11-05",
-      "datetime": "2026-11-05T07:26:43",
-      "time": "07:26",
-      "date_display": "Kamis, 5 November 2026",
-      "spokesperson": "Muhammad Sarmuji",
-      "unit": "Menteri",
-      "commodity": "Makanan & Minuman",
-      "has_review": false,
-      "review_text": ""
-    },
-    {
-      "id": 91,
-      "title": "Menperin: PMI manufaktur Indonesia pada Oktober 2026 capai 54",
-      "link": "https://www.antaranews.com/berita/5833707/menperin-pmi-manufaktur-indonesia-pada-oktober-2026-capai-54",
-      "media": "ANTARA News",
-      "tone": "Netral",
-      "date": "2026-11-05",
-      "datetime": "2026-11-05T07:25:45",
-      "time": "07:25",
-      "date_display": "Kamis, 5 November 2026",
-      "spokesperson": "Muhammad Sarmuji",
-      "unit": "Menteri",
-      "commodity": "Makanan & Minuman",
-      "has_review": true,
-      "review_text": ""
-    },
-    {
-      "id": 92,
-      "title": "Pertamina Serap 9.000 Ton Sagu untuk Pengeboran Migas, Kemenperin Siapkan Aturan Wajib",
-      "link": "https://wartaekonomi.co.id/read645862/pertamina-serap-9000-ton-sagu-untuk-pengeboran-migas-kemenperin-siapkan-aturan-wajib",
-      "media": "Warta Ekonomi",
-      "tone": "Positif",
-      "date": "2026-11-05",
-      "datetime": "2026-11-05T07:24:00",
-      "time": "07:24",
-      "date_display": "Kamis, 5 November 2026",
-      "spokesperson": "Muhammad Sarmuji",
-      "unit": "Menteri",
-      "commodity": "Tepung, Sagu & Pati",
-      "has_review": false,
-      "review_text": ""
-    },
-    {
-      "id": 93,
-      "title": "Produk Manufaktur RI Tembus Pasar Global, 7 Produk Raih G-Mark Jepang",
-      "link": "https://wartaekonomi.co.id/read645869/produk-manufaktur-ri-tembus-pasar-global-7-produk-raih-g-mark-jepang",
-      "media": "Warta Ekonomi",
-      "tone": "Netral",
-      "date": "2026-11-05",
-      "datetime": "2026-11-05T07:24:00",
-      "time": "07:24",
-      "date_display": "Kamis, 5 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Makanan & Minuman",
-      "has_review": true,
-      "review_text": "Perlu Dicek Manual: Berita penghargaan desain produk manufaktur secara umum di tingkat global."
-    },
-    {
-      "id": 94,
-      "title": "Lewat Kegiatan CVC, Bea Cukai Terus Bangun Komunikasi dengan Industri Hasil Tembakau",
-      "link": "https://m.jpnn.com/amp/news/lewat-kegiatan-cvc-bea-cukai-terus-bangun-komunikasi-dengan-industri-hasil-tembakau",
-      "media": "JPNN.com",
-      "tone": "Netral",
-      "date": "2026-11-05",
-      "datetime": "2026-11-05T07:20:20",
-      "time": "07:20",
-      "date_display": "Kamis, 5 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Hasil Tembakau",
-      "has_review": true,
-      "review_text": ""
-    },
-    {
-      "id": 95,
-      "title": "Bea Cukai Jalin Sinergi dengan Industri Hasil Tembakau melalui Customs Visit Customer",
-      "link": "https://indoposco.id/2026/11/05/bea-cukai-jalin-sinergi-dengan-industri-hasil-tembakau-melalui-customs-visit-customer/",
-      "media": "indoposco.id",
-      "tone": "Netral",
-      "date": "2026-11-05",
-      "datetime": "2026-11-05T07:15:20",
-      "time": "07:15",
-      "date_display": "Kamis, 5 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Hasil Tembakau",
-      "has_review": true,
-      "review_text": ""
-    },
-    {
-      "id": 96,
-      "title": "Menperin Sarmuji Ungkap Potensi Besar Mi Sagu hingga Kolagen dari Limbah Ikan",
-      "link": "https://www.industry.co.id/read/158604/menperin-sarmuji-ungkap-potensi-besar-mi-sagu-hingga-kolagen-dari-limbah-ikan",
-      "media": "Industry.co.id",
-      "tone": "Positif",
-      "date": "2026-11-05",
-      "datetime": "2026-11-05T07:05:00",
-      "time": "07:05",
-      "date_display": "Kamis, 5 November 2026",
-      "spokesperson": "Muhammad Sarmuji",
-      "unit": "Menteri",
-      "commodity": "Tepung, Sagu & Pati",
-      "has_review": false,
-      "review_text": ""
-    },
-    {
-      "id": 97,
-      "title": "Indonesia–Tiongkok Sepakati Kerja Sama Pertanian: Garap AI Perkebunan Hingga Ekspor Kelapa dan Sawit",
-      "link": "https://sawitindonesia.com/indonesia-tiongkok-sepakati-kerja-sama-pertanian-garap-ai-perkebunan-hingga-ekspor-kelapa-dan-sawit",
-      "media": "Sawit Indonesia",
-      "tone": "Netral",
-      "date": "2026-11-05",
-      "datetime": "2026-11-05T07:01:45",
-      "time": "07:01",
-      "date_display": "Kamis, 5 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Kelapa Sawit & CPO",
-      "has_review": true,
-      "review_text": ""
-    },
-    {
-      "id": 98,
-      "title": "Bea Cukai Malang Tekankan Kepatuhan Cukai Sejak Awal Usaha",
-      "link": "https://republika.co.id/berita//to0ou6423/bea-cukai-malang-tekankan-kepatuhan-cukai-sejak-awal-usaha",
-      "media": "Republika Online",
-      "tone": "Netral",
-      "date": "2026-11-05",
-      "datetime": "2026-11-05T07:01:18",
-      "time": "07:01",
-      "date_display": "Kamis, 5 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Hasil Tembakau",
-      "has_review": true,
-      "review_text": ""
-    },
-    {
-      "id": 99,
-      "title": "Disaksikan Menteri Perindustrian, Bupati Fachri Teken MoU Hadirkan Investasi Pabrik Sagu ke SBT",
-      "link": "https://ambon.tribunnews.com/bula/107770/disaksikan-menteri-perindustrian-bupati-fachri-teken-mou-hadirkan-investasi-pabrik-sagu-ke-sbt",
-      "media": "Tribunambon.com",
-      "tone": "Positif",
-      "date": "2026-11-05",
-      "datetime": "2026-11-05T06:59:17",
-      "time": "06:59",
-      "date_display": "Kamis, 5 November 2026",
-      "spokesperson": "Muhammad Sarmuji",
-      "unit": "Menteri",
-      "commodity": "Tepung, Sagu & Pati",
-      "has_review": false,
-      "review_text": ""
-    },
-    {
-      "id": 100,
-      "title": "Octofest 2026: Ukiran Jepara Tembus Pasar Global",
-      "link": "https://www.metrotvnews.com/play/NLMCzWyn-octofest-2026-ukiran-jepara-tembus-pasar-global",
-      "media": "MetroTVNews.com",
-      "tone": "Netral",
-      "date": "2026-11-05",
-      "datetime": "2026-11-05T06:58:55",
-      "time": "06:58",
-      "date_display": "Kamis, 5 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Kayu & Furnitur",
-      "has_review": true,
-      "review_text": ""
     }
   ],
   "recent_days": [
@@ -1775,9 +1776,19 @@
       "fileDate": "2026-11-08",
       "tglDisplay": "Minggu, 8 Nov 2026",
       "isNew": true,
-      "count": 3,
-      "countStr": "3 berita",
-      "pos": 3,
+      "count": 25,
+      "countStr": "25 berita",
+      "pos": 23,
+      "net": 1,
+      "neg": 1
+    },
+    {
+      "fileDate": "2026-11-07",
+      "tglDisplay": "Sabtu, 7 Nov 2026",
+      "isNew": false,
+      "count": 4,
+      "countStr": "4 berita",
+      "pos": 4,
       "net": 0,
       "neg": 0
     },
@@ -1900,16 +1911,6 @@
       "pos": 15,
       "net": 6,
       "neg": 0
-    },
-    {
-      "fileDate": "2026-10-24",
-      "tglDisplay": "Sabtu, 24 Okt 2026",
-      "isNew": false,
-      "count": 12,
-      "countStr": "12 berita",
-      "pos": 9,
-      "net": 1,
-      "neg": 2
     }
   ]
 }
