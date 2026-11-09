@@ -20,6 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(BASE_DIR))
 
 from src.config import get_date_folder, is_published_yesterday, parse_to_wib
+from src.export_excel import write_styled_excel
 
 DATA_EXPORT_DIR = BASE_DIR / "data_export"
 FILES_EXPORT_DIR = DATA_EXPORT_DIR / "files"
@@ -307,9 +308,9 @@ def merge_all_data_excel(src_xlsx: Path, dest_xlsx: Path) -> None:
     if not merged_sheets:
         return
     tmp_xlsx = dest_xlsx.with_suffix(".tmp.xlsx")
-    with pd.ExcelWriter(tmp_xlsx, engine="openpyxl") as writer:
-        for sheet_name, df in merged_sheets.items():
-            df.to_excel(writer, sheet_name=sheet_name[:31], index=False)
+    df_berita = merged_sheets.get("Berita", pd.DataFrame())
+    df_neg = merged_sheets.get("Ringkasan Negatif", pd.DataFrame())
+    write_styled_excel(df_berita, tmp_xlsx, df_neg=df_neg, sort_desc=True)
     shutil.move(str(tmp_xlsx), str(dest_xlsx))
 
 
@@ -339,12 +340,13 @@ def build_run_stats(new_articles: list[dict], folder: Path) -> dict | None:
 
 
 def export_split_daily_excel(src_xlsx: Path, ds: str, dest_xlsx: Path) -> bool:
-    """Menyaring baris multi-hari berdasarkan Tanggal == ds untuk file Excel harian."""
+    """Menyaring baris multi-hari berdasarkan Tanggal == ds untuk file Excel harian dengan styling lengkap."""
     sheets = pd.read_excel(src_xlsx, sheet_name=None)
     filtered: dict[str, pd.DataFrame] = {}
     for s_name, df in sheets.items():
         if "Tanggal" in df.columns and not df.empty:
-            tgl_str = pd.to_datetime(df["Tanggal"], errors="coerce").dt.strftime("%Y-%m-%d").fillna(
+            wib_dates = df["Tanggal"].apply(parse_to_wib)
+            tgl_str = pd.to_datetime(wib_dates, errors="coerce").dt.strftime("%Y-%m-%d").fillna(
                 df["Tanggal"].astype(str).str.slice(0, 10)
             )
             sub = df[tgl_str == ds].reset_index(drop=True)
@@ -354,9 +356,8 @@ def export_split_daily_excel(src_xlsx: Path, ds: str, dest_xlsx: Path) -> bool:
             filtered[s_name] = df
     if "Berita" not in filtered or filtered["Berita"].empty:
         return False
-    with pd.ExcelWriter(dest_xlsx, engine="openpyxl") as writer:
-        for s_name, df in filtered.items():
-            df.to_excel(writer, sheet_name=s_name[:31], index=False)
+    df_neg = filtered.get("Ringkasan Negatif", pd.DataFrame())
+    write_styled_excel(filtered["Berita"], dest_xlsx, df_neg=df_neg, sort_desc=True)
     return True
 
 
@@ -501,6 +502,13 @@ def run_self_check():
         merge_all_data_excel(p_new, p_old)
         df_res = pd.read_excel(p_old, sheet_name="Berita")
         assert len(df_res) == 3, f"Harusnya 3 baris Excel, dapat {len(df_res)}"
+        import openpyxl
+        wb_chk = openpyxl.load_workbook(p_old)
+        ws_chk = wb_chk["Berita"]
+        assert ws_chk["A1"].font.bold is True, "Header harus bold"
+        assert ws_chk.freeze_panes == "A2", "Freeze panes harus A2"
+        assert ws_chk["C2"].hyperlink is not None and ws_chk["C2"].hyperlink.target.startswith("https://"), "Link Website harus berupa hyperlink aktif"
+        wb_chk.close()
 
         with open(Path(tmpd) / "progress.json", "w", encoding="utf-8") as f:
             json.dump({"batch_reports": [{"total_initial": 100, "total_date_dropped": 40, "total_final_valid": 20}]}, f)

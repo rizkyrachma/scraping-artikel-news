@@ -7,8 +7,53 @@ import os
 import re
 import time
 import pandas as pd
-from openpyxl.styles import Font, PatternFill  # type: ignore
+from openpyxl.styles import Alignment, Font, PatternFill  # type: ignore
 from openpyxl.utils import get_column_letter  # type: ignore
+
+BERITA_COLUMNS = [
+    "Tanggal",
+    "Title",
+    "Link Website",
+    "Media Name",
+    "Tone",
+    "Spokesperson 1",
+    "Spokesperson 2",
+    "Unit Eselon",
+    "Terkait Kemenperin",
+    "Status Review",
+    "Keywords",
+    "Sumber Data",
+]
+
+NEG_COLUMNS = [
+    "Tanggal",
+    "Title",
+    "Link Website",
+    "Media Name",
+    "Terkait Kemenperin",
+    "Isu Inti",
+    "Alasan Negatif",
+    "What",
+    "Who",
+    "When",
+    "Where",
+    "Why",
+    "How",
+    "Stakeholder Terkait",
+    "Catatan",
+]
+
+
+def _clean_url_str(val) -> str:
+    if pd.isna(val) or not val:
+        return ""
+    s = str(val).strip()
+    if s.lower() in ("nan", "none"):
+        return ""
+    m = re.match(r'=HYPERLINK\("([^"]+)"', s, re.IGNORECASE)
+    if m:
+        return m.group(1).strip()
+    return s
 
 
 def normalize_rokok_keywords(kw_str: str, title: str = "", text: str = "") -> str:
@@ -276,32 +321,59 @@ def save_to_excel(
             if "rokok" in [k.strip().lower() for k in curr_kw.split(",")]:
                 df.at[idx, "Keywords"] = normalize_rokok_keywords(curr_kw, t, txt)
 
-        # Pembersihan nilai kosong agar tidak tersimpan sebagai string literal 'nan'
+    else:
+        df = pd.DataFrame(columns=columns)
+
+    return write_styled_excel(df, output_path, df_neg=negative_summaries)
+
+
+def write_styled_excel(
+    df_berita: pd.DataFrame,
+    output_path: str | os.PathLike,
+    df_neg: pd.DataFrame | list[dict] | None = None,
+    sort_desc: bool = False,
+) -> str:
+    """
+    Menulis DataFrame Berita (dan opsional Ringkasan Negatif) ke file Excel (.xlsx)
+    dengan styling standar: header bold, freeze_panes A2, auto-fit lebar kolom,
+    format tanggal WIB, highlight kuning review, dan hyperlink aktif berwarna biru.
+    """
+    try:
+        from src.config import parse_to_wib as _parse_date
+    except ImportError:
+        from config import parse_to_wib as _parse_date
+
+    output_str = str(output_path)
+    out_dir = os.path.dirname(output_str)
+    if out_dir:
+        os.makedirs(out_dir, exist_ok=True)
+
+    columns = list(BERITA_COLUMNS)
+    df = df_berita.copy() if not df_berita.empty else pd.DataFrame(columns=columns)
+    if not df.empty:
+        if "Link Website" in df.columns:
+            df["Link Website"] = df["Link Website"].apply(_clean_url_str)
         if "Tone" in df.columns:
             df["Tone"] = df["Tone"].replace(["nan", "None", ""], "Netral").fillna("Netral")
         if "Unit Eselon" in df.columns:
             df["Unit Eselon"] = df["Unit Eselon"].replace(["nan", "None", ""], "-").fillna("-")
-        if "Spokesperson 1" in df.columns:
-            df["Spokesperson 1"] = df["Spokesperson 1"].replace(["nan", "None"], "").fillna("")
-        if "Spokesperson 2" in df.columns:
-            df["Spokesperson 2"] = df["Spokesperson 2"].replace(["nan", "None"], "").fillna("")
+        for c in ("Spokesperson 1", "Spokesperson 2", "Status Review", "Keywords", "Title", "Media Name"):
+            if c in df.columns:
+                df[c] = df[c].replace(["nan", "None"], "").fillna("")
         if "Terkait Kemenperin" in df.columns:
             df["Terkait Kemenperin"] = df["Terkait Kemenperin"].replace(["nan", "None", ""], "Tidak").fillna("Tidak")
+        if "Sumber Data" in df.columns:
+            df["Sumber Data"] = df["Sumber Data"].replace(["nan", "None", ""], "RSS").fillna("RSS")
 
-        # Pastikan seluruh kolom wajib ada dan urut
-        for col in columns:
-            if col not in df.columns:
-                df[col] = ""
-        df = pd.DataFrame(df[columns])
-    else:
-        df = pd.DataFrame(columns=columns)
+    for col in columns:
+        if col not in df.columns:
+            df[col] = ""
+    df = pd.DataFrame(df[columns])
 
-
-
-    # Konversi field Tanggal ke datetime Excel WIB (UTC+7) tanpa timezone
-    from config import parse_to_wib as _parse_date
     if "Tanggal" in df.columns and not df.empty:
         df["Tanggal"] = df["Tanggal"].apply(_parse_date)
+        if sort_desc:
+            df = df.sort_values(by="Tanggal", ascending=False, na_position="last").reset_index(drop=True)
 
     def _write_excel(target_writer):
         df.to_excel(target_writer, index=False, sheet_name="Berita")
@@ -312,25 +384,29 @@ def save_to_excel(
             ws.cell(row=1, column=col_idx).font = Font(bold=True)
             col_lengths = [len(str(v)) for v in df[col_name].dropna() if str(v).strip()]
             max_len = max(max(col_lengths) if col_lengths else 0, len(col_name))
-            ws.column_dimensions[get_column_letter(col_idx)].width = min(max_len + 4, 60)
+            min_w = 21 if col_name == "Tanggal" else 10
+            ws.column_dimensions[get_column_letter(col_idx)].width = min(max(max_len + 4, min_w), 60)
 
-        # Format kolom Tanggal sebagai Date Excel
+        # Format kolom Tanggal sebagai Date Excel dan rata atas untuk semua sel
         date_col_idx = columns.index("Tanggal") + 1
+        top_align = Alignment(vertical="top")
         for row_idx in range(2, len(df) + 2):
+            for col_idx in range(1, len(columns) + 1):
+                ws.cell(row=row_idx, column=col_idx).alignment = top_align
             cell = ws.cell(row=row_idx, column=date_col_idx)
             if cell.value is not None:
                 cell.number_format = "yyyy-mm-dd hh:mm:ss"
 
         ws.freeze_panes = "A2"
 
-        # Highlight kuning untuk baris yang berstatus 'PERLU CEK MANUAL' (sesuai instruksi user)
+        # Highlight kuning untuk baris yang berstatus 'PERLU CEK MANUAL' / 'PERLU DICEK MANUAL'
         yellow_fill = PatternFill(start_color="FFFF00", end_color="FFFF00", fill_type="solid")
         status_col_idx = columns.index("Status Review") + 1 if "Status Review" in columns else None
 
         if status_col_idx:
             for row_idx in range(2, len(df) + 2):
                 status_val = str(ws.cell(row=row_idx, column=status_col_idx).value or "").strip().upper()
-                if "PERLU CEK MANUAL" in status_val:
+                if "PERLU CEK MANUAL" in status_val or "PERLU DICEK MANUAL" in status_val:
                     for col_idx in range(1, len(columns) + 1):
                         ws.cell(row=row_idx, column=col_idx).fill = yellow_fill
 
@@ -345,41 +421,35 @@ def save_to_excel(
                 cell.hyperlink = val
                 cell.font = link_font
 
-        # 2. Sheet Kedua 'Ringkasan Negatif' (15 kolom jika negative_summaries diberikan)
-        if negative_summaries is not None:
-            neg_columns = [
-                "Tanggal",
-                "Title",
-                "Link Website",
-                "Media Name",
-                "Terkait Kemenperin",
-                "Isu Inti",
-                "Alasan Negatif",
-                "What",
-                "Who",
-                "When",
-                "Where",
-                "Why",
-                "How",
-                "Stakeholder Terkait",
-                "Catatan",
-            ]
-            df_neg = pd.DataFrame(negative_summaries) if negative_summaries else pd.DataFrame(columns=neg_columns)
+        # 2. Sheet Kedua 'Ringkasan Negatif' (15 kolom jika df_neg diberikan)
+        if df_neg is not None:
+            neg_columns = list(NEG_COLUMNS)
+            if isinstance(df_neg, pd.DataFrame):
+                df_neg_clean = df_neg.copy() if not df_neg.empty else pd.DataFrame(columns=neg_columns)
+            else:
+                df_neg_clean = pd.DataFrame(df_neg) if df_neg else pd.DataFrame(columns=neg_columns)
+
+            if not df_neg_clean.empty and "Link Website" in df_neg_clean.columns:
+                df_neg_clean["Link Website"] = df_neg_clean["Link Website"].apply(_clean_url_str)
+
             for col in neg_columns:
-                if col not in df_neg.columns:
-                    df_neg[col] = ""
-            df_neg = df_neg[neg_columns]
+                if col not in df_neg_clean.columns:
+                    df_neg_clean[col] = ""
+                elif col != "Tanggal":
+                    df_neg_clean[col] = df_neg_clean[col].replace(["nan", "None"], "").fillna("")
+            df_neg_clean = pd.DataFrame(df_neg_clean[neg_columns])
 
-            if "Tanggal" in df_neg.columns and not df_neg.empty:
-                df_neg["Tanggal"] = pd.Series(df_neg["Tanggal"]).apply(_parse_date)
+            if "Tanggal" in df_neg_clean.columns and not df_neg_clean.empty:
+                df_neg_clean["Tanggal"] = pd.Series(df_neg_clean["Tanggal"]).apply(_parse_date)
+                if sort_desc:
+                    df_neg_clean = df_neg_clean.sort_values(by="Tanggal", ascending=False, na_position="last").reset_index(drop=True)
 
-            df_neg.to_excel(target_writer, index=False, sheet_name="Ringkasan Negatif")
+            df_neg_clean.to_excel(target_writer, index=False, sheet_name="Ringkasan Negatif")
             ws_neg = target_writer.sheets["Ringkasan Negatif"]
             ws_neg.freeze_panes = "A2"
 
-            from openpyxl.styles import Alignment  # type: ignore
             neg_widths = {
-                "Tanggal": 18,
+                "Tanggal": 21,
                 "Title": 38,
                 "Link Website": 30,
                 "Media Name": 20,
@@ -410,9 +480,10 @@ def save_to_excel(
                         if l_val:
                             pasti_ia_links.add(l_val.lower().split("?")[0].rstrip("/"))
 
-            for row_idx in range(2, len(df_neg) + 2):
+            wrap_top = Alignment(wrap_text=True, vertical="top")
+            for row_idx in range(2, len(df_neg_clean) + 2):
                 for col_idx in range(1, len(neg_columns) + 1):
-                    ws_neg.cell(row=row_idx, column=col_idx).alignment = Alignment(wrap_text=True, vertical="top")
+                    ws_neg.cell(row=row_idx, column=col_idx).alignment = wrap_top
 
                 neg_link = str(ws_neg.cell(row=row_idx, column=neg_columns.index("Link Website") + 1).value or "").strip()
                 norm_neg = neg_link.lower().split("?")[0].rstrip("/")
@@ -421,13 +492,13 @@ def save_to_excel(
                         ws_neg.cell(row=row_idx, column=col_idx).fill = yellow_fill
 
             tgl_neg_idx = neg_columns.index("Tanggal") + 1
-            for row_idx in range(2, len(df_neg) + 2):
+            for row_idx in range(2, len(df_neg_clean) + 2):
                 c = ws_neg.cell(row=row_idx, column=tgl_neg_idx)
                 if c.value is not None:
                     c.number_format = "yyyy-mm-dd hh:mm:ss"
 
             link_neg_idx = neg_columns.index("Link Website") + 1
-            for row_idx in range(2, len(df_neg) + 2):
+            for row_idx in range(2, len(df_neg_clean) + 2):
                 c = ws_neg.cell(row=row_idx, column=link_neg_idx)
                 val = str(c.value or "").strip()
                 if val and (val.startswith("http://") or val.startswith("https://")):
@@ -437,17 +508,17 @@ def save_to_excel(
 
     for attempt in range(3):
         try:
-            with pd.ExcelWriter(output_path, engine="openpyxl") as writer:
+            with pd.ExcelWriter(output_str, engine="openpyxl") as writer:
                 _write_excel(writer)
-            return output_path
+            return output_str
         except PermissionError:
             if attempt < 2:
-                print(f"[WARNING] File '{output_path}' sedang dibuka/dikunci oleh Microsoft Excel.")
-                print(f"          Menunggu 3 detik... Silakan tutup file di Microsoft Excel.")
+                print(f"[WARNING] File '{output_str}' sedang dibuka/dikunci oleh Microsoft Excel.")
+                print("          Menunggu 3 detik... Silakan tutup file di Microsoft Excel.")
                 time.sleep(3)
             else:
-                print(f"[ERROR] Gagal menyimpan ke '{output_path}' karena file sedang dibuka/dikunci di Microsoft Excel.")
-                print(f"        Silakan tutup file tersebut di Excel lalu jalankan kembali.")
+                print(f"[ERROR] Gagal menyimpan ke '{output_str}' karena file sedang dibuka/dikunci di Microsoft Excel.")
+                print("        Silakan tutup file tersebut di Excel lalu jalankan kembali.")
                 raise
 
-    return output_path
+    return output_str
