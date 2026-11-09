@@ -41,6 +41,8 @@ jobs:
   scrape-and-sync:
     runs-on: ubuntu-latest
     timeout-minutes: 90
+    env:
+      TZ: Asia/Jakarta
 
     steps:
       - name: Checkout repository
@@ -160,10 +162,22 @@ jobs:
       - name: Sinkronisasi Data Dashboard & Riwayat Run
         if: always() && steps.target_dates.outputs.should_skip != 'true'
         run: |
-          STATUS="${{ steps.run_scraper.outputs.run_status || 'Gagal' }}"
+          OUTCOME="${{ steps.run_scraper.outcome }}"
           DURATION="${{ steps.run_scraper.outputs.duration || '0' }}"
-          NOTE="${{ steps.run_scraper.outputs.run_note || 'Job dihentikan / timeout' }}"
           LOG_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+          if [ "$OUTCOME" = "success" ]; then
+            STATUS="Berhasil"
+            NOTE=""
+          elif [ "$OUTCOME" = "cancelled" ]; then
+            STATUS="Gagal"
+            NOTE="Dibatalkan"
+          else
+            STATUS="${{ steps.run_scraper.outputs.run_status }}"
+            [ -z "$STATUS" ] && STATUS="Gagal"
+            NOTE="${{ steps.run_scraper.outputs.run_note }}"
+            [ -z "$NOTE" ] && NOTE="Job dihentikan / timeout"
+          fi
 
           python scripts/sync_dashboard_data.py \
             --start-date "${{ steps.target_dates.outputs.start_date }}" \

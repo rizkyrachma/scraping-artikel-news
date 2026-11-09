@@ -7,6 +7,8 @@ interface DataStatusBarProps {
   isRunning: boolean;
   onOpenScrapeModal: () => void;
   onOpenDownloadModal: () => void;
+  onCancelScraping?: () => void;
+  runningStepLabel?: string | null;
   lastUpdatedStr?: string;
   targetDateStr?: string;
   runCountStr?: string;
@@ -17,6 +19,8 @@ export default function DataStatusBar({
   isRunning,
   onOpenScrapeModal,
   onOpenDownloadModal,
+  onCancelScraping,
+  runningStepLabel,
   lastUpdatedStr = "6 Nov, 07.12 WIB",
   targetDateStr = "5 Nov 2026",
   runCountStr = "158 berita",
@@ -39,7 +43,9 @@ export default function DataStatusBar({
             {isRunning ? "Status Pengambilan Data" : "Data terakhir diperbarui"}
           </div>
           <div className="status-value highlight">
-            {isRunning ? "Sedang mengambil data (Tahap 5: 62%)" : lastUpdatedStr}
+            {isRunning
+              ? runningStepLabel || "Sedang mengambil data (Tahap 5: 62%)"
+              : lastUpdatedStr}
           </div>
         </div>
 
@@ -56,7 +62,7 @@ export default function DataStatusBar({
 
           <div className="metric-item">
             <span className="metric-label">Hasil run ini</span>
-            <span className="metric-val">{isRunning ? "105 dari 170" : runCountStr}</span>
+            <span className="metric-val">{isRunning ? "Sedang diproses" : runCountStr}</span>
           </div>
 
           <div className="metric-mini-div desktop-only" />
@@ -81,7 +87,12 @@ export default function DataStatusBar({
         </button>
 
         {isRunning ? (
-          <button type="button" className="btn-status-action btn-danger" title="Batalkan Proses">
+          <button
+            type="button"
+            onClick={onCancelScraping}
+            className="btn-status-action btn-danger"
+            title="Batalkan Proses"
+          >
             <X size={14} strokeWidth={2.5} />
             <span>Batalkan</span>
           </button>

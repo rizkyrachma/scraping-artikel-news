@@ -31,6 +31,16 @@ export interface SummaryData {
   commodities: Array<{ name: string; count: number }>;
   spokespersons: Array<any>;
   recent_articles: Article[];
+  recent_days?: Array<{
+    fileDate: string;
+    tglDisplay: string;
+    isNew?: boolean;
+    count: number;
+    countStr: string;
+    pos: number;
+    net: number;
+    neg: number;
+  }>;
 }
 
 export interface RunHistoryItem {

@@ -259,6 +259,60 @@ def rebuild_summary(articles: list[dict]) -> dict:
     }
 
 
+def _norm_link(link: str) -> str:
+    return (link or "").strip().rstrip("/").lower()
+
+
+def merge_articles(new_articles: list[dict], existing_articles: list[dict]) -> list[dict]:
+    """Menggabungkan artikel baru ke arsip lama tanpa menghapus data historis."""
+    new_links = {_norm_link(a.get("link", "")) for a in new_articles if _norm_link(a.get("link", ""))}
+    preserved = [
+        a for a in existing_articles
+        if _norm_link(a.get("link", "")) not in new_links
+    ]
+    merged = list(new_articles) + preserved
+    merged.sort(key=lambda x: (x.get("date", ""), x.get("time", "")), reverse=True)
+    for idx, art in enumerate(merged, start=1):
+        art["id"] = idx
+    return merged
+
+
+def merge_all_data_excel(src_xlsx: Path, dest_xlsx: Path) -> None:
+    """Menggabungkan sheet Berita & Ringkasan Negatif ke Media_Monitoring_Agro_Semua_Data.xlsx tanpa menimpa arsip."""
+    if not src_xlsx.exists():
+        return
+    if not dest_xlsx.exists():
+        shutil.copy2(src_xlsx, dest_xlsx)
+        return
+
+    src_sheets = pd.read_excel(src_xlsx, sheet_name=None)
+    dest_sheets = pd.read_excel(dest_xlsx, sheet_name=None)
+
+    merged_sheets: dict[str, pd.DataFrame] = {}
+    all_names = list(dict.fromkeys(list(dest_sheets.keys()) + list(src_sheets.keys())))
+    for name in all_names:
+        df_new = src_sheets.get(name, pd.DataFrame())
+        df_old = dest_sheets.get(name, pd.DataFrame())
+        if df_new.empty and df_old.empty:
+            continue
+        combined = pd.concat([df_new, df_old], ignore_index=True)
+        if "Link Website" in combined.columns:
+            norm_keys = combined["Link Website"].fillna("").astype(str).map(_norm_link)
+            has_key = norm_keys != ""
+            # Pertahankan baris tanpa link + dedup baris ber-link dengan menyimpan versi terbaru (first)
+            keep_mask = (~has_key) | (~norm_keys.duplicated(keep="first"))
+            combined = combined[keep_mask].reset_index(drop=True)
+        merged_sheets[name] = combined
+
+    if not merged_sheets:
+        return
+    tmp_xlsx = dest_xlsx.with_suffix(".tmp.xlsx")
+    with pd.ExcelWriter(tmp_xlsx, engine="openpyxl") as writer:
+        for sheet_name, df in merged_sheets.items():
+            df.to_excel(writer, sheet_name=sheet_name[:31], index=False)
+    shutil.move(str(tmp_xlsx), str(dest_xlsx))
+
+
 def sync_after_run(
     start_date: str,
     end_date: str,
@@ -304,26 +358,16 @@ def sync_after_run(
                     shutil.copy2(src_xlsx, WEB_FILES_DIR / dest_name)
                 curr += datetime.timedelta(days=1)
 
-            # Perbarui juga file gabungan terbaru
-            shutil.copy2(src_xlsx, FILES_EXPORT_DIR / "Media_Monitoring_Agro_Semua_Data.xlsx")
+            # Gabungkan ke file Semua_Data tanpa menimpa data historis
+            all_data_dest = FILES_EXPORT_DIR / "Media_Monitoring_Agro_Semua_Data.xlsx"
+            merge_all_data_excel(src_xlsx, all_data_dest)
             if WEB_FILES_DIR.exists():
-                shutil.copy2(src_xlsx, WEB_FILES_DIR / "Media_Monitoring_Agro_Semua_Data.xlsx")
+                shutil.copy2(all_data_dest, WEB_FILES_DIR / "Media_Monitoring_Agro_Semua_Data.xlsx")
 
     # Merge ke articles_all.json jika ada artikel baru
     if new_articles:
         existing_articles = load_json(DATA_EXPORT_DIR / "articles_all.json", [])
-        seen_links = set()
-        merged = []
-        # Artikel baru ditaruh di depan, lalu diurutkan terbaru
-        for art in new_articles + existing_articles:
-            clean_link = (art.get("link") or "").split("?")[0].rstrip("/").lower()
-            if clean_link and clean_link not in seen_links:
-                seen_links.add(clean_link)
-                merged.append(art)
-
-        merged.sort(key=lambda x: (x.get("date", ""), x.get("time", "")), reverse=True)
-        for idx, art in enumerate(merged, start=1):
-            art["id"] = idx
+        merged = merge_articles(new_articles, existing_articles)
 
         summary_data = rebuild_summary(merged)
         with open(DATA_EXPORT_DIR / "articles_all.json", "w", encoding="utf-8") as f:
@@ -366,14 +410,41 @@ def sync_after_run(
 
 def run_self_check():
     """Self-check non-destruktif untuk memastikan seluruh fungsi pemetaan dan kalkulasi valid."""
+    import tempfile
+
     assert map_keyword_to_commodity("kelapa sawit, cpo") == "Kelapa Sawit & CPO"
     assert map_keyword_to_commodity("rokok ilegal") == "Hasil Tembakau"
     assert map_keyword_to_commodity("makanan dan minuman") == "Makanan & Minuman"
     assert format_duration(278) == "4m 38s"
     assert format_short_date_indo("2026-11-05") == "5 Nov 2026"
-    # Tanggal 2026-11-05 sudah ada di summary.json -> harus dilewati jika skip_existing=True
     assert check_unscraped_dates("2026-11-05", "2026-11-05", skip_existing=True) == []
     assert check_unscraped_dates("2026-11-05", "2026-11-05", skip_existing=False) == ["2026-11-05"]
+
+    # Verifikasi merge_articles menjaga query string & tidak menghapus arsip historis duplikat
+    existing = [
+        {"title": "A", "link": "https://site.id/news?id=1", "date": "2026-11-04", "time": "08:00"},
+        {"title": "B", "link": "https://site.id/news?id=2", "date": "2026-11-04", "time": "09:00"},
+        {"title": "B-dup", "link": "https://site.id/news?id=2", "date": "2026-11-03", "time": "10:00"},
+    ]
+    baru = [{"title": "C", "link": "https://site.id/news?id=3", "date": "2026-11-08", "time": "12:00"}]
+    merged = merge_articles(baru, existing)
+    assert len(merged) == 4, f"Harusnya 4 artikel terjaga, dapat {len(merged)}"
+
+    # Verifikasi merge_all_data_excel tidak menimpa data lama
+    with tempfile.TemporaryDirectory() as tmpd:
+        p_old = Path(tmpd) / "old.xlsx"
+        p_new = Path(tmpd) / "new.xlsx"
+        pd.DataFrame([
+            {"Title": "Lama 1", "Link Website": "https://a.id/1"},
+            {"Title": "Lama 2", "Link Website": "https://a.id/2"},
+        ]).to_excel(p_old, sheet_name="Berita", index=False)
+        pd.DataFrame([
+            {"Title": "Baru 1", "Link Website": "https://a.id/3"},
+        ]).to_excel(p_new, sheet_name="Berita", index=False)
+        merge_all_data_excel(p_new, p_old)
+        df_res = pd.read_excel(p_old, sheet_name="Berita")
+        assert len(df_res) == 3, f"Harusnya 3 baris Excel, dapat {len(df_res)}"
+
     print("[Self-Check] OK: Semua fungsi sync_dashboard_data terverifikasi.")
 
 

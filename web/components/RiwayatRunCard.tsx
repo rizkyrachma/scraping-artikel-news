@@ -31,24 +31,24 @@ export default function RiwayatRunCard({ isRunning, onViewAll }: RiwayatRunCardP
   const [runRows, setRunRows] = useState(FALLBACK_RUNS);
 
   useEffect(() => {
-    fetch("/data/runs.json")
+    fetch(`/data/runs.json?t=${Date.now()}`, { cache: "no-store" })
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data) && data.length > 0) {
           const mapped = data.slice(0, 30).map((r) => ({
             waktu: r.waktu_display || r.timestamp || "—",
             dur: r.durasi || "—",
-            hasil: r.catatan ? `0 (${r.catatan})` : `${r.hasil_berita || 0} berita`,
+            hasil: r.status === "Gagal" && r.catatan ? `0 (${r.catatan})` : `${r.hasil_berita || 0} berita`,
             status: r.status === "Gagal" ? "gagal" : "selesai",
           }));
           setRunRows(mapped);
         }
       })
       .catch(() => {});
-  }, []);
+  }, [isRunning]);
 
   const displayRows = isRunning
-    ? [{ waktu: "06 Nov, 09.45", dur: "2m 41s", hasil: "—", status: "berjalan" }, ...runRows]
+    ? [{ waktu: "Saat ini", dur: "Live", hasil: "—", status: "berjalan" }, ...runRows]
     : runRows;
 
   return (

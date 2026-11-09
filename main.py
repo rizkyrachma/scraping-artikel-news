@@ -202,6 +202,8 @@ def extract_one_article(item: dict) -> dict:
     if "news.google.com" in link:
         try:
             resolved = resolve_article_url(link)
+        except GoogleCaptchaBlockedError:
+            raise
         except Exception:
             resolved = link
     else:
@@ -1125,7 +1127,16 @@ def run_batch_pipeline(
         batch_kw_stats = []
 
         for kw in current_kws:
-            res = process_single_keyword(kw, name_map=name_map, target_date=(start_date, end_date))
+            try:
+                res = process_single_keyword(kw, name_map=name_map, target_date=(start_date, end_date))
+            except GoogleCaptchaBlockedError as cap_err:
+                if os.environ.get("SERPER_API_KEY", "").strip():
+                    global USE_SERPER_ONLY
+                    print(f"  [CAPTCHA FALLBACK] {cap_err} -> Beralih ke Serper.dev untuk sisa sesi.", flush=True)
+                    USE_SERPER_ONLY = True
+                    res = process_single_keyword(kw, name_map=name_map, serper_only=True, target_date=(start_date, end_date))
+                else:
+                    raise
             batch_initial += res["initial_candidates"]
             batch_content_valid += res["content_valid_count"]
             batch_date_dropped += res["date_dropped_count"]

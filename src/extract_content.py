@@ -14,6 +14,11 @@ import socket
 # Cegah proses hanging tanpa batas di level socket OS
 socket.setdefaulttimeout(15)
 
+_DEFAULT_BROWSER_HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36",
+    "Accept-Language": "id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7",
+}
+
 try:
     import googlenewsdecoder  # type: ignore
     if hasattr(googlenewsdecoder, "new_decoderv1") and hasattr(googlenewsdecoder.new_decoderv1, "__globals__"):
@@ -23,6 +28,7 @@ try:
             _orig_post = g_req.post
             def _safe_get(*a, **kw):
                 kw.setdefault("timeout", 6)
+                kw.setdefault("headers", _DEFAULT_BROWSER_HEADERS)
                 return _orig_get(*a, **kw)
             def _safe_post(*a, **kw):
                 kw.setdefault("timeout", 6)
@@ -33,50 +39,66 @@ try:
 except ImportError:
     googlenewsdecoder = None
 
-class GoogleCaptchaBlockedError(Exception):
-    """Exception khusus jika Google News mengalihkan ke CAPTCHA gate (google.com/sorry/index)."""
-    pass
+try:
+    from fetch_news import GoogleCaptchaBlockedError
+except ImportError:
+    class GoogleCaptchaBlockedError(Exception):
+        """Exception khusus jika Google News mengalihkan ke CAPTCHA gate (google.com/sorry/index)."""
+        pass
 
 
 _DECODED_URL_CACHE: dict[str, str] = {}
 _DECODER_LOCK = threading.Lock()
 _LAST_DECODE_TIME = 0.0
+_LOGGED_DECODE_ERROR = False
 
 
-def resolve_article_url(url: str, min_interval: float = 0.2, max_retries: int = 1) -> str:
+def resolve_article_url(url: str, min_interval: float = 0.4, max_retries: int = 1) -> str:
     """
     Menyelesaikan URL Google News (news.google.com/rss/articles/...)
     menjadi URL asli situs penerbit secara thread-safe, cepat, dan anti-hanging.
     """
-    global _LAST_DECODE_TIME
+    global _LAST_DECODE_TIME, _LOGGED_DECODE_ERROR
     if not url or "news.google.com" not in url or googlenewsdecoder is None:
         return url
 
     with _DECODER_LOCK:
         if url in _DECODED_URL_CACHE:
             return _DECODED_URL_CACHE[url]
-        now = time.time()
-        elapsed = now - _LAST_DECODE_TIME
-        if elapsed < min_interval:
-            time.sleep(min_interval - elapsed)
-        _LAST_DECODE_TIME = time.time()
 
     decoded = url
-    try:
-        res = googlenewsdecoder.new_decoderv1(url, interval=0)
-        if isinstance(res, dict):
-            if res.get("status") and res.get("decoded_url"):
-                decoded = res["decoded_url"]
-            else:
+    for attempt in range(max_retries + 1):
+        with _DECODER_LOCK:
+            now = time.time()
+            elapsed = now - _LAST_DECODE_TIME
+            if elapsed < min_interval:
+                time.sleep(min_interval - elapsed)
+            _LAST_DECODE_TIME = time.time()
+
+        try:
+            res = googlenewsdecoder.new_decoderv1(url, interval=0)
+            if isinstance(res, dict):
+                if res.get("status") and res.get("decoded_url"):
+                    decoded = res["decoded_url"]
+                    break
                 msg = str(res.get("message", ""))
                 if "sorry/index" in msg or "sorry" in msg.lower():
                     raise GoogleCaptchaBlockedError(
                         f"CAPTCHA gate terdeteksi ({msg[:120]})."
                     )
-    except GoogleCaptchaBlockedError:
-        raise
-    except Exception:
-        pass
+                if not _LOGGED_DECODE_ERROR and msg:
+                    _LOGGED_DECODE_ERROR = True
+                    print(f"  [Decoder Warning] Gagal decode URL Google News: {msg[:150]}", flush=True)
+                if attempt < max_retries and ("429" in msg or "failed" in msg.lower()):
+                    time.sleep(1.5)
+                    continue
+        except GoogleCaptchaBlockedError:
+            raise
+        except Exception as e:
+            if not _LOGGED_DECODE_ERROR:
+                _LOGGED_DECODE_ERROR = True
+                print(f"  [Decoder Warning] Exception decode URL Google News: {e}", flush=True)
+        break
 
     with _DECODER_LOCK:
         _DECODED_URL_CACHE[url] = decoded
@@ -166,6 +188,8 @@ def extract_article_text(url: str, max_length: int = 8000) -> str:
     diikuti parsing in-memory trafilatura dan newspaper3k tanpa second network request.
     """
     target_url = resolve_article_url(url)
+    if not target_url or "news.google.com" in target_url:
+        return ""
     
     # Router: jika URL adalah file PDF atau dari endpoint dokumen download,
     # blokir langsung (jangan diekstrak dan jangan proses OCR/pypdf)

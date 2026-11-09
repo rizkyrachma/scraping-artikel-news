@@ -56,9 +56,9 @@ PROGRESS_FILE = os.path.join("hasil_scrapping", "progress.json")
 # 5. Tes koneksi ringan sebelum mulai batch
 def check_google_news_access() -> tuple[bool, str]:
     """
-    Mengirim SATU request test ringan ke Google News RSS sebelum memulai batch.
-    Jika status 429 atau dialihkan ke CAPTCHA gate (google.com/sorry/index), mengembalikan (False, pesan).
-    Jika status 200 dan XML valid, mengembalikan (True, pesan sukses).
+    Mengirim SATU request test ringan ke Google News RSS + 1 test dekode URL sebelum memulai batch.
+    Jika status 429 atau dialihkan ke CAPTCHA gate (google.com/sorry/index), atau dekoder URL gagal, mengembalikan (False, pesan).
+    Jika status 200 dan XML + dekoder URL valid, mengembalikan (True, pesan sukses).
     HANYA dipanggil manual sebelum memulai sesi batch baru, BUKAN cron/otomatis berkala.
     """
     test_url = "https://news.google.com/rss/search?q=ekonomi&hl=id&gl=ID&ceid=ID:id"
@@ -71,7 +71,14 @@ def check_google_news_access() -> tuple[bool, str]:
         if resp.status_code == 200:
             feed = feedparser.parse(resp.content)
             if feed.entries:
-                return True, f"Akses Google News RSS aman dan normal (HTTP 200, {len(feed.entries)} entri terbaca)."
+                try:
+                    from extract_content import check_google_news_access as check_decoder_access
+                    dec_ok, dec_msg = check_decoder_access(feed.entries[0].link)
+                    if not dec_ok:
+                        return False, f"RSS HTTP 200 ({len(feed.entries)} entri), namun dekode URL Google News gagal: {dec_msg}"
+                except Exception as dec_err:
+                    return False, f"RSS HTTP 200, namun gagal uji dekode URL: {dec_err}"
+                return True, f"Akses Google News RSS & dekoder URL aman (HTTP 200, {len(feed.entries)} entri terbaca)."
             return True, "Akses Google News RSS terhubung normal (HTTP 200, feed kosong)."
         return False, f"Akses Google News RSS menghasilkan HTTP {resp.status_code}."
     except Exception as e:
@@ -85,7 +92,7 @@ def determine_session_source(force_serper: bool = False, skip_check: bool = Fals
     - Jika skip_check=True: Menggunakan status konfigurasi env saat ini.
     - Selain itu: Mengirim 1 request tes ringan via check_google_news_access().
       * Begitu RSS normal (HTTP 200), otomatis kembali pakai Google News RSS sebagai SUMBER UTAMA (USE_SERPER_ONLY=False).
-      * Jika RSS terganggu (429/503/CAPTCHA), otomatis beralih ke Serper.dev sebagai CADANGAN DARURAT (USE_SERPER_ONLY=True).
+      * Jika RSS/dekoder terganggu dan SERPER_API_KEY tersedia, otomatis beralih ke Serper.dev sebagai CADANGAN DARURAT (USE_SERPER_ONLY=True).
     """
     if force_serper:
         os.environ["USE_SERPER_ONLY"] = "true"
@@ -99,9 +106,14 @@ def determine_session_source(force_serper: bool = False, skip_check: bool = Fals
     if is_ok:
         os.environ["USE_SERPER_ONLY"] = "false"
         return False, f"Akses RSS pulih/normal: {msg}. Otomatis kembali menggunakan Google News RSS sebagai SUMBER UTAMA (Serper = cadangan darurat)."
-    else:
+
+    has_serper = bool(os.environ.get("SERPER_API_KEY", "").strip())
+    if has_serper:
         os.environ["USE_SERPER_ONLY"] = "true"
-        return True, f"Akses RSS terganggu: {msg}. Otomatis beralih menggunakan Serper.dev sebagai CADANGAN DARURAT untuk sesi ini."
+        return True, f"Akses RSS/dekoder terganggu: {msg}. Otomatis beralih menggunakan Serper.dev sebagai CADANGAN DARURAT untuk sesi ini."
+
+    os.environ["USE_SERPER_ONLY"] = "false"
+    return False, f"Peringatan akses RSS/dekoder terganggu ({msg}), namun SERPER_API_KEY kosong sehingga tetap mencoba Google News RSS."
 
 
 # 2. Jeda antar-keyword

@@ -10,6 +10,7 @@ interface RingkasanCardProps {
   posCount?: number;
   netCount?: number;
   negCount?: number;
+  lastUpdatedLabel?: string;
 }
 
 export default function RingkasanCard({
@@ -19,11 +20,12 @@ export default function RingkasanCard({
   posCount = 71,
   netCount = 80,
   negCount = 7,
+  lastUpdatedLabel = "06 Nov, 07.12",
 }: RingkasanCardProps) {
   const tot = posCount + netCount + negCount;
-  const pctPos = Math.round((posCount / tot) * 100);
-  const pctNet = Math.round((netCount / tot) * 100);
-  const pctNeg = 100 - pctPos - pctNet;
+  const pctPos = tot > 0 ? Math.round((posCount / tot) * 100) : 0;
+  const pctNet = tot > 0 ? Math.round((netCount / tot) * 100) : 0;
+  const pctNeg = tot > 0 ? Math.max(0, 100 - pctPos - pctNet) : 0;
 
   return (
     <>
@@ -34,7 +36,7 @@ export default function RingkasanCard({
         {isRunning && (
           <div className="banner-running-notice">
             <Info size={13} className="text-amber-800" strokeWidth={2} />
-            <span>Run baru sedang berjalan. Angka di bawah dari run 06 Nov, 07.12.</span>
+            <span>Run baru sedang berjalan. Angka di bawah dari run {lastUpdatedLabel}.</span>
           </div>
         )}
 
