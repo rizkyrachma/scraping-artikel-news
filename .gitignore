@@ -19,8 +19,13 @@ ENV/
 # Scratch & Temporary Testing Scripts (sering memuat debug/test API key)
 scratch/
 
-# Output Data Hasil Scraping
+# Output Data Hasil Scraping & Backup Lokal
 hasil_scrapping/
+backup_sebelum_web/
+screenshots/
+web/screenshots/
+web/scripts/
+
 
 # Temporary / OS files
 .DS_Store

@@ -1,0 +1,217 @@
+name: Daily Agro Media Scraping
+
+on:
+  schedule:
+    # 21:15 UTC = 04:15 WIB (UTC+7) setiap hari
+    - cron: '15 21 * * *'
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'Mode pengambilan (auto = kemarin, manual = rentang tanggal)'
+        required: false
+        default: 'auto'
+        type: choice
+        options:
+          - auto
+          - manual
+      start_date:
+        description: 'Tanggal mulai (YYYY-MM-DD, khusus mode manual)'
+        required: false
+        default: ''
+        type: string
+      end_date:
+        description: 'Tanggal akhir (YYYY-MM-DD, khusus mode manual)'
+        required: false
+        default: ''
+        type: string
+      skip_existing:
+        description: 'Lewati tanggal yang sudah pernah diambil (true/false)'
+        required: false
+        default: 'true'
+        type: string
+
+concurrency:
+  group: agro-daily-scrape
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  scrape-and-sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Ambil data_export terbaru dari branch data (jika ada)
+        run: |
+          if git ls-remote --exit-code --heads origin data >/dev/null 2>&1; then
+            git fetch origin data
+            git checkout origin/data -- data_export 2>/dev/null || true
+            cp -r data_export/files/* web/public/files/ 2>/dev/null || true
+            cp -r data_export/*.json web/public/data/ 2>/dev/null || true
+          fi
+
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Cache AI Recheck, Ringkasan & Progress Scraping
+        uses: actions/cache@v4
+        with:
+          path: |
+            hasil_scrapping/cache_ai_recheck.json
+            hasil_scrapping/cache_ringkasan.json
+            hasil_scrapping/**/progress*.json
+          key: agro-scrape-cache-${{ runner.os }}-${{ github.run_id }}
+          restore-keys: |
+            agro-scrape-cache-${{ runner.os }}-
+
+      - name: Tentukan rentang tanggal target (WIB)
+        id: target_dates
+        run: |
+          MODE="${{ github.event.inputs.mode || 'auto' }}"
+          INPUT_START="${{ github.event.inputs.start_date || '' }}"
+          INPUT_END="${{ github.event.inputs.end_date || '' }}"
+          SKIP_EXISTING="${{ github.event.inputs.skip_existing || 'true' }}"
+
+          if [ "${{ github.event_name }}" = "schedule" ]; then
+            TRIGGER_LABEL="Terjadwal"
+            MODE="auto"
+          else
+            TRIGGER_LABEL="Manual"
+          fi
+
+          if [ "$MODE" = "manual" ] && [ -n "$INPUT_START" ]; then
+            RAW_START="$INPUT_START"
+            RAW_END="${INPUT_END:-$INPUT_START}"
+          else
+            YESTERDAY_WIB=$(TZ=Asia/Jakarta date -d "yesterday" +%Y-%m-%d)
+            RAW_START="$YESTERDAY_WIB"
+            RAW_END="$YESTERDAY_WIB"
+          fi
+
+          CHECK_RESULT=$(python scripts/sync_dashboard_data.py --check-dates \
+            --start-date "$RAW_START" \
+            --end-date "$RAW_END" \
+            --skip-existing "$SKIP_EXISTING")
+
+          echo "trigger_label=$TRIGGER_LABEL" >> "$GITHUB_OUTPUT"
+          echo "raw_start=$RAW_START" >> "$GITHUB_OUTPUT"
+          echo "raw_end=$RAW_END" >> "$GITHUB_OUTPUT"
+
+          if [ "$CHECK_RESULT" = "SKIP" ]; then
+            echo "should_skip=true" >> "$GITHUB_OUTPUT"
+            echo "start_date=$RAW_START" >> "$GITHUB_OUTPUT"
+            echo "end_date=$RAW_END" >> "$GITHUB_OUTPUT"
+            echo "Semua tanggal ($RAW_START s/d $RAW_END) sudah ada di data_export. Melewati scraping."
+          else
+            EFF_START="${CHECK_RESULT%%:*}"
+            EFF_END="${CHECK_RESULT##*:}"
+            echo "should_skip=false" >> "$GITHUB_OUTPUT"
+            echo "start_date=$EFF_START" >> "$GITHUB_OUTPUT"
+            echo "end_date=$EFF_END" >> "$GITHUB_OUTPUT"
+            echo "Target scraping efektif: $EFF_START s/d $EFF_END ($TRIGGER_LABEL)"
+          fi
+
+      - name: Jalankan Pipeline Scraping (main.py)
+        id: run_scraper
+        if: steps.target_dates.outputs.should_skip != 'true'
+        continue-on-error: true
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          SERPER_API_KEY: ${{ secrets.SERPER_API_KEY }}
+          EXA_API_KEY: ${{ secrets.EXA_API_KEY }}
+        run: |
+          START_TS=$(date +%s)
+          set +e
+          python main.py --all \
+            --start-date "${{ steps.target_dates.outputs.start_date }}" \
+            --end-date "${{ steps.target_dates.outputs.end_date }}"
+          EXIT_CODE=$?
+          set -e
+          END_TS=$(date +%s)
+          DURATION=$((END_TS - START_TS))
+
+          echo "duration=$DURATION" >> "$GITHUB_OUTPUT"
+          echo "exit_code=$EXIT_CODE" >> "$GITHUB_OUTPUT"
+
+          if [ "$EXIT_CODE" -eq 0 ]; then
+            echo "run_status=Berhasil" >> "$GITHUB_OUTPUT"
+            echo "run_note=" >> "$GITHUB_OUTPUT"
+          else
+            echo "run_status=Gagal" >> "$GITHUB_OUTPUT"
+            echo "run_note=Exit code $EXIT_CODE" >> "$GITHUB_OUTPUT"
+          fi
+          exit $EXIT_CODE
+
+      - name: Sinkronisasi Data Dashboard & Riwayat Run
+        if: always() && steps.target_dates.outputs.should_skip != 'true'
+        run: |
+          STATUS="${{ steps.run_scraper.outputs.run_status || 'Gagal' }}"
+          DURATION="${{ steps.run_scraper.outputs.duration || '0' }}"
+          NOTE="${{ steps.run_scraper.outputs.run_note || 'Job dihentikan / timeout' }}"
+          LOG_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+          python scripts/sync_dashboard_data.py \
+            --start-date "${{ steps.target_dates.outputs.start_date }}" \
+            --end-date "${{ steps.target_dates.outputs.end_date }}" \
+            --trigger "${{ steps.target_dates.outputs.trigger_label }}" \
+            --status "$STATUS" \
+            --duration "$DURATION" \
+            --note "$NOTE" \
+            --log-url "$LOG_URL"
+
+      - name: Commit & Push pembaruan data ke branch data dan main
+        if: always() && steps.target_dates.outputs.should_skip != 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          # Simpan perubahan data_export dan web/public ke direktori sementara
+          mkdir -p /tmp/agro_sync/data_export /tmp/agro_sync/web_public
+          cp -r data_export/* /tmp/agro_sync/data_export/
+          cp -r web/public/* /tmp/agro_sync/web_public/
+
+          # 1. Update branch main (agar deployment web dan data_export selalu sinkron)
+          git add data_export/ web/public/data/ web/public/files/
+          if ! git diff --staged --quiet; then
+            git commit -m "chore(data): sinkronisasi data scraping ${{ steps.target_dates.outputs.start_date }} s/d ${{ steps.target_dates.outputs.end_date }}"
+            git push origin HEAD:main || true
+          fi
+
+          # 2. Update branch data khusus penyimpanan data terpisah
+          if git ls-remote --exit-code --heads origin data >/dev/null 2>&1; then
+            git fetch origin data
+            git checkout -B data origin/data
+          else
+            git checkout -B data
+          fi
+          cp -r /tmp/agro_sync/data_export/* data_export/
+          cp -r /tmp/agro_sync/web_public/* web/public/
+          git add data_export/ web/public/data/ web/public/files/
+          if ! git diff --staged --quiet; then
+            git commit -m "chore(data): update data scraping ${{ steps.target_dates.outputs.start_date }} s/d ${{ steps.target_dates.outputs.end_date }}"
+            git push origin data
+          fi
+
+      - name: Evaluasi status akhir job
+        if: always() && steps.target_dates.outputs.should_skip != 'true'
+        run: |
+          if [ "${{ steps.run_scraper.outputs.exit_code || '0' }}" != "0" ]; then
+            echo "::error::Pipeline scraping gagal dengan exit code ${{ steps.run_scraper.outputs.exit_code }}"
+            exit 1
+          fi
+

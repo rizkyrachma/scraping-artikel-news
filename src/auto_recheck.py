@@ -261,6 +261,108 @@ DETERMINISTIC_RULES = [
     (lambda t: "perajin batik tulis" in t or "lilin batik" in t or "batik sawit" in t or "smart batik" in t, "Kerajinan Batik Tulis UMKM"),
     (lambda t: "kisah inspiratif mama lidia mikan" in t, "Profil Human Interest Inspiratif UMKM Lokal"),
     (lambda t: "mengalir ke israel" in t, "Isu Geopolitik / Investigasi Ekspor Transit"),
+
+    # 10. Ranah Ditjen IKMA (Sentra Perajin Ukir Lokal Jepara / Event Kriya / Seminar Kampus Budaya)
+    (lambda t: any(w in t for w in [
+        "octofest", "rekanusa", "seni ukir jepara", "pengusaha ukir jepara",
+        "perajin mebel jepara", "pelaku mebel jepara",
+        "pengusaha mebel jepara diminta berinovasi dalam desain ukir",
+        "furniture exhibition for export in jepara",
+        "realisasi target ekspor industri furnitur dari jepara",
+    ]), "Ranah Ditjen IKMA / Sentra Perajin Ukir Lokal / Seminar Budaya Kampus"),
+
+    # 11. Kasus Pidana Korupsi / Penggeledahan Pajak Kejaksaan Agung (Non-Operasional IA)
+    (lambda t: "kejagung geledah" in t or "geledah pt ipps" in t or "kasus transfer pricing" in t, "Kasus Pidana Korupsi / Penggeledahan Pajak Kejagung (Non-Operasional IA)"),
+
+    # 12. Indikator Makro PMI / IKI Manufaktur Umum (Tidak Spesifik Sektor Industri Agro)
+    (lambda t: any(w in t for w in [
+        "kenaikan pmi indikator perkembangan positif industri ri",
+        "pmi manufaktur indonesia capai 54,0",
+        "pmi manufaktur menguat, pengamat tekankan kepastian regulasi",
+        "pmi manufaktur indonesia tembus 54,0, investasi industri masih tertahan",
+        "ekspansi manufaktur dibayangi kenaikan harga produksi",
+        "menperin sarmuji beberkan kinerja manufaktur ri yang cetak rekor",
+        "industrialisasi ri kembali menggeliat, jangan hanya andalkan nikel",
+        "menperin pede industri ri ekspansi, benarkah ancaman sudah lewat",
+        "industri manufaktur pertahankan ekspansi pada september 2026",
+        "naikan utilisasi industri ke 85%",
+        "utilisasi kapasitas industri rendah, target kemenperin 85%",
+        "kemenperin bidik utilisasi industri 85%",
+        "menperin dorong utilisasi industri naik jadi 85 persen",
+        "menperin genjot produksi, industri tak boleh kekurangan bahan baku",
+        "mendag dan menperin tagih peran kadin",
+        "menperin upayakan hilirisasi ciptakan ekosistem industri pendukung",
+    ]), "Berita Makro PMI / IKI / Utilisasi Manufaktur Umum (Bukan Spesifik Ditjen IA)"),
+
+    # 13. Kuliner Gaya Hidup Global, Pameran Mesin Plastik/Moulding, Jamu/Farmasi/Plastik (IKFT), & Razia Rokok Kecamatan
+    (lambda t: "pandan makin populer di as dan eropa" in t, "Tren Kuliner / Gaya Hidup Luar Negeri (Bukan Industri IA)"),
+    (lambda t: "tren minuman rendah gula meningkat, industri kopi" in t or "minuman rendah gula hingga berbahan nabati jadi sorotan" in t or "ellenka barista" in t, "Tren Kuliner / Menu Barista Kedai Kopi F&B (Bukan Pabrik IA)"),
+    (lambda t: "plastics & rubber indonesia" in t or "jelajahi inovasi teknologi industri plastik dan karet" in t, "Promosi Pameran Mesin Plastik & Moulding (Ranah IKFT / ILMATE)"),
+    (lambda t: "permintaan kemasan plastik naik" in t, "Bukan Sektor Agro (Industri Plastik & Kemasan Plastik - Ditjen IKFT)"),
+    (lambda t: "sido muncul" in t or "kinerja sido tertekan" in t, "Bukan Sektor Agro (Industri Jamu & Farmasi / Saham SIDO - Ditjen IKFT)"),
+    (lambda t: "penambahan alokasi gas industri: bisa pacu utilisasi" in t, "Bukan Sektor Agro (Gas untuk Petrokimia, Pupuk, Kaca, Baja, Keramik - IKFT/ILMATE)"),
+    (lambda t: "awasi mesin pelinting rokok di socah" in t, "Razia / Pengawasan Rokok Ilegal Tingkat Kecamatan (Pemkab / Satpol PP)"),
+
+    # 14. Hulu Perkebunan/Kehutanan, Birokrasi Kementan/BPDP, Edukasi Konsumen BPOM, & Akademisi
+    (lambda t: "enam langkah transformasi kunci menjaga masa depan industri sawit" in t, "Hulu Perkebunan Sawit (Benih, Budidaya, PSR, dan Legalitas Lahan GAPKI)"),
+    (lambda t: "singapura batasi sertifikasi hijau app" in t, "Hulu Kehutanan / Kebakaran Hutan dan Lahan Konsesi Kayu"),
+    (lambda t: "brmp gorontalo" in t, "Hulu Pertanian / Koordinasi Birokrasi Kementan Daerah (BRMP)"),
+    (lambda t: "bpdp perpanjang batas waktu pengajuan proposal" in t, "Pengumuman Administrasi Proposal Hibah BPDP (Bukan Operasional Pabrik)"),
+    (lambda t: "bpom jelaskan peran teknologi sterilisasi" in t, "Edukasi Gizi Konsumen Rumah Tangga (Parapuan / BPOM)"),
+    (lambda t: "uu jaminan produk halal tak kunjung ditegakkan" in t, "Opini Regulasi Jaminan Produk Halal Umum (BPJPH)"),
+    (lambda t: "delegasi arli ke china" in t, "Kunjungan Asosiasi Budidaya & Perdagangan Rumput Laut (Non-Pabrik)"),
+    (lambda t: "tarik perhatian guru besar jepang" in t, "Kunjungan Akademisi Kampus Jepang / Riset BRIN"),
+    (lambda t: "himki pacu pasar kerajinan" in t, "Fokus Pasar Kerajinan / Kriya (Ranah Ditjen IKMA)"),
+
+    # 15. Lalu Lintas Nataru, Gastrodiplomasi/Chef, Biofuel BBM, Bahan Baku Obat (IKFT), & Hulu/Daerah 4 Nov
+    (lambda t: "rekayasa lalu lintas jadi kunci distribusi" in t or "pasokan makanan dan minuman saat nataru perlu dijaga" in t, "Manajemen Lalu Lintas & Angkutan Jalan Raya Nataru (Kemenhub/Korlantas)"),
+    (lambda t: any(w in t for w in [
+        "jadi ajang promosi kuliner nusantara", "dorong kuliner nusantara jadi alat diplomasi",
+        "makanan bisa jadi alat negara", "soto lamongan ikut disorot",
+        "pameran makanan dorong keunggulan khas indonesia", "la cuisine 2026 libatkan",
+        "sagu di luwu juga diolah menjadi sinole",
+    ]), "Promosi Kuliner / Masakan Tradisional / Lomba Chef (Gaya Hidup & Pariwisata)"),
+    (lambda t: "bisa buat bbm baru" in t or "rumput laut bisa diolah jadi biofuel" in t or "brin research biogas" in t, "Wacana Energi / BBM Biofuel & Biogas (Ranah ESDM / Riset Energi)"),
+    (lambda t: "rupiah melemah, industri manufaktur hingga pangan" in t or "rupiah melemah, sektor makanan hingga digital" in t, "Berita Makro Kurs Rupiah Lintas Sektor (Manufaktur Umum, Farmasi & Digital)"),
+    (lambda t: "kampanye who 2026, bpjph banggai" in t, "Sosialisasi Sertifikasi Halal Kemenag Kabupaten (Arsip Daerah)"),
+    (lambda t: any(w in t for w in [
+        "jangan cuma jago jual komoditas mentah", "dorong hilirisasi sda untuk pertumbuhan industri",
+        "menperin perdalam hilirisasi demi ciptakan pertumbuhan", "pamer pmi manufaktur ri oktober 2026",
+    ]), "Pidato Makro Hilirisasi SDA / PMI Manufaktur Umum Nasional"),
+    (lambda t: "program strategis nasional di papua" in t, "Opini Sosial Lahan PSN di Papua"),
+    (lambda t: any(w in t for w in [
+        "pemprov riau dorong hilirisasi kelapa", "bi dan pemprov riau dorong hilirisasi kelapa",
+        "luas lahan capai 440 ribu hektare, riau dorong",
+    ]), "Forum Daerah Pemprov/BI Riau & Hulu Lahan Petani Kelapa Pesisir"),
+    (lambda t: "bps catat ntp kalbar turun" in t, "Hulu Perkebunan (Nilai Tukar Petani & Harga TBS Sawit Kalbar)"),
+    (lambda t: "dorong mahasiswa kuasai teknologi sambut hilirisasi kelapa" in t or "beasiswa dan pengembangan kelapa warnai kegiatan di unram" in t, "Kegiatan Kampus & Beasiswa Mahasiswa (Unram)"),
+    (lambda t: "produk olahan alami asal salatiga tembus pasar amerika" in t or "produk lokal blora tembus pasar as" in t, "Profil UMKM Tradisional Daerah (Ranah Ditjen IKMA / Pemkab)"),
+    (lambda t: "proyeksikan 90 persen ekspor perkebunan berwujud olahan" in t or "brmp sulut pacu hilirisasi kelapa" in t, "Program Hulu-Hilir Kementan (Wamentan / BRMP Pertanian)"),
+    (lambda t: "inovasi led kepada mahasiswa teknik biomedis" in t, "Bukan Sektor Agro (Inovasi Lampu LED & Teknik Biomedis ITERA)"),
+    (lambda t: "budidaya rumput laut di desa balefadorotuho" in t or "aktivitas nelayan membudidayakan rumput laut" in t, "Hulu Budidaya Rumput Laut Nelayan Daerah"),
+    (lambda t: "jadi bahan baku obat" in t, "Bukan Sektor Agro (Industri Bahan Baku Obat & Farmasi - Ditjen IKFT)"),
+    (lambda t: "korporasi pengemplang pajak" in t, "Opini Bursa Saham MSCI & Pajak Korporasi"),
+    (lambda t: any(w in t for w in [
+        "diplomat meksiko", "14 dubes jelajahi jepara", "dubes rumania lihat potensi besar mebel dan ukiran jepara",
+    ]), "Kunjungan Wisata Diplomatik ke Sentra Ukir Jepara (Kriya / Pemkab)"),
+    (lambda t: "minyak nilam masuk srg" in t, "Hulu Petani Nilam / Sistem Resi Gudang (Bappebti Kemendag)"),
+    (lambda t: "herman deru" in t or "hd tawarkan potensi hilirisasi komoditas sumsel" in t, "Audiensi Umum Pemprov Sumsel (Pelayaran & Investor Pertambangan/Perkebunan)"),
+    (lambda t: "separuh anggaran dbhcht dialokasikan" in t or "dugaan korupsi cukai rokok" in t, "Anggaran Bansos DBHCHT Daerah / Kasus Korupsi KPK (Non-Operasional Pabrik)"),
+    (lambda t: any(w in t for w in [
+        "npk kakao", "bibit kakao di panyabungan", "uniflor berdayakan petani kakao", "program aksara mahasiswa uniflor",
+    ]), "Hulu Perkebunan Kakao (Pupuk Subsidi, Bibit Kebun & Pengabdian Mahasiswa/PKK)"),
+    (lambda t: "rantai pasok bebas deforestasi" in t or "rantai pasok kopi berkelanjutan di tnbbs" in t, "Hulu Kehutanan / Konservasi Taman Nasional & Deforestasi EUDR"),
+    (lambda t: "fgd komisi fatwa mui" in t, "FGD Fatwa MUI & Kesehatan Remaja Kemenkes (Bukan Industri)"),
+    (lambda t: "zulhas ingin ekspor cpo langsung" in t, "Kebijakan Perdagangan Ekspor CPO Menko Pangan (Bukan Pabrik IA)"),
+    (lambda t: "varietas ppks simalungun" in t, "Hulu Perkebunan (Benih / Varietas Bibit Kelapa Sawit Disbun)"),
+    (lambda t: "pmi manufaktur indonesia pada oktober 2026 capai 54" in t, "Berita Makro PMI Umum"),
+    (lambda t: "potensi besar, kuliner indonesia punya peluang mendunia" in t, "Kuliner / Gaya Hidup Restoran"),
+    (lambda t: "sawit & petrokimia belum maksimal" in t, "Bukan Sektor Agro (Petrokimia IKFT)"),
+    (lambda t: "uin jakarta" in t, "Akademisi Kampus (UIN Jakarta)"),
+    (lambda t: "customs visit customer" in t or "kegiatan cvc" in t, "Teknis Kunjungan Bea Cukai (CVC)"),
+    (lambda t: "kepatuhan cukai sejak awal usaha" in t, "Teknis Administrasi Bea Cukai (NPPBKC)"),
+    (lambda t: "diskopindag kota malang latih" in t, "Bimtek Manajemen Keuangan Pemkot Malang"),
+    (lambda t: "kelola ekspor satu pintu, dsi tegaskan" in t, "Perkebunan Sawit Danantara RSPO"),
 ]
 
 
@@ -271,15 +373,27 @@ def check_deterministic_rules(article: dict) -> str | None:
     """
     url = str(article.get("link") or article.get("Link Website") or "").strip()
     title = str(article.get("title") or article.get("Title") or "").strip()
+    text = str(article.get("text") or article.get("isi") or "").strip()
     sumber_data = str(article.get("sumber_data") or article.get("Sumber Data") or "").strip()
 
     # Cek dokumen PDF
     if is_pdf_document(url=url, title=title, sumber_data=sumber_data):
         return "Dokumen PDF (Bukan Berita)"
 
-    # Cek domain asing
+    # Cek domain asing / aggregator bot AI
     if is_foreign_noise_domain(url):
         return "Domain Luar Negeri Non-Relevan (.vn / noise)"
+    if "feedberry.com" in url.lower():
+        return "Aggregator Bot AI / Teks Rusak (feedberry.com)"
+    if "kompasiana.com" in url.lower():
+        return "Blog Opini UGC (Kompasiana)"
+    if "/food/read/" in url.lower() and "kemenperin" not in text.lower():
+        return "Rubrik Kuliner / Gaya Hidup Makanan (Bukan Manufaktur IA)"
+
+    # Cek eksplisit Ditjen IKMA tanpa Ditjen Industri Agro di isi teks
+    txt_lower = text.lower()
+    if ("direktorat jenderal industri kecil, menengah, dan aneka" in txt_lower or "ditjen ikma" in txt_lower) and "industri agro" not in txt_lower:
+        return "Ranah Ditjen IKMA (Industri Kecil, Menengah, dan Aneka - Bukan Ditjen IA)"
 
     t_lower = title.lower()
 
@@ -374,11 +488,16 @@ class AutoRecheckPipeline:
         """Pass 1: Menjalankan aturan pasti."""
         kept = []
         discarded = []
+        seen_titles = set()
 
         for idx, art in enumerate(articles, start=1):
             title = str(art.get("title") or art.get("Title") or "").strip()
             link = str(art.get("link") or art.get("Link Website") or "").strip()
             reason = check_deterministic_rules(art)
+
+            norm_t = re.sub(r"\s+", " ", title.lower()).strip()
+            if not reason and norm_t in seen_titles:
+                reason = "Duplikat Judul Identik (Versi AMP / Sindikasi)"
 
             if reason:
                 discarded.append({
@@ -388,6 +507,7 @@ class AutoRecheckPipeline:
                     "pass": 1
                 })
             else:
+                seen_titles.add(norm_t)
                 art["_recheck_id"] = idx
                 kept.append(art)
 

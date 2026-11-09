@@ -154,6 +154,14 @@ def cache_article(art: dict) -> None:
 
 def preload_cache(target_dates: list[str] | None = None) -> None:
     candidates = [
+        "hasil_scrapping/November/2026-11-04/progress_unfiltered.json",
+        "hasil_scrapping/November/2026-11-04/progress.json",
+        "hasil_scrapping/November/2026-11-01_sd_2026-11-03/progress_unfiltered.json",
+        "hasil_scrapping/November/2026-11-01_sd_2026-11-03/progress.json",
+        "hasil_scrapping/Oktober/2026-10-21_sd_2026-10-31/progress_unfiltered.json",
+        "hasil_scrapping/Oktober/2026-10-21_sd_2026-10-31/progress.json",
+        "hasil_scrapping/Oktober/2026-10-21_sd_2026-10-27/progress_unfiltered.json",
+        "hasil_scrapping/Oktober/2026-10-21_sd_2026-10-27/progress.json",
         "hasil_scrapping/Oktober/2026-10-21_sd_2026-10-26/progress_unfiltered.json",
         "hasil_scrapping/Oktober/2026-10-21_sd_2026-10-26_backup_26okt/progress_unfiltered.json",
         "hasil_scrapping/Oktober/2026-10-21/progress.json",
