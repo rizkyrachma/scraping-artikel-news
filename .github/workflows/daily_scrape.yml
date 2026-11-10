@@ -2,10 +2,13 @@ name: Daily Agro Media Scraping
 
 on:
   schedule:
-    # 20:00 UTC = 03:00 WIB (mulai jam 3 pagi agar selesai sebelum jam 4 pagi WIB)
-    - cron: '0 20 * * *'
-    # 21:00 UTC = 04:00 WIB (cadangan otomatis jika antrean GitHub Actions padat; otomatis skip jika 03:00 WIB sudah berhasil)
-    - cron: '0 21 * * *'
+    # Gunakan menit ganjil (di luar :00/:15/:30) agar tidak terkena drop antrean jam sibuk GitHub Actions
+    # 20:07 UTC = 03:07 WIB (utama: mulai jam 3 lewat 7 pagi agar selesai sebelum jam 4 pagi WIB)
+    - cron: '7 20 * * *'
+    # 20:37 UTC = 03:37 WIB (cadangan 1: otomatis skip dalam 5 detik jika 03:07 WIB sudah jalan/berhasil)
+    - cron: '37 20 * * *'
+    # 21:07 UTC = 04:07 WIB (cadangan 2: otomatis skip dalam 5 detik jika sudah berhasil)
+    - cron: '7 21 * * *'
   workflow_dispatch:
     inputs:
       mode:
