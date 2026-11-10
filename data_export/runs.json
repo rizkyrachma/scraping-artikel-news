@@ -1,24 +1,23 @@
 [
   {
-    "id": "run-20261110-093953",
-    "waktu_display": "10 Nov, 09.39",
-    "timestamp": "2026-11-10T09:39:53",
+    "id": "run-20261110-111418",
+    "waktu_display": "10 Nov, 11.14",
+    "timestamp": "2026-11-10T11:14:18",
     "durasi": "73m 00s",
-    "hasil_berita": 108,
+    "hasil_berita": 79,
     "status": "Berhasil",
     "target_date": "2026-11-09",
     "pemicu": "Manual",
     "rentang_data": "9 Nov 2026",
     "stats": {
-      "final": 108,
-      "perlu_review": 106,
-      "tanpa_spokesperson": 81,
+      "final": 79,
+      "perlu_review": 1,
+      "tanpa_spokesperson": 60,
       "mentah": 4413,
       "filter_tgl": 2800,
       "unik": 299,
       "noise_dibuang_pct": 98
-    },
-    "catatan": "Terminal Lokal + GitHub Actions"
+    }
   },
   {
     "id": "run-20261110-060733",

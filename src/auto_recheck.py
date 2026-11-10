@@ -67,6 +67,8 @@ except Exception:
 # 1. KONFIGURASI MODEL & POOL GEMINI AI
 # ==============================================================================
 CANDIDATE_MODELS = [
+    "gemini-2.5-flash",
+    "gemini-2.5-flash-lite",
     "gemini-flash-latest",
     "gemini-flash-lite-latest",
     "gemini-3.8-flash",
@@ -75,13 +77,14 @@ CANDIDATE_MODELS = [
 ]
 _current_model_idx = 0
 _model_instance = None
+_exhausted_models: set[str] = set()
 gemini_quota_exhausted = False
 
 CACHE_FILE_DEFAULT = os.path.join("hasil_scrapping", "cache_ai_recheck.json")
 
 
-def _get_gemini_model(force_next: bool = False):
-    """Menginisialisasi model Generative AI Gemini secara lazy dengan fallback model dinamis."""
+def _get_gemini_model(force_next: bool = False, mark_quota_exhausted: bool = False):
+    """Menginisialisasi model Generative AI Gemini secara lazy dengan rotasi model dinamis."""
     global _model_instance, _current_model_idx, gemini_quota_exhausted
 
     if gemini_quota_exhausted:
@@ -94,25 +97,32 @@ def _get_gemini_model(force_next: bool = False):
     if not api_key:
         return None
 
+    if mark_quota_exhausted and 0 <= _current_model_idx < len(CANDIDATE_MODELS):
+        _exhausted_models.add(CANDIDATE_MODELS[_current_model_idx])
+
     if force_next:
-        _current_model_idx += 1
+        _current_model_idx = (_current_model_idx + 1) % len(CANDIDATE_MODELS)
 
     try:
         import google.generativeai as genai  # type: ignore
         genai.configure(api_key=api_key, transport="rest")  # type: ignore
 
-        while _current_model_idx < len(CANDIDATE_MODELS):
+        for _ in range(len(CANDIDATE_MODELS)):
             m_name = CANDIDATE_MODELS[_current_model_idx]
+            if m_name in _exhausted_models:
+                _current_model_idx = (_current_model_idx + 1) % len(CANDIDATE_MODELS)
+                continue
             try:
                 m = genai.GenerativeModel(m_name)  # type: ignore
                 _model_instance = m
                 return _model_instance
             except Exception:
-                _current_model_idx += 1
+                _exhausted_models.add(m_name)
+                _current_model_idx = (_current_model_idx + 1) % len(CANDIDATE_MODELS)
                 continue
 
         gemini_quota_exhausted = True
-        print("  [AI POOL] Seluruh model kandidat Gemini telah dicoba / kuota habis.", flush=True)
+        print("  [AI POOL] Seluruh model kandidat Gemini telah mencapai batas kuota harian.", flush=True)
         return None
     except Exception as e:
         print(f"  [AI POOL] Gagal menginisialisasi Gemini API: {e}", flush=True)
@@ -552,7 +562,7 @@ class AutoRecheckPipeline:
         full_prompt = f"{system_prompt}\n\n{user_content}"
 
         # 3. Eksekusi dengan retry dan fallback model pool
-        max_attempts = 3
+        max_attempts = 4
         ai_resp_data = None
 
         for attempt in range(max_attempts):
@@ -563,27 +573,29 @@ class AutoRecheckPipeline:
                 resp = model.generate_content(full_prompt, request_options={"retry": None, "timeout": 45})  # type: ignore
                 text = (resp.text or "").strip()
 
-                # Parse JSON
+                # Parse JSON (strict=False agar karakter newline/control di dalam string tidak memicu error)
                 m = re.search(r"\[[\s\S]*\]", text)
                 if m:
-                    ai_resp_data = json.loads(m.group(0))
+                    raw_json = re.sub(r"[\x00-\x08\x0b\x0c\x0e-\x1f]", " ", m.group(0))
+                    ai_resp_data = json.loads(raw_json, strict=False)
                     break
                 else:
                     m2 = re.search(r"\{[\s\S]*\}", text)
                     if m2:
-                        parsed = json.loads(m2.group(0))
+                        raw_json = re.sub(r"[\x00-\x08\x0b\x0c\x0e-\x1f]", " ", m2.group(0))
+                        parsed = json.loads(raw_json, strict=False)
                         ai_resp_data = parsed.get("hasil") or parsed.get("articles") or [parsed]
                         break
             except Exception as e:
                 err_str = str(e).lower()
-                if "429" in err_str or "quota" in err_str or "resourceexhausted" in err_str:
+                if "429" in err_str or "quota" in err_str or "resourceexhausted" in err_str or "404" in err_str:
                     print(f"    [AI LIMIT] Kuota model limit, beralih ke model berikutnya di pool...", flush=True)
-                    _get_gemini_model(force_next=True)
+                    _get_gemini_model(force_next=True, mark_quota_exhausted=True)
                     time.sleep(1.0)
                     continue
                 else:
                     print(f"    [AI ERROR] {e}. Mencoba beralih model...", flush=True)
-                    _get_gemini_model(force_next=True)
+                    _get_gemini_model(force_next=True, mark_quota_exhausted=False)
                     time.sleep(1.5)
                     continue
 
@@ -716,8 +728,13 @@ class AutoRecheckPipeline:
 
                 art[f"_pass{pass_num}_label"] = label
                 art[f"_pass{pass_num}_alasan"] = alasan
-                art["_final_label"] = label
-                art["_final_alasan"] = alasan
+                # Jangan menimpa status HILIR yang sudah terverifikasi di pass sebelumnya jika AI gagal merespon di putaran ini
+                prev_lbl = art.get("_final_label") or art.get("_pass2_label")
+                if alasan == "Respon AI tidak memuat ID artikel (Perlu verifikasi manual)" and prev_lbl == "HILIR":
+                    art["_final_label"] = "HILIR"
+                else:
+                    art["_final_label"] = label
+                    art["_final_alasan"] = alasan
 
                 title = str(art.get("title") or art.get("Title") or "").strip()
                 link = str(art.get("link") or art.get("Link Website") or "").strip()
