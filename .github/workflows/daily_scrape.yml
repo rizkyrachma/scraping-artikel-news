@@ -2,8 +2,10 @@ name: Daily Agro Media Scraping
 
 on:
   schedule:
-    # 21:15 UTC = 04:15 WIB (UTC+7) setiap hari
-    - cron: '15 21 * * *'
+    # 20:00 UTC = 03:00 WIB (mulai jam 3 pagi agar selesai sebelum jam 4 pagi WIB)
+    - cron: '0 20 * * *'
+    # 21:00 UTC = 04:00 WIB (cadangan otomatis jika antrean GitHub Actions padat; otomatis skip jika 03:00 WIB sudah berhasil)
+    - cron: '0 21 * * *'
   workflow_dispatch:
     inputs:
       mode:
@@ -88,7 +90,7 @@ jobs:
           INPUT_END="${{ github.event.inputs.end_date || '' }}"
           SKIP_EXISTING="${{ github.event.inputs.skip_existing || 'true' }}"
 
-          if [ "${{ github.event_name }}" = "schedule" ]; then
+          if [ "${{ github.event_name }}" = "schedule" ] || [ "$MODE" = "auto" ]; then
             TRIGGER_LABEL="Terjadwal"
             MODE="auto"
           else

@@ -97,3 +97,19 @@ export async function POST(req: NextRequest) {
     );
   }
 }
+
+export async function GET(req: NextRequest) {
+  const cronSecret = process.env.CRON_SECRET;
+  if (cronSecret) {
+    const authHeader = req.headers.get("authorization");
+    if (authHeader !== `Bearer ${cronSecret}`) {
+      return NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });
+    }
+  }
+  const fakeReq = new NextRequest(req.url, {
+    method: "POST",
+    body: JSON.stringify({ mode: "auto", skipExisting: true }),
+    headers: { "Content-Type": "application/json" },
+  });
+  return POST(fakeReq);
+}
