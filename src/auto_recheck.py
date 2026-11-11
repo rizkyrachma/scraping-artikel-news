@@ -373,6 +373,18 @@ DETERMINISTIC_RULES = [
     (lambda t: "kepatuhan cukai sejak awal usaha" in t, "Teknis Administrasi Bea Cukai (NPPBKC)"),
     (lambda t: "diskopindag kota malang latih" in t, "Bimtek Manajemen Keuangan Pemkot Malang"),
     (lambda t: "kelola ekspor satu pintu, dsi tegaskan" in t, "Perkebunan Sawit Danantara RSPO"),
+
+    # 16. Filter Eksklusif Ditjen Industri Agro (Non-IA, Hulu TBS, Direktori/Kamus, Biogas/POME, DBHCHT/Razia)
+    (lambda t: t in ("agenda", "berita", "article", "indeks berita", "detail berita", "informasi paket") or len(t) <= 4 or t.isdigit(), "Judul Generik / Kosong (Artifact Web)"),
+    (lambda t: "kamus istilah hukum" in t or "profile, phone, address" in t or "peraturan direktur jenderal industri agro nomor" in t, "Halaman Kamus / Direktori / Arsip Statis (Bukan Berita)"),
+    (lambda t: any(w in t for w in ["harga tbs sawit", "daftar harga tbs", "rincian harga tbs"]), "Hulu Perkebunan (Update Harga TBS Sawit Harian Petani)"),
+    (lambda t: any(w in t for w in ["industri plastik", "industri petrokimia", "pabrik gemuk", "gaikindo", "pameran otomotif", "hari batik nasional"]), "Bukan Sektor Agro (Ranah Ditjen IKFT / ILMATE / IKMA)"),
+    (lambda t: "kawasan industri" in t and not any(a in t for a in ["agro", "sagu", "sawit", "kakao", "kelapa", "mamin", "pangan", "karet", "tembakau", "pulp", "kertas", "halal", "maluku"]), "Kebijakan Kawasan Industri Umum Non-IA (Ditjen KPAII)"),
+    (lambda t: any(w in t for w in ["instalasi biogas limbah sawit", "biogas dari limbah sawit", "biogas di sei pagar", "biogas di sungai pagar", "pemanfaatan pome sebagai energi", "listrik pome 3,9 gw", "limbah sawit jadi listrik", "palm oil waste into electricity", "limbah sawit berpotensi hasilkan energi"]), "Energi Biogas / Listrik POME (Ranah Energi EBTKE / Lingkungan, Bukan Inti Manufaktur IA)"),
+    (lambda t: ("dbhcht" in t and any(w in t for w in ["salurkan blt", "pelatihan", "sosialisasikan", "sosialisasi"])) or ("bea cukai" in t and any(w in t for w in ["gencarkan penindakan rokok ilegal", "ajak masyarakat dukung peredaran rokok legal", "dampingi pelaku usaha di tiga wilayah"])), "Sosialisasi DBHCHT / Penindakan Bea Cukai Daerah (Bukan Kebijakan Industri IA)"),
+    (lambda t: "distribusi kebutuhan harian masyarakat juga bergantung pada angkutan truk" in t, "Logistik / Transportasi Truk Umum (Bukan Sektor IA)"),
+    (lambda t: "super-polutan" in t and "recolit" in t or "recoolit" in t, "Penanganan Emisi Gas Pendingin Refrigeran (Lingkungan Non-Inti IA)"),
+    (lambda t: "mulai 2024, pdam cilegon mandiri bakal jual air minum" in t, "Arsip Berita Lama (Tahun 2024)"),
 ]
 
 
@@ -790,27 +802,38 @@ class AutoRecheckPipeline:
         all_discarded = p1_discarded + p2_discarded + audit_discarded
         self.discarded_log = all_discarded
 
-        # 4. Finalisasi Artikel RAGU (Jangan Dibuang, Beri Flag PERLU CEK MANUAL)
+        # 4. Finalisasi Eksklusif Ditjen Industri Agro (Buang artikel RAGU/Review ke discarded_articles.json)
         ragu_count = 0
         hilir_count = 0
+        strict_hilir_kept = []
 
         for art in final_kept:
             final_lbl = art.get("_final_label", "HILIR")
             final_als = art.get("_final_alasan", "")
+            curr_sr = str(art.get("Status Review") or "").strip()
+            curr_stat = str(art.get("status") or art.get("Status") or art.get("status_ai") or "").strip().lower()
+            title = str(art.get("title") or art.get("Title") or "").strip()
+            link = str(art.get("link") or art.get("Link Website") or "").strip()
 
-            if final_lbl == "RAGU":
+            if final_lbl == "RAGU" or curr_stat == "review" or ("perlu" in curr_sr.lower() and "cek manual" in curr_sr.lower()):
                 ragu_count += 1
-                art["Status Review"] = f"PERLU CEK MANUAL: {final_als}" if final_als else "PERLU CEK MANUAL"
+                all_discarded.append({
+                    "judul": title,
+                    "link": link,
+                    "alasan": f"Ambigu / Bukan Inti Hilir IA (RAGU): {final_als or curr_sr}",
+                    "pass": 6
+                })
             else:
                 hilir_count += 1
-                # Jika sudah terverifikasi HILIR oleh AutoRecheck (Pass 2 + Audit Loop), bersihkan flag fallback 'AI tidak dijalankan' dari tahap awal
-                curr_sr = str(art.get("Status Review") or "").strip()
-                if "perlu cek manual" in curr_sr.lower() or "ai tidak dijalankan" in curr_sr.lower():
-                    art["Status Review"] = ""
+                art["Status Review"] = ""
+                art["status"] = "relevan"
                 curr_alasan = str(art.get("alasan") or art.get("alasan_ai") or "").strip().lower()
                 if "ai tidak dijalankan" in curr_alasan:
-                    art["status"] = "relevan"
                     art["alasan"] = art.get("_final_alasan") or art.get("_pass2_alasan") or ""
+                strict_hilir_kept.append(art)
+
+        final_kept = strict_hilir_kept
+        self.discarded_log = all_discarded
 
         # 5. Simpan Log Artikel yang Dibuang
         discard_json_path = os.path.join(self.target_dir, "discarded_articles.json")

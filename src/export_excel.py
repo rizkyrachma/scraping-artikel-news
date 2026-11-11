@@ -222,33 +222,21 @@ def save_to_excel(
         )
         df = pd.DataFrame(df.loc[~is_pdf_mask]).reset_index(drop=True)
 
-        # 1.5 Filter status "buang" dan format "review" sesuai instruksi
-        # - "relevan": masuk dataset final seperti biasa
-        # - "review": TETAP masuk dataset final, tapi kolom "Status Review" diisi "Perlu Dicek Manual" beserta alasan AI
-        # - "buang": dikeluarkan dari dataset final sepenuhnya
+        # 1.5 Filter eksklusif Ditjen Industri Agro: buang status 'buang'/'review' & baris 'Perlu Dicek Manual'
         for stat_col in ["status", "Status", "status_ai"]:
             if stat_col in df.columns:
-                mask = pd.Series(df[stat_col]).astype(str).str.strip().str.lower() != "buang"
+                mask = ~pd.Series(df[stat_col]).astype(str).str.strip().str.lower().isin(["buang", "review"])
                 df = pd.DataFrame(df.loc[mask]).reset_index(drop=True)
 
-        def _format_status_review(row):
-            raw_review = row.get("Status Review")
-            if pd.notna(raw_review) and str(raw_review).strip() and str(raw_review).strip().lower() not in ("nan", "none", "", "-"):
-                return str(raw_review).strip()
-            for c in ["status", "Status", "status_ai"]:
-                if c in row and str(row.get(c, "")).strip().lower() == "review":
-                    reason = str(row.get("alasan") or row.get("alasan_ai") or row.get("reason") or "").strip()
-                    if "ai tidak dijalankan" in reason.lower():
-                        return reason
-                    if reason:
-                        return f"Perlu Dicek Manual: {reason}"
-                    return "Perlu Dicek Manual"
-            alasan_raw = str(row.get("alasan") or row.get("alasan_ai") or row.get("reason") or "").strip()
-            if "ai tidak dijalankan" in alasan_raw.lower():
-                return alasan_raw
-            return ""
+        if "Status Review" in df.columns:
+            sr_series = pd.Series(df["Status Review"]).fillna("").astype(str).str.strip().str.lower()
+            sr_keep = (
+                sr_series.isin(["", "nan", "none", "-"])
+                | (~sr_series.str.contains("perlu|ai tidak dijalankan", regex=True))
+            )
+            df = pd.DataFrame(df.loc[sr_keep]).reset_index(drop=True)
 
-        df["Status Review"] = df.apply(_format_status_review, axis=1)
+        df["Status Review"] = ""
 
         def _format_sub_sektor(row):
             raw_sub = row.get("Sub Sektor")
@@ -351,7 +339,27 @@ def write_styled_excel(
     columns = list(BERITA_COLUMNS)
     df = df_berita.copy() if not df_berita.empty else pd.DataFrame(columns=columns)
     if not df.empty:
-        if "Link Website" in df.columns:
+        # Proteksi eksklusif Ditjen Industri Agro: singkirkan dokumen PDF & baris review/perlu cek manual
+        try:
+            from src.relevance_filter import is_pdf_document as _is_pdf
+        except ImportError:
+            from relevance_filter import is_pdf_document as _is_pdf
+        if "Sumber Data" in df.columns:
+            pdf_m = (
+                pd.Series(df["Sumber Data"]).astype(str).str.upper().eq("PDF")
+                | df.apply(lambda r: _is_pdf(url=str(r.get("Link Website", "")), title=str(r.get("Title", "")), sumber_data=str(r.get("Sumber Data", ""))), axis=1)
+            )
+            df = pd.DataFrame(df.loc[~pdf_m]).reset_index(drop=True)
+        for stat_col in ("status", "Status", "status_ai"):
+            if stat_col in df.columns and not df.empty:
+                m = ~pd.Series(df[stat_col]).astype(str).str.strip().str.lower().isin(["buang", "review"])
+                df = pd.DataFrame(df.loc[m]).reset_index(drop=True)
+        if "Status Review" in df.columns and not df.empty:
+            sr_s = pd.Series(df["Status Review"]).fillna("").astype(str).str.strip().str.lower()
+            sr_ok = sr_s.isin(["", "nan", "none", "-"]) | (~sr_s.str.contains("perlu|ai tidak dijalankan", regex=True))
+            df = pd.DataFrame(df.loc[sr_ok]).reset_index(drop=True)
+            df["Status Review"] = ""
+        if "Link Website" in df.columns and not df.empty:
             df["Link Website"] = df["Link Website"].apply(_clean_url_str)
         if "Tone" in df.columns:
             df["Tone"] = df["Tone"].replace(["nan", "None", ""], "Netral").fillna("Netral")
@@ -399,17 +407,6 @@ def write_styled_excel(
 
         ws.freeze_panes = "A2"
 
-        # Highlight kuning untuk baris yang berstatus 'PERLU CEK MANUAL' / 'PERLU DICEK MANUAL'
-        yellow_fill = PatternFill(start_color="FFFF00", end_color="FFFF00", fill_type="solid")
-        status_col_idx = columns.index("Status Review") + 1 if "Status Review" in columns else None
-
-        if status_col_idx:
-            for row_idx in range(2, len(df) + 2):
-                status_val = str(ws.cell(row=row_idx, column=status_col_idx).value or "").strip().upper()
-                if "PERLU CEK MANUAL" in status_val or "PERLU DICEK MANUAL" in status_val:
-                    for col_idx in range(1, len(columns) + 1):
-                        ws.cell(row=row_idx, column=col_idx).fill = yellow_fill
-
         # Buat Link Website jadi hyperlink aktif (href) dengan warna biru dan garis bawah
         link_col_idx = columns.index("Link Website") + 1
         link_font = Font(color="0563C1", underline="single")
@@ -431,6 +428,23 @@ def write_styled_excel(
 
             if not df_neg_clean.empty and "Link Website" in df_neg_clean.columns:
                 df_neg_clean["Link Website"] = df_neg_clean["Link Website"].apply(_clean_url_str)
+                if not df.empty and "Link Website" in df.columns:
+                    valid_links = {
+                        str(v).strip().lower().split("?")[0].rstrip("/")
+                        for v in df["Link Website"].dropna()
+                        if str(v).strip()
+                    }
+                    valid_titles = {
+                        str(v).strip().lower()
+                        for v in df["Title"].dropna()
+                        if str(v).strip()
+                    } if "Title" in df.columns else set()
+                    neg_l = df_neg_clean["Link Website"].fillna("").astype(str).str.strip().str.lower().str.split("?").str[0].str.rstrip("/")
+                    neg_t = df_neg_clean["Title"].fillna("").astype(str).str.strip().str.lower() if "Title" in df_neg_clean.columns else pd.Series([""] * len(df_neg_clean))
+                    keep_neg = neg_l.isin(valid_links) | neg_t.isin(valid_titles)
+                    if "Isu Inti" in df_neg_clean.columns:
+                        keep_neg = keep_neg & (~df_neg_clean["Isu Inti"].fillna("").astype(str).str.lower().str.contains("ringkasan gagal dibuat", regex=False))
+                    df_neg_clean = pd.DataFrame(df_neg_clean.loc[keep_neg]).reset_index(drop=True)
 
             for col in neg_columns:
                 if col not in df_neg_clean.columns:
@@ -470,26 +484,10 @@ def write_styled_excel(
                 ws_neg.cell(row=1, column=col_idx).font = Font(bold=True)
                 ws_neg.column_dimensions[get_column_letter(col_idx)].width = neg_widths.get(col_name, 25)
 
-            # Highlight kuning untuk baris Ringkasan Negatif yang pasti masuk sektor IA
-            pasti_ia_links = set()
-            if "Link Website" in df.columns:
-                for r_i in range(len(df)):
-                    stat = str(df.at[r_i, "Status Review"] if "Status Review" in df.columns else "")
-                    if not stat.lower().startswith("perlu dicek manual"):
-                        l_val = str(df.at[r_i, "Link Website"] or "").strip()
-                        if l_val:
-                            pasti_ia_links.add(l_val.lower().split("?")[0].rstrip("/"))
-
             wrap_top = Alignment(wrap_text=True, vertical="top")
             for row_idx in range(2, len(df_neg_clean) + 2):
                 for col_idx in range(1, len(neg_columns) + 1):
                     ws_neg.cell(row=row_idx, column=col_idx).alignment = wrap_top
-
-                neg_link = str(ws_neg.cell(row=row_idx, column=neg_columns.index("Link Website") + 1).value or "").strip()
-                norm_neg = neg_link.lower().split("?")[0].rstrip("/")
-                if norm_neg in pasti_ia_links or not pasti_ia_links:
-                    for col_idx in range(1, len(neg_columns) + 1):
-                        ws_neg.cell(row=row_idx, column=col_idx).fill = yellow_fill
 
             tgl_neg_idx = neg_columns.index("Tanggal") + 1
             for row_idx in range(2, len(df_neg_clean) + 2):
