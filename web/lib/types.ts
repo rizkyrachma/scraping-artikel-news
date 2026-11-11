@@ -1,3 +1,5 @@
+export type DownloadPresetMode = "daily" | "monthly" | "all";
+
 export interface Article {
   id: number;
   title: string;

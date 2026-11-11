@@ -2,6 +2,7 @@
 
 import React from "react";
 import { Download } from "lucide-react";
+import { DownloadPresetMode } from "@/lib/types";
 
 interface RecentDayItem {
   fileDate: string;
@@ -15,14 +16,14 @@ interface RecentDayItem {
 }
 
 interface UnduhHarianProps {
-  onOpenDownloadModal: () => void;
+  onOpenDownloadModal: (mode?: DownloadPresetMode) => void;
   recentDays?: RecentDayItem[];
 }
 
 export default function UnduhHarianCard({ onOpenDownloadModal, recentDays = [] }: UnduhHarianProps) {
   const handleDownload = (fileDate: string) => {
     const link = document.createElement("a");
-    link.href = `/api/files/Media_Monitoring_Agro_${fileDate}.xlsx`;
+    link.href = `/api/files/Media_Monitoring_Agro_${fileDate}.xlsx?t=${Date.now()}`;
     link.download = `Media_Monitoring_Agro_${fileDate}.xlsx`;
     document.body.appendChild(link);
     link.click();
@@ -36,10 +37,10 @@ export default function UnduhHarianCard({ onOpenDownloadModal, recentDays = [] }
         <div className="card-header-row">
           <h3 className="card-title">Unduh Excel Harian</h3>
           <div className="pills-group">
-            <button type="button" onClick={onOpenDownloadModal} className="pill-btn">
+            <button type="button" onClick={() => onOpenDownloadModal("monthly")} className="pill-btn">
               Bulanan
             </button>
-            <button type="button" onClick={onOpenDownloadModal} className="pill-btn">
+            <button type="button" onClick={() => onOpenDownloadModal("all")} className="pill-btn">
               Semua Data
             </button>
           </div>
@@ -112,7 +113,7 @@ export default function UnduhHarianCard({ onOpenDownloadModal, recentDays = [] }
         {/* Footer info tepat di bawah baris terakhir di area scroll */}
         <div className="card-scroll-footer">
           <span className="text-scroll-count">Menampilkan {recentDays.length} hari terakhir</span>
-          <button type="button" onClick={onOpenDownloadModal} className="btn-link-action">
+          <button type="button" onClick={() => onOpenDownloadModal("daily")} className="btn-link-action">
             Tampilkan lebih banyak →
           </button>
         </div>

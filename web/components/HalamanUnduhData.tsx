@@ -4,7 +4,6 @@ import React, { useState, useEffect, useMemo } from "react";
 import {
   Download,
   FileSpreadsheet,
-  Archive,
   Calendar,
   Filter,
   CheckCircle,
@@ -12,7 +11,7 @@ import {
   RotateCcw
 } from "lucide-react";
 import { formatNumberIndo } from "@/lib/utils";
-import { SummaryData } from "@/lib/types";
+import { DownloadPresetMode, SummaryData } from "@/lib/types";
 import PageHeaderCard from "@/components/PageHeaderCard";
 import CustomSelect, { CustomSelectOption } from "@/components/ui/CustomSelect";
 
@@ -30,7 +29,7 @@ interface DayDownloadItem {
 }
 
 interface HalamanUnduhDataProps {
-  onOpenDownloadModal: () => void;
+  onOpenDownloadModal: (mode?: DownloadPresetMode) => void;
   isRunning?: boolean;
   summaryData?: SummaryData | null;
 }
@@ -161,7 +160,7 @@ export default function HalamanUnduhData({ onOpenDownloadModal, isRunning, summa
 
   const handleDownloadFile = (fileDate: string) => {
     const link = document.createElement("a");
-    link.href = `/api/files/Media_Monitoring_Agro_${fileDate}.xlsx`;
+    link.href = `/api/files/Media_Monitoring_Agro_${fileDate}.xlsx?t=${Date.now()}`;
     link.download = `Media_Monitoring_Agro_${fileDate}.xlsx`;
     document.body.appendChild(link);
     link.click();
@@ -210,7 +209,7 @@ export default function HalamanUnduhData({ onOpenDownloadModal, isRunning, summa
           <div className="unduh-primary-actions">
             <button
               type="button"
-              onClick={onOpenDownloadModal}
+              onClick={() => onOpenDownloadModal("monthly")}
               className="btn-action-unduh-bulanan"
               title="Unduh gabungan dataset bulan berjalan"
             >
@@ -220,12 +219,12 @@ export default function HalamanUnduhData({ onOpenDownloadModal, isRunning, summa
 
             <button
               type="button"
-              onClick={onOpenDownloadModal}
+              onClick={() => onOpenDownloadModal("all")}
               className="btn-action-unduh-zip"
-              title="Unduh seluruh arsip data lengkap format ZIP"
+              title="Unduh seluruh arsip data lengkap format Excel (.xlsx)"
             >
-              <Archive size={15} />
-              <span>Unduh semua (ZIP)</span>
+              <FileSpreadsheet size={15} />
+              <span>Unduh semua data (.xlsx)</span>
             </button>
           </div>
 

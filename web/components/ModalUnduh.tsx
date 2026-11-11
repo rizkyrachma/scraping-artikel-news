@@ -2,12 +2,13 @@
 
 import React, { useState, useEffect, useMemo } from "react";
 import { Download, X, Calendar, CheckCircle2 } from "lucide-react";
-import { SummaryData } from "@/lib/types";
+import { DownloadPresetMode, SummaryData } from "@/lib/types";
 
 interface ModalUnduhProps {
   isOpen: boolean;
   onClose: () => void;
   summaryData?: SummaryData | null;
+  presetMode?: DownloadPresetMode;
 }
 
 const MONTHS_SHORT = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agt", "Sep", "Okt", "Nov", "Des"];
@@ -18,44 +19,80 @@ function fmtShort(iso: string): string {
   return `${parts[2]} ${MONTHS_SHORT[parts[1] - 1] || ""} ${parts[0]}`;
 }
 
-export default function ModalUnduh({ isOpen, onClose, summaryData }: ModalUnduhProps) {
-  const latestDate = summaryData?.metadata?.last_updated || "";
+export default function ModalUnduh({
+  isOpen,
+  onClose,
+  summaryData,
+  presetMode = "daily",
+}: ModalUnduhProps) {
+  const dateKeys = useMemo(() => {
+    const counts = summaryData?.metadata?.calendar_counts || {};
+    return Object.keys(counts)
+      .filter((k) => (counts[k] || 0) > 0)
+      .sort();
+  }, [summaryData]);
+
+  const latestDate =
+    summaryData?.metadata?.last_updated ||
+    summaryData?.recent_days?.[0]?.fileDate ||
+    dateKeys[dateKeys.length - 1] ||
+    "";
+  const earliestDate =
+    summaryData?.metadata?.earliest_date ||
+    dateKeys[0] ||
+    latestDate;
+
   const [format, setFormat] = useState<"daily" | "merged">("daily");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
   useEffect(() => {
-    if (latestDate && !startDate && !endDate) {
+    if (!isOpen) return;
+    if (presetMode === "all") {
+      setFormat("merged");
+      setStartDate(earliestDate);
+      setEndDate(latestDate);
+    } else if (presetMode === "monthly") {
+      const ym = latestDate.slice(0, 7);
+      const monthFirst = dateKeys.find((d) => d.startsWith(ym)) || (ym ? `${ym}-01` : earliestDate);
+      setFormat("merged");
+      setStartDate(monthFirst);
+      setEndDate(latestDate);
+    } else {
+      setFormat("daily");
       setStartDate(latestDate);
       setEndDate(latestDate);
     }
-  }, [latestDate, startDate, endDate]);
+  }, [isOpen, presetMode, earliestDate, latestDate, dateKeys]);
+
+  const handleSelectDaily = () => {
+    setFormat("daily");
+    if (latestDate && startDate !== endDate) {
+      setStartDate(latestDate);
+      setEndDate(latestDate);
+    }
+  };
+
+  const handleSelectMerged = () => {
+    setFormat("merged");
+    if (earliestDate) setStartDate(earliestDate);
+    if (latestDate) setEndDate(latestDate);
+  };
 
   const rangeInfo = useMemo(() => {
     const counts = summaryData?.metadata?.calendar_counts || {};
-    if (!startDate || !endDate) {
-      return { daysWithData: 0, totalArticles: 0, totalDays: 0 };
-    }
-    const d1 = new Date(`${startDate}T00:00:00Z`);
-    const d2 = new Date(`${endDate}T00:00:00Z`);
-    if (Number.isNaN(d1.getTime()) || Number.isNaN(d2.getTime()) || d1 > d2) {
-      return { daysWithData: 0, totalArticles: 0, totalDays: 0 };
+    if (!startDate || !endDate || startDate > endDate) {
+      return { daysWithData: 0, totalArticles: 0 };
     }
     let daysWithData = 0;
     let totalArticles = 0;
-    let totalDays = 0;
-    const cur = new Date(d1);
-    while (cur <= d2 && totalDays < 365) {
-      const iso = cur.toISOString().slice(0, 10);
-      const cnt = counts[iso] || 0;
-      if (cnt > 0) {
+    for (const [iso, cnt] of Object.entries(counts)) {
+      if (iso >= startDate && iso <= endDate && cnt > 0) {
         daysWithData += 1;
         totalArticles += cnt;
       }
-      totalDays += 1;
-      cur.setUTCDate(cur.getUTCDate() + 1);
     }
-    return { daysWithData, totalArticles, totalDays };
+    return { daysWithData, totalArticles };
   }, [startDate, endDate, summaryData]);
 
   if (!isOpen) return null;
@@ -68,7 +105,7 @@ export default function ModalUnduh({ isOpen, onClose, summaryData }: ModalUnduhP
         ? `Media_Monitoring_Agro_${startDate}.xlsx`
         : "Media_Monitoring_Agro_Semua_Data.xlsx";
     const link = document.createElement("a");
-    link.href = `/api/files/${targetFile}`;
+    link.href = `/api/files/${targetFile}?t=${Date.now()}`;
     link.download = targetFile;
     document.body.appendChild(link);
     link.click();
@@ -142,7 +179,7 @@ export default function ModalUnduh({ isOpen, onClose, summaryData }: ModalUnduhP
                 type="radio"
                 name="downloadFormat"
                 checked={format === "daily"}
-                onChange={() => setFormat("daily")}
+                onChange={handleSelectDaily}
               />
               <div className="radio-text">
                 <div className="radio-title">
@@ -159,7 +196,7 @@ export default function ModalUnduh({ isOpen, onClose, summaryData }: ModalUnduhP
                 type="radio"
                 name="downloadFormat"
                 checked={format === "merged"}
-                onChange={() => setFormat("merged")}
+                onChange={handleSelectMerged}
               />
               <div className="radio-text">
                 <div className="radio-title">Gabung seluruh arsip dalam satu file Excel (.xlsx)</div>

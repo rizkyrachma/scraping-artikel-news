@@ -14,7 +14,7 @@ import ModalUnduh from "@/components/ModalUnduh";
 import HalamanBerita from "@/components/HalamanBerita";
 import HalamanRiwayatRun from "@/components/HalamanRiwayatRun";
 import HalamanUnduhData from "@/components/HalamanUnduhData";
-import { SummaryData, RunHistoryItem } from "@/lib/types";
+import { DownloadPresetMode, SummaryData, RunHistoryItem } from "@/lib/types";
 
 const MONTHS_SHORT_ID = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agt", "Sep", "Okt", "Nov", "Des"];
 
@@ -33,7 +33,13 @@ export default function DashboardPage() {
   const [runningStepLabel, setRunningStepLabel] = useState<string | null>(null);
   const [isScrapeModalOpen, setIsScrapeModalOpen] = useState(false);
   const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
+  const [downloadModalMode, setDownloadModalMode] = useState<DownloadPresetMode>("daily");
   const [selectedDate, setSelectedDate] = useState("");
+
+  const openDownloadModal = (mode: DownloadPresetMode = "daily") => {
+    setDownloadModalMode(mode);
+    setIsDownloadModalOpen(true);
+  };
 
   // State data
   const [summaryData, setSummaryData] = useState<SummaryData | null>(null);
@@ -219,7 +225,7 @@ export default function DashboardPage() {
               <DataStatusBar
                 isRunning={isRunning}
                 onOpenScrapeModal={() => setIsScrapeModalOpen(true)}
-                onOpenDownloadModal={() => setIsDownloadModalOpen(true)}
+                onOpenDownloadModal={() => openDownloadModal("daily")}
                 onCancelScraping={handleCancelScraping}
                 runningStepLabel={runningStepLabel}
                 lastUpdatedStr={lastUpdatedStr}
@@ -240,7 +246,7 @@ export default function DashboardPage() {
               {/* Baris Dua Kartu Bawah: Unduh Harian & Riwayat Run */}
               <div className="bottom-cards-row">
                 <UnduhHarianCard
-                  onOpenDownloadModal={() => setIsDownloadModalOpen(true)}
+                  onOpenDownloadModal={openDownloadModal}
                   recentDays={summaryData?.recent_days || []}
                 />
                 <RiwayatRunCard
@@ -290,7 +296,7 @@ export default function DashboardPage() {
         {/* Tampilan Tab Unduh Data Lengkap */}
         {activeTab === "unduh" && (
           <HalamanUnduhData
-            onOpenDownloadModal={() => setIsDownloadModalOpen(true)}
+            onOpenDownloadModal={openDownloadModal}
             isRunning={isRunning}
             summaryData={summaryData}
           />
@@ -312,6 +318,7 @@ export default function DashboardPage() {
         isOpen={isDownloadModalOpen}
         onClose={() => setIsDownloadModalOpen(false)}
         summaryData={summaryData}
+        presetMode={downloadModalMode}
       />
     </div>
   );
