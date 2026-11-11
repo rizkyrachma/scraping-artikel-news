@@ -3,14 +3,14 @@
     "last_updated": "2026-11-10",
     "last_updated_display": "Selasa, 10 November 2026",
     "earliest_date": "2026-08-06",
-    "total_articles": 4378,
+    "total_articles": 4367,
     "tone_summary": {
-      "Positif": 2380,
+      "Positif": 2381,
       "Netral": 1326,
-      "Negatif": 672
+      "Negatif": 660
     },
     "calendar_counts": {
-      "2026-11-10": 61,
+      "2026-11-10": 50,
       "2026-11-09": 78,
       "2026-11-08": 29,
       "2026-11-07": 25,
@@ -71,31 +71,31 @@
     },
     {
       "name": "Lainnya",
-      "count": 623
+      "count": 624
     },
     {
       "name": "Makanan & Minuman",
-      "count": 527
+      "count": 526
     },
     {
       "name": "Hasil Tembakau",
-      "count": 415
+      "count": 404
     },
     {
       "name": "Tepung, Sagu & Pati",
-      "count": 333
+      "count": 332
     },
     {
       "name": "Kakao & Cokelat",
-      "count": 250
+      "count": 251
     },
     {
       "name": "Kopi & Teh",
-      "count": 245
+      "count": 246
     },
     {
       "name": "Kelapa & Olahan",
-      "count": 209
+      "count": 208
     },
     {
       "name": "Kayu & Furnitur",
@@ -133,11 +133,11 @@
   "spokespersons": [
     {
       "name": "Muhammad Sarmuji",
-      "count": 469
+      "count": 468
     },
     {
       "name": "Putu Juli Ardika",
-      "count": 104
+      "count": 105
     },
     {
       "name": "Faisol Riza",
@@ -186,8 +186,8 @@
       "spokesperson": "",
       "unit": "-",
       "commodity": "Kakao & Cokelat",
-      "has_review": true,
-      "review_text": "AI tidak dijalankan (alasan: seluruh model Gemini gagal diinisialisasi / kuota habis)"
+      "has_review": false,
+      "review_text": ""
     },
     {
       "id": 2,
@@ -202,8 +202,8 @@
       "spokesperson": "",
       "unit": "-",
       "commodity": "Kelapa Sawit & CPO",
-      "has_review": true,
-      "review_text": "AI tidak dijalankan (alasan: seluruh model Gemini gagal diinisialisasi / kuota habis)"
+      "has_review": false,
+      "review_text": ""
     },
     {
       "id": 3,
@@ -219,7 +219,7 @@
       "unit": "-",
       "commodity": "Kakao & Cokelat",
       "has_review": true,
-      "review_text": "AI tidak dijalankan (alasan: seluruh model Gemini gagal diinisialisasi / kuota habis)"
+      "review_text": "Perlu Dicek Manual: Berita mengenai penanganan emisi gas pendingin di pabrik industri cokelat (termasuk kategori operasional/lingkungan industri)."
     },
     {
       "id": 4,
@@ -234,27 +234,11 @@
       "spokesperson": "",
       "unit": "-",
       "commodity": "Kakao & Cokelat",
-      "has_review": true,
-      "review_text": "AI tidak dijalankan (alasan: seluruh model Gemini gagal diinisialisasi / kuota habis)"
+      "has_review": false,
+      "review_text": ""
     },
     {
       "id": 5,
-      "title": "Warga RI Berburu Cokelat ke Malaysia, Pengusaha Mal Ungkap Dampaknya",
-      "link": "https://www.cnbcindonesia.com/news/20261110212952-4-784063/warga-ri-berburu-cokelat-ke-malaysia-pengusaha-mal-ungkap-dampaknya",
-      "media": "CNBC Indonesia",
-      "tone": "Netral",
-      "date": "2026-11-10",
-      "datetime": "2026-11-10T21:45:00",
-      "time": "21:45",
-      "date_display": "Selasa, 10 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Kakao & Cokelat",
-      "has_review": true,
-      "review_text": "AI tidak dijalankan (alasan: seluruh model Gemini gagal diinisialisasi / kuota habis)"
-    },
-    {
-      "id": 6,
       "title": "Kopi Luwak Punya Rasa Khas, Didorong Ekspansi Pasar Internasional",
       "link": "https://www.metrotvnews.com/read/bw6CAZjJ-kopi-luwak-punya-rasa-khas-didorong-ekspansi-pasar-internasional",
       "media": "MetroTVNews.com",
@@ -267,62 +251,14 @@
       "unit": "-",
       "commodity": "Kopi & Teh",
       "has_review": true,
-      "review_text": "AI tidak dijalankan (alasan: seluruh model Gemini gagal diinisialisasi / kuota habis)"
+      "review_text": "PERLU CEK MANUAL: Artikel lebih banyak membahas karakteristik rasa dan profil kopi luwak secara umum ketimbang aktivitas industri pengolahan manufaktur."
     },
     {
-      "id": 7,
-      "title": "DBHCHT Merosot Hampir Rp3 Miliar, Pemkab Sampang Gandeng Bea Cukai Perangi Rokok Ilegal",
-      "link": "https://klikmadura.com/sampang/dbhcht-merosot-hampir-rp3-miliar-pemkab-sampang-gandeng-bea-cukai-perangi-rokok-ilegal/",
-      "media": "Klik Madura",
-      "tone": "Negatif",
-      "date": "2026-11-10",
-      "datetime": "2026-11-10T21:35:17",
-      "time": "21:35",
-      "date_display": "Selasa, 10 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Hasil Tembakau",
-      "has_review": true,
-      "review_text": "AI tidak dijalankan (alasan: seluruh model Gemini gagal diinisialisasi / kuota habis)"
-    },
-    {
-      "id": 8,
-      "title": "Tepung tapioka mahal, Mendag Budi segera telusuri rantai distribusi",
-      "link": "https://www.antaranews.com/video/5845039/tepung-tapioka-mahal-mendag-budi-segera-telusuri-rantai-distribusi",
-      "media": "ANTARA News",
-      "tone": "Netral",
-      "date": "2026-11-10",
-      "datetime": "2026-11-10T21:12:44",
-      "time": "21:12",
-      "date_display": "Selasa, 10 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Tepung, Sagu & Pati",
-      "has_review": false,
-      "review_text": ""
-    },
-    {
-      "id": 9,
-      "title": "Kembali, Satgas BKC Gelar Opgab Berantas Rokok Ilegal di Lima Kecamatan",
-      "link": "https://suarantb.com/2026/11/10/kembali-satgas-bkc-gelar-opgab-berantas-rokok-ilegal-di-lima-kecamatan/",
-      "media": "SUARANTB.com",
-      "tone": "Negatif",
-      "date": "2026-11-10",
-      "datetime": "2026-11-10T20:58:50",
-      "time": "20:58",
-      "date_display": "Selasa, 10 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Hasil Tembakau",
-      "has_review": true,
-      "review_text": "AI tidak dijalankan (alasan: seluruh model Gemini gagal diinisialisasi / kuota habis)"
-    },
-    {
-      "id": 10,
+      "id": 6,
       "title": "Menperin Bicara Nasib Industri Rokok Elektrik usai MUI Haramkan Vape",
       "link": "https://www.cnnindonesia.com/ekonomi/20261110203746-92-1425620/menperin-bicara-nasib-industri-rokok-elektrik-usai-mui-haramkan-vape",
       "media": "CNN Indonesia",
-      "tone": "Negatif",
+      "tone": "Netral",
       "date": "2026-11-10",
       "datetime": "2026-11-10T20:57:11",
       "time": "20:57",
@@ -330,15 +266,31 @@
       "spokesperson": "Muhammad Sarmuji",
       "unit": "MENTERI",
       "commodity": "Hasil Tembakau",
-      "has_review": true,
-      "review_text": "AI tidak dijalankan (alasan: seluruh model Gemini gagal diinisialisasi / kuota habis)"
+      "has_review": false,
+      "review_text": ""
     },
     {
-      "id": 11,
+      "id": 7,
+      "title": "Berita Video - Cokbang, Coklat dengan Cita Rasa Khas Kakao Pulau Sabang",
+      "link": "https://rri.co.id/berita-video/52840/cokbang-coklat-dengan-cita-rasa-khas-kakao-pulau-sabang",
+      "media": "RRI.co.id",
+      "tone": "Positif",
+      "date": "2026-11-10",
+      "datetime": "2026-11-10T20:57:00",
+      "time": "20:57",
+      "date_display": "Selasa, 10 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Kakao & Cokelat",
+      "has_review": false,
+      "review_text": ""
+    },
+    {
+      "id": 8,
       "title": "Menperin Buka Suara Soal Vape Haram",
       "link": "https://ekonomi.republika.co.id/berita/toadqv423/menperin-buka-suara-soal-vape-haram",
       "media": "republika.co.id",
-      "tone": "Negatif",
+      "tone": "Netral",
       "date": "2026-11-10",
       "datetime": "2026-11-10T19:40:00",
       "time": "19:40",
@@ -346,11 +298,11 @@
       "spokesperson": "Muhammad Sarmuji",
       "unit": "MENTERI",
       "commodity": "Hasil Tembakau",
-      "has_review": true,
-      "review_text": "AI tidak dijalankan (alasan: seluruh model Gemini gagal diinisialisasi / kuota habis)"
+      "has_review": false,
+      "review_text": ""
     },
     {
-      "id": 12,
+      "id": 9,
       "title": "Limbah Sawit Diolah Jadi Energi, PalmCo Gandeng BRIN Kembangkan Bioenergi",
       "link": "https://ekonomi.republika.co.id/berita/toadul430/limbah-sawit-diolah-jadi-energi-palmco-gandeng-brin-kembangkan-bioenergi",
       "media": "republika.co.id",
@@ -363,14 +315,14 @@
       "unit": "-",
       "commodity": "Kelapa Sawit & CPO",
       "has_review": true,
-      "review_text": "Perlu Dicek Manual: Pengolahan limbah sawit (POME) menjadi energi alternatif melalui riset/teknologi."
+      "review_text": "Perlu Dicek Manual: Berita riset/inovasi pengolahan limbah sawit (POME) oleh BUMN dan BRIN."
     },
     {
-      "id": 13,
+      "id": 10,
       "title": "Kopdes Merah Putih Targetkan Bangun 18 Pabrik Kelapa Sawit Tahun Depan",
       "link": "https://www.suara.com/video/2026/11/10/190000/kopdes-merah-putih-targetkan-bangun-18-pabrik-kelapa-sawit-tahun-depan",
       "media": "Suara.com",
-      "tone": "Positif",
+      "tone": "Negatif",
       "date": "2026-11-10",
       "datetime": "2026-11-10T19:00:00",
       "time": "19:00",
@@ -382,7 +334,7 @@
       "review_text": ""
     },
     {
-      "id": 14,
+      "id": 11,
       "title": "Kemenperin Ungkap 6 Tantangan Industri Manufaktur Indonesia",
       "link": "https://akurat.co/riil/905761/kemenperin-ungkap-6-tantangan-industri-manufaktur-indonesia",
       "media": "Akurat.co",
@@ -394,27 +346,11 @@
       "spokesperson": "Muhammad Sarmuji",
       "unit": "MENTERI",
       "commodity": "Makanan & Minuman",
-      "has_review": true,
-      "review_text": "AI tidak dijalankan (alasan: seluruh model Gemini gagal diinisialisasi / kuota habis)"
-    },
-    {
-      "id": 15,
-      "title": "Manisnya Cuan Gula Semut, Ella Sukses Berdayakan Petani Desa Tembus Pasar Global",
-      "link": "https://www.metrotvnews.com/play/NnjCRlZX-manisnya-cuan-gula-semut-ella-sukses-berdayakan-petani-desa-tembus-pasar-global",
-      "media": "MetroTVNews.com",
-      "tone": "Positif",
-      "date": "2026-11-10",
-      "datetime": "2026-11-10T18:12:11",
-      "time": "18:12",
-      "date_display": "Selasa, 10 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Kelapa & Olahan",
       "has_review": false,
       "review_text": ""
     },
     {
-      "id": 16,
+      "id": 12,
       "title": "Kemenperin Kebut Kemudahan Izin Kawasan Industri",
       "link": "https://www.industry.co.id/read/158908/kemenperin-kebut-kemudahan-izin-kawasan-industri",
       "media": "Industry.co.id",
@@ -426,11 +362,11 @@
       "spokesperson": "Muhammad Sarmuji",
       "unit": "MENTERI",
       "commodity": "Makanan & Minuman",
-      "has_review": false,
-      "review_text": ""
+      "has_review": true,
+      "review_text": "Perlu Dicek Manual: Kebijakan Kemenperin Sektor Non-IA (Kawasan Industri)"
     },
     {
-      "id": 17,
+      "id": 13,
       "title": "Worcas Group Promosikan Kopi Luwak Indonesia di Pameran CIIE 2026 Shanghai",
       "link": "https://www.jpnn.com/news/worcas-group-promosikan-kopi-luwak-indonesia-di-pameran-ciie-2026-shanghai",
       "media": "JPNN.com",
@@ -442,43 +378,11 @@
       "spokesperson": "",
       "unit": "-",
       "commodity": "Kopi & Teh",
-      "has_review": true,
-      "review_text": "AI tidak dijalankan (alasan: seluruh model Gemini gagal diinisialisasi / kuota habis)"
+      "has_review": false,
+      "review_text": ""
     },
     {
-      "id": 18,
-      "title": "Operasi ASAP II, Bea Cukai Batam Amankan 42 Ribu Batang Rokok Ilegal",
-      "link": "https://www.terasbatam.id/operasi-asap-ii-bea-cukai-batam-amankan-42-ribu-batang-rokok-ilegal/?amp",
-      "media": "Terasbatam",
-      "tone": "Negatif",
-      "date": "2026-11-10",
-      "datetime": "2026-11-10T17:40:24",
-      "time": "17:40",
-      "date_display": "Selasa, 10 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Hasil Tembakau",
-      "has_review": true,
-      "review_text": "AI tidak dijalankan (alasan: seluruh model Gemini gagal diinisialisasi / kuota habis)"
-    },
-    {
-      "id": 19,
-      "title": "Indika Energy (INDY) Dirikan Anak Usaha, Bidik Bisnis Perdagangan Hasil Pertanian",
-      "link": "https://id.tradingview.com/news/kontan:53bdc824a87ea:0/",
-      "media": "TradingView",
-      "tone": "Positif",
-      "date": "2026-11-10",
-      "datetime": "2026-11-10T17:17:26",
-      "time": "17:17",
-      "date_display": "Selasa, 10 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Makanan & Minuman",
-      "has_review": true,
-      "review_text": "Perlu Dicek Manual: Pendirian anak usaha baru yang membidik sektor perdagangan hasil pertanian/aromatik."
-    },
-    {
-      "id": 20,
+      "id": 14,
       "title": "DPRD Apresiasi Terobosan Tirta Wening, Permintaan Air Kemasan Terus Bertambah",
       "link": "https://bacaini.id/dprd-apresiasi-terobosan-tirta-wening-permintaan-air-kemasan-terus-bertambah/",
       "media": "Bacaini.id",
@@ -490,11 +394,27 @@
       "spokesperson": "",
       "unit": "-",
       "commodity": "Makanan & Minuman",
-      "has_review": true,
-      "review_text": "AI tidak dijalankan (alasan: seluruh model Gemini gagal diinisialisasi / kuota habis)"
+      "has_review": false,
+      "review_text": ""
     },
     {
-      "id": 21,
+      "id": 15,
+      "title": "Worcas Group Bawa Kopi Luwak Indonesia ke CIIE 2026, Perkuat Bisnis Pasar Global",
+      "link": "https://wartaekonomi.co.id/read646907/worcas-group-bawa-kopi-luwak-indonesia-ke-ciie-2026-perkuat-bisnis-pasar-global",
+      "media": "Warta Ekonomi",
+      "tone": "Positif",
+      "date": "2026-11-10",
+      "datetime": "2026-11-10T16:10:00",
+      "time": "16:10",
+      "date_display": "Selasa, 10 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Kopi & Teh",
+      "has_review": false,
+      "review_text": ""
+    },
+    {
+      "id": 16,
       "title": "Bea Cukai Banyuwangi Gencarkan Penindakan Rokok Ilegal, Potensi Kerugian Negara Rp7 Miliar",
       "link": "https://infopublik.id/kategori/nusantara/996690/bea-cukai-banyuwangi-gencarkan-penindakan-rokok-ilegal-potensi-kerugian-negara-rp7-miliar",
       "media": "InfoPublik",
@@ -506,11 +426,11 @@
       "spokesperson": "",
       "unit": "-",
       "commodity": "Hasil Tembakau",
-      "has_review": true,
-      "review_text": "AI tidak dijalankan (alasan: seluruh model Gemini gagal diinisialisasi / kuota habis)"
+      "has_review": false,
+      "review_text": ""
     },
     {
-      "id": 22,
+      "id": 17,
       "title": "Biodiesel Fleksibel Jelang IPOC 2026",
       "link": "https://gapki.id/news/2026/11/10/biodiesel-fleksibel-jelang-ipoc-2026/",
       "media": "Gabungan Pengusaha Kelapa Sawit Indonesia (GAPKI)",
@@ -526,7 +446,7 @@
       "review_text": ""
     },
     {
-      "id": 23,
+      "id": 18,
       "title": "MUI Haramkan Vape, 200 Industri Rokok Elektronik Indonesia Terancam",
       "link": "https://katadata.co.id/berita/industri/6af2c79a579d1/mui-haramkan-vape-200-industri-rokok-elektronik-indonesia-terancam",
       "media": "Katadata.co.id",
@@ -538,27 +458,11 @@
       "spokesperson": "Muhammad Sarmuji",
       "unit": "MENTERI",
       "commodity": "Hasil Tembakau",
-      "has_review": true,
-      "review_text": "AI tidak dijalankan (alasan: seluruh model Gemini gagal diinisialisasi / kuota habis)"
+      "has_review": false,
+      "review_text": ""
     },
     {
-      "id": 24,
-      "title": "Gedor Kemudahan Perizinan, Kemenperin Pacu Optimalisasi 181 Kawasan Industri Nasional",
-      "link": "https://infoekonomi.id/2026/11/gedor-kemudahan-perizinan-kemenperin-pacu-optimalisasi-181-kawasan-industri-nasional/",
-      "media": "Info Ekonomi",
-      "tone": "Positif",
-      "date": "2026-11-10",
-      "datetime": "2026-11-10T14:23:10",
-      "time": "14:23",
-      "date_display": "Selasa, 10 November 2026",
-      "spokesperson": "Muhammad Sarmuji",
-      "unit": "MENTERI",
-      "commodity": "Lainnya",
-      "has_review": true,
-      "review_text": "AI tidak dijalankan (alasan: seluruh model Gemini gagal diinisialisasi / kuota habis)"
-    },
-    {
-      "id": 25,
+      "id": 19,
       "title": "Menteri Perindustrian: Industri pengolahan Indonesia tumbuh 5,87%",
       "link": "https://www.idnfinancials.com/id/news/71474/menteri-perindustrian-industri-pengolahan-indonesia-tumbuh-5-87",
       "media": "IDNFinancials",
@@ -570,11 +474,11 @@
       "spokesperson": "Muhammad Sarmuji",
       "unit": "MENTERI",
       "commodity": "Makanan & Minuman",
-      "has_review": true,
-      "review_text": "AI tidak dijalankan (alasan: seluruh model Gemini gagal diinisialisasi / kuota habis)"
+      "has_review": false,
+      "review_text": ""
     },
     {
-      "id": 26,
+      "id": 20,
       "title": "Kebijakan EPR Mulai Berlaku 2028, Industri Mamin hingga Kosmetik Wajib Kelola Sampah Kemasan",
       "link": "https://voi.id/ekonomi/601958/kebijakan-epr-mulai-berlaku-2028-industri-mamin-hingga-kosmetik-wajib-kelola-sampah-kemasan",
       "media": "VOI.ID",
@@ -590,23 +494,7 @@
       "review_text": ""
     },
     {
-      "id": 27,
-      "title": "Bea Cukai Banda Aceh Menyita 14.000 Batang Rokok Ilegal di Pidie",
-      "link": "https://mediaindonesia.com/politik-dan-hukum/954353/bea-cukai-banda-aceh-menyita-14000-batang-rokok-ilegal-di-pidie",
-      "media": "Media Indonesia",
-      "tone": "Negatif",
-      "date": "2026-11-10",
-      "datetime": "2026-11-10T13:38:34",
-      "time": "13:38",
-      "date_display": "Selasa, 10 November 2026",
-      "spokesperson": "Muhammad Sarmuji",
-      "unit": "MENTERI",
-      "commodity": "Hasil Tembakau",
-      "has_review": true,
-      "review_text": "AI tidak dijalankan (alasan: seluruh model Gemini gagal diinisialisasi / kuota habis)"
-    },
-    {
-      "id": 28,
+      "id": 21,
       "title": "Menperin Minta Kebijakan Industri Berangkat dari Masalah Nyata Pelaku Usaha",
       "link": "https://www.jawapos.com/bisnis/2611100189/menperin-minta-kebijakan-industri-berangkat-dari-masalah-nyata-pelaku-usaha",
       "media": "Jawa Pos",
@@ -622,7 +510,7 @@
       "review_text": ""
     },
     {
-      "id": 29,
+      "id": 22,
       "title": "Bertemu APINDO, Menperin Sarmuji Belanja 6 Masalah Industri",
       "link": "https://www.industry.co.id/read/158978/bertemu-apindo-menperin-sarmuji-belanja-6-masalah-industri",
       "media": "Industry.co.id",
@@ -638,7 +526,7 @@
       "review_text": ""
     },
     {
-      "id": 30,
+      "id": 23,
       "title": "Optimalisasi Biomassa Sawit Indonesia: Peluang Energi Terbarukan, Pelet Biomassa, dan Pakan Ternak Berkelanjutan",
       "link": "https://sawitindonesia.com/optimalisasi-biomassa-sawit-indonesia-peluang-energi-terbarukan-pelet-biomassa-dan-pakan-ternak-berkelanjutan",
       "media": "Sawit Indonesia",
@@ -650,27 +538,27 @@
       "spokesperson": "",
       "unit": "-",
       "commodity": "Kelapa Sawit & CPO",
-      "has_review": true,
-      "review_text": "AI tidak dijalankan (alasan: seluruh model Gemini gagal diinisialisasi / kuota habis)"
+      "has_review": false,
+      "review_text": ""
     },
     {
-      "id": 31,
-      "title": "Polisi Amankan 22.880 Batang Rokok Diduga Ilegal di Magetan, Pasokan dari Madura dan Malang",
-      "link": "https://beritajatim.com/polisi-amankan-22-880-batang-rokok-diduga-ilegal-di-magetan-pasokan-dari-madura-dan-malang",
-      "media": "beritajatim.com",
-      "tone": "Negatif",
+      "id": 24,
+      "title": "Indonesia-Prancis Luncurkan Produk Cokelat Hasil Pengembangan Bersama - kumparan.com",
+      "link": "https://kumparan.com/kumparannews/indonesia-prancis-luncurkan-produk-cokelat-hasil-pengembangan-bersama-28XqqcDOzqq",
+      "media": "kumparan",
+      "tone": "Positif",
       "date": "2026-11-10",
-      "datetime": "2026-11-10T12:34:08",
-      "time": "12:34",
+      "datetime": "2026-11-10T13:04:29",
+      "time": "13:04",
       "date_display": "Selasa, 10 November 2026",
       "spokesperson": "",
       "unit": "-",
-      "commodity": "Hasil Tembakau",
-      "has_review": true,
-      "review_text": "AI tidak dijalankan (alasan: seluruh model Gemini gagal diinisialisasi / kuota habis)"
+      "commodity": "Kakao & Cokelat",
+      "has_review": false,
+      "review_text": ""
     },
     {
-      "id": 32,
+      "id": 25,
       "title": "Karantina Jatim Dorong Perbaikan Standar Ekspor Porang dan Tapioka ke China",
       "link": "https://karantinaindonesia.go.id/bali/berita/karantina-jatim-dorong-perbaikan-standar-ekspor-porang-dan-tapioka-ke-china",
       "media": "Badan Karantina Indonesia",
@@ -686,7 +574,7 @@
       "review_text": ""
     },
     {
-      "id": 33,
+      "id": 26,
       "title": "Pabrik Kelapa Sawit Rp155 Miliar Mulai Dibangun di Dharmasraya, Ditargetkan Rampung dalam 17 Bulan",
       "link": "https://topkonstruksi.com/pabrik-kelapa-sawit-dharmasraya-rp155-miliar/",
       "media": "Top Konstruksi",
@@ -698,11 +586,11 @@
       "spokesperson": "",
       "unit": "-",
       "commodity": "Kelapa Sawit & CPO",
-      "has_review": true,
-      "review_text": "AI tidak dijalankan (alasan: seluruh model Gemini gagal diinisialisasi / kuota habis)"
+      "has_review": false,
+      "review_text": ""
     },
     {
-      "id": 34,
+      "id": 27,
       "title": "BERTEMU APINDO, MENPERIN BAHAS PENYELESAIAN HAMBATAN INDUSTR",
       "link": "https://itrade.cgsi.co.id/bertemu-apindo-menperin-bahas-penyelesaian-hambatan-industri",
       "media": "iTrade CGS International",
@@ -714,11 +602,11 @@
       "spokesperson": "Muhammad Sarmuji",
       "unit": "MENTERI",
       "commodity": "Makanan & Minuman",
-      "has_review": true,
-      "review_text": "AI tidak dijalankan (alasan: seluruh model Gemini gagal diinisialisasi / kuota habis)"
+      "has_review": false,
+      "review_text": ""
     },
     {
-      "id": 35,
+      "id": 28,
       "title": "Produksi Gula Indonesia Meningkat, Industri Makanan Minuman Masih Membutuhkan Pasokan Impor",
       "link": "https://korelasi.co/gula-nasional-indonesia-industri-makanan-minuman/",
       "media": "Korelasi.co",
@@ -734,7 +622,7 @@
       "review_text": ""
     },
     {
-      "id": 36,
+      "id": 29,
       "title": "Agenda",
       "link": "https://www.sidoarjokab.go.id/berita/agenda/1794275137/0",
       "media": "Website Resmi Pemerintah Kabupaten Sidoarjo",
@@ -746,27 +634,11 @@
       "spokesperson": "",
       "unit": "-",
       "commodity": "Hasil Tembakau",
-      "has_review": true,
-      "review_text": "AI tidak dijalankan (alasan: seluruh model Gemini gagal diinisialisasi / kuota habis)"
+      "has_review": false,
+      "review_text": ""
     },
     {
-      "id": 37,
-      "title": "Fatwa MUI, Vape Haram, Kapolri Larang Anggota Konsumsi Rokok Elektrik",
-      "link": "https://riaupos.jawapos.com/nasional/2611100017/fatwa-mui-vape-haram-kapolri-larang-anggota-konsumsi-rokok-elektrik",
-      "media": "Riau Pos",
-      "tone": "Negatif",
-      "date": "2026-11-10",
-      "datetime": "2026-11-10T10:40:33",
-      "time": "10:40",
-      "date_display": "Selasa, 10 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Hasil Tembakau",
-      "has_review": true,
-      "review_text": "AI tidak dijalankan (alasan: seluruh model Gemini gagal diinisialisasi / kuota habis)"
-    },
-    {
-      "id": 38,
+      "id": 30,
       "title": "Pemprov Gorontalo dan PT Berdikari Matangkan Kerja Sama Pembangunan Pabrik Pakan Ternak",
       "link": "https://dulohupa.id/pemprov-gorontalo-dan-pt-berdikari-matangkan-kerja-sama-pembangunan-pabrik-pakan-ternak/",
       "media": "Dulohupa.id",
@@ -778,11 +650,11 @@
       "spokesperson": "",
       "unit": "-",
       "commodity": "Pakan Ternak",
-      "has_review": true,
-      "review_text": "AI tidak dijalankan (alasan: seluruh model Gemini gagal diinisialisasi / kuota habis)"
+      "has_review": false,
+      "review_text": ""
     },
     {
-      "id": 39,
+      "id": 31,
       "title": "Hari Pahlawan dan Ironi Minyak Goreng",
       "link": "https://www.cnbcindonesia.com/opini/20261110095709-14-783790/hari-pahlawan-dan-ironi-minyak-goreng",
       "media": "CNBC Indonesia",
@@ -794,27 +666,11 @@
       "spokesperson": "",
       "unit": "-",
       "commodity": "Kelapa Sawit & CPO",
-      "has_review": true,
-      "review_text": "PERLU CEK MANUAL: Artikel mengulas kebijakan hilirisasi biodiesel B50 dan industri minyak goreng sebagai produk olahan agro."
+      "has_review": false,
+      "review_text": ""
     },
     {
-      "id": 40,
-      "title": "MUI Haramkan Vape, Ini Bunyi Lengkap Fatwa dan Larangannya",
-      "link": "https://www.cnbcindonesia.com/lifestyle/20261110094312-33-783782/mui-haramkan-vape-ini-bunyi-lengkap-fatwa-dan-larangannya/amp",
-      "media": "CNBC Indonesia",
-      "tone": "Negatif",
-      "date": "2026-11-10",
-      "datetime": "2026-11-10T09:54:12",
-      "time": "09:54",
-      "date_display": "Selasa, 10 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Hasil Tembakau",
-      "has_review": true,
-      "review_text": "AI tidak dijalankan (alasan: seluruh model Gemini gagal diinisialisasi / kuota habis)"
-    },
-    {
-      "id": 41,
+      "id": 32,
       "title": "Pemprov Gorontalo matangkan PKS pembangunan pabrik pakan",
       "link": "https://gorontalo.antaranews.com/berita/435055/pemprov-gorontalo-matangkan-pks-pembangunan-pabrik-pakan",
       "media": "ANTARA News Gorontalo",
@@ -826,11 +682,27 @@
       "spokesperson": "",
       "unit": "-",
       "commodity": "Pakan Ternak",
-      "has_review": true,
-      "review_text": "AI tidak dijalankan (alasan: seluruh model Gemini gagal diinisialisasi / kuota habis)"
+      "has_review": false,
+      "review_text": ""
     },
     {
-      "id": 42,
+      "id": 33,
+      "title": "Industri Pengolahan Tembus Rekor Tumbuh 5,87 Persen dan DHE SDA Bebas Konversi 100 Persen",
+      "link": "https://www.taxindo.co.id/id/berita/industri-pengolahan-tembus-rekor-tumbuh-587-persen-dan-dhe-sda-bebas-konversi-100-persen-mengapa-pengusaha-masih-mengeluhkan-ketimpangan-ekonomi",
+      "media": "Taxindo Prime Consulting",
+      "tone": "Positif",
+      "date": "2026-11-10",
+      "datetime": "2026-11-10T09:49:00",
+      "time": "09:49",
+      "date_display": "Selasa, 10 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Karet & Olahan",
+      "has_review": false,
+      "review_text": ""
+    },
+    {
+      "id": 34,
       "title": "Dorong Hilirisasi Perkebunan, Pemprov Sumbar Resmikan Pembangunan Pabrik Kelapa Sawit Rp155 Miliar di Dharmasraya",
       "link": "https://padang.viva.co.id/ragam-perkara/10395-dorong-hilirisasi-perkebunan-pemprov-sumbar-resmikan-pembangunan-pabrik-kelapa-sawit-rp155-miliar-di-dharmasraya",
       "media": "VIVA Padang",
@@ -846,39 +718,7 @@
       "review_text": ""
     },
     {
-      "id": 43,
-      "title": "Industri Pengolahan Tembus Rekor Tumbuh 5,87 Persen dan DHE SDA Bebas Konversi 100 Persen",
-      "link": "https://www.taxindo.co.id/id/berita/industri-pengolahan-tembus-rekor-tumbuh-587-persen-dan-dhe-sda-bebas-konversi-100-persen-mengapa-pengusaha-masih-mengeluhkan-ketimpangan-ekonomi",
-      "media": "Taxindo Prime Consulting",
-      "tone": "Positif",
-      "date": "2026-11-10",
-      "datetime": "2026-11-10T09:49:00",
-      "time": "09:49",
-      "date_display": "Selasa, 10 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Karet & Olahan",
-      "has_review": true,
-      "review_text": "AI tidak dijalankan (alasan: seluruh model Gemini gagal diinisialisasi / kuota habis)"
-    },
-    {
-      "id": 44,
-      "title": "MUI Haramkan Vape, Ini 8 Rekomendasi untuk Pemerintah",
-      "link": "https://news.harianjogja.com/r-1278296/mui-haramkan-vape-ini-8-rekomendasi-untuk-pemerintah",
-      "media": "Harianjogja.com",
-      "tone": "Negatif",
-      "date": "2026-11-10",
-      "datetime": "2026-11-10T09:27:03",
-      "time": "09:27",
-      "date_display": "Selasa, 10 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Hasil Tembakau",
-      "has_review": true,
-      "review_text": "AI tidak dijalankan (alasan: seluruh model Gemini gagal diinisialisasi / kuota habis)"
-    },
-    {
-      "id": 45,
+      "id": 35,
       "title": "Kakao AS, Indonesia Bersaing Ketat Lawan Malaysia",
       "link": "https://goexport.org/kakao-as-indonesia-bersaing-ketat-lawan-malaysia",
       "media": "goexport.org",
@@ -890,11 +730,11 @@
       "spokesperson": "",
       "unit": "-",
       "commodity": "Kakao & Cokelat",
-      "has_review": true,
-      "review_text": "AI tidak dijalankan (alasan: seluruh model Gemini gagal diinisialisasi / kuota habis)"
+      "has_review": false,
+      "review_text": ""
     },
     {
-      "id": 46,
+      "id": 36,
       "title": "Menperin jalankan kebijakan sesuai sektor jaga momentum pertumbuhan",
       "link": "https://ambon.antaranews.com/berita/351967/menperin-jalankan-kebijakan-sesuai-sektor-jaga-momentum-pertumbuhan",
       "media": "ANTARA News",
@@ -910,7 +750,23 @@
       "review_text": ""
     },
     {
-      "id": 47,
+      "id": 37,
+      "title": "Menperin Pastikan Kebijakan HGBT Industri Berlanjut",
+      "link": "https://cwibc.co.id/menperin-hgbt-industri-berlanjut",
+      "media": "cwibc.co.id",
+      "tone": "Positif",
+      "date": "2026-11-10",
+      "datetime": "2026-11-10T08:57:17",
+      "time": "08:57",
+      "date_display": "Selasa, 10 November 2026",
+      "spokesperson": "Muhammad Sarmuji",
+      "unit": "MENTERI",
+      "commodity": "Lainnya",
+      "has_review": false,
+      "review_text": ""
+    },
+    {
+      "id": 38,
       "title": "Peraturan Direktur Jenderal Industri Agro Nomor 2 Tahun 2026",
       "link": "https://www.hukumonline.com/pusatdata/detail/lt6a33cca909979/peraturan-direktur-jenderal-industri-agro-nomor-2-tahun-2026/history/?ts=us",
       "media": "Hukumonline",
@@ -926,7 +782,7 @@
       "review_text": ""
     },
     {
-      "id": 48,
+      "id": 39,
       "title": "Bertemu Pengusaha, Menperin Ungkap Tantangan Industri RI",
       "link": "https://finance.detik.com/industri/d-8745960/bertemu-pengusaha-menperin-ungkap-tantangan-industri-ri/amp",
       "media": "detikFinance",
@@ -938,11 +794,11 @@
       "spokesperson": "Muhammad Sarmuji",
       "unit": "MENTERI",
       "commodity": "Tepung, Sagu & Pati",
-      "has_review": true,
-      "review_text": "AI tidak dijalankan (alasan: seluruh model Gemini gagal diinisialisasi / kuota habis)"
+      "has_review": false,
+      "review_text": ""
     },
     {
-      "id": 49,
+      "id": 40,
       "title": "DPR Dorong Indofood Kurangi Impor Gandum, Tapioka Lokal Jadi Alternatif",
       "link": "https://www.agrofarm.co.id/2026/11/dpr-dorong-indofood-kurangi-impor-gandum-tapioka-lokal-jadi-alternatif/",
       "media": "agrofarm.co.id",
@@ -954,27 +810,11 @@
       "spokesperson": "",
       "unit": "-",
       "commodity": "Tepung, Sagu & Pati",
-      "has_review": true,
-      "review_text": "Perlu Dicek Manual: Dorongan DPR terkait substitusi bahan baku impor industri mamin dengan produk lokal."
+      "has_review": false,
+      "review_text": ""
     },
     {
-      "id": 50,
-      "title": "Gubernur Hendrik Lewerissa Dorong Hilirisasi Sagu Maluku Masuk PSN 2027",
-      "link": "https://arikamedia.id/gubernur-hendrik-lewerissa-dorong-hilirisasi-sagu-maluku-masuk-psn-2027/",
-      "media": "arikamedia.id",
-      "tone": "Positif",
-      "date": "2026-11-10",
-      "datetime": "2026-11-10T08:00:00",
-      "time": "08:00",
-      "date_display": "Selasa, 10 November 2026",
-      "spokesperson": "Muhammad Sarmuji",
-      "unit": "MENTERI",
-      "commodity": "Tepung, Sagu & Pati",
-      "has_review": true,
-      "review_text": "AI tidak dijalankan (alasan: 503 POST https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent?%24alt=json%3Benum-encoding%3Dint: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.)"
-    },
-    {
-      "id": 51,
+      "id": 41,
       "title": "Ada 181 Kawasan Industri di RI, Menperin: Pengembangan di Jawa dan Luar Jawa Punya Fokus Berbeda",
       "link": "https://www.idxchannel.com/economics/ada-181-kawasan-industri-di-ri-menperin-pengembangan-di-jawa-dan-luar-jawa-punya-fokus-berbeda",
       "media": "IDX Channel",
@@ -986,59 +826,27 @@
       "spokesperson": "Muhammad Sarmuji",
       "unit": "MENTERI",
       "commodity": "Makanan & Minuman",
-      "has_review": true,
-      "review_text": "AI tidak dijalankan (alasan: seluruh model Gemini gagal diinisialisasi / kuota habis)"
+      "has_review": false,
+      "review_text": ""
     },
     {
-      "id": 52,
-      "title": "Peredaran Rokok Ilegal Merek Manchester Marak di Batam, Jalur Distribusi Disorot",
-      "link": "https://kinni.id/2026/11/10/peredaran-rokok-ilegal-merek-manchester-marak-di-batam-jalur-distribusi-disorot/",
-      "media": "Kinni.id",
-      "tone": "Negatif",
+      "id": 42,
+      "title": "Gubernur Hendrik Lewerissa Dorong Hilirisasi Sagu Maluku Masuk PSN 2027",
+      "link": "https://arikamedia.id/gubernur-hendrik-lewerissa-dorong-hilirisasi-sagu-maluku-masuk-psn-2027/",
+      "media": "arikamedia.id",
+      "tone": "Positif",
       "date": "2026-11-10",
-      "datetime": "2026-11-10T07:18:23",
-      "time": "07:18",
+      "datetime": "2026-11-10T07:00:00",
+      "time": "07:00",
       "date_display": "Selasa, 10 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Hasil Tembakau",
-      "has_review": true,
-      "review_text": "AI tidak dijalankan (alasan: seluruh model Gemini gagal diinisialisasi / kuota habis)"
+      "spokesperson": "Muhammad Sarmuji",
+      "unit": "MENTERI",
+      "commodity": "Tepung, Sagu & Pati",
+      "has_review": false,
+      "review_text": ""
     },
     {
-      "id": 53,
-      "title": "Berikut Isi Lengkap Fatwa MUI: Vape Haram!",
-      "link": "https://fajar.co.id/2026/11/10/berikut-isi-lengkap-fatwa-mui-vape-haram/",
-      "media": "FAJAR",
-      "tone": "Negatif",
-      "date": "2026-11-10",
-      "datetime": "2026-11-10T06:57:15",
-      "time": "06:57",
-      "date_display": "Selasa, 10 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Hasil Tembakau",
-      "has_review": true,
-      "review_text": "AI tidak dijalankan (alasan: seluruh model Gemini gagal diinisialisasi / kuota habis)"
-    },
-    {
-      "id": 54,
-      "title": "Fatwa MUI Nomor 131 Tahun 2026: Rokok Elektrik atau Vape Dinyatakan Haram",
-      "link": "https://prokalteng.jawapos.com/nasional/10/11/2026/fatwa-mui-nomor-131-tahun-2026-rokok-elektrik-atau-vape-dinyatakan-haram/",
-      "media": "Prokalteng",
-      "tone": "Negatif",
-      "date": "2026-11-10",
-      "datetime": "2026-11-10T06:55:30",
-      "time": "06:55",
-      "date_display": "Selasa, 10 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Hasil Tembakau",
-      "has_review": true,
-      "review_text": "AI tidak dijalankan (alasan: seluruh model Gemini gagal diinisialisasi / kuota habis)"
-    },
-    {
-      "id": 55,
+      "id": 43,
       "title": "Wamenperin: Jelang Nataru, Industri Mamin dan Fesyen Bakal Menggeliat",
       "link": "https://www.industry.co.id/read/158950/wamenperin-jelang-nataru-industri-mamin-dan-fesyen-bakal-menggeliat",
       "media": "Industry.co.id",
@@ -1054,7 +862,7 @@
       "review_text": ""
     },
     {
-      "id": 56,
+      "id": 44,
       "title": "Tingkatkan Sinergi, APINDO Sampaikan Isu Industri kepada Menteri Perindustrian",
       "link": "https://bisnistoday.co.id/tingkatkan-sinergi-apindo-sampaikan-isu-industri-kepada-menteri-perindustrian/",
       "media": "Bisnistoday",
@@ -1066,11 +874,11 @@
       "spokesperson": "Muhammad Sarmuji",
       "unit": "MENTERI",
       "commodity": "Makanan & Minuman",
-      "has_review": true,
-      "review_text": "AI tidak dijalankan (alasan: seluruh model Gemini gagal diinisialisasi / kuota habis)"
+      "has_review": false,
+      "review_text": ""
     },
     {
-      "id": 57,
+      "id": 45,
       "title": "Melihat Canggihnya Instalasi Biogas Limbah Sawit Kolaborasi BRIN-PTPN IV di Sei Pagar",
       "link": "https://gemilaunews.com/ekonomi/melihat-canggihnya-instalasi-biogas-limbah-sawit-kolaborasi-brin-ptpn-iv-di-sei-pagar/",
       "media": "GemilauNews",
@@ -1082,11 +890,27 @@
       "spokesperson": "",
       "unit": "-",
       "commodity": "Kelapa Sawit & CPO",
-      "has_review": true,
-      "review_text": "AI tidak dijalankan (alasan: seluruh model Gemini gagal diinisialisasi / kuota habis)"
+      "has_review": false,
+      "review_text": ""
     },
     {
-      "id": 58,
+      "id": 46,
+      "title": "Hilirisasi Minyak Atsiri Dorong Indonesia Bidik Ekspor Rp8 Triliun",
+      "link": "https://www.indonesians.id/berita-utama/amp/1803195417/hilirisasi-minyak-atsiri-dorong-indonesia-bidik-ekspor-rp8-triliun?page=2",
+      "media": "Indonesians.id",
+      "tone": "Positif",
+      "date": "2026-11-10",
+      "datetime": "2026-11-10T04:50:00",
+      "time": "04:50",
+      "date_display": "Selasa, 10 November 2026",
+      "spokesperson": "Putu Juli Ardika",
+      "unit": "IA",
+      "commodity": "Lainnya",
+      "has_review": false,
+      "review_text": ""
+    },
+    {
+      "id": 47,
       "title": "Jaga Biosekuriti, Karantina Papua Tengah Awasi Pengeluaran 604 Ton CPO ke Surabaya",
       "link": "https://karantinaindonesia.go.id/papua-tengah/berita/jaga-biosekuriti-karantina-papua-tengah-awasi-pengeluaran-604-ton-cpoke-surabaya",
       "media": "Badan Karantina Indonesia",
@@ -1098,11 +922,11 @@
       "spokesperson": "",
       "unit": "-",
       "commodity": "Kelapa Sawit & CPO",
-      "has_review": true,
-      "review_text": "AI tidak dijalankan (alasan: seluruh model Gemini gagal diinisialisasi / kuota habis)"
+      "has_review": false,
+      "review_text": ""
     },
     {
-      "id": 59,
+      "id": 48,
       "title": "Krista Interfood 2026 Perkuat Peluang Kolaborasi Industri F&B, Sanwoo Bidik Pasar B2B",
       "link": "https://www.jawapos.com/ekonomi/2611090328/krista-interfood-2026-perkuat-peluang-kolaborasi-industri-fb-sanwoo-bidik-pasar-b2b?page=all",
       "media": "Jawa Pos",
@@ -1118,7 +942,7 @@
       "review_text": ""
     },
     {
-      "id": 60,
+      "id": 49,
       "title": "Mulai 2024, PDAM Cilegon Mandiri Bakal Jual Air Minum Dalam Kemasan",
       "link": "https://berita.cilegon.go.id/baca/Mulai-2024,-PDAM-Cilegon-Mandiri-Bakal-Jual-Air-Minum-Dalam-Kemasan/20261110/Nzcx",
       "media": "Berita Cilegon",
@@ -1130,11 +954,11 @@
       "spokesperson": "",
       "unit": "-",
       "commodity": "Lainnya",
-      "has_review": true,
-      "review_text": "AI tidak dijalankan (alasan: seluruh model Gemini gagal diinisialisasi / kuota habis)"
+      "has_review": false,
+      "review_text": ""
     },
     {
-      "id": 61,
+      "id": 50,
       "title": "SSC Ekspor Rempah ke Amerika Serikat: Syarat, Alur Penerbitan, dan 14 Kode Produknya",
       "link": "https://ukmindonesia.id/baca-deskripsi-posts/ssc-ekspor-rempah-ke-amerika-serikat-syarat-alur-penerbitan-dan-14-kode-produknya",
       "media": "ukmindonesia.id",
@@ -1147,10 +971,10 @@
       "unit": "-",
       "commodity": "Lainnya",
       "has_review": true,
-      "review_text": "AI tidak dijalankan (alasan: seluruh model Gemini gagal diinisialisasi / kuota habis)"
+      "review_text": "Perlu Dicek Manual: Prosedur ekspor produk agro (rempah) yang relevan dengan rantai pasok industri agro."
     },
     {
-      "id": 62,
+      "id": 51,
       "title": "Makanan Olahan Indonesia Makin Diminati Global, Kemendag: Ekspor Tembus USD 4,49 Miliar",
       "link": "https://www.jawapos.com/bisnis/2611090530/makanan-olahan-indonesia-makin-diminati-global-kemendag-ekspor-tembus-usd-449-miliar",
       "media": "Jawa Pos",
@@ -1166,7 +990,7 @@
       "review_text": ""
     },
     {
-      "id": 63,
+      "id": 52,
       "title": "Pemkab Aceh Utara Luncurkan Produk Air Minum Dalam Kemasan ‘Ie Loen’",
       "link": "https://baratapost.com/pemkab-aceh-utara-luncurkan-produk-air-minum-dalam-kemasan-ie-loen/",
       "media": "Barata Post",
@@ -1182,7 +1006,7 @@
       "review_text": ""
     },
     {
-      "id": 64,
+      "id": 53,
       "title": "DBHCHT Kembali untuk Buruh, Pemkot Blitar Salurkan BLT Rp630 Ribu kepada 897 Pekerja",
       "link": "https://kafeberita.com/dbhcht-kembali-untuk-buruh-pemkot-blitar-salurkan-blt-rp630-ribu-kepada-897-pekerja/",
       "media": "kafeberita.com",
@@ -1198,7 +1022,7 @@
       "review_text": ""
     },
     {
-      "id": 65,
+      "id": 54,
       "title": "PT Kalidareh Dharma Agro Bangun Pabrik Sawit Rp155 Miliar, Gubernur Mahyeldi Dorong Hilirisasi di Sumbar",
       "link": "https://haisawit.co.id/news/detail/pt-kalidareh-dharma-agro-bangun-pabrik-sawit-rp155-miliar-gubernur-mahyeldi-dorong-hilirisasi-di-sumbar",
       "media": "Hai Sawit",
@@ -1214,7 +1038,7 @@
       "review_text": ""
     },
     {
-      "id": 66,
+      "id": 55,
       "title": "Dua Tahun Vakum, Pabrik Sawit PT MAS Kembali Produksi dan Serap Tenaga Kerja Lokal",
       "link": "https://haisawit.co.id/news/detail/dua-tahun-vakum-pabrik-sawit-pt-mas-kembali-produksi-dan-serap-tenaga-kerja-lokal-",
       "media": "Hai Sawit",
@@ -1230,7 +1054,7 @@
       "review_text": ""
     },
     {
-      "id": 67,
+      "id": 56,
       "title": "Tingkatkan Produktivitas Pekerja Pabrik Rokok, Pemkot Pekalongan Gelar Pelatihan Berbasis DBHCHT 2026 - radarpekalongan.disway.id",
       "link": "https://radarpekalongan.disway.id/amp/116616/tingkatkan-produktivitas-pekerja-pabrik-rokok-pemkot-pekalongan-gelar-pelatihan-berbasis-dbhcht-2026",
       "media": "Radar Pekalongan",
@@ -1246,7 +1070,7 @@
       "review_text": ""
     },
     {
-      "id": 68,
+      "id": 57,
       "title": "Intip Proses Pembuatan Cokelat dari Biji Kakao hingga Jadi Cokelat Siap Santap",
       "link": "https://medan.tribunnews.com/lifestyle/1818970/intip-proses-pembuatan-cokelat-dari-biji-kakao-hingga-jadi-cokelat-siap-santap",
       "media": "Tribun-medan.com",
@@ -1262,7 +1086,7 @@
       "review_text": ""
     },
     {
-      "id": 69,
+      "id": 58,
       "title": "Industri Tepung Ikan Jadi Magnet Investasi Baru Kota Serang",
       "link": "https://waddedaily.com/industri-tepung-ikan-jadi-magnet-investasi-baru-kota-serang/",
       "media": "waddedaily.com",
@@ -1278,7 +1102,7 @@
       "review_text": ""
     },
     {
-      "id": 70,
+      "id": 59,
       "title": "Dongkrak Daya Saing Global Komoditas RI, Pemerintah Geber Hilirisasi Sektor Perkebunan",
       "link": "https://www.viva.co.id/bisnis/1942284-dongkrak-daya-saing-global-komoditas-ri-pemerintah-geber-hilirisasi-sektor-perkebunan",
       "media": "VIVA.co.id",
@@ -1294,7 +1118,7 @@
       "review_text": ""
     },
     {
-      "id": 71,
+      "id": 60,
       "title": "Industri Mamin-Transportasi Diproyeksi Jadi Sektor Termoncer pada Nataru 2027 - kumparan.com",
       "link": "https://kumparan.com/kumparanbisnis/industri-mamin-transportasi-diproyeksi-jadi-sektor-termoncer-pada-nataru-2027-28XZQJEy06c",
       "media": "kumparan",
@@ -1310,7 +1134,7 @@
       "review_text": ""
     },
     {
-      "id": 72,
+      "id": 61,
       "title": "Kemenkop Perluas Pabrik CPO Koperasi untuk Hilirisasi Sawit Rakyat",
       "link": "https://cwibc.co.id/kemenkop-pabrik-cpo-koperasi-sawit",
       "media": "cwibc.co.id",
@@ -1326,7 +1150,7 @@
       "review_text": ""
     },
     {
-      "id": 73,
+      "id": 62,
       "title": "Ekspor Produk Unggulan Blora Tembus Rp70,04 Miliar, Mebel Jati dan Briket Jadi Andalan - jateng.disway.id",
       "link": "https://jateng.disway.id/disway-muria/read/725933/ekspor-produk-unggulan-blora-tembus-rp7004-miliar-mebel-jati-dan-briket-jadi-andalan",
       "media": "Disway",
@@ -1342,7 +1166,7 @@
       "review_text": ""
     },
     {
-      "id": 74,
+      "id": 63,
       "title": "Pemkot Surabaya dampingi ekspor olahan kakao ke Jepang senilai Rp3,2 miliar",
       "link": "https://jatim.antaranews.com/berita/1117171/pemkot-surabaya-dampingi-ekspor-olahan-kakao-ke-jepang-senilai-rp32-miliar",
       "media": "Antara News jatim",
@@ -1358,7 +1182,7 @@
       "review_text": ""
     },
     {
-      "id": 75,
+      "id": 64,
       "title": "Targetkan 18 Pabrik CPO Koperasi Beroperasi 2027, Menkop Ferry Pastikan Investasi Murni Mandiri Tanpa APBN",
       "link": "https://sawitindonesia.com/targetkan-18-pabrik-cpo-koperasi-beroperasi-2027-menkop-ferry-pastikan-investasi-murni-mandiri-tanpa-apbn",
       "media": "Sawit Indonesia",
@@ -1374,7 +1198,7 @@
       "review_text": ""
     },
     {
-      "id": 76,
+      "id": 65,
       "title": "Produk makanan ringan asal Pati perluas ekspor lima kota di Australia",
       "link": "https://jateng.antaranews.com/berita/652859/produk-makanan-ringan-asal-pati-perluas-ekspor-lima-kota-di-australia",
       "media": "ANTARA News Jateng",
@@ -1390,7 +1214,7 @@
       "review_text": ""
     },
     {
-      "id": 77,
+      "id": 66,
       "title": "Belajar dari B50, Transisi Bersih Minta Pemerintah Matangkan Program E50",
       "link": "https://www.inews.id/regional/jatim/belajar-dari-b50-transisi-bersih-minta-pemerintah-matangkan-program-e50",
       "media": "iNews.ID",
@@ -1406,7 +1230,7 @@
       "review_text": ""
     },
     {
-      "id": 78,
+      "id": 67,
       "title": "Snack Pati Go International, Chandra Pacu Ekspansi Pasar",
       "link": "https://humas.patikab.go.id/frontpanel/berita/detail/OUJxVVIvU3dmOHY5MktVM3J3aHZqUT09",
       "media": "Humas Kabupaten Pati",
@@ -1422,7 +1246,7 @@
       "review_text": ""
     },
     {
-      "id": 79,
+      "id": 68,
       "title": "Industri Pengasapan Karet dalam bentuk Ribbed Smoked Sheet — Kamus Istilah Hukum",
       "link": "https://literasihukum.com/kamus-hukum/25606/industri-pengasapan-karet-dalam-bentuk-ribbed-smoked-sheet",
       "media": "Literasi Hukum Indonesia",
@@ -1438,7 +1262,7 @@
       "review_text": ""
     },
     {
-      "id": 80,
+      "id": 69,
       "title": "Industri Karet Remah (Crumb Rubber) — Kamus Istilah Hukum",
       "link": "https://literasihukum.com/kamus-hukum/25610/industri-karet-remah-crumb-rubber",
       "media": "Literasi Hukum Indonesia",
@@ -1454,7 +1278,7 @@
       "review_text": ""
     },
     {
-      "id": 81,
+      "id": 70,
       "title": "Strategi Baru Industrialisasi Nasional Menjadi Ujian Konsistensi Hilirisasi, SDM, dan Industri Hijau",
       "link": "https://gadget.qoo10.co.id/bisnis/strategi-baru-industrialisasi-nasional/",
       "media": "gadget.qoo10.co.id",
@@ -1470,7 +1294,7 @@
       "review_text": ""
     },
     {
-      "id": 82,
+      "id": 71,
       "title": "Strategi Baru Industrialisasi Nasional Perkuat Rantai Pasok Indonesia",
       "link": "https://suaragarut.id/strategi-industrialisasi-nasional-indonesia",
       "media": "SuaraGarut.ID",
@@ -1486,7 +1310,7 @@
       "review_text": ""
     },
     {
-      "id": 83,
+      "id": 72,
       "title": "Perkuat Posisi Merek Es Krim Cokelat Lokal, Halocoko Andalkan Inovasi & Harga Terjangkau",
       "link": "https://jatim.jpnn.com/jatim-terkini/50097/perkuat-posisi-merek-es-krim-cokelat-lokal-halocoko-andalkan-inovasi-harga-terjangkau",
       "media": "JPNN.com Jatim",
@@ -1502,7 +1326,7 @@
       "review_text": ""
     },
     {
-      "id": 84,
+      "id": 73,
       "title": "SBIN Perkuat Industrialisasi dan Hilirisasi Industri Nasional",
       "link": "https://demokratis.co.id/sbin-perkuat-industrialisasi-nasional",
       "media": "Demokratis.co.id",
@@ -1518,7 +1342,7 @@
       "review_text": ""
     },
     {
-      "id": 85,
+      "id": 74,
       "title": "Menjaga Kesinambungan Strategi Baru Industrialisasi Nasional",
       "link": "https://finance.detik.com/berita-ekonomi-bisnis/d-8745394/menjaga-kesinambungan-strategi-baru-industrialisasi-nasional/amp",
       "media": "detikFinance",
@@ -1534,7 +1358,7 @@
       "review_text": ""
     },
     {
-      "id": 86,
+      "id": 75,
       "title": "Perusahaan Asal Medan Kembangkan Inovasi Botanikal untuk Industri Pangan",
       "link": "https://wartaekonomi.co.id/read646614/perusahaan-asal-medan-kembangkan-inovasi-botanikal-untuk-industri-pangan",
       "media": "Warta Ekonomi",
@@ -1550,7 +1374,7 @@
       "review_text": ""
     },
     {
-      "id": 87,
+      "id": 76,
       "title": "Menperin Sarmuji di Media Gathering Forwind: Manufaktur Indonesia Lebih Tinggi Dibanding Jepang",
       "link": "https://tubasmedia.com/menperin-sarmuji-di-media-gathering-forwind-manufaktur-indonesia-lebih-tinggi-dibanding-jepang/",
       "media": "tubasmedia.com",
@@ -1566,7 +1390,7 @@
       "review_text": ""
     },
     {
-      "id": 88,
+      "id": 77,
       "title": "Kemenperin Perkuat Kemudahan Perizinan Berusaha di Kawasan Industri",
       "link": "https://tubasmedia.com/kemenperin-perkuat-kemudahan-perizinan-berusaha-di-kawasan-industri/",
       "media": "tubasmedia.com",
@@ -1582,7 +1406,7 @@
       "review_text": ""
     },
     {
-      "id": 89,
+      "id": 78,
       "title": "865 ROLL VENEER PRODUKSI JAWA TENGAH KINI HIASI INDUSTRI FURNITURE DUNIA",
       "link": "https://karantinaindonesia.go.id/deputi-karantina-ikan/berita/865-roll-veneer-produksi-jawa-tengah-kini-hiasi-industri-furniture-dunia",
       "media": "Badan Karantina Indonesia",
@@ -1598,7 +1422,7 @@
       "review_text": ""
     },
     {
-      "id": 90,
+      "id": 79,
       "title": "Sejalan dengan Visi BRIN Optimalkan Limbah Sawit, PTPN IV PalmCo Terus Akselerasi Pemanfaatan POME sebagai Energi Terbarukan",
       "link": "https://koranbumn.com/sejalan-dengan-visi-brin-optimalkan-limbah-sawit-ptpn-iv-palmco-terus-akselerasi-pemanfaatan-pome-sebagai-energi-terbarukan/",
       "media": "koranbumn",
@@ -1614,7 +1438,7 @@
       "review_text": ""
     },
     {
-      "id": 91,
+      "id": 80,
       "title": "Melihat Geliat Bisnis Cokelat di Ujung Barat Indonesia",
       "link": "https://www.idntimes.com/business/economy/melihat-geliat-bisnis-cokelat-di-ujung-barat-indonesia-c1c2-00-bvq5c-nsyd7z",
       "media": "IDN Times",
@@ -1630,7 +1454,7 @@
       "review_text": ""
     },
     {
-      "id": 92,
+      "id": 81,
       "title": "Koperasi Bangun Delapan Pabrik CPO Tahun Ini, Perkuat Posisi Tawar Petani",
       "link": "https://katadata.co.id/berita/industri/6af19ad8b0057/koperasi-bangun-delapan-pabrik-cpo-tahun-ini-perkuat-posisi-tawar-petani",
       "media": "Katadata.co.id",
@@ -1646,7 +1470,7 @@
       "review_text": ""
     },
     {
-      "id": 93,
+      "id": 82,
       "title": "Bukan Hanya Sembako, Distribusi Kebutuhan Harian Masyarakat Juga Bergantung pada Angkutan Truk",
       "link": "https://jakarta.suaramerdeka.com/nasional/13417878545/bukan-hanya-sembako-distribusi-kebutuhan-harian-masyarakat-juga-bergantung-pada-angkutan-truk",
       "media": "Suara Merdeka Jakarta",
@@ -1662,7 +1486,7 @@
       "review_text": ""
     },
     {
-      "id": 94,
+      "id": 83,
       "title": "Kolaborasi Italia dan Indonesia, Industri Gelato Tanah Air Kian Menjanjikan",
       "link": "https://www.womensobsession.com/detail/5195/kolaborasi-italia-dan-indonesia-industri-gelato-tanah-air-kian-menjanjikan",
       "media": "Women's Obsession",
@@ -1678,7 +1502,7 @@
       "review_text": ""
     },
     {
-      "id": 95,
+      "id": 84,
       "title": "Produk Kakao Surabaya Ekspor Perdana ke Jepang, Nilainya Rp 3,2 Miliar",
       "link": "https://www.bicarasurabaya.com/berita/36278/produk-kakao-surabaya-ekspor-perdana-ke-jepang-nilainya-rp-32-miliar/",
       "media": "Bicara Surabaya",
@@ -1694,7 +1518,7 @@
       "review_text": ""
     },
     {
-      "id": 96,
+      "id": 85,
       "title": "Apa Itu Olein dan Stearin? Mengenal Hasil Fraksinasi Minyak Sawit",
       "link": "https://gapki.id/id/wikisawit/knowledge-base/apa-itu-olein-dan-stearin/",
       "media": "Gabungan Pengusaha Kelapa Sawit Indonesia (GAPKI)",
@@ -1710,7 +1534,7 @@
       "review_text": ""
     },
     {
-      "id": 97,
+      "id": 86,
       "title": "Limbah Sawit Jadi Listrik, Pupuk, Hingga Pakan Ternak",
       "link": "https://gapki.id/news/2026/11/09/limbah-sawit-jadi-listrik-pupuk-hingga-pakan-ternak/",
       "media": "Gabungan Pengusaha Kelapa Sawit Indonesia (GAPKI)",
@@ -1726,7 +1550,7 @@
       "review_text": ""
     },
     {
-      "id": 98,
+      "id": 87,
       "title": "SIAL 2026 Resmi Dibuka, Perkuat Akses Pasar Global Industri F&B",
       "link": "https://tirto.id/sial-2026-resmi-dibuka-perkuat-akses-pasar-global-industri-fb-idAR",
       "media": "Tirto.id",
@@ -1742,7 +1566,7 @@
       "review_text": ""
     },
     {
-      "id": 99,
+      "id": 88,
       "title": "Produk Kakao IKM Surabaya Go Global, Jepang Jadi Pasar Ekspor Perdana Senilai Rp3,2 Miliar",
       "link": "https://kominfo.jatimprov.go.id/berita/produk-kakao-ikm-surabaya-go-global-jepang-jadi-pasar-ekspor-perdana-senilai-rp3-2-miliar",
       "media": "Dinas Komunikasi dan Informatika Provinsi Jawa Timur",
@@ -1758,7 +1582,7 @@
       "review_text": ""
     },
     {
-      "id": 100,
+      "id": 89,
       "title": "Perda Penanaman Modal Riau Disiapkan, Kekayaan Alam Tak Boleh Lagi Hanya Dikeruk, Industri Harus Dibangun di Daerah",
       "link": "https://www.goriau.com/berita/baca/perda-penanaman-modal-riau-disiapkan-kekayaan-alam-tak-boleh-lagi-hanya-dikeruk-industri-harus-dibangun-di-daerah.html",
       "media": "GoRiau.com",
@@ -1772,6 +1596,182 @@
       "commodity": "Kelapa Sawit & CPO",
       "has_review": false,
       "review_text": ""
+    },
+    {
+      "id": 90,
+      "title": "Wamenperin sebut industri mamin dan fesyen menggeliat jelang Nataru",
+      "link": "https://jogja.antaranews.com/berita/866627/wamenperin-sebut-industri-mamin-dan-fesyen-menggeliat-jelang-nataru",
+      "media": "ANTARA News Yogyakarta",
+      "tone": "Positif",
+      "date": "2026-11-09",
+      "datetime": "2026-11-09T15:16:56",
+      "time": "15:16",
+      "date_display": "Senin, 9 November 2026",
+      "spokesperson": "Faisol Riza",
+      "unit": "WAMEN",
+      "commodity": "Hasil Tembakau",
+      "has_review": false,
+      "review_text": ""
+    },
+    {
+      "id": 91,
+      "title": "Wamenperin Soroti Produktivitas 4,2 Juta IKM, Kontribusi Nilai Tambah Baru 21,73%",
+      "link": "https://investortrust.id/business/121978/wamenperin-soroti-produktivitas-4-2-juta-ikm-kontribusi-nilai-tambah-baru-21-73",
+      "media": "InvestorTrust",
+      "tone": "Netral",
+      "date": "2026-11-09",
+      "datetime": "2026-11-09T15:12:00",
+      "time": "15:12",
+      "date_display": "Senin, 9 November 2026",
+      "spokesperson": "Faisol Riza",
+      "unit": "WAMEN",
+      "commodity": "Lainnya",
+      "has_review": false,
+      "review_text": ""
+    },
+    {
+      "id": 92,
+      "title": "Lamhot Sinaga Dorong Indofood Kurangi Impor Gandum dengan Optimalkan Tapioka Lokal",
+      "link": "https://fraksigolkar.com/read/2826/lamhot-sinaga-dorong-indofood-kurangi-impor-gandum-dengan-optimalkan-tapioka-lokal",
+      "media": "Fraksi Partai Golkar",
+      "tone": "Positif",
+      "date": "2026-11-09",
+      "datetime": "2026-11-09T15:08:28",
+      "time": "15:08",
+      "date_display": "Senin, 9 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Tepung, Sagu & Pati",
+      "has_review": false,
+      "review_text": ""
+    },
+    {
+      "id": 93,
+      "title": "Wamenperin: Industri mamin dan fesyen menggeliat jelang Nataru",
+      "link": "https://www.antaranews.com/berita/5841411/wamenperin-industri-mamin-dan-fesyen-menggeliat-jelang-nataru",
+      "media": "ANTARA News",
+      "tone": "Positif",
+      "date": "2026-11-09",
+      "datetime": "2026-11-09T15:06:33",
+      "time": "15:06",
+      "date_display": "Senin, 9 November 2026",
+      "spokesperson": "Faisol Riza",
+      "unit": "WAMEN",
+      "commodity": "Hasil Tembakau",
+      "has_review": false,
+      "review_text": ""
+    },
+    {
+      "id": 94,
+      "title": "BPS Way Kanan Dukung Inovasi Kopi Hilir Bangkit",
+      "link": "https://rri.co.id/waykanan/regional/2882294/bps-way-kanan-dukung-inovasi-kopi-hilir-bangkit",
+      "media": "RRI.co.id",
+      "tone": "Positif",
+      "date": "2026-11-09",
+      "datetime": "2026-11-09T15:03:00",
+      "time": "15:03",
+      "date_display": "Senin, 9 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Kopi & Teh",
+      "has_review": false,
+      "review_text": ""
+    },
+    {
+      "id": 95,
+      "title": "Kopdes Merah Putih Bakal Punya Kebun Sawit hingga Pabrik CPO",
+      "link": "https://economy.okezone.com/read/2026/11/09/320/3252996/kopdes-merah-putih-bakal-punya-kebun-sawit-hingga-pabrik-cpo",
+      "media": "economy.okezone.com",
+      "tone": "Positif",
+      "date": "2026-11-09",
+      "datetime": "2026-11-09T14:42:56",
+      "time": "14:42",
+      "date_display": "Senin, 9 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Kelapa Sawit & CPO",
+      "has_review": false,
+      "review_text": ""
+    },
+    {
+      "id": 96,
+      "title": "Produk Olahan Kakao Surabaya Tembus Pasar Jepang, Nilai Ekspor Rp3,2 Miliar",
+      "link": "https://trubus.id/produk-olahan-kakao-surabaya-tembus-pasar-jepang-nilai-ekspor-rp32-miliar/",
+      "media": "Trubus.id",
+      "tone": "Positif",
+      "date": "2026-11-09",
+      "datetime": "2026-11-09T14:33:28",
+      "time": "14:33",
+      "date_display": "Senin, 9 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Kakao & Cokelat",
+      "has_review": false,
+      "review_text": ""
+    },
+    {
+      "id": 97,
+      "title": "Pemkot Surabaya dan ECS Antar IKM Tembus Pasar Jepang, Ekspor Kakao Capai Rp3,2 Miliar",
+      "link": "https://surabaya.go.id/id/berita/25918/pemkot-surabaya-dan-ecs-antar-ikm-tembus-pasar-jepang-ekspor-kakao-capai-rp-3-2-miliar",
+      "media": "Pemerintah Kota Surabaya",
+      "tone": "Positif",
+      "date": "2026-11-09",
+      "datetime": "2026-11-09T14:20:07",
+      "time": "14:20",
+      "date_display": "Senin, 9 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Hasil Tembakau",
+      "has_review": false,
+      "review_text": ""
+    },
+    {
+      "id": 98,
+      "title": "RI Uji Coba Sagu untuk Pengeboran Minyak Pertamina, Dua Sumur Diklaim Berhasil",
+      "link": "https://sorotanpublik.id/ri-uji-coba-sagu-untuk-pengeboran-minyak-pertamina-dua-sumur-diklaim-berhasil/",
+      "media": "sorotanpublik.id",
+      "tone": "Positif",
+      "date": "2026-11-09",
+      "datetime": "2026-11-09T14:09:40",
+      "time": "14:09",
+      "date_display": "Senin, 9 November 2026",
+      "spokesperson": "Muhammad Sarmuji",
+      "unit": "MENTERI",
+      "commodity": "Tepung, Sagu & Pati",
+      "has_review": true,
+      "review_text": "PERLU CEK MANUAL: Artikel membahas riset pemanfaatan sagu untuk pengeboran minyak oleh BRIN dan Pertamina, masih dalam tahap uji coba aplikasi industri."
+    },
+    {
+      "id": 99,
+      "title": "Disperin Kalsel tingkatkan daya saing industri AMDK",
+      "link": "https://kalsel.antaranews.com/berita/543787/disperin-kalsel-tingkatkan-daya-saing-industri-amdk",
+      "media": "ANTARA News Kalsel",
+      "tone": "Positif",
+      "date": "2026-11-09",
+      "datetime": "2026-11-09T14:02:04",
+      "time": "14:02",
+      "date_display": "Senin, 9 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Makanan & Minuman",
+      "has_review": false,
+      "review_text": ""
+    },
+    {
+      "id": 100,
+      "title": "Tapioka Lokal Bisa Jadi Alternatif, Lamhot Sinaga Minta Indofood Kurangi Impor Gandum",
+      "link": "https://www.niaga.asia/tapioka-lokal-bisa-jadi-alternatif-lamhot-sinaga-minta-indofood-kurangi-impor-gandum/",
+      "media": "Niaga.Asia",
+      "tone": "Positif",
+      "date": "2026-11-09",
+      "datetime": "2026-11-09T13:57:14",
+      "time": "13:57",
+      "date_display": "Senin, 9 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Tepung, Sagu & Pati",
+      "has_review": false,
+      "review_text": ""
     }
   ],
   "recent_days": [
@@ -1779,11 +1779,11 @@
       "fileDate": "2026-11-10",
       "tglDisplay": "Selasa, 10 Nov 2026",
       "isNew": true,
-      "count": 61,
-      "countStr": "61 berita",
-      "pos": 37,
+      "count": 50,
+      "countStr": "50 berita",
+      "pos": 38,
       "net": 7,
-      "neg": 17
+      "neg": 5
     },
     {
       "fileDate": "2026-11-09",

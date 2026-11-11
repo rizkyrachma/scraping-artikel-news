@@ -803,10 +803,14 @@ class AutoRecheckPipeline:
                 art["Status Review"] = f"PERLU CEK MANUAL: {final_als}" if final_als else "PERLU CEK MANUAL"
             else:
                 hilir_count += 1
-                # Jika sebelumnya kosong atau bukan review khusus, kosongkan status review
+                # Jika sudah terverifikasi HILIR oleh AutoRecheck (Pass 2 + Audit Loop), bersihkan flag fallback 'AI tidak dijalankan' dari tahap awal
                 curr_sr = str(art.get("Status Review") or "").strip()
-                if "perlu cek manual" in curr_sr.lower():
+                if "perlu cek manual" in curr_sr.lower() or "ai tidak dijalankan" in curr_sr.lower():
                     art["Status Review"] = ""
+                curr_alasan = str(art.get("alasan") or art.get("alasan_ai") or "").strip().lower()
+                if "ai tidak dijalankan" in curr_alasan:
+                    art["status"] = "relevan"
+                    art["alasan"] = art.get("_final_alasan") or art.get("_pass2_alasan") or ""
 
         # 5. Simpan Log Artikel yang Dibuang
         discard_json_path = os.path.join(self.target_dir, "discarded_articles.json")

@@ -1,5 +1,26 @@
 [
   {
+    "id": "run-20261111-100736",
+    "waktu_display": "11 Nov, 10.07",
+    "timestamp": "2026-11-11T10:07:36",
+    "durasi": "60m 20s",
+    "hasil_berita": 50,
+    "status": "Berhasil",
+    "target_date": "2026-11-10",
+    "pemicu": "Manual",
+    "rentang_data": "10 Nov 2026",
+    "stats": {
+      "final": 50,
+      "perlu_review": 5,
+      "tanpa_spokesperson": 33,
+      "mentah": 4110,
+      "filter_tgl": 2170,
+      "unik": 116,
+      "noise_dibuang_pct": 99
+    },
+    "catatan": "Terminal Lokal + GitHub Actions (50 Berita Hilir)"
+  },
+  {
     "id": "run-20261111-035701",
     "waktu_display": "11 Nov, 03.57",
     "timestamp": "2026-11-11T03:57:01",

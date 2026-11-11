@@ -163,20 +163,24 @@ ATURAN KERJA
 - Jika input kosong, balas {"total_diproses":0,"total_relevan":0,"total_review":0,"total_dibuang":0,"hasil":[],"dibuang":[]}.
 """
 
-# Urutan model Gemini kandidat dengan fallback dinamis
+# Urutan model Gemini kandidat dengan fallback & rotasi dinamis
 CANDIDATE_MODELS = [
-    "gemini-3-flash-preview",
+    "gemini-2.5-flash",
+    "gemini-2.5-flash-lite",
+    "gemini-flash-latest",
     "gemini-flash-lite-latest",
+    "gemini-3-flash-preview",
     "gemini-3.6-flash",
     "gemini-3.1-flash-lite",
 ]
 _current_model_idx = 0
 _model_instance = None
+_exhausted_models: set[str] = set()
 gemini_quota_exhausted = False
 
 
-def _get_gemini_model(force_next: bool = False):
-    """Menginisialisasi model Generative AI Gemini secara lazy dengan fallback model dinamis."""
+def _get_gemini_model(force_next: bool = False, mark_quota_exhausted: bool = False):
+    """Menginisialisasi model Generative AI Gemini secara lazy dengan rotasi model dinamis."""
     global _model_instance, _current_model_idx, gemini_quota_exhausted
 
     if gemini_quota_exhausted:
@@ -189,26 +193,33 @@ def _get_gemini_model(force_next: bool = False):
     if not api_key:
         return None
 
+    if mark_quota_exhausted and 0 <= _current_model_idx < len(CANDIDATE_MODELS):
+        _exhausted_models.add(CANDIDATE_MODELS[_current_model_idx])
+
     if force_next:
-        _current_model_idx += 1
+        _current_model_idx = (_current_model_idx + 1) % len(CANDIDATE_MODELS)
 
     try:
         import google.generativeai as genai  # type: ignore
         genai.configure(api_key=api_key, transport="rest")  # type: ignore
 
-        while _current_model_idx < len(CANDIDATE_MODELS):
+        for _ in range(len(CANDIDATE_MODELS)):
             m_name = CANDIDATE_MODELS[_current_model_idx]
+            if m_name in _exhausted_models:
+                _current_model_idx = (_current_model_idx + 1) % len(CANDIDATE_MODELS)
+                continue
             try:
                 m = genai.GenerativeModel(m_name)  # type: ignore
                 _model_instance = m
                 print(f"[AI MODEL] Menggunakan model Gemini: {m_name}", flush=True)
                 return _model_instance
             except Exception:
-                _current_model_idx += 1
+                _exhausted_models.add(m_name)
+                _current_model_idx = (_current_model_idx + 1) % len(CANDIDATE_MODELS)
                 continue
 
         gemini_quota_exhausted = True
-        print("[PERINGATAN] Seluruh kandidat model Gemini telah dicoba / kuota harian habis.", flush=True)
+        print("[PERINGATAN] Seluruh kandidat model Gemini telah mencapai batas kuota harian.", flush=True)
         return None
     except Exception as e:
         print(f"[PERINGATAN] Gagal menginisialisasi Gemini API: {e}", flush=True)
@@ -239,7 +250,8 @@ def parse_and_validate_batch_response(resp_text: str, sent_articles: list[dict])
         }
 
     try:
-        data = json.loads(json_match.group(0))
+        raw_json = re.sub(r"[\x00-\x08\x0b\x0c\x0e-\x1f]", " ", json_match.group(0))
+        data = json.loads(raw_json, strict=False)
     except Exception as e:
         print(f"  [WARNING] Error json.loads: {e}. Menandai seluruh batch sebagai 'review'.", flush=True)
         return {
@@ -424,20 +436,21 @@ def classify_agro_relevance_batch(articles: list[dict]) -> dict:
             is_rate_limit = "429" in err_msg or "quota" in err_msg or "resourceexhausted" in err_msg
 
             if is_rate_limit:
-                is_daily = "generaterequestsperday" in err_msg or "perday" in err_msg
+                is_daily = "generaterequestsperday" in err_msg or "perday" in err_msg or "quota" in err_msg
                 if is_daily:
-                    print("[RATE LIMIT HARIAN] Model mencapai batas harian. Beralih ke model kandidat berikutnya...", flush=True)
-                    _get_gemini_model(force_next=True)
+                    print("[RATE LIMIT HARIAN] Model mencapai batas kuota. Beralih ke model kandidat berikutnya...", flush=True)
+                    _get_gemini_model(force_next=True, mark_quota_exhausted=True)
                     time.sleep(1.0)
                     continue
 
-                # RPM limit: tunggu 60 detik
-                print(f"[RATE LIMIT RPM] Terkena batas per menit. Menunggu 60 detik (percobaan {attempt + 1}/{max_attempts})...", flush=True)
-                time.sleep(60.0)
+                # RPM limit: beralih ke model lain di pool agar tidak perlu tidur 60 detik
+                print(f"[RATE LIMIT RPM] Terkena batas per menit, merotasi ke model berikutnya (percobaan {attempt + 1}/{max_attempts})...", flush=True)
+                _get_gemini_model(force_next=True, mark_quota_exhausted=False)
+                time.sleep(2.0)
                 continue
             else:
                 print(f"[ERROR GEMINI] {e}. Mencoba beralih model / retry...", flush=True)
-                _get_gemini_model(force_next=True)
+                _get_gemini_model(force_next=True, mark_quota_exhausted=False)
                 time.sleep(2.0)
                 continue
 
