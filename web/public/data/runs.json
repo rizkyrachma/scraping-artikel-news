@@ -1,5 +1,26 @@
 [
   {
+    "id": "run-20261113-035906",
+    "waktu_display": "13 Nov, 03.59",
+    "timestamp": "2026-11-13T03:59:06",
+    "durasi": "44m 03s",
+    "hasil_berita": 69,
+    "status": "Berhasil",
+    "target_date": "2026-11-12",
+    "pemicu": "Terjadwal",
+    "rentang_data": "12 Nov 2026",
+    "stats": {
+      "final": 69,
+      "perlu_review": 0,
+      "tanpa_spokesperson": 61,
+      "mentah": 4053,
+      "filter_tgl": 2637,
+      "unik": 306,
+      "noise_dibuang_pct": 98
+    },
+    "log_url": "https://github.com/rizkyrachma/scraping-artikel-news/actions/runs/43298078916"
+  },
+  {
     "id": "run-20261112-035457",
     "waktu_display": "12 Nov, 03.54",
     "timestamp": "2026-11-12T03:54:57",
@@ -419,16 +440,5 @@
     "target_date": "2026-10-19",
     "pemicu": "Terjadwal",
     "rentang_data": "19 Okt 2026"
-  },
-  {
-    "id": "run-20261019-0714",
-    "waktu_display": "19 Okt, 07.14",
-    "timestamp": "2026-10-19T07:14:00",
-    "durasi": "4m 12s",
-    "hasil_berita": 33,
-    "status": "Berhasil",
-    "target_date": "2026-10-18",
-    "pemicu": "Terjadwal",
-    "rentang_data": "18 Okt 2026"
   }
 ]
