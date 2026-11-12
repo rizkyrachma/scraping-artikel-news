@@ -125,12 +125,14 @@ def save_to_excel(
     records: list[dict],
     output_path: str,
     merge_existing: bool = False,
-    negative_summaries: list[dict] | None = None
+    negative_summaries: list[dict] | None = None,
+    extra_columns: list[str] | None = None,
 ):
     """
     Menyimpan hasil scraping dan NLP ke file Excel dengan styling:
     - Kolom wajib: Tanggal, Isu, Title, Link Website, Media Name, Tone, Spokesperson 1, Spokesperson 2, Unit Eselon, Terkait Kemenperin, Keywords, Sumber Data
     - Mendukung merge_existing=True untuk menggabungkan dengan file yang sudah ada (dedup URL dan judul)
+    - Mendukung extra_columns opsional yang ditempatkan hanya di akhir (misal 'Sumber Run')
     - Header bold dan lebar kolom auto-fit
     - Kolom Link Website berupa hyperlink aktif
     - Kolom Tanggal diformat sebagai tanggal Excel (datetime tanpa timezone)
@@ -183,6 +185,7 @@ def save_to_excel(
             "Terkait Kemenperin": ["Terkait Kemenperin", "terkait_kemenperin"],
             "Keywords": ["Keywords", "keywords", "Keyword", "keyword"],
             "Sumber Data": ["Sumber Data", "sumber_data", "source_data"],
+            "Sumber Run": ["Sumber Run", "sumber_run", "source_run"],
         }
 
         for target_col, alt_keys in mappings.items():
@@ -320,7 +323,12 @@ def save_to_excel(
     else:
         df = pd.DataFrame(columns=columns)
 
-    return write_styled_excel(df, output_path, df_neg=negative_summaries)
+    return write_styled_excel(
+        df,
+        output_path,
+        df_neg=negative_summaries,
+        extra_columns=extra_columns,
+    )
 
 
 def write_styled_excel(
@@ -328,6 +336,7 @@ def write_styled_excel(
     output_path: str | os.PathLike,
     df_neg: pd.DataFrame | list[dict] | None = None,
     sort_desc: bool = False,
+    extra_columns: list[str] | None = None,
 ) -> str:
     """
     Menulis DataFrame Berita (dan opsional Ringkasan Negatif) ke file Excel (.xlsx)
@@ -346,6 +355,16 @@ def write_styled_excel(
 
     columns = list(BERITA_COLUMNS)
     df = df_berita.copy() if not df_berita.empty else pd.DataFrame(columns=columns)
+
+    trailing_cols: list[str] = []
+    for ec in (extra_columns or []):
+        if ec and ec not in columns and ec not in trailing_cols:
+            trailing_cols.append(ec)
+    if "Sumber Run" not in columns and "Sumber Run" not in trailing_cols and "Sumber Run" in df.columns:
+        has_sr = df["Sumber Run"].replace(["nan", "None"], "").fillna("").astype(str).str.strip().ne("").any()
+        if has_sr:
+            trailing_cols.append("Sumber Run")
+    columns.extend(trailing_cols)
     if not df.empty:
         # Proteksi eksklusif Ditjen Industri Agro: singkirkan dokumen PDF & status 'buang'; pertahankan baris 'review' untuk tanda kuning
         try:
@@ -390,6 +409,8 @@ def write_styled_excel(
     for col in columns:
         if col not in df.columns:
             df[col] = ""
+        elif col in trailing_cols:
+            df[col] = df[col].replace(["nan", "None"], "").fillna("").astype(str)
     df = pd.DataFrame(df[columns])
 
     if "Tanggal" in df.columns and not df.empty:

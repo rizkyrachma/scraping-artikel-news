@@ -53,6 +53,7 @@ from src.config import (
 from src.stable import (
     canonical_url,
     DateSnapshotStore,
+    merge_runs_from_excel,
     save_decision_cache,
     union_articles_by_canonical_url,
 )
@@ -1624,8 +1625,45 @@ if __name__ == "__main__":
     parser.add_argument("--start-date", type=str, default=None, help="Tanggal awal rentang evaluasi YYYY-MM-DD")
     parser.add_argument("--end-date", type=str, default=None, help="Tanggal akhir rentang evaluasi YYYY-MM-DD")
     parser.add_argument("--recheck", action="store_true", help="Jalankan Auto Cek Ulang pada data yang sudah di-scrape tanpa scrape ulang")
+    parser.add_argument("--merge-from", dest="merge_from", type=str, default=None, help="Path file Excel (.xlsx) dari run lain pada tanggal yang sama untuk digabungkan")
+    parser.add_argument("--overwrite", action="store_true", help="Izinkan menimpa data/file lama saat --merge-from (default: tidak menimpa)")
+    parser.add_argument("--publish", action="store_true", help="Izinkan pembaruan ke data_export/ (branch data); default NONAKTIF selama pengujian")
 
     args = parser.parse_args()
+
+    def _run_merge_for_target_date(merge_path: str, overwrite: bool = False, output_override: str | None = None) -> dict:
+        s_d, e_d = get_date_range()
+        d_folder = get_date_folder((s_d, e_d))
+        d_str = s_d.strftime("%Y-%m-%d") if s_d == e_d else f"{s_d.strftime('%Y-%m-%d')}_sd_{e_d.strftime('%Y-%m-%d')}"
+        ringkasan_p = os.path.join(d_folder, f"all_{d_str}_ringkasan.xlsx")
+        plain_p = os.path.join(d_folder, f"all_{d_str}.xlsx")
+        base_p = output_override or (ringkasan_p if os.path.exists(ringkasan_p) else plain_p)
+        res = merge_runs_from_excel(
+            base_p,
+            merge_path,
+            output_path=output_override or base_p,
+            overwrite=overwrite,
+        )
+        print(
+            f"\n[MERGE RUN SELESAI] Base={res['base_count']} | MergeFrom={res['merge_from_count']} "
+            f"| Konflik={res['conflicts']} (DecisionCache={res['cache_resolved']}, DropCache={res['dropped_by_cache']}) "
+            f"| Final={res['final_count']} | Overwrite={res['overwritten']} -> {res['output_path']}",
+            flush=True,
+        )
+        return res
+
+    def _publish_if_requested(publish_flag: bool, duration_sec: int = 1) -> None:
+        if not publish_flag:
+            return
+        from scripts.sync_dashboard_data import sync_after_run
+        s_d, e_d = get_date_range()
+        sync_after_run(
+            start_date=s_d.strftime("%Y-%m-%d"),
+            end_date=e_d.strftime("%Y-%m-%d"),
+            status="Berhasil",
+            duration_sec=max(1, int(duration_sec)),
+            trigger="Manual CLI (--publish)",
+        )
 
     if args.api_key:
         os.environ["SERPER_API_KEY"] = args.api_key.strip()
@@ -1663,6 +1701,12 @@ if __name__ == "__main__":
             print(f"[Error] File sumber checkpoint tidak ditemukan di: {source_chk}", flush=True)
             sys.exit(1)
 
+    t_cli_start = time.time()
+    if args.merge_from and not args.all and args.batch is None and not args.keyword:
+        _run_merge_for_target_date(args.merge_from, overwrite=args.overwrite, output_override=args.output)
+        _publish_if_requested(args.publish, duration_sec=int(time.time() - t_cli_start))
+        sys.exit(0)
+
     USE_SERPER_ONLY, source_msg = determine_session_source(force_serper=args.serper_only)
     print(f"\n[STATUS SUMBER SESI] {source_msg}\n")
 
@@ -1678,3 +1722,8 @@ if __name__ == "__main__":
         run_batch_pipeline(batch_size=5)
     else:
         run_batch_pipeline(batch_size=5)
+
+    if args.merge_from:
+        _run_merge_for_target_date(args.merge_from, overwrite=args.overwrite, output_override=args.output)
+
+    _publish_if_requested(args.publish, duration_sec=int(time.time() - t_cli_start))

@@ -863,5 +863,163 @@ class TestPointENegativeSummaryConsistency(unittest.TestCase):
                     os.environ["GEMINI_API_KEY"] = prev_key
 
 
+class TestPointFMergeRuns(unittest.TestCase):
+    def test_merge_runs_union_decision_cache_overwrite_protection_and_trailing_sumber_run(self):
+        import pandas as pd
+        from src.export_excel import BERITA_COLUMNS
+        from src.stable import merge_runs_from_excel
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            base_xlsx = os.path.join(tmpdir, "all_2026-11-11_ringkasan.xlsx")
+            other_xlsx = os.path.join(tmpdir, "gha_2026-11-11_ringkasan.xlsx")
+            cache_path = os.path.join(tmpdir, "cache_decisions.json")
+
+            dcache = DecisionCache(filepath=cache_path)
+            dcache.set(
+                "https://bisnis.com/artikel-a",
+                "tone",
+                "v2",
+                "mock-model",
+                {"id": 1, "tone": "Negatif", "dasar": "judul", "alasan": "Cache tone", "metode": "AI"},
+            )
+            dcache.set(
+                "https://bisnis.com/artikel-a",
+                "pass3_audit",
+                "v2",
+                "mock-model",
+                {"id": 1, "status": "hilir", "alasan": "Tetap relevan hilir"},
+            )
+            dcache.save(force=True)
+
+            base_recs = [
+                {
+                    "Tanggal": "2026-11-11 08:00:00",
+                    "Title": "Artikel A Versi Lokal",
+                    "Link Website": "https://bisnis.com/artikel-a",
+                    "Media Name": "Bisnis Lokal",
+                    "Tone": "Netral",  # Sengaja beda dengan DecisionCache ('Negatif')
+                    "Spokesperson 1": "Putu Juli Ardika",
+                    "Unit Eselon": "IA",
+                    "Terkait Kemenperin": "Ya",
+                    "Keywords": "sawit",
+                    "Sumber Data": "RSS",
+                },
+                {
+                    "Tanggal": "2026-11-11 09:00:00",
+                    "Title": "Artikel B Hanya Lokal",
+                    "Link Website": "https://kontan.co.id/artikel-b",
+                    "Media Name": "Kontan",
+                    "Tone": "Positif",
+                    "Terkait Kemenperin": "Tidak",
+                    "Keywords": "cpo",
+                    "Sumber Data": "RSS",
+                },
+            ]
+            other_recs = [
+                {
+                    "Tanggal": "2026-11-11 08:00:00",
+                    "Title": "Artikel A Versi GHA",
+                    "Link Website": "https://www.bisnis.com/artikel-a?utm_source=gha",
+                    "Media Name": "Bisnis GHA",
+                    "Tone": "Positif",  # Konflik dengan base & DecisionCache
+                    "Terkait Kemenperin": "Tidak",
+                    "Keywords": "hilirisasi sawit",
+                    "Sumber Data": "RSS",
+                },
+                {
+                    "Tanggal": "2026-11-11 10:00:00",
+                    "Title": "Artikel C Negatif Dari GHA",
+                    "Link Website": "https://kayonews.co.id/artikel-c",
+                    "Media Name": "KayoNews",
+                    "Tone": "Negatif",
+                    "Terkait Kemenperin": "Tidak",
+                    "Keywords": "karet",
+                    "Sumber Data": "RSS",
+                },
+                {
+                    "Tanggal": "2026-11-11 11:00:00",
+                    "Title": "Laporan PDF Tahunan",
+                    "Link Website": "https://example.go.id/laporan.pdf",
+                    "Media Name": "Example",
+                    "Tone": "Netral",
+                    "Terkait Kemenperin": "Tidak",
+                    "Keywords": "sawit",
+                    "Sumber Data": "PDF",
+                },
+            ]
+            other_neg = [
+                {
+                    "Tanggal": "2026-11-11 10:00:00",
+                    "Title": "Artikel C Negatif Dari GHA",
+                    "Link Website": "https://kayonews.co.id/artikel-c",
+                    "Media Name": "KayoNews",
+                    "Terkait Kemenperin": "Tidak",
+                    "Isu Inti": "Harga karet melemah",
+                    "Alasan Negatif": "Menekan industri karet",
+                }
+            ]
+
+            save_to_excel(base_recs, base_xlsx, merge_existing=False)
+            save_to_excel(other_recs, other_xlsx, merge_existing=False, negative_summaries=other_neg)
+            orig_base_df = pd.read_excel(base_xlsx, sheet_name="Berita")
+            self.assertEqual(len(orig_base_df), 2)
+
+            # 1. Tanpa --overwrite: file lama TIDAK boleh ditimpa, konflik non-cache pertahankan data lama, Tone ikut DecisionCache
+            res = merge_runs_from_excel(
+                base_xlsx,
+                other_xlsx,
+                output_path=base_xlsx,
+                overwrite=False,
+                decision_cache=dcache,
+            )
+            self.assertNotEqual(res["output_path"], base_xlsx)
+            self.assertTrue(os.path.exists(res["output_path"]))
+            # Pastikan base_xlsx lama tetap 2 baris (tidak tertimpa)
+            self.assertEqual(len(pd.read_excel(base_xlsx, sheet_name="Berita")), 2)
+
+            df_m = pd.read_excel(res["output_path"], sheet_name="Berita")
+            df_m_neg = pd.read_excel(res["output_path"], sheet_name="Ringkasan Negatif")
+            self.assertEqual(list(df_m.columns[: len(BERITA_COLUMNS)]), list(BERITA_COLUMNS))
+            self.assertEqual(df_m.columns[-1], "Sumber Run")
+            self.assertEqual(len(df_m), 3)  # A + B + C (PDF gugur)
+
+            row_a = df_m[df_m["Link Website"].astype(str).str.contains("artikel-a")].iloc[0]
+            self.assertEqual(row_a["Title"], "Artikel A Versi Lokal")  # data lama dipertahankan
+            self.assertEqual(row_a["Tone"], "Negatif")  # konflik pakai DecisionCache
+            self.assertEqual(row_a["Sumber Run"], "lokal + merge_from")
+            self.assertIn("sawit", str(row_a["Keywords"]).lower())
+            self.assertIn("hilirisasi sawit", str(row_a["Keywords"]).lower())
+
+            # Konsistensi 1:1 Ringkasan Negatif (Artikel A dari DecisionCache + Artikel C)
+            self.assertEqual(len(df_m_neg), 2)
+
+            # 2. Dengan --overwrite: boleh menimpa file target & field non-cache dari merge_from
+            res_ow = merge_runs_from_excel(
+                base_xlsx,
+                other_xlsx,
+                output_path=base_xlsx,
+                overwrite=True,
+                decision_cache=dcache,
+            )
+            self.assertEqual(res_ow["output_path"], base_xlsx)
+            df_ow = pd.read_excel(base_xlsx, sheet_name="Berita")
+            row_a_ow = df_ow[df_ow["Link Website"].astype(str).str.contains("artikel-a")].iloc[0]
+            self.assertEqual(row_a_ow["Title"], "Artikel A Versi GHA")
+            self.assertEqual(row_a_ow["Tone"], "Negatif")  # tetap dari DecisionCache
+
+    def test_cli_help_exposes_merge_overwrite_publish_and_guard_blocks_data_export(self):
+        import subprocess
+        main_py = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "main.py")
+        proc = subprocess.run([sys.executable, main_py, "--help"], capture_output=True, text=True, check=True)
+        self.assertIn("--merge-from", proc.stdout)
+        self.assertIn("--overwrite", proc.stdout)
+        self.assertIn("--publish", proc.stdout)
+
+        # Pastikan data_export hanya dipanggil saat --publish=True
+        with open(main_py, "r", encoding="utf-8") as f:
+            src = f.read()
+        self.assertIn("if not publish_flag:\n            return", src)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

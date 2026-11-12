@@ -182,6 +182,30 @@ class DecisionCache:
                 return dict(entry["value"])
         return None
 
+    def find_by_url(self, url: str) -> dict[str, dict]:
+        """Mengembalikan keputusan terbaru per stage untuk canonical_url tertentu (lintas model/versi)."""
+        can = canonical_url(url) or str(url or "").strip().lower()
+        if not can:
+            return {}
+        latest: dict[str, tuple[float, dict]] = {}
+        with self._lock:
+            self._reload_if_newer_locked()
+            for entry in self._data.values():
+                if not isinstance(entry, dict):
+                    continue
+                e_url = canonical_url(str(entry.get("url") or ""))
+                if e_url != can:
+                    continue
+                stage = str(entry.get("stage") or "").strip()
+                val = entry.get("value")
+                if not stage or not isinstance(val, dict):
+                    continue
+                ts = float(entry.get("ts", 0.0) or 0.0)
+                prev = latest.get(stage)
+                if prev is None or ts >= prev[0]:
+                    latest[stage] = (ts, dict(val))
+        return {st: pair[1] for st, pair in latest.items()}
+
     def set(
         self,
         url: str,
@@ -471,3 +495,302 @@ def prune_pipeline_caches(
             pass
 
     return {"snapshots_removed": snap_removed}
+
+
+def _clean_merged_url(val) -> str:
+    s = str(val or "").strip()
+    if s.lower() in ("", "nan", "none"):
+        return ""
+    m = re.match(r'^=HYPERLINK\("([^"]+)"', s, re.IGNORECASE)
+    if m:
+        return m.group(1).strip()
+    return s
+
+
+def _combine_source_labels(label_a: str, label_b: str) -> str:
+    parts = []
+    seen = set()
+    for raw in (label_a, label_b):
+        for tok in str(raw or "").split("+"):
+            t = tok.strip()
+            if t and t.lower() not in seen:
+                seen.add(t.lower())
+                parts.append(t)
+    return " + ".join(parts)
+
+
+def _is_empty_cell(val) -> bool:
+    if val is None:
+        return True
+    try:
+        import math
+        if isinstance(val, float) and math.isnan(val):
+            return True
+    except Exception:
+        pass
+    s = str(val).strip()
+    return s.lower() in ("", "nan", "none", "-")
+
+
+def _read_excel_run_sheets(xlsx_path: str) -> tuple[list[dict], list[dict]]:
+    import pandas as pd
+
+    if not xlsx_path or not os.path.exists(xlsx_path):
+        return [], []
+    sheets = pd.read_excel(xlsx_path, sheet_name=None)
+    berita_df = sheets.get("Berita")
+    if berita_df is None and sheets:
+        first_key = next(iter(sheets.keys()))
+        berita_df = sheets[first_key]
+    neg_df = sheets.get("Ringkasan Negatif")
+    berita_rows = berita_df.to_dict(orient="records") if berita_df is not None and not berita_df.empty else []
+    neg_rows = neg_df.to_dict(orient="records") if neg_df is not None and not neg_df.empty else []
+    return berita_rows, neg_rows
+
+
+def _apply_decision_cache_to_record(rec: dict, cached_by_stage: dict[str, dict]) -> tuple[dict, bool, bool]:
+    """
+    Menerapkan keputusan dari DecisionCache ke satu record hasil merge.
+    Mengembalikan (record_terupdate, is_kept, used_cache).
+    """
+    if not cached_by_stage:
+        return rec, True, False
+
+    out = dict(rec)
+    used_cache = False
+
+    # 1. Resolusi relevansi: prioritas pass3_audit -> pass2_relevance -> ai_relevance
+    for st in ("pass3_audit", "pass2_relevance", "ai_relevance"):
+        dec = cached_by_stage.get(st)
+        if not isinstance(dec, dict):
+            continue
+        status = str(dec.get("status") or "").strip().lower()
+        alasan = str(dec.get("alasan") or "").strip()
+        if status == "buang":
+            return out, False, True
+        if status == "review":
+            out["Status Review"] = alasan or str(out.get("Status Review") or "").strip() or "PERLU CEK MANUAL"
+            out["status"] = "review"
+            used_cache = True
+            break
+        if status in ("hilir", "relevan"):
+            out["Status Review"] = ""
+            out["status"] = "hilir" if status == "hilir" else "relevan"
+            used_cache = True
+            break
+
+    # 2. Resolusi tone
+    tone_dec = cached_by_stage.get("tone")
+    if isinstance(tone_dec, dict):
+        t_val = str(tone_dec.get("tone") or "").strip().capitalize()
+        if t_val in ("Positif", "Netral", "Negatif"):
+            out["Tone"] = t_val
+            used_cache = True
+
+    return out, True, used_cache
+
+
+def merge_runs_from_excel(
+    base_source: str | list[dict],
+    merge_from_path: str,
+    output_path: str | None = None,
+    overwrite: bool = False,
+    base_label: str = "lokal",
+    merge_label: str = "merge_from",
+    decision_cache: DecisionCache | None = None,
+    base_neg_summaries: list[dict] | None = None,
+) -> dict:
+    """
+    Menggabungkan berita valid dari dua run pada tanggal yang sama (--merge-from):
+    - Union berdasarkan canonical_url(Link Website)
+    - Konflik keputusan memakai DecisionCache jika tersedia
+    - Tanpa --overwrite, data lama (base & file eksisting) tidak ditimpa
+    - Menyertakan kolom 'Sumber Run' hanya di posisi akhir Excel
+    """
+    if not merge_from_path or not os.path.exists(merge_from_path):
+        raise FileNotFoundError(f"File --merge-from tidak ditemukan: {merge_from_path}")
+
+    try:
+        from export_excel import save_to_excel
+        from relevance_filter import is_pdf_document
+    except ImportError:
+        from src.export_excel import save_to_excel
+        from src.relevance_filter import is_pdf_document
+
+    if isinstance(base_source, str):
+        base_rows, loaded_base_neg = _read_excel_run_sheets(base_source)
+        default_out = base_source
+    else:
+        base_rows = list(base_source or [])
+        loaded_base_neg = []
+        default_out = output_path or merge_from_path
+
+    base_neg = list(base_neg_summaries) if base_neg_summaries is not None else loaded_base_neg
+    merge_rows, merge_neg = _read_excel_run_sheets(merge_from_path)
+
+    dcache = decision_cache or get_decision_cache()
+
+    def _is_valid_row(r: dict) -> bool:
+        url = _clean_merged_url(r.get("Link Website") or r.get("link") or r.get("resolved_url") or "")
+        if not url:
+            return False
+        title = str(r.get("Title") or r.get("title") or "").strip()
+        sumber_data = str(r.get("Sumber Data") or r.get("sumber_data") or "").strip()
+        if is_pdf_document(url=url, title=title, sumber_data=sumber_data):
+            return False
+        for k in ("status", "Status", "status_ai"):
+            if str(r.get(k) or "").strip().lower() == "buang":
+                return False
+        return True
+
+    by_can: dict[str, dict] = {}
+    order: list[str] = []
+    conflicts = 0
+    cache_resolved = 0
+    dropped_by_cache = 0
+
+    for row in base_rows:
+        if not isinstance(row, dict) or not _is_valid_row(row):
+            continue
+        url = _clean_merged_url(row.get("Link Website") or row.get("link") or row.get("resolved_url") or "")
+        can = canonical_url(url)
+        if not can:
+            continue
+        rec = dict(row)
+        rec["Link Website"] = url
+        rec["Sumber Run"] = str(rec.get("Sumber Run") or "").strip() or base_label
+        if can not in by_can:
+            by_can[can] = rec
+            order.append(can)
+
+    for row in merge_rows:
+        if not isinstance(row, dict) or not _is_valid_row(row):
+            continue
+        url = _clean_merged_url(row.get("Link Website") or row.get("link") or row.get("resolved_url") or "")
+        can = canonical_url(url)
+        if not can:
+            continue
+        inc = dict(row)
+        inc["Link Website"] = url
+        inc_src = str(inc.get("Sumber Run") or "").strip() or merge_label
+
+        if can not in by_can:
+            inc["Sumber Run"] = inc_src
+            by_can[can] = inc
+            order.append(can)
+            continue
+
+        conflicts += 1
+        old = dict(by_can[can])
+        combined_src = _combine_source_labels(old.get("Sumber Run", base_label), inc_src)
+
+        if overwrite:
+            merged_rec = dict(old)
+            for k, v in inc.items():
+                if k == "Sumber Run":
+                    continue
+                if not _is_empty_cell(v):
+                    merged_rec[k] = v
+        else:
+            merged_rec = dict(old)
+            for k, v in inc.items():
+                if k == "Sumber Run":
+                    continue
+                if _is_empty_cell(merged_rec.get(k)) and not _is_empty_cell(v):
+                    merged_rec[k] = v
+
+        # Gabungkan Keywords secara non-destruktif agar tidak ada label terbuang
+        kw_parts = []
+        seen_kw = set()
+        for kw_raw in (old.get("Keywords") or old.get("keyword") or "", inc.get("Keywords") or inc.get("keyword") or ""):
+            for part in str(kw_raw or "").split(","):
+                p = part.strip()
+                if p and p.lower() not in seen_kw and p.lower() not in ("nan", "none"):
+                    seen_kw.add(p.lower())
+                    kw_parts.append(p)
+        if kw_parts:
+            merged_rec["Keywords"] = ", ".join(kw_parts)
+
+        merged_rec["Sumber Run"] = combined_src
+        by_can[can] = merged_rec
+
+    final_records: list[dict] = []
+    for can in order:
+        rec = by_can[can]
+        cached = dcache.find_by_url(rec.get("Link Website") or can)
+        updated, kept, used_cache = _apply_decision_cache_to_record(rec, cached)
+        if used_cache:
+            cache_resolved += 1
+        if not kept:
+            dropped_by_cache += 1
+            continue
+        final_records.append(updated)
+
+    # Gabungkan Ringkasan Negatif sesuai aturan overwrite dan canonical_url
+    neg_by_can: dict[str, dict] = {}
+    neg_order: list[str] = []
+    first_neg, second_neg = (merge_neg, base_neg) if overwrite else (base_neg, merge_neg)
+    for nr in (first_neg or []) + (second_neg or []):
+        if not isinstance(nr, dict):
+            continue
+        nurl = _clean_merged_url(nr.get("Link Website") or nr.get("link") or "")
+        ncan = canonical_url(nurl)
+        key = ncan or str(nr.get("Title") or "").strip().lower()
+        if not key:
+            continue
+        if key not in neg_by_can:
+            nr_copy = dict(nr)
+            if nurl:
+                nr_copy["Link Website"] = nurl
+            neg_by_can[key] = nr_copy
+            neg_order.append(key)
+
+    valid_neg_cans = {
+        canonical_url(str(r.get("Link Website") or ""))
+        for r in final_records
+        if str(r.get("Tone") or "").strip().lower() == "negatif"
+    }
+    valid_neg_titles = {
+        str(r.get("Title") or "").strip().lower()
+        for r in final_records
+        if str(r.get("Tone") or "").strip().lower() == "negatif"
+    }
+    filtered_neg = []
+    for k in neg_order:
+        nr = neg_by_can[k]
+        ncan = canonical_url(str(nr.get("Link Website") or ""))
+        nt = str(nr.get("Title") or "").strip().lower()
+        if (ncan and ncan in valid_neg_cans) or (nt and nt in valid_neg_titles):
+            filtered_neg.append(nr)
+
+    has_any_neg = len(valid_neg_cans) > 0 or bool(base_neg) or bool(merge_neg)
+    neg_arg = filtered_neg if has_any_neg else None
+
+    target_out = str(output_path or default_out)
+    if os.path.exists(target_out) and not overwrite:
+        out_dir, out_name = os.path.split(target_out)
+        stem, ext = os.path.splitext(out_name)
+        candidate = os.path.join(out_dir, f"{stem}_merged{ext or '.xlsx'}")
+        if os.path.exists(candidate):
+            stamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            candidate = os.path.join(out_dir, f"{stem}_merged_{stamp}{ext or '.xlsx'}")
+        target_out = candidate
+
+    save_to_excel(
+        final_records,
+        target_out,
+        merge_existing=False,
+        negative_summaries=neg_arg,
+        extra_columns=["Sumber Run"],
+    )
+
+    return {
+        "output_path": target_out,
+        "base_count": len(base_rows),
+        "merge_from_count": len(merge_rows),
+        "final_count": len(final_records),
+        "conflicts": conflicts,
+        "cache_resolved": cache_resolved,
+        "dropped_by_cache": dropped_by_cache,
+        "overwritten": bool(overwrite),
+    }
