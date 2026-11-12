@@ -118,6 +118,7 @@ from src.relevance_filter import (
     has_ditjen_agro_override,
     has_kemenperin_or_agro_override,
     is_agro_relevant_content,
+    classify_non_news_evergreen,
 )
 from src.ai_relevance_classifier import (
     classify_agro_relevance,
@@ -547,6 +548,15 @@ def filter_valid_articles(
         if is_non_article_structural_noise(title=title, url=link, text=text):
             item_copy = dict(item)
             item_copy["discard_reason"] = "structural_noise"
+            discarded.append(item_copy)
+            continue
+
+        # 1-evergreen. Filter non-berita / glosarium / profil vendor / edukasi evergreen (satu codepath dengan auto_recheck)
+        is_evergreen, evergreen_reason = classify_non_news_evergreen(title=title, text=text, url=link)
+        if is_evergreen:
+            item_copy = dict(item)
+            item_copy["discard_reason"] = f"non_news_evergreen: {evergreen_reason}"
+            item_copy["ai_reason"] = evergreen_reason
             discarded.append(item_copy)
             continue
 

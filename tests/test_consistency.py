@@ -30,9 +30,10 @@ from src.stable import (
     canonical_url,
     union_articles_by_canonical_url,
 )
-from src.auto_recheck import AutoRecheckPipeline, apply_ragu_rubric
+from src.auto_recheck import AutoRecheckPipeline, apply_ragu_rubric, check_deterministic_rules
 from src.export_excel import save_to_excel
 from src.gemini_pool import GeminiModelPool, _is_eligible_text_model
+from src.relevance_filter import classify_non_news_evergreen, is_likely_relevant
 import main as pipeline_main
 
 
@@ -623,6 +624,45 @@ class TestPointBDeterminismAndSnapshot(unittest.TestCase):
                 os.environ.pop("GEMINI_API_KEY", None)
             else:
                 os.environ["GEMINI_API_KEY"] = prev_key
+
+
+class TestPointCNonNewsEvergreenFilter(unittest.TestCase):
+    def test_drops_gha_leaked_glossary_vendor_and_evergreen_via_single_codepath(self):
+        leaks = [
+            ("Apa Itu Crude Glycerin?", "https://gapki.id/news/apa-itu-crude-glycerin", "glosarium bahan kimia turunan."),
+            ("Apa Itu Stearic Acid 1840?", "https://gapki.id/news/apa-itu-stearic-acid-1840", "pengertian dan sifat stearic acid."),
+            ("Pengolahan Limbah Cair POME", "https://asahifibreglass.com/pengolahan-limbah-cair-pome/", "Hubungi kami untuk konsultasi sistem FRP."),
+            ("Kisah Supermi Sedaaap", "https://example.com/lifestyle/kisah-supermi-sedaaap", "Sejarah panjang merek mie instan."),
+        ]
+        for title, url, text in leaks:
+            flagged, reason = classify_non_news_evergreen(title=title, text=text, url=url)
+            self.assertTrue(flagged, f"Harusnya terdeteksi non-berita: {title}")
+            self.assertTrue(bool(reason))
+            self.assertFalse(is_likely_relevant(title), f"is_likely_relevant harus menolak: {title}")
+            recheck_reason = check_deterministic_rules({"title": title, "link": url, "text": text})
+            self.assertIsNotNone(recheck_reason, f"auto_recheck harus menolak via codepath sama: {title}")
+
+        # Verifikasi main.filter_valid_articles membuang semua item tersebut dengan alasan tercatat
+        arts = [
+            {"title": t, "link": u, "text": txt + (" kata tambahan " * 30), "published": "2026-11-11 10:00:00"}
+            for t, u, txt in leaks
+        ]
+        valid, discarded = pipeline_main.filter_valid_articles(arts, min_length=50)
+        self.assertEqual(len(valid), 0)
+        self.assertEqual(len(discarded), len(leaks))
+        for d in discarded:
+            self.assertIn("non_news_evergreen", d.get("discard_reason", ""))
+
+    def test_keeps_real_industry_news_containing_similar_terms(self):
+        real_news = [
+            ("Kemenperin Resmikan Pabrik Biogas Pengolahan Limbah Cair POME", "https://ekonomi.bisnis.com/read/20261111/1/pome", "Kementerian Perindustrian mendorong hilirisasi industri sawit."),
+            ("Kisah Sukses Ekspor Kopi Olahan Dorong Devisa Industri Nasional", "https://industri.kontan.co.id/news/ekspor-kopi", "Ekspor produk olahan kopi nasional meningkat tajam."),
+            ("Kemenperin Siapkan Regulasi Pengolahan Limbah POME Terpadu", "https://agro.kemenperin.go.id/berita/123", "Rilis resmi Ditjen Industri Agro."),
+        ]
+        for title, url, text in real_news:
+            flagged, reason = classify_non_news_evergreen(title=title, text=text, url=url)
+            self.assertFalse(flagged, f"Berita nyata tidak boleh terbuang: {title} ({reason})")
+            self.assertTrue(is_likely_relevant(title))
 
 
 if __name__ == "__main__":

@@ -55,12 +55,17 @@ except Exception:
     pass
 
 try:
-    from relevance_filter import is_pdf_document, is_foreign_noise_domain
+    from relevance_filter import is_pdf_document, is_foreign_noise_domain, classify_non_news_evergreen
 except Exception:
-    def is_pdf_document(url="", title="", sumber_data=""):
-        return bool(sumber_data and sumber_data.upper() == "PDF") or ".pdf" in (url or "").lower()
-    def is_foreign_noise_domain(url=""):
-        return ".vn" in (url or "").lower()
+    try:
+        from src.relevance_filter import is_pdf_document, is_foreign_noise_domain, classify_non_news_evergreen
+    except Exception:
+        def is_pdf_document(url="", title="", sumber_data=""):
+            return bool(sumber_data and sumber_data.upper() == "PDF") or ".pdf" in (url or "").lower()
+        def is_foreign_noise_domain(url=""):
+            return ".vn" in (url or "").lower()
+        def classify_non_news_evergreen(title="", text="", url=""):
+            return False, ""
 
 try:
     from gemini_pool import CANDIDATE_MODELS, GeminiModelPool
@@ -391,6 +396,11 @@ def check_deterministic_rules(article: dict) -> str | None:
     # Cek dokumen PDF
     if is_pdf_document(url=url, title=title, sumber_data=sumber_data):
         return "Dokumen PDF (Bukan Berita)"
+
+    # Cek non-berita / glosarium / profil perusahaan / evergreen (satu codepath dengan main.py)
+    is_evergreen, evergreen_reason = classify_non_news_evergreen(title=title, text=text, url=url)
+    if is_evergreen:
+        return evergreen_reason or "Artikel Non-Berita / Konten Evergreen"
 
     # Cek domain asing / aggregator bot AI
     if is_foreign_noise_domain(url):

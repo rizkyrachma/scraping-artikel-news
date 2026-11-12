@@ -463,6 +463,129 @@ def is_entity_only_title(title: str = "") -> bool:
     return False
 
 
+_EVERGREEN_NEWS_ANCHOR_RE = re.compile(
+    r"\b(?:kemenperin|menperin|wamenperin|ditjen\s+agro|kementerian\s+perindustrian|"
+    r"resmikan|diresmikan|targetkan|luncurkan|diluncurkan|ekspor|impor|"
+    r"investasi|ekspansi|tutup\s+pabrik|phk|regulasi|kebijakan|cukai|tarif|"
+    r"teken|sepakati|raih|capai|umumkan|melaporkan|naik|turun|anjlok|melonjak)\b",
+    re.IGNORECASE,
+)
+
+_GLOSSARY_TITLE_RE = re.compile(
+    r"^\s*(?:apa\s+itu|apa\s+yang\s+dimaksud|pengertian|definisi|"
+    r"arti\s+(?:kata|istilah)|mengenal\s+apa\s+itu|glosarium|glossary)\b",
+    re.IGNORECASE,
+)
+
+_EDUCATIONAL_TITLE_RE = re.compile(
+    r"^\s*(?:kisah\b|sejarah\s+(?:singkat|panjang|berdirinya|merek|terciptanya|asal)|"
+    r"asal[- ]usul\b|fakta\s+(?:unik|menarik)\b|mengenal\b|yuk\s+kenali\b|"
+    r"jenis[- ]jenis\b|macam[- ]macam\b|perbedaan\s+.+\s+(?:dan|dengan)\s+|"
+    r"manfaat\s+(?:dan\s+)?(?:fungsi|kegunaan|kandungan)\b)",
+    re.IGNORECASE,
+)
+
+_VENDOR_CORPORATE_DOMAINS = (
+    "asahifibreglass.com",
+    "inviro.co.id",
+    "saka.co.id",
+    "tokomesin.com",
+    "maksindo.com",
+    "grahamesin.com",
+)
+
+_STATIC_PROFILE_URL_PATHS = (
+    "/glosarium/",
+    "/glossary/",
+    "/kamus/",
+    "/wiki/",
+    "/knowledge-base/",
+    "/company-profile",
+    "/profil-perusahaan",
+    "/tentang-kami",
+    "/about-us",
+    "/our-services",
+    "/layanan-kami",
+    "/solusi-industri",
+    "/katalog-produk",
+    "/spesifikasi-produk",
+    "/produk-kami",
+)
+
+_VENDOR_CTA_PHRASES = (
+    "hubungi kami",
+    "minta penawaran",
+    "request a quote",
+    "konsultasi gratis",
+    "dapatkan penawaran",
+    "spesifikasi produk",
+    "spesifikasi teknis",
+    "tentang perusahaan kami",
+    "mengapa memilih kami",
+    "portofolio kami",
+)
+
+
+def classify_non_news_evergreen(title: str = "", text: str = "", url: str = "") -> tuple[bool, str]:
+    """
+    Mendeteksi artikel non-berita / evergreen (Point C) lewat satu codepath terpadu:
+    1. Artikel glosarium / definisi ('Apa Itu Crude Glycerin?', 'Apa Itu Stearic Acid 1840?', URL /glosarium/).
+    2. Halaman produk, company profile, atau layanan vendor ('Pengolahan Limbah Cair POME' di asahifibreglass.com).
+    3. Artikel edukasi atau kisah merek evergreen tanpa peristiwa berita ('Kisah Supermi Sedaaap').
+    Mengembalikan (True, alasan) jika non-berita/evergreen, atau (False, '') jika layak lanjut evaluasi.
+    """
+    u_lower = (url or "").strip().lower()
+    if "agro.kemenperin.go.id" in u_lower or "kemenperin.go.id/artikel" in u_lower:
+        return False, ""
+
+    t_clean = (title or "").strip()
+    t_lower = t_clean.lower()
+    snip_lower = (text or "")[:3000].lower()
+
+    # 1. Domain vendor / perusahaan jasa / produk industri
+    if any(dom in u_lower for dom in _VENDOR_CORPORATE_DOMAINS):
+        return True, "non_news_vendor_page (domain vendor/perusahaan jasa)"
+
+    # 2. URL statis glosarium, profil perusahaan, katalog layanan/produk
+    if any(p in u_lower for p in _STATIC_PROFILE_URL_PATHS):
+        if "wikipedia.org" in u_lower or "/glosarium" in u_lower or "/glossary" in u_lower or "/kamus" in u_lower:
+            return True, "non_news_glossary_url (halaman glosarium/wiki)"
+        return True, "non_news_company_profile_url (halaman profil/produk/layanan)"
+
+    if any(p in u_lower for p in ("/layanan/", "/services/", "/service/", "/produk/")) and not any(
+        n in u_lower for n in ("/news/", "/berita/", "/artikel/", "/read/")
+    ):
+        return True, "non_news_product_or_service_page (halaman produk/layanan perusahaan)"
+
+    # 3. Artikel glosarium di judul ('Apa Itu ...', 'Pengertian ...', 'Definisi ...')
+    if t_clean and _GLOSSARY_TITLE_RE.search(t_clean):
+        return True, "non_news_glossary (artikel glosarium/definisi 'Apa Itu')"
+
+    # 4. Halaman profil layanan / teknis statis tanpa peristiwa berita (judul frasa benda murni + sinyal vendor/tanpa verba berita)
+    if re.match(r"^(?:jasa|layanan|sistem|pengolahan|pembuatan|instalasi)\s+(?:limbah|air\s+limbah|ipak|ipal|pome)\b", t_lower):
+        if not _EVERGREEN_NEWS_ANCHOR_RE.search(t_clean):
+            return True, "non_news_service_explainer (halaman layanan/edukasi teknis tanpa peristiwa)"
+
+    # 5. Konten edukasi / kisah merek evergreen tanpa berita aktual ('Kisah Supermi Sedaaap', dll)
+    if t_clean and _EDUCATIONAL_TITLE_RE.search(t_clean):
+        if not _EVERGREEN_NEWS_ANCHOR_RE.search(t_clean):
+            return True, "non_news_evergreen_education (artikel kisah merek/edukasi tanpa peristiwa aktual)"
+
+    # 6. Halaman brosur / company profile dengan multiple vendor CTA & bukan portal berita
+    if snip_lower and ".go.id" not in u_lower and not any(n in u_lower for n in ("/read/", "/berita/", "/news/")):
+        cta_hits = sum(1 for phrase in _VENDOR_CTA_PHRASES if phrase in snip_lower)
+        if cta_hits >= 2 and not _EVERGREEN_NEWS_ANCHOR_RE.search(t_clean):
+            return True, "non_news_company_profile (halaman profil/brosur perusahaan CTA vendor)"
+
+    return False, ""
+
+
+def is_non_news_evergreen(title: str = "", text: str = "", url: str = "") -> bool:
+    """Wrapper boolean untuk classify_non_news_evergreen."""
+    flagged, _reason = classify_non_news_evergreen(title=title, text=text, url=url)
+    return flagged
+
+
 def is_non_article_structural_noise(title: str = "", url: str = "", text: str = "") -> bool:
     """
     BAGIAN 1: FILTER POLA STRUKTURAL (RULE-BASED, GRATIS, DIJALANKAN LEBIH DULU)
@@ -579,8 +702,10 @@ def is_likely_relevant(title: str) -> bool:
     if not title:
         return True
 
-    # Tahap 1: Pola struktural murah tanpa AI
+    # Tahap 1: Pola struktural murah tanpa AI & artikel non-berita/evergreen
     if is_non_article_structural_noise(title):
+        return False
+    if is_non_news_evergreen(title=title):
         return False
     if is_social_media_engagement_noise(title):
         return False
