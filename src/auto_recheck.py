@@ -62,71 +62,27 @@ except Exception:
     def is_foreign_noise_domain(url=""):
         return ".vn" in (url or "").lower()
 
+try:
+    from gemini_pool import CANDIDATE_MODELS, GeminiModelPool
+    from stable import canonical_url, get_decision_cache
+except ImportError:
+    from src.gemini_pool import CANDIDATE_MODELS, GeminiModelPool
+    from src.stable import canonical_url, get_decision_cache
 
-# ==============================================================================
-# 1. KONFIGURASI MODEL & POOL GEMINI AI
-# ==============================================================================
-CANDIDATE_MODELS = [
-    "gemini-2.5-flash",
-    "gemini-2.5-flash-lite",
-    "gemini-flash-latest",
-    "gemini-flash-lite-latest",
-    "gemini-3.8-flash",
-    "gemini-3.5-flash",
-    "gemini-3.5-flash-lite",
-]
-_current_model_idx = 0
-_model_instance = None
-_exhausted_models: set[str] = set()
+PASS2_PROMPT_VERSION = "v2026-11-12-b"
+AUDIT_PROMPT_VERSION = "v2026-11-12-b"
+_MODEL_POOL = GeminiModelPool("AUTO RECHECK")
 gemini_quota_exhausted = False
-
 CACHE_FILE_DEFAULT = os.path.join("hasil_scrapping", "cache_ai_recheck.json")
+MAX_RECHECK_CACHE_ENTRIES = 15000
 
 
 def _get_gemini_model(force_next: bool = False, mark_quota_exhausted: bool = False):
-    """Menginisialisasi model Generative AI Gemini secara lazy dengan rotasi model dinamis."""
-    global _model_instance, _current_model_idx, gemini_quota_exhausted
-
-    if gemini_quota_exhausted:
-        return None
-
-    if _model_instance is not None and not force_next:
-        return _model_instance
-
-    api_key = os.getenv("GEMINI_API_KEY", "").strip()
-    if not api_key:
-        return None
-
-    if mark_quota_exhausted and 0 <= _current_model_idx < len(CANDIDATE_MODELS):
-        _exhausted_models.add(CANDIDATE_MODELS[_current_model_idx])
-
-    if force_next:
-        _current_model_idx = (_current_model_idx + 1) % len(CANDIDATE_MODELS)
-
-    try:
-        import google.generativeai as genai  # type: ignore
-        genai.configure(api_key=api_key, transport="rest")  # type: ignore
-
-        for _ in range(len(CANDIDATE_MODELS)):
-            m_name = CANDIDATE_MODELS[_current_model_idx]
-            if m_name in _exhausted_models:
-                _current_model_idx = (_current_model_idx + 1) % len(CANDIDATE_MODELS)
-                continue
-            try:
-                m = genai.GenerativeModel(m_name)  # type: ignore
-                _model_instance = m
-                return _model_instance
-            except Exception:
-                _exhausted_models.add(m_name)
-                _current_model_idx = (_current_model_idx + 1) % len(CANDIDATE_MODELS)
-                continue
-
-        gemini_quota_exhausted = True
-        print("  [AI POOL] Seluruh model kandidat Gemini telah mencapai batas kuota harian.", flush=True)
-        return None
-    except Exception as e:
-        print(f"  [AI POOL] Gagal menginisialisasi Gemini API: {e}", flush=True)
-        return None
+    """Kompatibilitas wrapper yang mendelegasikan rotasi model ke shared GeminiModelPool."""
+    global gemini_quota_exhausted
+    model, _m_name = _MODEL_POOL.get_model(force_next=force_next, mark_exhausted=mark_quota_exhausted)
+    gemini_quota_exhausted = _MODEL_POOL.quota_exhausted
+    return model
 
 
 # ==============================================================================
@@ -148,22 +104,56 @@ class RecheckCache:
 
     def save(self):
         try:
-            os.makedirs(os.path.dirname(self.cache_path), exist_ok=True)
+            if len(self.cache_data) > MAX_RECHECK_CACHE_ENTRIES:
+                keep_keys = list(self.cache_data.keys())[-MAX_RECHECK_CACHE_ENTRIES:]
+                self.cache_data = {k: self.cache_data[k] for k in keep_keys}
+            out_dir = os.path.dirname(self.cache_path)
+            if out_dir:
+                os.makedirs(out_dir, exist_ok=True)
             with open(self.cache_path, "w", encoding="utf-8") as f:
                 json.dump(self.cache_data, f, ensure_ascii=False, indent=2)
         except Exception as e:
             print(f"  [CACHE WARNING] Gagal menyimpan cache: {e}", flush=True)
 
-    def get_key(self, title: str, snippet: str, pass_name: str) -> str:
-        raw = f"{title.strip().lower()}|{snippet.strip()[:200].lower()}|{pass_name}"
+    def get_key(
+        self,
+        title: str,
+        snippet: str,
+        pass_name: str,
+        url: str = "",
+        prompt_version: str = "",
+        model_name: str = "",
+    ) -> str:
+        can_u = canonical_url(url) if url else ""
+        if can_u:
+            raw = f"{can_u}|{pass_name}|{prompt_version}|{model_name}"
+        else:
+            raw = f"{title.strip().lower()}|{snippet.strip()[:200].lower()}|{pass_name}|{prompt_version}|{model_name}"
         return hashlib.sha256(raw.encode("utf-8")).hexdigest()
 
-    def get(self, title: str, snippet: str, pass_name: str) -> dict | None:
-        key = self.get_key(title, snippet, pass_name)
+    def get(
+        self,
+        title: str,
+        snippet: str,
+        pass_name: str,
+        url: str = "",
+        prompt_version: str = "",
+        model_name: str = "",
+    ) -> dict | None:
+        key = self.get_key(title, snippet, pass_name, url=url, prompt_version=prompt_version, model_name=model_name)
         return self.cache_data.get(key)
 
-    def set(self, title: str, snippet: str, pass_name: str, result: dict):
-        key = self.get_key(title, snippet, pass_name)
+    def set(
+        self,
+        title: str,
+        snippet: str,
+        pass_name: str,
+        result: dict,
+        url: str = "",
+        prompt_version: str = "",
+        model_name: str = "",
+    ):
+        key = self.get_key(title, snippet, pass_name, url=url, prompt_version=prompt_version, model_name=model_name)
         self.cache_data[key] = result
 
 
@@ -456,7 +446,12 @@ Berita harus fokus ke salah satu hal berikut:
 == KLASIFIKASI LABEL ==
 - "HILIR": Jelas masuk ranah hilir manufaktur/pengolahan/kebijakan Ditjen Industri Agro.
 - "BUKAN_HILIR": Masuk ranah hulu pertanian, non-agro, kriminal, promosi, atau noise yang harus dibuang.
-- "RAGU": Ambigu atau berpotensi menyangkut industri agro namun butuh verifikasi manusia.
+- "RAGU": HANYA jika masih borderline setelah menerapkan RUBRIK KASUS PERBATASAN di bawah ini.
+
+== RUBRIK KASUS PERBATASAN (WAJIB UNTUK TOPIK PERBATASAN SEPERTI CUKAI/WHO/VAPE/REGULASI) ==
+- MASUK ("HILIR"): Ada dampak langsung ke industri, pabrik, produksi, utilisasi, atau pekerja dalam negeri, ATAU memuat pernyataan resmi Kemenperin (Menperin/Wamenperin/pejabat Ditjen IA) atau asosiasi industri dalam negeri (APVI, GAPKI, GAPMMI, GAPPRI, APINDO, KADIN, HIMKI).
+- TOLAK ("BUKAN_HILIR"): Hanya opini/komentar akademisi, dosen, atau pengamat tanpa respons industri/Kemenperin, ATAU hanya regulasi/anjuran luar negeri (WHO, FCTC, Uni Eropa/EUDR, negara lain) tanpa respons/dampak langsung industri dalam negeri.
+- TETAP "RAGU": Hanya jika informasinya masih borderline setelah rubrik di atas diterapkan.
 
 Wajib baca konteks keseluruhan judul dan cuplikan teks artikel, jangan hanya menilai dari satu kata kunci.
 FORMAT OUTPUT (HARUS JSON MURNI TANPA MARKDOWN / BACKTICKS):
@@ -476,14 +471,19 @@ TUGASMU: LAKUKAN AUDIT KETAT (DEVIL'S ADVOCATE). CARILAH ALASAN UNTUK MEMBUANG A
 Ajukan pertanyaan kritis untuk setiap artikel:
 1. Apakah artikel ini sebenarnya ranah hulu (perkebunan petani mentah, budidaya tambak, bibit, harga TBS/singkong/karet di petani, bukan pengolahan pabrik)?
 2. Apakah ini sektor non-agro (otomotif, baterai/EV, maritim kapal, logam baja, tambang batubara/migas ESDM, festival musik)?
-3. Apakah ini pabrik luar negeri (contoh: produsen biskuit di Malaysia tutup) atau isu luar negeri tanpa dampak bagi industri Indonesia?
-4. Apakah ini hanya riset mahasiswa/kampus skala laboratorium, pengabdian desa pesisir, atau promosi kerajinan tanpa skala industri manufaktur?
+3. Apakah ini pabrik luar negeri (contoh: produsen biskuit di Malaysia tutup) atau isu luar negeri/WHO tanpa dampak maupun respons industri Indonesia?
+4. Apakah ini hanya opini akademisi/kampus tanpa respons Kemenperin/asosiasi industri, riset mahasiswa skala laboratorium, pengabdian desa pesisir, atau promosi kerajinan tanpa skala industri manufaktur?
 5. Apakah ini hanya aksi pendanaan korporasi murni (surat utang/obligasi) tanpa membahas operasional industri?
+
+RUBRIK KASUS PERBATASAN (KONSISTEN):
+- Tetap "HILIR" jika ada dampak langsung ke industri/pabrik dalam negeri atau pernyataan resmi Kemenperin / asosiasi industri Indonesia (APVI, GAPKI, GAPMMI, GAPPRI, APINDO, KADIN, HIMKI).
+- Ubah menjadi "BUKAN_HILIR" jika hanya opini akademisi tanpa respons industri, atau hanya regulasi/laporan luar negeri (misal WHO/FCTC/luar negeri) tanpa respons industri dalam negeri.
+- Tandai "RAGU" HANYA jika informasinya tetap borderline setelah rubrik diterapkan.
 
 ATURAN KELULUSAN AUDIT:
 - Artikel TETAP "HILIR" HANYA JIKA kamu TIDAK MENEMUKAN alasan kuat untuk membuangnya (benar-benar terbukti industri manufaktur, pabrik, hilirisasi, ekspor-impor olahan agro, atau kebijakan Kemenperin industri agro).
 - Jika kamu menemukan alasan kuat bahwa artikel ini hulu atau non-agro atau noise, ubah labelnya menjadi "BUKAN_HILIR" dan sebutkan alasannya.
-- Jika informasinya sangat ambigu atau borderline, tandai "RAGU".
+- Jika masih sangat borderline setelah rubrik diterapkan, tandai "RAGU".
 
 Wajib grounded: alasan harus berbasis isi teks artikel asli, jangan mengarang.
 FORMAT OUTPUT (HARUS JSON MURNI TANPA MARKDOWN / BACKTICKS):
@@ -495,6 +495,61 @@ FORMAT OUTPUT (HARUS JSON MURNI TANPA MARKDOWN / BACKTICKS):
   }
 ]
 """
+
+_RUBRIC_GOV_ASSOC_RE = re.compile(
+    r"\b(?:kemenperin|menperin|wamenperin|ditjen\s+industri\s+agro|ditjen\s+ia|"
+    r"kementerian\s+perindustrian|apvi|gapki|gapmmi|gappri|apindo|kadin|himki|"
+    r"asindo|akbi|gabungan\s+pengusaha|asosiasi\s+industri|asosiasi\s+petani)\b",
+    re.IGNORECASE,
+)
+_RUBRIC_DOMESTIC_INDUSTRY_RE = re.compile(
+    r"\b(?:industri\s+dalam\s+negeri|pabrik\s+dalam\s+negeri|utilisasi\s+pabrik|"
+    r"kapasitas\s+produksi|investasi\s+pabrik|hilirisasi\s+industri|ekspansi\s+pabrik|"
+    r"pekerja\s+industri|phk\s+(?:pekerja|buruh|pabrik)|pabrik\s+rokok|pabrik\s+sawit|"
+    r"industri\s+hasil\s+tembakau|iht|industri\s+mamin|industri\s+agro)\b",
+    re.IGNORECASE,
+)
+_RUBRIC_ACADEMIC_RE = re.compile(
+    r"\b(?:akademisi|ekonom|pengamat|guru\s+besar|dosen|peneliti\s+universitas|"
+    r"pakar\s+ekonomi|pakar\s+kesehatan|umm|ugm|unair|undip|unpad)\b",
+    re.IGNORECASE,
+)
+_RUBRIC_FOREIGN_ONLY_RE = re.compile(
+    r"\b(?:who|world\s+health\s+organization|fctc|uni\s+eropa|eudr|parlemen\s+eropa|"
+    r"konferensi\s+who|laporan\s+who|impor\s+as|malaysia|thailand|vietnam)\b",
+    re.IGNORECASE,
+)
+
+
+def apply_ragu_rubric(article: dict, ai_label: str, ai_alasan: str = "") -> tuple[str, str]:
+    """
+    Rubrik eksplisit untuk kasus perbatasan (RAGU):
+    - MASUK (HILIR): dampak langsung ke industri/pabrik dalam negeri atau pernyataan Kemenperin / asosiasi industri.
+    - TOLAK (BUKAN_HILIR): hanya opini akademisi/pengamat atau regulasi luar negeri (WHO/dll) tanpa respons industri dalam negeri.
+    - RAGU: tetap borderline jika tidak cukup bukti deterministik untuk memutuskan.
+    """
+    lbl = str(ai_label or "RAGU").strip().upper()
+    if lbl != "RAGU":
+        return lbl, ai_alasan
+
+    title = str(article.get("title") or article.get("Title") or "").strip()
+    text = str(article.get("text") or article.get("isi") or article.get("snippet") or "").strip()
+    corpus = f"{title} {text[:2500]}".strip()
+
+    has_gov_or_assoc = bool(_RUBRIC_GOV_ASSOC_RE.search(corpus))
+    has_domestic_ind = bool(_RUBRIC_DOMESTIC_INDUSTRY_RE.search(corpus))
+
+    if has_gov_or_assoc:
+        return "HILIR", "Rubrik RAGU: memuat pernyataan Kemenperin atau asosiasi industri dalam negeri"
+    if has_domestic_ind and not _RUBRIC_ACADEMIC_RE.search(title):
+        return "HILIR", "Rubrik RAGU: memuat dampak langsung ke industri/pabrik dalam negeri"
+
+    if _RUBRIC_ACADEMIC_RE.search(corpus):
+        return "BUKAN_HILIR", "Rubrik RAGU: opini akademisi/pengamat tanpa respons Kemenperin atau asosiasi industri"
+    if _RUBRIC_FOREIGN_ONLY_RE.search(corpus):
+        return "BUKAN_HILIR", "Rubrik RAGU: regulasi atau isu luar negeri/WHO tanpa respons industri dalam negeri"
+
+    return "RAGU", ai_alasan or "Kasus perbatasan tetap ambigu (memerlukan tinjauan manual)"
 
 
 # ==============================================================================
@@ -536,15 +591,25 @@ class AutoRecheckPipeline:
         return kept, discarded
 
     def _call_ai_batch(self, batch: list[dict], system_prompt: str, pass_name: str) -> list[dict]:
-        """Memanggil Gemini AI untuk batch artikel dengan caching dan fallback pool."""
+        """Memanggil Gemini AI untuk batch artikel dengan caching persisten (DecisionCache + RecheckCache), temperature=0, dan fallback pool."""
+        global gemini_quota_exhausted
         results = []
         uncached = []
+        dcache = get_decision_cache()
+        prompt_ver = PASS2_PROMPT_VERSION if pass_name == "pass2_relevance" else AUDIT_PROMPT_VERSION
+        active_model = _MODEL_POOL.peek_active_model_name()
 
-        # 1. Cek Cache
+        # 1. Cek DecisionCache & RecheckCache (key berbasis URL kanonik + versi prompt + model)
         for art in batch:
             title = str(art.get("title") or art.get("Title") or "").strip()
+            url = str(art.get("resolved_url") or art.get("link") or art.get("Link Website") or "").strip()
             snip = str(art.get("text") or art.get("text_snippet") or art.get("snippet") or "")[:500].strip()
-            cached_val = self.cache.get(title, snip, pass_name)
+            cached_val = dcache.get(url, pass_name, prompt_ver, active_model) if url else None
+            if cached_val is None:
+                cached_val = self.cache.get(
+                    title, snip, pass_name,
+                    url=url, prompt_version=prompt_ver, model_name=active_model,
+                )
             if cached_val:
                 res_item = dict(cached_val)
                 res_item["id"] = art["_recheck_id"]
@@ -573,43 +638,29 @@ class AutoRecheckPipeline:
         user_content = f"Daftar berita untuk dinilai (total {len(payload_items)}):\n{json.dumps(payload_items, ensure_ascii=False, indent=2)}"
         full_prompt = f"{system_prompt}\n\n{user_content}"
 
-        # 3. Eksekusi dengan retry dan fallback model pool
-        max_attempts = 4
+        # 3. Eksekusi deterministik (temperature=0) via shared GeminiModelPool
         ai_resp_data = None
-
-        for attempt in range(max_attempts):
-            model = _get_gemini_model()
-            if model is None:
-                break
+        used_model = active_model
+        text, used_model, _err = _MODEL_POOL.generate_deterministic(
+            full_prompt,
+            timeout=45,
+            max_attempts=4,
+        )
+        gemini_quota_exhausted = _MODEL_POOL.quota_exhausted
+        if text:
             try:
-                resp = model.generate_content(full_prompt, request_options={"retry": None, "timeout": 45})  # type: ignore
-                text = (resp.text or "").strip()
-
-                # Parse JSON (strict=False agar karakter newline/control di dalam string tidak memicu error)
                 m = re.search(r"\[[\s\S]*\]", text)
                 if m:
                     raw_json = re.sub(r"[\x00-\x08\x0b\x0c\x0e-\x1f]", " ", m.group(0))
                     ai_resp_data = json.loads(raw_json, strict=False)
-                    break
                 else:
                     m2 = re.search(r"\{[\s\S]*\}", text)
                     if m2:
                         raw_json = re.sub(r"[\x00-\x08\x0b\x0c\x0e-\x1f]", " ", m2.group(0))
                         parsed = json.loads(raw_json, strict=False)
                         ai_resp_data = parsed.get("hasil") or parsed.get("articles") or [parsed]
-                        break
             except Exception as e:
-                err_str = str(e).lower()
-                if "429" in err_str or "quota" in err_str or "resourceexhausted" in err_str or "404" in err_str:
-                    print(f"    [AI LIMIT] Kuota model limit, beralih ke model berikutnya di pool...", flush=True)
-                    _get_gemini_model(force_next=True, mark_quota_exhausted=True)
-                    time.sleep(1.0)
-                    continue
-                else:
-                    print(f"    [AI ERROR] {e}. Mencoba beralih model...", flush=True)
-                    _get_gemini_model(force_next=True, mark_quota_exhausted=False)
-                    time.sleep(1.5)
-                    continue
+                print(f"    [AI PARSE ERROR] {e}", flush=True)
 
         # 4. Petakan hasil respon AI ke uncached items
         resp_map = {}
@@ -621,6 +672,7 @@ class AutoRecheckPipeline:
         for art in uncached:
             art_id = art["_recheck_id"]
             title = str(art.get("title") or art.get("Title") or "").strip()
+            url = str(art.get("resolved_url") or art.get("link") or art.get("Link Website") or "").strip()
             snip = str(art.get("text") or art.get("text_snippet") or art.get("snippet") or "")[:500].strip()
 
             val = resp_map.get(art_id)
@@ -632,6 +684,7 @@ class AutoRecheckPipeline:
                 if label not in ["HILIR", "BUKAN_HILIR", "RAGU"]:
                     label = "RAGU"
                 alasan = str(val.get("alasan", "Dinilai oleh AI")).strip()
+                label, alasan = apply_ragu_rubric(art, label, alasan)
             else:
                 # Fallback aman jika respon tidak lengkap: RAGU (jangan langsung buang)
                 label = "RAGU"
@@ -646,7 +699,15 @@ class AutoRecheckPipeline:
 
             # Simpan ke cache jika AI berhasil mengevaluasi
             if val:
-                self.cache.set(title, snip, pass_name, res_entry)
+                self.cache.set(
+                    title, snip, pass_name, res_entry,
+                    url=url, prompt_version=prompt_ver, model_name=used_model,
+                )
+                if url:
+                    dcache.set(url, pass_name, prompt_ver, used_model, res_entry)
+
+        if uncached:
+            dcache.save()
 
         return results
 
@@ -802,7 +863,9 @@ class AutoRecheckPipeline:
         all_discarded = p1_discarded + p2_discarded + audit_discarded
         self.discarded_log = all_discarded
 
-        # 4. Finalisasi Eksklusif Ditjen Industri Agro (Buang artikel RAGU/Review ke discarded_articles.json)
+        # 4. Finalisasi Kasus Perbatasan / RAGU dengan Rubrik Eksplisit:
+        #    - Terapkan apply_ragu_rubric (opini akademisi/regulasi luar negeri tanpa respons industri -> buang; Kemenperin/asosiasi/dampak industri -> HILIR)
+        #    - Jika tetap borderline setelah rubrik -> PERTAHANKAN dengan status Review (baris kuning di kolom Status Review), JANGAN di-drop diam-diam!
         ragu_count = 0
         hilir_count = 0
         strict_hilir_kept = []
@@ -815,14 +878,32 @@ class AutoRecheckPipeline:
             title = str(art.get("title") or art.get("Title") or "").strip()
             link = str(art.get("link") or art.get("Link Website") or "").strip()
 
-            if final_lbl == "RAGU" or curr_stat == "review" or ("perlu" in curr_sr.lower() and "cek manual" in curr_sr.lower()):
-                ragu_count += 1
-                all_discarded.append({
-                    "judul": title,
-                    "link": link,
-                    "alasan": f"Ambigu / Bukan Inti Hilir IA (RAGU): {final_als or curr_sr}",
-                    "pass": 6
-                })
+            is_borderline = (
+                final_lbl == "RAGU"
+                or curr_stat == "review"
+                or ("perlu" in curr_sr.lower() and "cek manual" in curr_sr.lower())
+            )
+            if is_borderline:
+                rubric_lbl, rubric_als = apply_ragu_rubric(art, "RAGU", final_als or curr_sr)
+                if rubric_lbl == "BUKAN_HILIR":
+                    all_discarded.append({
+                        "judul": title,
+                        "link": link,
+                        "alasan": rubric_als or f"Ditolak Rubrik RAGU: {final_als or curr_sr}",
+                        "pass": 6
+                    })
+                elif rubric_lbl == "HILIR":
+                    hilir_count += 1
+                    art["Status Review"] = ""
+                    art["status"] = "relevan"
+                    art["alasan"] = rubric_als
+                    strict_hilir_kept.append(art)
+                else:
+                    ragu_count += 1
+                    reason_text = rubric_als or final_als or curr_sr
+                    art["status"] = "review"
+                    art["Status Review"] = f"PERLU CEK MANUAL: {reason_text}" if reason_text else "PERLU CEK MANUAL"
+                    strict_hilir_kept.append(art)
             else:
                 hilir_count += 1
                 art["Status Review"] = ""

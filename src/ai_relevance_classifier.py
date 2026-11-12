@@ -18,6 +18,16 @@ try:
 except Exception:
     pass
 
+try:
+    from gemini_pool import CANDIDATE_MODELS, GeminiModelPool
+    from stable import get_decision_cache
+except ImportError:
+    from src.gemini_pool import CANDIDATE_MODELS, GeminiModelPool
+    from src.stable import get_decision_cache
+
+AI_RELEVANCE_PROMPT_VERSION = "v2026-11-12-b"
+_MODEL_POOL = GeminiModelPool("AI RELEVANCE")
+
 # System Prompt Resmi Baku Ditjen IA Kemenperin
 SYSTEM_PROMPT = """PERAN
 Kamu adalah filter berita untuk Direktorat Jenderal Industri Agro (IA), Kementerian Perindustrian. Tugasmu menyaring berita hasil scraping untuk keperluan media monitoring: berita Sektor IA dipertahankan, berita yang bukan Sektor IA dibuang.
@@ -163,67 +173,15 @@ ATURAN KERJA
 - Jika input kosong, balas {"total_diproses":0,"total_relevan":0,"total_review":0,"total_dibuang":0,"hasil":[],"dibuang":[]}.
 """
 
-# Urutan model Gemini kandidat dengan fallback & rotasi dinamis
-CANDIDATE_MODELS = [
-    "gemini-2.5-flash",
-    "gemini-2.5-flash-lite",
-    "gemini-flash-latest",
-    "gemini-flash-lite-latest",
-    "gemini-3-flash-preview",
-    "gemini-3.6-flash",
-    "gemini-3.1-flash-lite",
-]
-_current_model_idx = 0
-_model_instance = None
-_exhausted_models: set[str] = set()
 gemini_quota_exhausted = False
 
 
 def _get_gemini_model(force_next: bool = False, mark_quota_exhausted: bool = False):
-    """Menginisialisasi model Generative AI Gemini secara lazy dengan rotasi model dinamis."""
-    global _model_instance, _current_model_idx, gemini_quota_exhausted
-
-    if gemini_quota_exhausted:
-        return None
-
-    if _model_instance is not None and not force_next:
-        return _model_instance
-
-    api_key = os.getenv("GEMINI_API_KEY", "").strip()
-    if not api_key:
-        return None
-
-    if mark_quota_exhausted and 0 <= _current_model_idx < len(CANDIDATE_MODELS):
-        _exhausted_models.add(CANDIDATE_MODELS[_current_model_idx])
-
-    if force_next:
-        _current_model_idx = (_current_model_idx + 1) % len(CANDIDATE_MODELS)
-
-    try:
-        import google.generativeai as genai  # type: ignore
-        genai.configure(api_key=api_key, transport="rest")  # type: ignore
-
-        for _ in range(len(CANDIDATE_MODELS)):
-            m_name = CANDIDATE_MODELS[_current_model_idx]
-            if m_name in _exhausted_models:
-                _current_model_idx = (_current_model_idx + 1) % len(CANDIDATE_MODELS)
-                continue
-            try:
-                m = genai.GenerativeModel(m_name)  # type: ignore
-                _model_instance = m
-                print(f"[AI MODEL] Menggunakan model Gemini: {m_name}", flush=True)
-                return _model_instance
-            except Exception:
-                _exhausted_models.add(m_name)
-                _current_model_idx = (_current_model_idx + 1) % len(CANDIDATE_MODELS)
-                continue
-
-        gemini_quota_exhausted = True
-        print("[PERINGATAN] Seluruh kandidat model Gemini telah mencapai batas kuota harian.", flush=True)
-        return None
-    except Exception as e:
-        print(f"[PERINGATAN] Gagal menginisialisasi Gemini API: {e}", flush=True)
-        return None
+    """Kompatibilitas wrapper yang mendelegasikan rotasi model ke shared GeminiModelPool."""
+    global gemini_quota_exhausted
+    model, _name = _MODEL_POOL.get_model(force_next=force_next, mark_exhausted=mark_quota_exhausted)
+    gemini_quota_exhausted = _MODEL_POOL.quota_exhausted
+    return model
 
 
 def parse_and_validate_batch_response(resp_text: str, sent_articles: list[dict]) -> dict:
@@ -361,31 +319,65 @@ def classify_agro_relevance_batch(articles: list[dict]) -> dict:
         }
 
     api_key = os.getenv("GEMINI_API_KEY", "").strip()
+    dcache = get_decision_cache()
+    active_model = _MODEL_POOL.peek_active_model_name()
+
+    # Cek DecisionCache berbasis URL kanonik + versi prompt + model
+    by_id: dict = {}
+    uncached_articles: list[dict] = []
+    for a in articles:
+        a_url = str(a.get("resolved_url") or a.get("link") or a.get("Link Website") or a.get("url") or "").strip()
+        cached_decision = dcache.get(a_url, "ai_relevance", AI_RELEVANCE_PROMPT_VERSION, active_model) if a_url else None
+        if cached_decision is not None:
+            entry = dict(cached_decision)
+            entry["id"] = a["id"]
+            by_id[a["id"]] = entry
+        else:
+            uncached_articles.append(a)
+
+    if not uncached_articles:
+        retained = [v for v in by_id.values() if v["status"] in ["relevan", "review"]]
+        relevan_items = [v for v in by_id.values() if v["status"] == "relevan"]
+        review_items = [v for v in by_id.values() if v["status"] == "review"]
+        discarded = [v for v in by_id.values() if v["status"] == "buang"]
+        return {
+            "total_diproses": len(articles),
+            "total_relevan": len(relevan_items),
+            "total_review": len(review_items),
+            "total_dibuang": len(discarded),
+            "total_dipertahankan": len(retained),
+            "hasil": retained,
+            "dibuang": discarded,
+            "by_id": by_id,
+        }
+
     if not api_key:
         print("[WARNING] GEMINI_API_KEY tidak ditemukan. Menandai batch sebagai 'review'.", flush=True)
-        by_id = {
-            a["id"]: {
+        for a in uncached_articles:
+            by_id[a["id"]] = {
                 "id": a["id"],
                 "status": "review",
                 "sub_sektor": "-",
                 "alasan": "AI tidak dijalankan (alasan: GEMINI_API_KEY tidak ditemukan)"
             }
-            for a in articles
-        }
+        retained = [v for v in by_id.values() if v["status"] in ["relevan", "review"]]
+        relevan_items = [v for v in by_id.values() if v["status"] == "relevan"]
+        review_items = [v for v in by_id.values() if v["status"] == "review"]
+        discarded = [v for v in by_id.values() if v["status"] == "buang"]
         return {
             "total_diproses": len(articles),
-            "total_relevan": 0,
-            "total_review": len(articles),
-            "total_dibuang": 0,
-            "total_dipertahankan": len(articles),
-            "hasil": list(by_id.values()),
-            "dibuang": [],
-            "by_id": by_id
+            "total_relevan": len(relevan_items),
+            "total_review": len(review_items),
+            "total_dibuang": len(discarded),
+            "total_dipertahankan": len(retained),
+            "hasil": retained,
+            "dibuang": discarded,
+            "by_id": by_id,
         }
 
-    # Format input berita ke JSON
+    # Format input berita yang belum ada di cache ke JSON
     formatted_input = []
-    for a in articles:
+    for a in uncached_articles:
         snip = str(a.get("text_snippet") or a.get("snippet") or a.get("text") or "").strip()[:300]
         item_entry = {
             "id": a["id"],
@@ -401,80 +393,47 @@ def classify_agro_relevance_batch(articles: list[dict]) -> dict:
     user_payload = f"Daftar berita untuk dinilai (total: {len(formatted_input)}):\n{json.dumps(formatted_input, ensure_ascii=False, indent=2)}"
     full_prompt = f"{SYSTEM_PROMPT}\n\n{user_payload}"
 
-    max_attempts = 3
-    last_error_reason = ""
-    for attempt in range(max_attempts):
-        model = _get_gemini_model()
-        if model is None:
-            last_error_reason = "seluruh model Gemini gagal diinisialisasi / kuota habis"
-            break
+    resp_text, used_model, last_error_reason = _MODEL_POOL.generate_deterministic(
+        full_prompt,
+        timeout=45,
+        max_attempts=3,
+    )
+    gemini_quota_exhausted = _MODEL_POOL.quota_exhausted
 
-        try:
-            response = model.generate_content(full_prompt, request_options={"retry": None, "timeout": 45})  # type: ignore
-            resp_text = (response.text or "").strip()
-            by_id = parse_and_validate_batch_response(resp_text, formatted_input)
-
-            retained = [v for v in by_id.values() if v["status"] in ["relevan", "review"]]
-            relevan_items = [v for v in by_id.values() if v["status"] == "relevan"]
-            review_items = [v for v in by_id.values() if v["status"] == "review"]
-            discarded = [v for v in by_id.values() if v["status"] == "buang"]
-
-            return {
-                "total_diproses": len(articles),
-                "total_relevan": len(relevan_items),
-                "total_review": len(review_items),
-                "total_dibuang": len(discarded),
-                "total_dipertahankan": len(retained),
-                "hasil": retained,
-                "dibuang": discarded,
-                "by_id": by_id
+    if resp_text is not None:
+        parsed_by_id = parse_and_validate_batch_response(resp_text, formatted_input)
+        for a in uncached_articles:
+            val = parsed_by_id.get(a["id"], {})
+            by_id[a["id"]] = val
+            a_url = str(a.get("resolved_url") or a.get("link") or a.get("Link Website") or a.get("url") or "").strip()
+            al_low = str(val.get("alasan", "")).lower()
+            if a_url and "ai tidak dijalankan" not in al_low and "id tidak ditemukan" not in al_low:
+                dcache.set(a_url, "ai_relevance", AI_RELEVANCE_PROMPT_VERSION, used_model or active_model, val)
+        dcache.save()
+    else:
+        fallback_reason = f"AI tidak dijalankan (alasan: {last_error_reason or 'panggilan Gemini gagal/timeout'})"
+        print(f"  [FALLBACK] Gagal memproses batch via AI. {fallback_reason}", flush=True)
+        for a in uncached_articles:
+            by_id[a["id"]] = {
+                "id": a["id"],
+                "status": "review",
+                "sub_sektor": "-",
+                "alasan": fallback_reason
             }
 
-        except Exception as e:
-            err_msg = str(e).lower()
-            last_error_reason = str(e)
-            is_rate_limit = "429" in err_msg or "quota" in err_msg or "resourceexhausted" in err_msg
-
-            if is_rate_limit:
-                is_daily = "generaterequestsperday" in err_msg or "perday" in err_msg or "quota" in err_msg
-                if is_daily:
-                    print("[RATE LIMIT HARIAN] Model mencapai batas kuota. Beralih ke model kandidat berikutnya...", flush=True)
-                    _get_gemini_model(force_next=True, mark_quota_exhausted=True)
-                    time.sleep(1.0)
-                    continue
-
-                # RPM limit: beralih ke model lain di pool agar tidak perlu tidur 60 detik
-                print(f"[RATE LIMIT RPM] Terkena batas per menit, merotasi ke model berikutnya (percobaan {attempt + 1}/{max_attempts})...", flush=True)
-                _get_gemini_model(force_next=True, mark_quota_exhausted=False)
-                time.sleep(2.0)
-                continue
-            else:
-                print(f"[ERROR GEMINI] {e}. Mencoba beralih model / retry...", flush=True)
-                _get_gemini_model(force_next=True, mark_quota_exhausted=False)
-                time.sleep(2.0)
-                continue
-
-    # Fallback aman jika seluruh percobaan gagal: Tandai sebagai "review" (Aturan 3)
-    fallback_reason = f"AI tidak dijalankan (alasan: {last_error_reason or 'panggilan Gemini gagal/timeout'})"
-    print(f"  [FALLBACK] Gagal memproses batch via AI. {fallback_reason}", flush=True)
-    by_id = {
-        a["id"]: {
-            "id": a["id"],
-            "status": "review",
-            "sub_sektor": "-",
-            "alasan": fallback_reason
-        }
-        for a in articles
-    }
+    retained = [v for v in by_id.values() if v["status"] in ["relevan", "review"]]
+    relevan_items = [v for v in by_id.values() if v["status"] == "relevan"]
+    review_items = [v for v in by_id.values() if v["status"] == "review"]
+    discarded = [v for v in by_id.values() if v["status"] == "buang"]
     return {
         "total_diproses": len(articles),
-        "total_relevan": 0,
-        "total_review": len(articles),
-        "total_dibuang": 0,
-        "total_dipertahankan": len(articles),
-        "hasil": list(by_id.values()),
-        "dibuang": [],
-        "by_id": by_id
+        "total_relevan": len(relevan_items),
+        "total_review": len(review_items),
+        "total_dibuang": len(discarded),
+        "total_dipertahankan": len(retained),
+        "hasil": retained,
+        "dibuang": discarded,
+        "by_id": by_id,
     }
 
 

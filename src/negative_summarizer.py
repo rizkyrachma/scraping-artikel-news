@@ -28,15 +28,12 @@ try:
 except Exception:
     extract_article_text = None
 
-CANDIDATE_MODELS = [
-    "gemini-flash-lite-latest",
-    "gemini-flash-latest",
-    "gemini-3.8-flash",
-    "gemini-3.5-flash",
-    "gemini-3-flash-preview",
-]
-_current_model_idx = 0
-_model_instance = None
+try:
+    from gemini_pool import CANDIDATE_MODELS, GeminiModelPool
+except ImportError:
+    from src.gemini_pool import CANDIDATE_MODELS, GeminiModelPool
+
+_MODEL_POOL = GeminiModelPool("NEGATIVE SUMMARIZER")
 gemini_quota_exhausted = False
 TOTAL_API_CALLS = 0
 
@@ -63,40 +60,11 @@ def _safe_int(val, default: int = 0) -> int:
 
 
 def _get_gemini_model(force_next: bool = False):
-    """Inisialisasi model Generative AI Gemini secara lazy dengan fallback model dinamis."""
-    global _model_instance, _current_model_idx, gemini_quota_exhausted
-
-    if gemini_quota_exhausted:
-        return None
-
-    if _model_instance is not None and not force_next:
-        return _model_instance
-
-    api_key = os.getenv("GEMINI_API_KEY", "").strip()
-    if not api_key:
-        return None
-
-    if force_next:
-        _current_model_idx += 1
-
-    try:
-        import google.generativeai as genai  # type: ignore
-        genai.configure(api_key=api_key, transport="rest")  # type: ignore
-
-        while _current_model_idx < len(CANDIDATE_MODELS):
-            m_name = CANDIDATE_MODELS[_current_model_idx]
-            try:
-                m = genai.GenerativeModel(m_name)  # type: ignore
-                _model_instance = m
-                return _model_instance
-            except Exception:
-                _current_model_idx += 1
-                continue
-
-        gemini_quota_exhausted = True
-        return None
-    except Exception:
-        return None
+    """Kompatibilitas wrapper yang mendelegasikan rotasi model ke shared GeminiModelPool."""
+    global gemini_quota_exhausted
+    model, _name = _MODEL_POOL.get_model(force_next=force_next, mark_exhausted=force_next)
+    gemini_quota_exhausted = _MODEL_POOL.quota_exhausted
+    return model
 
 
 SYSTEM_PROMPT = """Kamu analis media monitoring Direktorat Jenderal Industri Agro, Kemenperin. Untuk setiap berita bertone Negatif, baca judul dan isi lengkap, lalu hasilkan:
@@ -280,7 +248,11 @@ def _call_gemini_summary_batch(chunk: list[dict]) -> dict[int, dict]:
             break
         try:
             TOTAL_API_CALLS += 1
-            resp = model.generate_content(full_prompt, request_options={"timeout": 60})
+            resp = model.generate_content(
+                full_prompt,
+                generation_config={"temperature": 0},
+                request_options={"timeout": 60},
+            )
             resp_text = (resp.text or "").strip()
 
             clean_json = re.sub(r"^```(?:json)?\s*", "", resp_text, flags=re.MULTILINE)

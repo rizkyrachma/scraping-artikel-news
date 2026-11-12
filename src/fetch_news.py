@@ -618,18 +618,24 @@ def merge_keywords(kw_a: str, kw_b: str) -> str:
     return ", ".join(result)
 
 
+try:
+    from stable import canonical_url as _canonical_url
+except ImportError:
+    from src.stable import canonical_url as _canonical_url
+
+
 def dedup_by_link(items: list[dict]) -> list[dict]:
     """
-    Deduplikasi hasil berdasarkan URL link (tanpa parameter query string).
-    Jika URL sama ditemukan, gabungkan keyword-nya.
+    Deduplikasi hasil berdasarkan URL kanonik (hapus param tracking, www, dan trailing slash).
+    Jika URL sama ditemukan, gabungkan keyword-nya dan pertahankan teks terpanjang.
     """
     url_map = {}
     for item in items:
         raw_link = (
-            item.get("link")
+            item.get("resolved_url")
+            or item.get("link")
             or item.get("Link Website")
             or item.get("url")
-            or item.get("resolved_url")
             or ""
         )
         if raw_link is None or (isinstance(raw_link, float) and str(raw_link) == "nan"):
@@ -639,18 +645,20 @@ def dedup_by_link(items: list[dict]) -> list[dict]:
             if link.lower() in ("nan", "none"):
                 link = ""
 
-        if "youtube.com/watch" in link.lower():
-            parsed_u = urlparse(link)
-            qs = parse_qs(parsed_u.query)
-            vid = qs.get("v", [""])[0]
-            key = f"https://www.youtube.com/watch?v={vid}" if vid else link
-        elif "youtu.be/" in link.lower():
-            key = link.split("?")[0].rstrip("/")
-        else:
-            key = link.split("?")[0].rstrip("/") if link else f"__no_link_{id(item)}__"
+        key = _canonical_url(link) if link else ""
+        if not key:
+            key = f"__no_link_{id(item)}__"
         if key not in url_map:
             url_map[key] = dict(item)
         else:
+            if len(str(item.get("text") or "")) > len(str(url_map[key].get("text") or "")):
+                kept_kw = url_map[key].get("keyword") or url_map[key].get("Keywords") or ""
+                kept_src = url_map[key].get("sumber_data")
+                url_map[key] = dict(item)
+                if kept_kw:
+                    url_map[key]["keyword"] = kept_kw
+                if kept_src == "RSS":
+                    url_map[key]["sumber_data"] = "RSS"
             existing_kw = url_map[key].get("keyword") or url_map[key].get("Keywords") or ""
             new_kw = item.get("keyword") or item.get("Keywords") or ""
             merged = merge_keywords(existing_kw, new_kw)

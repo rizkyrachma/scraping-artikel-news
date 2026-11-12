@@ -21,15 +21,15 @@ try:
 except Exception:
     pass
 
-CANDIDATE_MODELS = [
-    "gemini-flash-lite-latest",
-    "gemini-flash-latest",
-    "gemini-3.8-flash",
-    "gemini-3.5-flash",
-    "gemini-3-flash-preview",
-]
-_current_model_idx = 0
-_model_instance = None
+try:
+    from gemini_pool import CANDIDATE_MODELS, GeminiModelPool
+    from stable import canonical_url, get_decision_cache
+except ImportError:
+    from src.gemini_pool import CANDIDATE_MODELS, GeminiModelPool
+    from src.stable import canonical_url, get_decision_cache
+
+TONE_PROMPT_VERSION = "v2026-11-12-b"
+_MODEL_POOL = GeminiModelPool("TONE CLASSIFIER")
 gemini_quota_exhausted = False
 TOTAL_API_CALLS = 0
 
@@ -123,40 +123,11 @@ Balas HANYA dengan JSON valid tanpa markdown/backticks, format:
 
 
 def _get_gemini_model(force_next: bool = False):
-    """Menginisialisasi model Generative AI Gemini secara lazy dengan fallback model dinamis."""
-    global _model_instance, _current_model_idx, gemini_quota_exhausted
-
-    if gemini_quota_exhausted:
-        return None
-
-    if _model_instance is not None and not force_next:
-        return _model_instance
-
-    api_key = os.getenv("GEMINI_API_KEY", "").strip()
-    if not api_key:
-        return None
-
-    if force_next:
-        _current_model_idx += 1
-
-    try:
-        import google.generativeai as genai  # type: ignore
-        genai.configure(api_key=api_key, transport="rest")  # type: ignore
-
-        while _current_model_idx < len(CANDIDATE_MODELS):
-            m_name = CANDIDATE_MODELS[_current_model_idx]
-            try:
-                m = genai.GenerativeModel(m_name)  # type: ignore
-                _model_instance = m
-                return _model_instance
-            except Exception:
-                _current_model_idx += 1
-                continue
-
-        gemini_quota_exhausted = True
-        return None
-    except Exception:
-        return None
+    """Kompatibilitas wrapper yang mendelegasikan rotasi model ke shared GeminiModelPool."""
+    global gemini_quota_exhausted
+    model, _name = _MODEL_POOL.get_model(force_next=force_next, mark_exhausted=force_next)
+    gemini_quota_exhausted = _MODEL_POOL.quota_exhausted
+    return model
 
 
 # =========================================================================
@@ -439,12 +410,27 @@ def classify_tone_consistent(articles: list[dict], use_ai: bool = True, threshol
 
 
 def _process_one_chunk(chunk: list[dict], use_ai: bool = True) -> list[dict]:
-    """Memproses 1 batch (maksimal 5 artikel) dengan AI, fallback jika gagal."""
+    """Memproses 1 batch (maksimal 5 artikel) dengan DecisionCache, temperature=0, dan fallback jika gagal."""
     global gemini_quota_exhausted, TOTAL_API_CALLS
 
-    # Siapkan payload
-    formatted_items = []
+    dcache = get_decision_cache()
+    active_model = _MODEL_POOL.peek_active_model_name()
+    resolved_by_id = {}
+    uncached_chunk = []
+
     for a in chunk:
+        a_url = str(a.get("resolved_url") or a.get("link") or a.get("Link Website") or "").strip()
+        cached = dcache.get(a_url, "tone", TONE_PROMPT_VERSION, active_model) if a_url else None
+        if cached is not None:
+            entry = dict(cached)
+            entry["id"] = a["id"]
+            resolved_by_id[a["id"]] = entry
+        else:
+            uncached_chunk.append(a)
+
+    # Siapkan payload hanya untuk yang belum tersimpan di DecisionCache
+    formatted_items = []
+    for a in uncached_chunk:
         item_text = str(a.get("text", "")).strip()[:3000]
         formatted_items.append({
             "id": a["id"],
@@ -452,103 +438,84 @@ def _process_one_chunk(chunk: list[dict], use_ai: bool = True) -> list[dict]:
             "text": item_text
         })
 
-    resolved_by_id = {}
-
-    if use_ai and not gemini_quota_exhausted:
+    if formatted_items and use_ai and not gemini_quota_exhausted:
         api_key = os.getenv("GEMINI_API_KEY", "").strip()
         if api_key:
-            model = _get_gemini_model()
-            if model is not None:
-                payload_str = json.dumps(formatted_items, ensure_ascii=False, indent=2)
-                user_msg = f"Berikut daftar artikel untuk dinilai tonenya (total: {len(formatted_items)}):\n{payload_str}"
-                full_prompt = f"{TONE_SYSTEM_PROMPT}\n\n{user_msg}"
+            payload_str = json.dumps(formatted_items, ensure_ascii=False, indent=2)
+            user_msg = f"Berikut daftar artikel untuk dinilai tonenya (total: {len(formatted_items)}):\n{payload_str}"
+            full_prompt = f"{TONE_SYSTEM_PROMPT}\n\n{user_msg}"
 
-                max_retries = 3
-                for attempt in range(max_retries):
-                    if model is None:
-                        break
-                    try:
-                        TOTAL_API_CALLS += 1
-                        resp = model.generate_content(full_prompt, request_options={"timeout": 60})
-                        resp_text = (resp.text or "").strip()
-                        # Bersihkan markdown json jika ada
-                        clean_json = re.sub(r"^```(?:json)?\s*", "", resp_text, flags=re.MULTILINE)
-                        clean_json = re.sub(r"\s*```$", "", clean_json, flags=re.MULTILINE).strip()
-                        m = re.search(r"\{[\s\S]*\}", clean_json)
-                        if m:
-                            clean_json = m.group(0)
+            TOTAL_API_CALLS += 1
+            resp_text, used_model, _err = _MODEL_POOL.generate_deterministic(
+                full_prompt,
+                timeout=60,
+                max_attempts=3,
+            )
+            gemini_quota_exhausted = _MODEL_POOL.quota_exhausted
 
-                        hasil_list = []
+            if resp_text:
+                clean_json = re.sub(r"^```(?:json)?\s*", "", resp_text, flags=re.MULTILINE)
+                clean_json = re.sub(r"\s*```$", "", clean_json, flags=re.MULTILINE).strip()
+                m = re.search(r"\{[\s\S]*\}", clean_json)
+                if m:
+                    clean_json = m.group(0)
+
+                hasil_list = []
+                try:
+                    data = json.loads(clean_json, strict=False)
+                    hasil_list = data.get("hasil", [])
+                except Exception:
+                    pattern = r'\{\s*"id"\s*:\s*([^,]+?)\s*,\s*"tone"\s*:\s*"([^"]+?)"\s*,\s*"dasar"\s*:\s*"([^"]+?)"\s*,\s*"alasan"\s*:\s*"(.*?)"\s*\}'
+                    matches = re.findall(pattern, clean_json, re.DOTALL)
+                    for m_id, m_tone, m_dasar, m_alasan in matches:
                         try:
-                            data = json.loads(clean_json, strict=False)
-                            hasil_list = data.get("hasil", [])
+                            p_id = json.loads(m_id)
                         except Exception:
-                            # Regex fallback jika JSON decode gagal
-                            pattern = r'\{\s*"id"\s*:\s*([^,]+?)\s*,\s*"tone"\s*:\s*"([^"]+?)"\s*,\s*"dasar"\s*:\s*"([^"]+?)"\s*,\s*"alasan"\s*:\s*"(.*?)"\s*\}'
-                            matches = re.findall(pattern, clean_json, re.DOTALL)
-                            for m_id, m_tone, m_dasar, m_alasan in matches:
-                                try:
-                                    p_id = json.loads(m_id)
-                                except Exception:
-                                    p_id = m_id.strip().strip('"')
-                                hasil_list.append({
-                                    "id": p_id,
-                                    "tone": m_tone,
-                                    "dasar": m_dasar,
-                                    "alasan": m_alasan.strip()
-                                })
+                            p_id = m_id.strip().strip('"')
+                        hasil_list.append({
+                            "id": p_id,
+                            "tone": m_tone,
+                            "dasar": m_dasar,
+                            "alasan": m_alasan.strip()
+                        })
 
-                        for h in hasil_list:
-                            h_id = h.get("id")
-                            t_val = str(h.get("tone", "")).strip().capitalize()
-                            if t_val not in ["Positif", "Netral", "Negatif"]:
-                                t_val = "Netral"
-                            d_val = str(h.get("dasar", "judul")).strip().lower()
-                            if d_val not in ["judul", "isi"]:
-                                d_val = "judul"
-                            alasan_val = str(h.get("alasan", "")).strip()
+                by_uncached_id = {u["id"]: u for u in uncached_chunk}
+                for h in hasil_list:
+                    h_id = h.get("id")
+                    t_val = str(h.get("tone", "")).strip().capitalize()
+                    if t_val not in ["Positif", "Netral", "Negatif"]:
+                        t_val = "Netral"
+                    d_val = str(h.get("dasar", "judul")).strip().lower()
+                    if d_val not in ["judul", "isi"]:
+                        d_val = "judul"
+                    alasan_val = str(h.get("alasan", "")).strip()
 
-                            res_obj = {
-                                "id": h_id,
-                                "tone": t_val,
-                                "dasar": d_val,
-                                "alasan": alasan_val,
-                                "metode": "AI"
-                            }
-                            if h_id is not None:
-                                resolved_by_id[h_id] = res_obj
-                                try:
-                                    resolved_by_id[int(h_id)] = res_obj
-                                except (ValueError, TypeError):
-                                    pass
-                                resolved_by_id[str(h_id)] = res_obj
+                    res_obj = {
+                        "id": h_id,
+                        "tone": t_val,
+                        "dasar": d_val,
+                        "alasan": alasan_val,
+                        "metode": "AI"
+                    }
+                    if h_id is not None:
+                        resolved_by_id[h_id] = res_obj
+                        try:
+                            resolved_by_id[int(h_id)] = res_obj
+                        except (ValueError, TypeError):
+                            pass
+                        resolved_by_id[str(h_id)] = res_obj
 
-                        # Jika semua artikel di chunk berhasil terisi, selesai
-                        if all(a["id"] in resolved_by_id for a in chunk):
-                            break
-                        # Jika belum semua tapi ada hasil, retry sekali jika masih ada sisa attempt
-                        if attempt == max_retries - 1:
-                            break
-                    except Exception as e:
-                        err_s = str(e).lower()
-                        if "429" in err_s or "quota" in err_s or "resourceexhausted" in err_s:
-                            if "perday" in err_s or "daily" in err_s:
-                                print(f"[GEMINI] Batas harian tercapai. Beralih model...", flush=True)
-                                model = _get_gemini_model(force_next=True)
-                                if model is None:
-                                    gemini_quota_exhausted = True
-                                    break
-                            else:
-                                wait_sec = 5.0 * (attempt + 1)
-                                print(f"[GEMINI 429] Rate limit, jeda {wait_sec}s...", flush=True)
-                                time.sleep(wait_sec)
-                        else:
-                            print(f"[GEMINI ERROR] {e}. Retry {attempt+1}/{max_retries}...", flush=True)
-                            model = _get_gemini_model(force_next=True)
-                            if model is None:
-                                gemini_quota_exhausted = True
-                                break
-                            time.sleep(2.0)
+                        src_art = by_uncached_id.get(h_id) or by_uncached_id.get(str(h_id))
+                        if not src_art:
+                            try:
+                                src_art = by_uncached_id.get(int(h_id))
+                            except (ValueError, TypeError):
+                                src_art = None
+                        if src_art:
+                            s_url = str(src_art.get("resolved_url") or src_art.get("link") or src_art.get("Link Website") or "").strip()
+                            if s_url:
+                                dcache.set(s_url, "tone", TONE_PROMPT_VERSION, used_model or active_model, res_obj)
+                dcache.save()
 
     # Cek ID yang hilang atau jika AI tidak dipakai / gagal
     final_chunk_results = []

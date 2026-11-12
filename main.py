@@ -48,6 +48,13 @@ from src.config import (
     log_granular,
     start_heartbeat,
     format_display_url,
+    parse_to_wib,
+)
+from src.stable import (
+    canonical_url,
+    DateSnapshotStore,
+    save_decision_cache,
+    union_articles_by_canonical_url,
 )
 from src.fetch_news import (
     collect_all,
@@ -142,7 +149,7 @@ _EXTRACTED_CACHE: dict[str, dict] = {}
 def get_cached_article(url: str) -> dict | None:
     if not url:
         return None
-    key = url.strip().split("?")[0].rstrip("/").lower()
+    key = canonical_url(url) or url.strip().split("?")[0].rstrip("/").lower()
     return _EXTRACTED_CACHE.get(key)
 
 
@@ -150,11 +157,11 @@ def cache_article(art: dict) -> None:
     link = (art.get("link") or art.get("Link Website") or art.get("url") or art.get("resolved_url") or "").strip()
     text = str(art.get("text") or "").strip()
     if link and text:
-        key = link.split("?")[0].rstrip("/").lower()
+        key = canonical_url(link) or link.split("?")[0].rstrip("/").lower()
         _EXTRACTED_CACHE[key] = art
         res_url = (art.get("resolved_url") or "").strip()
         if res_url:
-            res_key = res_url.split("?")[0].rstrip("/").lower()
+            res_key = canonical_url(res_url) or res_url.split("?")[0].rstrip("/").lower()
             _EXTRACTED_CACHE[res_key] = art
 
 
@@ -843,7 +850,7 @@ def filter_valid_articles(
                 if "ai tidak dijalankan" in str(ai_reason).lower():
                     c["Status Review"] = ai_reason
                 elif status_ai == "review":
-                    c["Status Review"] = f"Perlu Dicek Manual: {ai_reason}" if ai_reason else "Perlu Dicek Manual"
+                    c["Status Review"] = f"PERLU CEK MANUAL: {ai_reason}" if ai_reason else "PERLU CEK MANUAL"
                 else:
                     c["Status Review"] = ""
                 valid.append(c)
@@ -1058,15 +1065,8 @@ def finalize_and_export(
 
     total_before = len(articles)
 
-    # 1. Dedup lintas keyword berdasarkan URL dasar
-    seen_urls = set()
-    cross_deduped = []
-    for art in articles:
-        url_to_check = art.get("resolved_url") or art.get("link", "")
-        clean_url = url_to_check.split("?")[0].rstrip("/")
-        if clean_url not in seen_urls:
-            seen_urls.add(clean_url)
-            cross_deduped.append(art)
+    # 1. Dedup lintas keyword berdasarkan URL kanonik (stabil across param tracking & http/www)
+    cross_deduped = union_articles_by_canonical_url([], articles)
 
     # 2. Dedup lintas keyword berdasarkan kemiripan judul (rapidfuzz >= 85)
     final_unique = dedup_by_title(cross_deduped, threshold=85)
@@ -1192,6 +1192,8 @@ def finalize_and_export(
             save_to_excel(records, ringkasan_path, merge_existing=False, negative_summaries=neg_summaries)
             print(f"Salinan dengan ringkasan negatif disimpan ke: {ringkasan_path}", flush=True)
 
+    save_decision_cache()
+    save_decode_cache()
     return records, tone_dist
 
 
@@ -1570,6 +1572,23 @@ def run_batch_pipeline(
                     })
         except Exception as e:
             print(f"[Direct Crawl Warning] {e}", flush=True)
+
+        # Gabungkan dengan snapshot kandidat harian agar run pada jam berbeda tetap >= 95% konsisten
+        try:
+            snap_store = DateSnapshotStore()
+            before_snap = len(checkpoint["articles"])
+            checkpoint["articles"] = snap_store.merge_range_with_snapshots(
+                start_date,
+                end_date,
+                checkpoint["articles"],
+                parse_date_fn=parse_to_wib,
+            )
+            print(
+                f"[Snapshot Union] Kandidat tanggal {start_date} s.d. {end_date}: {before_snap} -> {len(checkpoint['articles'])} artikel",
+                flush=True,
+            )
+        except Exception as e:
+            print(f"[Snapshot Union Warning] {e}", flush=True)
 
         finalize_and_export(checkpoint["articles"], name_map, output_excel=out_excel_path)
     elif target_batch is not None:

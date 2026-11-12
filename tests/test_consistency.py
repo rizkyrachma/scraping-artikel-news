@@ -23,7 +23,16 @@ from src.extract_content import (
     resolve_article_with_fallback,
 )
 import src.extract_content as extract_content_mod
-from src.fetch_news import _extract_rss_metadata_urls
+from src.fetch_news import _extract_rss_metadata_urls, dedup_by_link
+from src.stable import (
+    DateSnapshotStore,
+    DecisionCache,
+    canonical_url,
+    union_articles_by_canonical_url,
+)
+from src.auto_recheck import AutoRecheckPipeline, apply_ragu_rubric
+from src.export_excel import save_to_excel
+from src.gemini_pool import GeminiModelPool, _is_eligible_text_model
 import main as pipeline_main
 
 
@@ -443,6 +452,177 @@ class TestPointADecoderAndCircuitBreaker(unittest.TestCase):
             pipeline_main.filter_valid_articles = orig_filter
             pipeline_main.get_kemenperin_signal = orig_sig
             pipeline_main.save_decode_cache = orig_save
+
+
+class TestPointBDeterminismAndSnapshot(unittest.TestCase):
+    def test_canonical_url_and_dedup_strip_tracking_and_wrappers(self):
+        u1 = '=HYPERLINK("http://www.ekonomi.bisnis.com/read/20261111/1/cpo/?utm_source=google&fbclid=XYZ&b=2&a=1", "Buka")'
+        u2 = "https://ekonomi.bisnis.com/read/20261111/1/cpo?a=1&b=2&gclid=999"
+        self.assertEqual(canonical_url(u1), canonical_url(u2))
+        self.assertEqual(canonical_url(u1), "https://ekonomi.bisnis.com/read/20261111/1/cpo?a=1&b=2")
+
+        ded = dedup_by_link([
+            {"link": u1, "keyword": "cpo", "title": "Ekspor CPO", "text": "Pendek"},
+            {"link": u2, "keyword": "biodiesel", "title": "Ekspor CPO", "text": "Teks jauh lebih panjang dan lengkap " * 5},
+        ])
+        self.assertEqual(len(ded), 1)
+        self.assertEqual(ded[0]["keyword"], "cpo, biodiesel")
+
+    def test_decision_cache_versions_prompt_model_and_bounds_entries(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            path = os.path.join(tmpdir, "cache_decisions.json")
+            now = [500.0]
+            dc = DecisionCache(filepath=path, max_entries=100, time_fn=lambda: now[0])
+            url = "https://industri.kontan.co.id/news/pabrik-gula-baru?utm_medium=rss"
+            dc.set(url, "tone", "v2026-11-12-b", "gemini-2.5-flash", {"tone": "Positif"})
+            dc.save(force=True)
+
+            reloaded = DecisionCache(filepath=path, max_entries=100)
+            self.assertEqual(
+                reloaded.get("http://www.industri.kontan.co.id/news/pabrik-gula-baru/", "tone", "v2026-11-12-b", "gemini-2.5-flash"),
+                {"tone": "Positif"},
+            )
+            # Berubah versi prompt atau model -> wajib cache miss
+            self.assertIsNone(reloaded.get(url, "tone", "v2026-11-13-new", "gemini-2.5-flash"))
+            self.assertIsNone(reloaded.get(url, "tone", "v2026-11-12-b", "gemini-2.5-flash-lite"))
+
+            # Verifikasi pemangkasan batas maksimum entri
+            for i in range(115):
+                now[0] += 1.0
+                reloaded.set(f"https://example.com/berita/{i}", "tone", "v1", "m1", {"tone": "Netral"})
+            self.assertEqual(reloaded.size(), 100)
+
+    def test_snapshot_store_unions_runs_and_prunes_over_30_days(self):
+        from datetime import date
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            today_ref = date(2026, 11, 12)
+            store = DateSnapshotStore(snapshot_dir=tmpdir, retention_days=30, today_fn=lambda: today_ref)
+
+            # Buat snapshot lama (>30 hari) dan snapshot masih dalam jendela (<30 hari)
+            with open(os.path.join(tmpdir, "2026-10-01.json"), "w", encoding="utf-8") as f:
+                f.write('{"articles":[]}')
+            with open(os.path.join(tmpdir, "2026-11-01.json"), "w", encoding="utf-8") as f:
+                f.write('{"articles":[]}')
+
+            run1 = [
+                {"link": "https://bisnis.com/a1?utm_source=x", "title": "Pabrik CPO Ekspansi", "published": "2026-11-11 04:00:00", "keyword": "cpo", "text": "Teks CPO " * 60},
+                {"link": "https://kontan.co.id/a2", "title": "Industri AMDK Tumbuh", "published": "2026-11-11 05:00:00", "keyword": "amdk", "text": "Teks AMDK " * 60},
+            ]
+            run2 = [
+                {"link": "https://kontan.co.id/a2/", "title": "Industri AMDK Tumbuh", "published": "2026-11-11 08:00:00", "keyword": "mamin", "text": "Teks AMDK " * 60},
+                {"link": "https://cnbc.com/a3", "title": "Ekspor Kakao Naik", "published": "2026-11-11 08:15:00", "keyword": "kakao", "text": "Teks Kakao " * 60},
+            ]
+
+            merged_r1 = store.merge_range_with_snapshots(date(2026, 11, 11), date(2026, 11, 11), run1)
+            self.assertEqual(len(merged_r1), 2)
+
+            merged_r2 = store.merge_range_with_snapshots(date(2026, 11, 11), date(2026, 11, 11), run2)
+            self.assertEqual(len(merged_r2), 3)
+            # Snapshot > 30 hari otomatis terhapus
+            self.assertFalse(os.path.exists(os.path.join(tmpdir, "2026-10-01.json")))
+            self.assertTrue(os.path.exists(os.path.join(tmpdir, "2026-11-01.json")))
+
+    def test_ragu_rubric_and_yellow_review_row_preserved_in_excel(self):
+        import openpyxl
+
+        # 1. Kemenperin / Asosiasi -> HILIR
+        lbl1, _ = apply_ragu_rubric(
+            {"title": "Cukai Rokok Jadi Sorotan WHO, APVI dan Kemenperin Bahas Dampak IHT", "text": "Industri hasil tembakau."},
+            "RAGU",
+        )
+        self.assertEqual(lbl1, "HILIR")
+
+        # 2. Murni opini akademisi / WHO tanpa respons industri -> BUKAN_HILIR
+        lbl2, _ = apply_ragu_rubric(
+            {"title": "Pengamat Ekonomi Soroti Isu Kesehatan Rokok Menurut Laporan WHO", "text": "Dosen universitas menilai konsumsi rokok global."},
+            "RAGU",
+        )
+        self.assertEqual(lbl2, "BUKAN_HILIR")
+
+        # 3. Masih borderline setelah rubrik -> tetap RAGU -> di auto_recheck jadi review kuning dan TIDAK di-drop di Excel
+        lbl3, _ = apply_ragu_rubric(
+            {"title": "Dinamika Pasar Komoditas Spesial Triwulan IV", "text": "Pergerakan pasokan dan permintaan regional mengalami fluktuasi terbatas."},
+            "RAGU",
+        )
+        self.assertEqual(lbl3, "RAGU")
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            pipe = AutoRecheckPipeline(target_dir=tmpdir)
+            # Bypass Pass 2 & Audit AI agar deterministik di unit test
+            pipe.run_pass_2_ai = lambda arts, batch_size=15: (arts, [])
+            pipe.run_audit_loop = lambda arts, max_audit_passes=4, batch_size=15: (
+                [dict(a, _final_label="RAGU", _final_alasan="Topik perbatasan butuh cek manual") for a in arts],
+                [],
+                {},
+            )
+            kept, _disc = pipe.run(
+                [
+                    {
+                        "title": "Dinamika Pasar Komoditas Spesial Triwulan IV",
+                        "link": "https://bisnis.com/borderline-1",
+                        "published": "2026-11-11 10:00:00",
+                        "text": "Pasokan dan permintaan komoditas spesialis tercatat berubah di kuartal ini. " * 6,
+                    }
+                ],
+                target_dir=tmpdir,
+            )
+            self.assertEqual(len(kept), 1)
+            self.assertEqual(kept[0]["status"], "review")
+            self.assertIn("PERLU CEK MANUAL", kept[0]["Status Review"])
+
+            xlsx_path = os.path.join(tmpdir, "out_review.xlsx")
+            save_to_excel(
+                kept + [{"title": "Dibuang", "link": "https://x.com/drop", "status": "buang", "published": "2026-11-11 10:00:00"}],
+                xlsx_path,
+                merge_existing=False,
+            )
+            wb = openpyxl.load_workbook(xlsx_path)
+            ws = wb["Berita"]
+            self.assertEqual(ws.max_row, 2)  # 1 header + 1 baris review ("buang" tereliminasi)
+            # Pastikan baris review berwarna kuning (FFFF00)
+            fill_rgb = str(ws.cell(row=2, column=1).fill.start_color.rgb or "")
+            self.assertTrue(fill_rgb.endswith("FFFF00"))
+
+    def test_gemini_pool_filters_non_text_models_uses_temp_zero_and_rotates_on_404(self):
+        self.assertTrue(_is_eligible_text_model("gemini-2.5-flash", ["generateContent"]))
+        self.assertFalse(_is_eligible_text_model("gemini-2.5-flash-tts", ["generateContent"]))
+        self.assertFalse(_is_eligible_text_model("gemini-2.5-flash-image", ["generateContent"]))
+        self.assertFalse(_is_eligible_text_model("gemma-3-27b-it", ["generateContent"]))
+
+        captured_configs = []
+
+        class FakeModel404:
+            def generate_content(self, prompt, generation_config=None, request_options=None):
+                captured_configs.append(("m404", generation_config))
+                raise RuntimeError("404 models/fake-404 is not found")
+
+        class FakeModelOK:
+            def generate_content(self, prompt, generation_config=None, request_options=None):
+                captured_configs.append(("mOK", generation_config))
+
+                class Resp:
+                    text = '[{"id": 1, "tone": "Netral"}]'
+
+                return Resp()
+
+        pool = GeminiModelPool("TEST")
+        pool._models = ["fake-404", "fake-ok"]
+        pool._instances = {"fake-404": FakeModel404(), "fake-ok": FakeModelOK()}
+        prev_key = os.environ.get("GEMINI_API_KEY")
+        try:
+            os.environ["GEMINI_API_KEY"] = "dummy-test-key"
+            text, used_model, err = pool.generate_deterministic("test prompt", max_attempts=3)
+            self.assertEqual(used_model, "fake-ok")
+            self.assertEqual(err, "")
+            self.assertIn("Netral", text or "")
+            for _, cfg in captured_configs:
+                self.assertEqual(cfg, {"temperature": 0})
+        finally:
+            if prev_key is None:
+                os.environ.pop("GEMINI_API_KEY", None)
+            else:
+                os.environ["GEMINI_API_KEY"] = prev_key
 
 
 if __name__ == "__main__":

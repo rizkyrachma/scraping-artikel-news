@@ -156,8 +156,9 @@ def is_valid_decoded_url(url: str) -> bool:
 class DecodeCache:
     """Cache persisten JSON untuk pasangan URL Google News -> URL asli penerbit (tidak menyimpan kegagalan)."""
 
-    def __init__(self, filepath: str | None = None):
+    def __init__(self, filepath: str | None = None, max_entries: int = 25000):
         self.filepath = filepath or os.environ.get("DECODE_CACHE_FILE") or DEFAULT_DECODE_CACHE_FILE
+        self.max_entries = max(100, int(max_entries))
         self._lock = threading.RLock()
         self._data: dict[str, str] = {}
         self._loaded_mtime: float = -1.0
@@ -225,6 +226,10 @@ class DecodeCache:
 
     def save(self, force: bool = False) -> None:
         with self._lock:
+            if len(self._data) > self.max_entries:
+                keep_keys = list(self._data.keys())[-self.max_entries:]
+                self._data = {k: self._data[k] for k in keep_keys}
+                self._dirty = True
             if not force and not self._dirty:
                 return
             snapshot = dict(self._data)

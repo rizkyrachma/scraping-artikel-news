@@ -222,21 +222,23 @@ def save_to_excel(
         )
         df = pd.DataFrame(df.loc[~is_pdf_mask]).reset_index(drop=True)
 
-        # 1.5 Filter eksklusif Ditjen Industri Agro: buang status 'buang'/'review' & baris 'Perlu Dicek Manual'
+        # 1.5 Filter eksklusif Ditjen Industri Agro: buang HANYA status 'buang'; pertahankan 'review' agar ditandai kuning
         for stat_col in ["status", "Status", "status_ai"]:
             if stat_col in df.columns:
-                mask = ~pd.Series(df[stat_col]).astype(str).str.strip().str.lower().isin(["buang", "review"])
+                mask = ~pd.Series(df[stat_col]).astype(str).str.strip().str.lower().isin(["buang"])
                 df = pd.DataFrame(df.loc[mask]).reset_index(drop=True)
 
-        if "Status Review" in df.columns:
-            sr_series = pd.Series(df["Status Review"]).fillna("").astype(str).str.strip().str.lower()
-            sr_keep = (
-                sr_series.isin(["", "nan", "none", "-"])
-                | (~sr_series.str.contains("perlu|ai tidak dijalankan", regex=True))
-            )
-            df = pd.DataFrame(df.loc[sr_keep]).reset_index(drop=True)
-
-        df["Status Review"] = ""
+        if "Status Review" not in df.columns:
+            df["Status Review"] = ""
+        df["Status Review"] = df["Status Review"].replace(["nan", "None"], "").fillna("").astype(str).str.strip()
+        for stat_col in ["status", "Status", "status_ai"]:
+            if stat_col in df.columns:
+                rev_mask = (
+                    pd.Series(df[stat_col]).astype(str).str.strip().str.lower().eq("review")
+                    & (df["Status Review"] == "")
+                )
+                if rev_mask.any():
+                    df.loc[rev_mask, "Status Review"] = "PERLU CEK MANUAL"
 
         def _format_sub_sektor(row):
             raw_sub = row.get("Sub Sektor")
@@ -339,7 +341,7 @@ def write_styled_excel(
     columns = list(BERITA_COLUMNS)
     df = df_berita.copy() if not df_berita.empty else pd.DataFrame(columns=columns)
     if not df.empty:
-        # Proteksi eksklusif Ditjen Industri Agro: singkirkan dokumen PDF & baris review/perlu cek manual
+        # Proteksi eksklusif Ditjen Industri Agro: singkirkan dokumen PDF & status 'buang'; pertahankan baris 'review' untuk tanda kuning
         try:
             from src.relevance_filter import is_pdf_document as _is_pdf
         except ImportError:
@@ -352,13 +354,19 @@ def write_styled_excel(
             df = pd.DataFrame(df.loc[~pdf_m]).reset_index(drop=True)
         for stat_col in ("status", "Status", "status_ai"):
             if stat_col in df.columns and not df.empty:
-                m = ~pd.Series(df[stat_col]).astype(str).str.strip().str.lower().isin(["buang", "review"])
+                m = ~pd.Series(df[stat_col]).astype(str).str.strip().str.lower().isin(["buang"])
                 df = pd.DataFrame(df.loc[m]).reset_index(drop=True)
-        if "Status Review" in df.columns and not df.empty:
-            sr_s = pd.Series(df["Status Review"]).fillna("").astype(str).str.strip().str.lower()
-            sr_ok = sr_s.isin(["", "nan", "none", "-"]) | (~sr_s.str.contains("perlu|ai tidak dijalankan", regex=True))
-            df = pd.DataFrame(df.loc[sr_ok]).reset_index(drop=True)
+        if "Status Review" not in df.columns:
             df["Status Review"] = ""
+        df["Status Review"] = df["Status Review"].replace(["nan", "None"], "").fillna("").astype(str).str.strip()
+        for stat_col in ("status", "Status", "status_ai"):
+            if stat_col in df.columns and not df.empty:
+                rev_m = (
+                    pd.Series(df[stat_col]).astype(str).str.strip().str.lower().eq("review")
+                    & (df["Status Review"] == "")
+                )
+                if rev_m.any():
+                    df.loc[rev_m, "Status Review"] = "PERLU CEK MANUAL"
         if "Link Website" in df.columns and not df.empty:
             df["Link Website"] = df["Link Website"].apply(_clean_url_str)
         if "Tone" in df.columns:
@@ -395,12 +403,19 @@ def write_styled_excel(
             min_w = 21 if col_name == "Tanggal" else 10
             ws.column_dimensions[get_column_letter(col_idx)].width = min(max(max_len + 4, min_w), 60)
 
-        # Format kolom Tanggal sebagai Date Excel dan rata atas untuk semua sel
+        # Format kolom Tanggal sebagai Date Excel, rata atas untuk semua sel, dan warna kuning untuk baris review
         date_col_idx = columns.index("Tanggal") + 1
+        review_col_idx = columns.index("Status Review") + 1
         top_align = Alignment(vertical="top")
+        yellow_fill = PatternFill(start_color="FFFF00", end_color="FFFF00", fill_type="solid")
         for row_idx in range(2, len(df) + 2):
+            sr_val = str(ws.cell(row=row_idx, column=review_col_idx).value or "").strip()
+            is_review_row = bool(sr_val and sr_val.lower() not in ("nan", "none", "-"))
             for col_idx in range(1, len(columns) + 1):
-                ws.cell(row=row_idx, column=col_idx).alignment = top_align
+                c = ws.cell(row=row_idx, column=col_idx)
+                c.alignment = top_align
+                if is_review_row:
+                    c.fill = yellow_fill
             cell = ws.cell(row=row_idx, column=date_col_idx)
             if cell.value is not None:
                 cell.number_format = "yyyy-mm-dd hh:mm:ss"
