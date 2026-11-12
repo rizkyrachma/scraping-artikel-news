@@ -449,7 +449,7 @@ def _process_one_chunk(chunk: list[dict], use_ai: bool = True) -> list[dict]:
             resp_text, used_model, _err = _MODEL_POOL.generate_deterministic(
                 full_prompt,
                 timeout=60,
-                max_attempts=3,
+                max_attempts=6,
             )
             gemini_quota_exhausted = _MODEL_POOL.quota_exhausted
 

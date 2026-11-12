@@ -31,6 +31,7 @@ from src.stable import (
     union_articles_by_canonical_url,
 )
 from src.auto_recheck import AutoRecheckPipeline, apply_ragu_rubric, check_deterministic_rules
+from src.direct_crawl_agro import fetch_with_retry
 from src.export_excel import save_to_excel
 from src.gemini_pool import GeminiModelPool, _is_eligible_text_model
 from src.relevance_filter import classify_non_news_evergreen, is_likely_relevant
@@ -663,6 +664,78 @@ class TestPointCNonNewsEvergreenFilter(unittest.TestCase):
             flagged, reason = classify_non_news_evergreen(title=title, text=text, url=url)
             self.assertFalse(flagged, f"Berita nyata tidak boleh terbuang: {title} ({reason})")
             self.assertTrue(is_likely_relevant(title))
+
+
+class TestPointDInfrastructureResilience(unittest.TestCase):
+    def test_direct_crawl_dns_retry_recovers_with_exponential_backoff(self):
+        import requests
+
+        attempts = [0]
+        sleeps = []
+
+        def flaky_dns_get(url, headers=None, verify=False, timeout=20):
+            attempts[0] += 1
+            if attempts[0] < 4:
+                raise requests.ConnectionError("Failed to resolve 'agro.kemenperin.go.id' ([Errno 11001] getaddrinfo failed)")
+
+            class OkResp:
+                status_code = 200
+                text = "<html><body>OK</body></html>"
+
+            return OkResp()
+
+        html = fetch_with_retry(
+            "https://agro.kemenperin.go.id/berita",
+            max_retries=5,
+            timeout=10,
+            get_fn=flaky_dns_get,
+            sleep_fn=lambda s: sleeps.append(s),
+            jitter_fn=lambda a, b: 0.2,
+        )
+        self.assertEqual(attempts[0], 4)
+        self.assertEqual(html, "<html><body>OK</body></html>")
+        self.assertEqual(len(sleeps), 3)
+        # Exponential backoff meningkat (1.7, 3.2, 6.2)
+        self.assertLess(sleeps[0], sleeps[1])
+        self.assertLess(sleeps[1], sleeps[2])
+
+    def test_gemini_pool_recovers_batch1_from_404_and_timeout_to_fallback_model(self):
+        class Model404:
+            def generate_content(self, prompt, generation_config=None, request_options=None):
+                raise RuntimeError("404 NotFound model")
+
+        class ModelTimeout:
+            def generate_content(self, prompt, generation_config=None, request_options=None):
+                raise TimeoutError("Request timed out after 45s")
+
+        class ModelWorking:
+            def generate_content(self, prompt, generation_config=None, request_options=None):
+                class Resp:
+                    text = '{"hasil": [{"id": 1, "status": "relevan", "sub_sektor": "Mamin", "alasan": "Ok"}], "dibuang": []}'
+
+                return Resp()
+
+        pool = GeminiModelPool("BATCH1_TEST")
+        pool._models = ["m-404", "m-timeout", "m-ok"]
+        pool._instances = {"m-404": Model404(), "m-timeout": ModelTimeout(), "m-ok": ModelWorking()}
+
+        import src.gemini_pool as gp_mod
+
+        orig_sleep = gp_mod.time.sleep
+        prev_key = os.environ.get("GEMINI_API_KEY")
+        try:
+            gp_mod.time.sleep = lambda _s: None
+            os.environ["GEMINI_API_KEY"] = "dummy-test-key"
+            resp_text, used_model, err = pool.generate_deterministic("batch 1 prompt", max_attempts=3)
+            self.assertEqual(used_model, "m-ok")
+            self.assertEqual(err, "")
+            self.assertIn('"relevan"', resp_text or "")
+        finally:
+            gp_mod.time.sleep = orig_sleep
+            if prev_key is None:
+                os.environ.pop("GEMINI_API_KEY", None)
+            else:
+                os.environ["GEMINI_API_KEY"] = prev_key
 
 
 if __name__ == "__main__":

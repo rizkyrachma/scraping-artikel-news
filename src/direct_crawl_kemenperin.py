@@ -13,6 +13,11 @@ import urllib3
 
 urllib3.disable_warnings()
 
+try:
+    from direct_crawl_agro import fetch_with_retry as _agro_fetch_with_retry
+except ImportError:
+    from src.direct_crawl_agro import fetch_with_retry as _agro_fetch_with_retry
+
 KEMENPERIN_SIARAN_PERS_URL = "https://kemenperin.go.id/siaran-pers"
 
 HEADERS = {
@@ -55,12 +60,12 @@ def crawl_kemenperin_siaran_pers(target_date: date | tuple | list | None = None,
             break
         seen_urls.add(current_url)
         try:
-            resp = requests.get(current_url, headers=HEADERS, verify=False, timeout=25)
-            if resp.status_code != 200:
-                print(f"[Direct Crawl] Gagal mengakses {current_url} (HTTP {resp.status_code})")
+            html_page = _agro_fetch_with_retry(current_url, max_retries=4, timeout=25)
+            if not html_page:
+                print(f"[Direct Crawl] Gagal mengakses {current_url} setelah retry")
                 break
 
-            soup = BeautifulSoup(resp.text, "html.parser")
+            soup = BeautifulSoup(html_page, "html.parser")
             article_links = soup.find_all("a", href=True)
 
             found_on_page = 0
@@ -85,12 +90,12 @@ def crawl_kemenperin_siaran_pers(target_date: date | tuple | list | None = None,
                         if pub_date is None or not (start_d <= pub_date <= end_d):
                             continue
 
-                    # Ekstraksi isi artikel penuh
+                    # Ekstraksi isi artikel penuh dengan retry DNS/timeout
                     article_text = title
                     try:
-                        art_resp = requests.get(full_url, headers=HEADERS, verify=False, timeout=20)
-                        if art_resp.status_code == 200:
-                            art_soup = BeautifulSoup(art_resp.text, "html.parser")
+                        art_html = _agro_fetch_with_retry(full_url, max_retries=4, timeout=20)
+                        if art_html:
+                            art_soup = BeautifulSoup(art_html, "html.parser")
                             content_div = art_soup.find("div", class_=re.compile(r"content|artikel|isi|detail", re.I))
                             if content_div:
                                 article_text = content_div.get_text(separator="\n", strip=True)

@@ -396,7 +396,7 @@ def classify_agro_relevance_batch(articles: list[dict]) -> dict:
     resp_text, used_model, last_error_reason = _MODEL_POOL.generate_deterministic(
         full_prompt,
         timeout=45,
-        max_attempts=3,
+        max_attempts=6,
     )
     gemini_quota_exhausted = _MODEL_POOL.quota_exhausted
 

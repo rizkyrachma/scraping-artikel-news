@@ -101,14 +101,40 @@ def normalize_url(raw_url: str | None, base: str = BASE_URL) -> str:
     return urllib.parse.urlunparse(clean_parsed)
 
 
-def fetch_with_retry(url: str, max_retries: int = 3, timeout: int = 20) -> str | None:
+def _is_dns_error(err: BaseException) -> bool:
+    msg = str(err).lower()
+    return any(
+        tok in msg
+        for tok in (
+            "getaddrinfo",
+            "nameresolutionerror",
+            "failed to resolve",
+            "name or service not known",
+            "temporary failure in name resolution",
+            "nodename nor servname",
+        )
+    )
+
+
+def fetch_with_retry(
+    url: str,
+    max_retries: int = 5,
+    timeout: int = 20,
+    get_fn=None,
+    sleep_fn=None,
+    jitter_fn=None,
+) -> str | None:
     """
-    Mengambil isi teks halaman dengan retry exponential backoff dan timeout 20 detik.
-    Jika error (timeout, 403, 404, situs down), mencatat log peringatan dan mengembalikan None.
+    Mengambil isi teks halaman dengan exponential backoff + jitter khusus DNS error,
+    timeout, dan HTTP 5xx (default 5 percobaan). HTTP 403/404 berhenti segera.
     """
+    do_get = get_fn or requests.get
+    do_sleep = sleep_fn or time.sleep
+    do_jitter = jitter_fn or random.uniform
+
     for attempt in range(1, max_retries + 1):
         try:
-            resp = requests.get(url, headers=HEADERS, verify=False, timeout=timeout)
+            resp = do_get(url, headers=HEADERS, verify=False, timeout=timeout)
             if resp.status_code == 200:
                 return resp.text
             elif resp.status_code in (404, 403):
@@ -117,13 +143,16 @@ def fetch_with_retry(url: str, max_retries: int = 3, timeout: int = 20) -> str |
             else:
                 logger.warning(f"HTTP {resp.status_code} saat mengakses {url} (percobaan {attempt}/{max_retries}).")
         except (requests.Timeout, requests.ConnectionError, requests.RequestException) as err:
-            logger.warning(f"Error jaringan/timeout saat mengakses {url}: {err} (percobaan {attempt}/{max_retries}).")
+            kind = "DNS error" if _is_dns_error(err) else "Jaringan/timeout"
+            logger.warning(f"[{kind}] Gagal mengakses {url}: {err} (percobaan {attempt}/{max_retries}).")
 
         if attempt < max_retries:
-            backoff_sleep = 2 ** (attempt - 1)
-            time.sleep(backoff_sleep)
+            base = 1.5 * (2 ** (attempt - 1))
+            jitter = float(do_jitter(0.1, 0.7))
+            backoff_sleep = min(16.0, base + jitter)
+            do_sleep(backoff_sleep)
 
-    logger.warning(f"Gagal mengambil {url} setelah {max_retries} percobaan.")
+    logger.error(f"Gagal permanen mengambil {url} setelah {max_retries} percobaan (DNS/jaringan).")
     return None
 
 
@@ -191,7 +220,7 @@ def fetch_agro_kemenperin(
         # Jeda 1-2 detik antar request
         time.sleep(random.uniform(1.0, 2.0))
 
-        html = fetch_with_retry(page_url, max_retries=3, timeout=20)
+        html = fetch_with_retry(page_url, max_retries=5, timeout=20)
         if not html:
             logger.warning(f"Halaman {page_url} tidak dapat diambil. Menghentikan scraping.")
             break
@@ -250,7 +279,7 @@ def fetch_agro_kemenperin(
 
             if include_content:
                 time.sleep(random.uniform(1.0, 1.5))
-                detail_html = fetch_with_retry(clean_link, max_retries=3, timeout=20)
+                detail_html = fetch_with_retry(clean_link, max_retries=5, timeout=20)
                 isi_text = ""
                 if detail_html:
                     detail_soup = BeautifulSoup(detail_html, "html.parser")

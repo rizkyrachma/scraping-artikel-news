@@ -212,17 +212,20 @@ class GeminiModelPool:
         self,
         prompt: str,
         timeout: int = 45,
-        max_attempts: int = 4,
+        max_attempts: int = 6,
     ) -> tuple[str | None, str, str]:
         """
-        Memanggil Gemini dengan `temperature=0`, backoff eksponensial, dan rotasi model
-        saat terjadi 404/429/timeout.
+        Memanggil Gemini dengan `temperature=0`, backoff eksponensial + jitter, dan rotasi model
+        saat terjadi 404/429/timeout agar Batch 1 tidak langsung gagal ke mode offline/recheck.
         Returns: (response_text_or_None, model_name_used, error_reason)
         """
+        import random
         last_error = ""
         last_model = self.peek_active_model_name()
+        pool_count = len(self._models or DEFAULT_CANDIDATE_MODELS)
+        total_budget = max(max(1, int(max_attempts)), pool_count + 2)
 
-        for attempt in range(max(1, int(max_attempts))):
+        for attempt in range(total_budget):
             model, m_name = self.get_model()
             last_model = m_name
             if model is None:
@@ -240,6 +243,7 @@ class GeminiModelPool:
                 last_error = str(e)
                 err_low = last_error.lower()
                 is_not_found = "404" in err_low or "not found" in err_low or "not_found" in err_low
+                is_timeout = "timeout" in err_low or "timed out" in err_low or "deadline" in err_low
                 is_rate_limit = "429" in err_low or "quota" in err_low or "resourceexhausted" in err_low
                 is_daily = is_rate_limit and ("perday" in err_low or "daily" in err_low or "generaterequestsperday" in err_low)
 
@@ -250,16 +254,22 @@ class GeminiModelPool:
                 if is_daily:
                     print(f"[{self.caller_name}] Kuota harian '{m_name}' habis. Beralih model...", flush=True)
                     self.get_model(force_next=True, mark_exhausted=True)
-                    time.sleep(0.5)
+                    time.sleep(0.3)
                     continue
                 if is_rate_limit:
-                    backoff = min(8.0, 2.0 * (2 ** attempt))
+                    backoff = min(8.0, 2.0 * (2 ** min(attempt, 3))) + random.uniform(0.1, 0.5)
                     print(f"[{self.caller_name}] Rate limit (429) pada '{m_name}', rotasi model + jeda {backoff:.1f}s...", flush=True)
                     self.get_model(force_next=True, mark_exhausted=False)
                     time.sleep(backoff)
                     continue
+                if is_timeout:
+                    backoff = min(8.0, 1.5 * (2 ** min(attempt, 3))) + random.uniform(0.1, 0.5)
+                    print(f"[{self.caller_name}] Timeout pada '{m_name}': {e}. Retry dalam {backoff:.1f}s...", flush=True)
+                    self.get_model(force_next=True, mark_exhausted=False)
+                    time.sleep(backoff)
+                    continue
 
-                backoff = min(6.0, 1.5 * (2 ** attempt))
+                backoff = min(6.0, 1.5 * (2 ** min(attempt, 3))) + random.uniform(0.1, 0.4)
                 print(f"[{self.caller_name}] Error '{m_name}': {e}. Retry dalam {backoff:.1f}s...", flush=True)
                 self.get_model(force_next=True, mark_exhausted=False)
                 time.sleep(backoff)
