@@ -16,11 +16,13 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..",
 from src.extract_content import (
     AdaptiveDecodeController,
     DecodeCache,
+    DecodeNegativeCache,
     fallback_url_from_metadata,
     is_valid_decoded_url,
     normalize_google_news_url,
     resolve_article_with_fallback,
 )
+import src.extract_content as extract_content_mod
 from src.fetch_news import _extract_rss_metadata_urls
 import main as pipeline_main
 
@@ -139,8 +141,8 @@ class TestPointADecoderAndCircuitBreaker(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmpdir:
             cache = DecodeCache(filepath=os.path.join(tmpdir, "cache.json"))
             ctrl = AdaptiveDecodeController(circuit_pause=0.0, sleep_fn=lambda _: None)
-            # Paksa circuit breaker OPEN agar langsung menguji Layer 2 & Layer 3
-            for _ in range(5):
+            # Paksa circuit breaker OPEN (>= min_samples default 10) agar langsung menguji Layer 2 & Layer 3
+            for _ in range(10):
                 ctrl.record_failure()
             self.assertEqual(ctrl.state(), "OPEN")
 
@@ -214,6 +216,167 @@ class TestPointADecoderAndCircuitBreaker(unittest.TestCase):
             self.assertFalse(res_fail["resolved"])
             self.assertIsNone(cache.get(item_fail["link"]))
 
+    def test_min_samples_ten_blocks_early_open_and_cache_hits_not_counted(self):
+        ctrl = AdaptiveDecodeController(
+            window_size=20,
+            failure_threshold=0.50,
+            circuit_pause=0.0,
+            sleep_fn=lambda _: None,
+        )
+        self.assertEqual(ctrl.min_samples, 10)
+
+        # 3 gagal dari 3 request TIDAK boleh memicu circuit breaker OPEN
+        for _ in range(3):
+            tripped = ctrl.record_failure()
+            self.assertFalse(tripped)
+        self.assertEqual(ctrl.state(), "CLOSED")
+        self.assertEqual(ctrl.snapshot()["circuit_trips"], 0)
+
+        # Request yang dilayani cache tidak boleh masuk rolling window
+        with tempfile.TemporaryDirectory() as tmpdir:
+            cache = DecodeCache(filepath=os.path.join(tmpdir, "cache.json"))
+            neg_cache = DecodeNegativeCache(filepath=os.path.join(tmpdir, "neg.json"))
+            gurl = "https://news.google.com/rss/articles/CBMiCACHED1?oc=5"
+            cache.set(gurl, "https://ekonomi.bisnis.com/read/20261111/1/999/sawit")
+            for _ in range(10):
+                res = resolve_article_with_fallback(
+                    {"title": "Sawit Stabil", "link": gurl},
+                    cache=cache,
+                    neg_cache=neg_cache,
+                    controller=ctrl,
+                )
+                self.assertEqual(res["method"], "cache")
+            self.assertEqual(ctrl.snapshot()["rolling_window_size"], 3)
+
+        # L4 retry dengan allow_circuit_trip=False juga tidak boleh memicu OPEN meski sampel kecil
+        ctrl_l4 = AdaptiveDecodeController(circuit_pause=0.0, sleep_fn=lambda _: None)
+        ctrl_l4.reset_for_retry_pass()
+        for _ in range(12):
+            self.assertFalse(ctrl_l4.record_failure(allow_trip=False))
+        self.assertEqual(ctrl_l4.state(), "CLOSED")
+        self.assertEqual(ctrl_l4.snapshot()["circuit_trips"], 0)
+
+        # Kasus 12 gagal dari 20 request (8 sukses + 12 gagal = 60% >= 50%) HARUS OPEN
+        ctrl_20 = AdaptiveDecodeController(window_size=20, failure_threshold=0.50, min_samples=10, circuit_pause=0.0, sleep_fn=lambda _: None)
+        for _ in range(8):
+            ctrl_20.record_success()
+        tripped_list = [ctrl_20.record_failure() for _ in range(12)]
+        self.assertTrue(any(tripped_list))
+        self.assertEqual(ctrl_20.state(), "OPEN")
+
+    def test_negative_cache_ttl_and_rejected_target_save_search_quota(self):
+        now = [1000.0]
+        with tempfile.TemporaryDirectory() as tmpdir:
+            cache = DecodeCache(filepath=os.path.join(tmpdir, "cache.json"))
+            neg_cache = DecodeNegativeCache(
+                filepath=os.path.join(tmpdir, "neg_cache.json"),
+                ttl_seconds=6 * 3600,
+                time_fn=lambda: now[0],
+            )
+            ctrl = AdaptiveDecodeController(circuit_pause=0.0, sleep_fn=lambda _: None)
+            search_calls = [0]
+
+            def fake_search(_it):
+                search_calls[0] += 1
+                return (None, "", "")
+
+            orig_decoder = extract_content_mod._decoder_fn
+            try:
+                extract_content_mod._decoder_fn = lambda _u: {"status": False, "message": "429"}
+                dead_item = {
+                    "title": "Berita Gagal Permanen Untuk Uji Negative Cache",
+                    "link": "https://news.google.com/rss/articles/CBMiDEAD1?oc=5",
+                    "source_url": "https://ekonomi.bisnis.com",
+                }
+                r1 = resolve_article_with_fallback(
+                    dead_item,
+                    allow_search_fallback=True,
+                    max_retries=0,
+                    cache=cache,
+                    neg_cache=neg_cache,
+                    controller=ctrl,
+                    search_fallback_fn=fake_search,
+                )
+                self.assertFalse(r1["resolved"])
+                self.assertEqual(search_calls[0], 1)
+                self.assertIsNone(cache.get(dead_item["link"]))
+                self.assertTrue(neg_cache.is_failed(dead_item["link"]))
+
+                # Run ulang < 6 jam: langsung terlayani negative_cache, nol panggilan Serper/Exa
+                now[0] += 3600.0
+                r2 = resolve_article_with_fallback(
+                    dead_item,
+                    allow_search_fallback=True,
+                    max_retries=0,
+                    cache=cache,
+                    neg_cache=neg_cache,
+                    controller=ctrl,
+                    search_fallback_fn=fake_search,
+                )
+                self.assertEqual(r2["method"], "negative_cache")
+                self.assertEqual(search_calls[0], 1)
+
+                # Setelah > 6 jam: TTL kedaluwarsa, fallback search dipanggil lagi
+                now[0] += (6 * 3600.0) + 1.0
+                resolve_article_with_fallback(
+                    dead_item,
+                    allow_search_fallback=True,
+                    max_retries=0,
+                    cache=cache,
+                    neg_cache=neg_cache,
+                    controller=ctrl,
+                    search_fallback_fn=fake_search,
+                )
+                self.assertEqual(search_calls[0], 2)
+
+                # Tujuan non-artikel (misal Google Maps) dari GoogleDecoder harus ditandai rejected_target
+                # tanpa membakar kuota search dan tanpa memicu circuit breaker
+                extract_content_mod._decoder_fn = lambda _u: {
+                    "status": True,
+                    "decoded_url": "https://www.google.com/maps/search/?api=1&query=Kopi+Tarts",
+                }
+                maps_item = {
+                    "title": "Kopi & Tarts - Google Maps",
+                    "link": "https://news.google.com/rss/articles/CBMiMAPS1?oc=5",
+                }
+                r_maps = resolve_article_with_fallback(
+                    maps_item,
+                    allow_search_fallback=True,
+                    cache=cache,
+                    neg_cache=neg_cache,
+                    controller=ctrl,
+                    search_fallback_fn=fake_search,
+                )
+                self.assertFalse(r_maps["resolved"])
+                self.assertEqual(r_maps["method"], "rejected_target")
+                self.assertEqual(search_calls[0], 2)
+                self.assertEqual(ctrl.snapshot()["circuit_trips"], 0)
+            finally:
+                extract_content_mod._decoder_fn = orig_decoder
+
+    def test_decode_stats_track_extraction_length_separately(self):
+        stats = pipeline_main._init_decode_stats()
+        pipeline_main._record_decode_stat(
+            stats,
+            {"link": "https://news.google.com/rss/articles/CBMi1"},
+            {"decode_failed": False, "decode_method": "decode_local", "text": "A" * 350},
+        )
+        pipeline_main._record_decode_stat(
+            stats,
+            {"link": "https://news.google.com/rss/articles/CBMi2"},
+            {"decode_failed": False, "decode_method": "decode_local", "text": "Pendek"},
+        )
+        pipeline_main._record_decode_stat(
+            stats,
+            {"link": "https://news.google.com/rss/articles/CBMi3"},
+            {"decode_failed": True, "decode_method": "negative_cache", "text": ""},
+        )
+        self.assertEqual(stats["extract_total"], 3)
+        self.assertEqual(stats["extract_ok"], 1)
+        self.assertEqual(stats["extract_short"], 1)
+        self.assertEqual(stats["negative_cache_hit"], 1)
+        self.assertEqual(stats["decode_fail"], 0)
+
     def test_rss_metadata_extraction_ignores_google_and_root_links(self):
         fake_entry = {
             "links": [
@@ -245,7 +408,7 @@ class TestPointADecoderAndCircuitBreaker(unittest.TestCase):
         orig_sig = pipeline_main.get_kemenperin_signal
         orig_save = pipeline_main.save_decode_cache
         try:
-            def fake_extract(item, allow_search_fallback=True):
+            def fake_extract(item, allow_search_fallback=True, **_kwargs):
                 it = dict(item)
                 if "CBMiOK" in it["link"]:
                     it["link"] = "https://ekonomi.bisnis.com/read/20261111/1/ok"

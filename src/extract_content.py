@@ -93,6 +93,8 @@ SERPER_SEARCH_URL = "https://google.serper.dev/search"
 SERPER_NEWS_URL = "https://google.serper.dev/news"
 EXA_SEARCH_URL = "https://api.exa.ai/search"
 DEFAULT_DECODE_CACHE_FILE = os.path.join("hasil_scrapping", "cache_decode.json")
+DEFAULT_NEGATIVE_CACHE_FILE = os.path.join("hasil_scrapping", "cache_decode_failed.json")
+DEFAULT_NEGATIVE_CACHE_TTL_SECONDS = 6 * 3600
 
 _BLOCKED_DECODED_HOSTS = {
     "news.google.com",
@@ -246,6 +248,147 @@ class DecodeCache:
                     pass
 
 
+class DecodeNegativeCache:
+    """Cache negatif ber-TTL pendek (default 6 jam) khusus untuk URL Google News gagal/ditolak, terpisah dari cache sukses permanen."""
+
+    def __init__(
+        self,
+        filepath: str | None = None,
+        ttl_seconds: float = DEFAULT_NEGATIVE_CACHE_TTL_SECONDS,
+        time_fn=None,
+    ):
+        self.filepath = filepath or os.environ.get("DECODE_NEGATIVE_CACHE_FILE") or DEFAULT_NEGATIVE_CACHE_FILE
+        self.ttl_seconds = max(1.0, float(ttl_seconds))
+        self._time_fn = time_fn or time.time
+        self._lock = threading.RLock()
+        self._data: dict[str, dict] = {}
+        self._loaded_mtime: float = -1.0
+        self._dirty = False
+        self.load()
+
+    def _prune_expired_locked(self, now: float | None = None) -> int:
+        cur = self._time_fn() if now is None else float(now)
+        expired = [
+            k for k, entry in self._data.items()
+            if not isinstance(entry, dict) or (cur - float(entry.get("ts", 0.0))) >= self.ttl_seconds
+        ]
+        for k in expired:
+            del self._data[k]
+        if expired:
+            self._dirty = True
+        return len(expired)
+
+    def _reload_if_newer_locked(self) -> None:
+        try:
+            if os.path.exists(self.filepath):
+                mtime = os.path.getmtime(self.filepath)
+                if mtime > self._loaded_mtime:
+                    self._load_locked()
+        except Exception:
+            pass
+
+    def _load_locked(self) -> None:
+        if not os.path.exists(self.filepath):
+            self._loaded_mtime = 0.0
+            return
+        try:
+            with open(self.filepath, "r", encoding="utf-8") as f:
+                raw = json.load(f)
+            now = self._time_fn()
+            if isinstance(raw, dict):
+                cleaned: dict[str, dict] = {}
+                for k, v in raw.items():
+                    if isinstance(k, str) and "news.google.com" in k and isinstance(v, dict):
+                        ts = float(v.get("ts", 0.0) or 0.0)
+                        if (now - ts) < self.ttl_seconds:
+                            cleaned[normalize_google_news_url(k)] = {
+                                "ts": ts,
+                                "reason": str(v.get("reason") or "failed")[:120],
+                            }
+                for k, v in self._data.items():
+                    if k not in cleaned and (now - float(v.get("ts", 0.0))) < self.ttl_seconds:
+                        cleaned[k] = v
+                self._data = cleaned
+            self._loaded_mtime = os.path.getmtime(self.filepath)
+        except Exception:
+            pass
+
+    def load(self) -> None:
+        with self._lock:
+            self._load_locked()
+
+    def get_reason(self, url: str) -> str | None:
+        if not url or "news.google.com" not in url:
+            return None
+        norm = normalize_google_news_url(url)
+        with self._lock:
+            self._reload_if_newer_locked()
+            entry = self._data.get(norm)
+            if not entry:
+                return None
+            if (self._time_fn() - float(entry.get("ts", 0.0))) >= self.ttl_seconds:
+                del self._data[norm]
+                self._dirty = True
+                return None
+            return str(entry.get("reason") or "failed")
+
+    def is_failed(self, url: str) -> bool:
+        return self.get_reason(url) is not None
+
+    def mark_failed(self, url: str, reason: str = "failed") -> bool:
+        if not url or "news.google.com" not in url:
+            return False
+        norm = normalize_google_news_url(url)
+        with self._lock:
+            self._data[norm] = {
+                "ts": float(self._time_fn()),
+                "reason": str(reason or "failed")[:120],
+            }
+            self._dirty = True
+        return True
+
+    def remove(self, url: str) -> bool:
+        if not url or "news.google.com" not in url:
+            return False
+        norm = normalize_google_news_url(url)
+        with self._lock:
+            if norm in self._data:
+                del self._data[norm]
+                self._dirty = True
+                return True
+        return False
+
+    def size(self) -> int:
+        with self._lock:
+            self._prune_expired_locked()
+            return len(self._data)
+
+    def save(self, force: bool = False) -> None:
+        with self._lock:
+            self._prune_expired_locked()
+            if not force and not self._dirty:
+                return
+            snapshot = dict(self._data)
+            target = self.filepath
+            out_dir = os.path.dirname(target)
+            if out_dir:
+                os.makedirs(out_dir, exist_ok=True)
+            tmp_path = f"{target}.tmp.{os.getpid()}.{threading.get_ident()}"
+            try:
+                with open(tmp_path, "w", encoding="utf-8") as f:
+                    json.dump(snapshot, f, ensure_ascii=False, indent=2)
+                os.replace(tmp_path, target)
+                self._loaded_mtime = os.path.getmtime(target)
+                self._dirty = False
+            except Exception as e:
+                print(f"  [Negative Cache Warning] Gagal menyimpan {target}: {e}", flush=True)
+                try:
+                    if os.path.exists(tmp_path):
+                        os.remove(tmp_path)
+                except Exception:
+                    pass
+
+
 class AdaptiveDecodeController:
     """Pengontrol laju request Google News dengan rolling failure window, exponential backoff, jitter, concurrency adaptif, dan circuit breaker."""
 
@@ -253,7 +396,7 @@ class AdaptiveDecodeController:
         self,
         window_size: int = 20,
         failure_threshold: float = 0.50,
-        min_samples: int = 5,
+        min_samples: int = 10,
         base_interval: float = 0.4,
         max_interval: float = 4.0,
         backoff_base: float = 1.0,
@@ -379,7 +522,7 @@ class AdaptiveDecodeController:
                 self._state = "CLOSED"
                 self._half_open_probing = False
 
-    def record_failure(self) -> bool:
+    def record_failure(self, allow_trip: bool = True) -> bool:
         tripped = False
         pause_secs = 0.0
         fr_pct = 0.0
@@ -393,7 +536,7 @@ class AdaptiveDecodeController:
             fr = self._failure_rate_locked()
             win_len = len(self._window)
 
-            should_trip = (
+            should_trip = allow_trip and (
                 self._state == "HALF_OPEN"
                 or (self._state == "CLOSED" and win_len >= self.min_samples and fr >= self.failure_threshold)
             )
@@ -406,6 +549,8 @@ class AdaptiveDecodeController:
                 pause_secs = self.circuit_pause
                 fr_pct = fr * 100.0
                 trip_num = self._circuit_trips
+            elif self._state == "HALF_OPEN" and not allow_trip:
+                self._half_open_probing = False
 
         if tripped:
             print(
@@ -448,6 +593,7 @@ class AdaptiveDecodeController:
 
 
 _DEFAULT_DECODE_CACHE: DecodeCache | None = None
+_DEFAULT_NEGATIVE_DECODE_CACHE: DecodeNegativeCache | None = None
 _DEFAULT_DECODE_CONTROLLER: AdaptiveDecodeController | None = None
 _SINGLETON_LOCK = threading.Lock()
 _SEARCH_FALLBACK_LOCK = threading.Lock()
@@ -466,9 +612,20 @@ def get_decode_cache() -> DecodeCache:
         return _DEFAULT_DECODE_CACHE
 
 
+def get_negative_decode_cache() -> DecodeNegativeCache:
+    global _DEFAULT_NEGATIVE_DECODE_CACHE
+    with _SINGLETON_LOCK:
+        target = os.environ.get("DECODE_NEGATIVE_CACHE_FILE") or DEFAULT_NEGATIVE_CACHE_FILE
+        if _DEFAULT_NEGATIVE_DECODE_CACHE is None or _DEFAULT_NEGATIVE_DECODE_CACHE.filepath != target:
+            _DEFAULT_NEGATIVE_DECODE_CACHE = DecodeNegativeCache(target)
+        return _DEFAULT_NEGATIVE_DECODE_CACHE
+
+
 def save_decode_cache(force: bool = False) -> None:
     if _DEFAULT_DECODE_CACHE is not None:
         _DEFAULT_DECODE_CACHE.save(force=force)
+    if _DEFAULT_NEGATIVE_DECODE_CACHE is not None:
+        _DEFAULT_NEGATIVE_DECODE_CACHE.save(force=force)
 
 
 def get_decode_controller() -> AdaptiveDecodeController:
@@ -579,7 +736,7 @@ def _score_search_candidate(
     return -1.0
 
 
-def fallback_url_from_search(item: dict) -> tuple[str | None, str, str]:
+def fallback_url_from_search(item: dict, bypass_memo: bool = False) -> tuple[str | None, str, str]:
     """Layer 3: mencari URL artikel asli melalui Serper.dev / Exa berdasarkan judul + nama sumber."""
     global _SERPER_EXHAUSTED, _EXA_EXHAUSTED
     if not isinstance(item, dict):
@@ -592,9 +749,10 @@ def fallback_url_from_search(item: dict) -> tuple[str | None, str, str]:
 
     expected_domain = _extract_expected_domain(item)
     memo_key = (clean_title.lower(), expected_domain or media_name.lower())
-    with _SEARCH_FALLBACK_LOCK:
-        if memo_key in _SEARCH_FALLBACK_MEMO:
-            return _SEARCH_FALLBACK_MEMO[memo_key]
+    if not bypass_memo:
+        with _SEARCH_FALLBACK_LOCK:
+            if memo_key in _SEARCH_FALLBACK_MEMO:
+                return _SEARCH_FALLBACK_MEMO[memo_key]
 
     best_result: tuple[str | None, str, str] = (None, "", "")
 
@@ -684,6 +842,7 @@ def _resolve_gnews_local_only(
     max_retries: int = 2,
     cache: DecodeCache | None = None,
     controller: AdaptiveDecodeController | None = None,
+    allow_circuit_trip: bool = True,
 ) -> tuple[str, str]:
     """Menjalankan Layer 1 (cache, decode offline v1, dan decode online GoogleDecoder dengan adaptive throttling)."""
     global _LOGGED_DECODE_WARNINGS
@@ -714,10 +873,15 @@ def _resolve_gnews_local_only(
             res = _decoder_fn(url)
             if isinstance(res, dict):
                 dec = str(res.get("decoded_url") or "").strip()
-                if (res.get("status") or res.get("success")) and is_valid_decoded_url(dec):
-                    controller.record_success()
-                    cache.set(url, dec)
-                    return dec, "decode_local"
+                if res.get("status") or res.get("success"):
+                    if is_valid_decoded_url(dec):
+                        controller.record_success()
+                        cache.set(url, dec)
+                        return dec, "decode_local"
+                    if dec and "news.google.com" not in dec.lower() and "google.com/sorry" not in dec.lower():
+                        # Google decode sukses, namun tujuan adalah URL non-artikel/blocklist (Google Maps, homepage, job portal)
+                        controller.record_success()
+                        return dec, "rejected_target"
 
                 msg = str(res.get("message", ""))
                 msg_low = msg.lower()
@@ -727,14 +891,14 @@ def _resolve_gnews_local_only(
                 if _LOGGED_DECODE_WARNINGS < 5 and msg:
                     _LOGGED_DECODE_WARNINGS += 1
                     print(f"  [Decoder Warning] Gagal decode URL Google News: {msg[:150]}", flush=True)
-            controller.record_failure()
+            controller.record_failure(allow_trip=allow_circuit_trip)
         except GoogleCaptchaBlockedError:
             raise
         except Exception as e:
             if _LOGGED_DECODE_WARNINGS < 5:
                 _LOGGED_DECODE_WARNINGS += 1
                 print(f"  [Decoder Warning] Exception decode URL Google News: {e}", flush=True)
-            controller.record_failure()
+            controller.record_failure(allow_trip=allow_circuit_trip)
 
         if attempt < max_retries and controller.allow_google_decode():
             controller.sleep_backoff(attempt)
@@ -751,8 +915,12 @@ def resolve_article_with_fallback(
     cache: DecodeCache | None = None,
     controller: AdaptiveDecodeController | None = None,
     search_fallback_fn=None,
+    neg_cache: DecodeNegativeCache | None = None,
+    use_negative_cache: bool = True,
+    allow_circuit_trip: bool = True,
+    bypass_search_memo: bool = False,
 ) -> dict:
-    """Resolusi URL Google News berlapis: (1) lokal, (2) metadata/RSS, (3) search Exa/Serper."""
+    """Resolusi URL Google News berlapis: (1) lokal, (2) metadata/RSS, (3) search Exa/Serper, plus negative cache TTL pendek."""
     link = str(item.get("link") or item.get("Link Website") or "").strip()
     if not link or "news.google.com" not in link:
         return {
@@ -762,30 +930,71 @@ def resolve_article_with_fallback(
             "text": str(item.get("text") or ""),
         }
 
+    custom_cache = cache is not None
     cache = cache or get_decode_cache()
     controller = controller or get_decode_controller()
+    if neg_cache is None:
+        if custom_cache:
+            neg_cache = DecodeNegativeCache(
+                filepath=os.path.join(os.path.dirname(cache.filepath) or ".", "cache_decode_failed.json")
+            )
+        else:
+            neg_cache = get_negative_decode_cache()
+
+    # Cache sukses permanen dicek sebelum negative cache (tidak menyentuh rolling window circuit breaker)
+    cached_ok = cache.get(link)
+    if cached_ok:
+        return {"url": cached_ok, "resolved": True, "method": "cache", "text": ""}
+
+    if use_negative_cache:
+        neg_reason = neg_cache.get_reason(link)
+        if neg_reason is not None:
+            return {
+                "url": link,
+                "resolved": False,
+                "method": "negative_cache",
+                "negative_reason": neg_reason,
+                "text": "",
+            }
 
     dec_url, method = _resolve_gnews_local_only(
         link,
         max_retries=max_retries,
         cache=cache,
         controller=controller,
+        allow_circuit_trip=allow_circuit_trip,
     )
     if method in ("cache", "decode_offline", "decode_local") and is_valid_decoded_url(dec_url):
+        neg_cache.remove(link)
         return {"url": dec_url, "resolved": True, "method": method, "text": ""}
+
+    if method == "rejected_target":
+        neg_cache.mark_failed(link, reason="rejected_target")
+        return {
+            "url": dec_url,
+            "resolved": False,
+            "method": "rejected_target",
+            "text": "",
+        }
 
     # Layer 2: metadata item / link RSS non-root
     meta_url = fallback_url_from_metadata(item)
     if meta_url:
         cache.set(link, meta_url)
+        neg_cache.remove(link)
         return {"url": meta_url, "resolved": True, "method": "fallback_meta", "text": ""}
 
     # Layer 3: fallback search (Serper / Exa) berdasar judul + media sumber
+    search_attempted = False
     if allow_search_fallback:
-        s_fn = search_fallback_fn or fallback_url_from_search
-        s_url, s_method, s_text = s_fn(item)
+        search_attempted = True
+        if search_fallback_fn is not None:
+            s_url, s_method, s_text = search_fallback_fn(item)
+        else:
+            s_url, s_method, s_text = fallback_url_from_search(item, bypass_memo=bypass_search_memo)
         if s_url and is_valid_decoded_url(s_url):
             cache.set(link, s_url)
+            neg_cache.remove(link)
             return {
                 "url": s_url,
                 "resolved": True,
@@ -793,10 +1002,14 @@ def resolve_article_with_fallback(
                 "text": s_text or "",
             }
 
+    final_method = "circuit_skipped" if method == "circuit_skipped" else "failed"
+    if final_method == "failed":
+        neg_cache.mark_failed(link, reason=final_method)
+
     return {
         "url": link,
         "resolved": False,
-        "method": "circuit_skipped" if method == "circuit_skipped" else "failed",
+        "method": final_method,
         "text": "",
     }
 

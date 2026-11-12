@@ -23,6 +23,7 @@ import os
 # Tambahkan src ke sys.path agar seluruh modul dalam src/ dapat diimpor langsung
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "src")))
 import json
+import inspect
 import time
 import threading
 import argparse
@@ -191,7 +192,14 @@ def preload_cache(target_dates: list[str] | None = None) -> None:
         print(f"[Cache Preload] Siap menggunakan cache teks untuk {len(_EXTRACTED_CACHE)} URL.", flush=True)
 
 
-def extract_one_article(item: dict, allow_search_fallback: bool = True) -> dict:
+def extract_one_article(
+    item: dict,
+    allow_search_fallback: bool = True,
+    max_retries: int = 2,
+    use_negative_cache: bool = True,
+    allow_circuit_trip: bool = True,
+    bypass_search_memo: bool = False,
+) -> dict:
     """Helper untuk ekstraksi konten satu artikel secara concurrent (mendukung resolusi URL Google News 4 lapis & direct URL Serper/Exa)."""
     link = item.get("link", "")
     cached = get_cached_article(link)
@@ -203,6 +211,7 @@ def extract_one_article(item: dict, allow_search_fallback: bool = True) -> dict:
             item_copy["link"] = item_copy["resolved_url"]
         item_copy["decode_method"] = "cache" if "news.google.com" in link else "direct"
         item_copy["decode_failed"] = False
+        item_copy["skip_retry"] = False
         item_copy["is_suspiciously_short"] = False
         return item_copy
 
@@ -212,6 +221,10 @@ def extract_one_article(item: dict, allow_search_fallback: bool = True) -> dict:
             dec_res = resolve_article_with_fallback(
                 item,
                 allow_search_fallback=allow_search_fallback,
+                max_retries=max_retries,
+                use_negative_cache=use_negative_cache,
+                allow_circuit_trip=allow_circuit_trip,
+                bypass_search_memo=bypass_search_memo,
             )
         except GoogleCaptchaBlockedError:
             raise
@@ -222,12 +235,13 @@ def extract_one_article(item: dict, allow_search_fallback: bool = True) -> dict:
         decode_method = dec_res.get("method") or "failed"
         pre_text = str(dec_res.get("text") or "").strip()
 
-        if not dec_res.get("resolved") or "news.google.com" in resolved:
+        if not dec_res.get("resolved") or (decode_method != "rejected_target" and "news.google.com" in resolved):
             item_copy = dict(item)
             item_copy["text"] = str(item.get("text") or "")
-            item_copy["resolved_url"] = link
+            item_copy["resolved_url"] = resolved if decode_method == "rejected_target" else link
             item_copy["decode_method"] = decode_method
             item_copy["decode_failed"] = True
+            item_copy["skip_retry"] = decode_method in ("negative_cache", "rejected_target")
             item_copy["is_suspiciously_short"] = False
             return item_copy
     else:
@@ -245,6 +259,7 @@ def extract_one_article(item: dict, allow_search_fallback: bool = True) -> dict:
             item_copy["link"] = resolved
             item_copy["decode_method"] = decode_method
             item_copy["decode_failed"] = False
+            item_copy["skip_retry"] = False
             item_copy["is_suspiciously_short"] = False
             return item_copy
 
@@ -266,6 +281,7 @@ def extract_one_article(item: dict, allow_search_fallback: bool = True) -> dict:
         item_copy["link"] = resolved
     item_copy["decode_method"] = decode_method
     item_copy["decode_failed"] = False
+    item_copy["skip_retry"] = False
     item_copy["is_suspiciously_short"] = is_suspiciously_short(text)
     cache_article(item_copy)
     return item_copy
@@ -294,6 +310,8 @@ def _init_decode_stats() -> dict:
     return {
         "gnews_total": 0,
         "cache_hit": 0,
+        "negative_cache_hit": 0,
+        "rejected_target": 0,
         "decode_offline": 0,
         "decode_local": 0,
         "decode_ok": 0,
@@ -301,16 +319,32 @@ def _init_decode_stats() -> dict:
         "fallback_search": 0,
         "decode_fail": 0,
         "circuit_skipped": 0,
+        "extract_total": 0,
+        "extract_ok": 0,
+        "extract_short": 0,
     }
 
 
 def _record_decode_stat(stats: dict, raw_item: dict, res_item: dict) -> None:
+    stats["extract_total"] += 1
+    txt_len = len(str(res_item.get("text") or "").strip())
+    if txt_len >= 300:
+        stats["extract_ok"] += 1
+    elif not res_item.get("decode_failed"):
+        stats["extract_short"] += 1
+
     raw_link = str(raw_item.get("link") or "")
     if "news.google.com" not in raw_link:
         return
     stats["gnews_total"] += 1
     method = str(res_item.get("decode_method") or "")
     if res_item.get("decode_failed"):
+        if method == "negative_cache":
+            stats["negative_cache_hit"] += 1
+            return
+        if method == "rejected_target":
+            stats["rejected_target"] += 1
+            return
         stats["decode_fail"] += 1
         if method == "circuit_skipped":
             stats["circuit_skipped"] += 1
@@ -389,7 +423,18 @@ def drain_retry_queue(
         work_item["_merged_retry_keywords"] = full_kw
 
         try:
-            res = extract_one_article(work_item, allow_search_fallback=True)
+            ext_params = inspect.signature(extract_one_article).parameters
+            if "use_negative_cache" in ext_params:
+                res = extract_one_article(
+                    work_item,
+                    allow_search_fallback=True,
+                    max_retries=1,
+                    use_negative_cache=False,
+                    allow_circuit_trip=False,
+                    bypass_search_memo=True,
+                )
+            else:
+                res = extract_one_article(work_item, allow_search_fallback=True)
         except GoogleCaptchaBlockedError as cap_err:
             print(f"  [Retry Queue CAPTCHA] {cap_err} -> Menghentikan dekode Google, lanjut fallback search sisa item.", flush=True)
             work_item["decode_failed"] = True
@@ -893,15 +938,17 @@ def process_single_keyword(
                     res, disp_url = f.result(timeout=45)
                     _record_decode_stat(decode_stats, raw_item, res)
                     if res.get("decode_failed"):
-                        q_item = dict(res)
-                        q_item["keyword"] = keyword
-                        retry_items.append(q_item)
+                        if not res.get("skip_retry"):
+                            q_item = dict(res)
+                            q_item["keyword"] = keyword
+                            retry_items.append(q_item)
                     else:
                         extracted.append(res)
                 except GoogleCaptchaBlockedError:
                     raise
                 except Exception:
                     disp_url = format_display_url(raw_item)
+                    decode_stats["extract_total"] += 1
                     if "news.google.com" in str(raw_item.get("link") or ""):
                         decode_stats["gnews_total"] += 1
                         decode_stats["decode_fail"] += 1
@@ -910,14 +957,17 @@ def process_single_keyword(
                         retry_items.append(q_item)
                 log_granular(f"       -> mengekstrak artikel {completed}/{total_yest}: {disp_url}")
         save_decode_cache()
-        if decode_stats["gnews_total"] > 0:
+        if decode_stats["gnews_total"] > 0 or decode_stats["extract_total"] > 0:
             cb_snap = ctrl.snapshot()
+            ext_tot = decode_stats["extract_total"]
+            ext_pct = (decode_stats["extract_ok"] / ext_tot * 100.0) if ext_tot else 0.0
             log_granular(
                 f"     [Decode] GNews={decode_stats['gnews_total']} | Cache={decode_stats['cache_hit']} "
-                f"| Offline={decode_stats['decode_offline']} | Lokal={decode_stats['decode_local']} "
-                f"| Meta={decode_stats['fallback_meta']} | Search={decode_stats['fallback_search']} "
-                f"| Retry={decode_stats['decode_fail']} | CB={cb_snap['state']} "
-                f"(RollingFail={cb_snap['rolling_failure_rate']*100:.0f}%, NextWorkers={cb_snap['recommended_workers']})"
+                f"| NegCache={decode_stats['negative_cache_hit']} | Offline={decode_stats['decode_offline']} "
+                f"| Lokal={decode_stats['decode_local']} | Meta={decode_stats['fallback_meta']} "
+                f"| Search={decode_stats['fallback_search']} | Rejected={decode_stats['rejected_target']} "
+                f"| Retry={decode_stats['decode_fail']} | ExtractOK={decode_stats['extract_ok']}/{ext_tot} ({ext_pct:.0f}%) "
+                f"| CB={cb_snap['state']} (RollingFail={cb_snap['rolling_failure_rate']*100:.0f}%, NextWorkers={cb_snap['recommended_workers']})"
             )
     else:
         log_granular(f"       -> tidak ada artikel tanggal kemarin untuk diekstrak")
@@ -1231,11 +1281,13 @@ def run_pipeline(
                     res, disp_url = f.result(timeout=45)
                     _record_decode_stat(run_decode_stats, raw_item, res)
                     if res.get("decode_failed"):
-                        retry_items.append(res)
+                        if not res.get("skip_retry"):
+                            retry_items.append(res)
                     else:
                         extracted_articles.append(res)
                 except Exception:
                     disp_url = format_display_url(raw_item)
+                    run_decode_stats["extract_total"] += 1
                     if "news.google.com" in str(raw_item.get("link") or ""):
                         run_decode_stats["gnews_total"] += 1
                         run_decode_stats["decode_fail"] += 1
@@ -1431,6 +1483,9 @@ def run_batch_pipeline(
 
         g_tot = batch_decode_report["gnews_total"]
         fail_pct = (batch_decode_report["decode_fail"] / g_tot * 100.0) if g_tot else 0.0
+        ext_tot = batch_decode_report.get("extract_total", 0)
+        ext_ok = batch_decode_report.get("extract_ok", 0)
+        ext_pct = (ext_ok / ext_tot * 100.0) if ext_tot else 0.0
         print("\n" + "-" * 50, flush=True)
         print(f"[LAPORAN SELESAI BATCH {b_num}/{total_batches}]", flush=True)
         print(f"Keywords diproses        : {', '.join(current_kws)}", flush=True)
@@ -1440,10 +1495,16 @@ def run_batch_pipeline(
         print(f"Terkait Kemenperin (Ya)  : {batch_kemenperin_yes} | Tidak: {batch_final_valid - batch_kemenperin_yes}", flush=True)
         print(
             f"Metrik Decode GNews      : Total={g_tot} | Cache={batch_decode_report['cache_hit']} "
+            f"| NegCache={batch_decode_report.get('negative_cache_hit', 0)} "
             f"| DecodeOK={batch_decode_report['decode_ok']} (Offline={batch_decode_report['decode_offline']}, Lokal={batch_decode_report['decode_local']}) "
             f"| FallbackMeta={batch_decode_report['fallback_meta']} | FallbackSearch={batch_decode_report['fallback_search']} "
+            f"| Rejected={batch_decode_report.get('rejected_target', 0)} "
             f"| Gagal/Retry={batch_decode_report['decode_fail']} ({fail_pct:.1f}%) "
             f"| CircuitTrips={batch_decode_report['circuit_trips']}",
+            flush=True,
+        )
+        print(
+            f"Metrik Ekstraksi Teks    : ExtractOK={ext_ok}/{ext_tot} ({ext_pct:.1f}%) (>= 300 char, tidak setara metrik decode-only)",
             flush=True,
         )
         print("Rincian per keyword:", flush=True)
