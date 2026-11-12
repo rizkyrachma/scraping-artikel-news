@@ -54,6 +54,7 @@ from src.fetch_news import (
     is_near_duplicate_title,
     dedup_by_link,
     dedup_by_title,
+    merge_keywords,
     GoogleCaptchaBlockedError,
     determine_session_source,
 )
@@ -61,6 +62,10 @@ from src.extract_content import (
     extract_article_text,
     is_suspiciously_short,
     resolve_article_url,
+    resolve_article_with_fallback,
+    get_decode_controller,
+    save_decode_cache,
+    normalize_google_news_url,
 )
 from src.relevance_filter import (
     is_pdf_document,
@@ -186,8 +191,8 @@ def preload_cache(target_dates: list[str] | None = None) -> None:
         print(f"[Cache Preload] Siap menggunakan cache teks untuk {len(_EXTRACTED_CACHE)} URL.", flush=True)
 
 
-def extract_one_article(item: dict) -> dict:
-    """Helper untuk ekstraksi konten satu artikel secara concurrent (mendukung resolusi URL Google News & direct URL Serper/Exa)."""
+def extract_one_article(item: dict, allow_search_fallback: bool = True) -> dict:
+    """Helper untuk ekstraksi konten satu artikel secara concurrent (mendukung resolusi URL Google News 4 lapis & direct URL Serper/Exa)."""
     link = item.get("link", "")
     cached = get_cached_article(link)
     if cached and len(str(cached.get("text", "")).strip()) >= 300:
@@ -196,19 +201,39 @@ def extract_one_article(item: dict) -> dict:
         item_copy["resolved_url"] = cached.get("resolved_url") or link
         if item_copy["resolved_url"] and "news.google.com" not in item_copy["resolved_url"]:
             item_copy["link"] = item_copy["resolved_url"]
+        item_copy["decode_method"] = "cache" if "news.google.com" in link else "direct"
+        item_copy["decode_failed"] = False
         item_copy["is_suspiciously_short"] = False
         return item_copy
 
+    pre_text = ""
     if "news.google.com" in link:
         try:
-            resolved = resolve_article_url(link)
+            dec_res = resolve_article_with_fallback(
+                item,
+                allow_search_fallback=allow_search_fallback,
+            )
         except GoogleCaptchaBlockedError:
             raise
         except Exception:
-            resolved = link
+            dec_res = {"url": link, "resolved": False, "method": "failed", "text": ""}
+
+        resolved = dec_res.get("url") or link
+        decode_method = dec_res.get("method") or "failed"
+        pre_text = str(dec_res.get("text") or "").strip()
+
+        if not dec_res.get("resolved") or "news.google.com" in resolved:
+            item_copy = dict(item)
+            item_copy["text"] = str(item.get("text") or "")
+            item_copy["resolved_url"] = link
+            item_copy["decode_method"] = decode_method
+            item_copy["decode_failed"] = True
+            item_copy["is_suspiciously_short"] = False
+            return item_copy
     else:
         # Tautan langsung dari Serper.dev / Exa tidak membutuhkan resolusi Google decoder
         resolved = link
+        decode_method = "direct"
 
     # Cek cache lagi dengan resolved URL
     if resolved != link:
@@ -218,11 +243,13 @@ def extract_one_article(item: dict) -> dict:
             item_copy["text"] = cached["text"]
             item_copy["resolved_url"] = resolved
             item_copy["link"] = resolved
+            item_copy["decode_method"] = decode_method
+            item_copy["decode_failed"] = False
             item_copy["is_suspiciously_short"] = False
             return item_copy
 
     # Jika teks sudah disediakan oleh Exa / YouTube dan memadai (>= 300 char), gunakan langsung
-    text = item.get("text", "")
+    text = pre_text if len(pre_text) >= 300 else str(item.get("text") or "")
     if not text or len(text.strip()) < 300:
         if item.get("sumber_data") != "YouTube":
             try:
@@ -237,12 +264,14 @@ def extract_one_article(item: dict) -> dict:
     item_copy["resolved_url"] = resolved
     if resolved and "news.google.com" not in resolved:
         item_copy["link"] = resolved
+    item_copy["decode_method"] = decode_method
+    item_copy["decode_failed"] = False
     item_copy["is_suspiciously_short"] = is_suspiciously_short(text)
     cache_article(item_copy)
     return item_copy
 
 
-def extract_single_article_with_timer(item: dict) -> tuple[dict, str]:
+def extract_single_article_with_timer(item: dict, allow_search_fallback: bool = True) -> tuple[dict, str]:
     """
     Ekstraksi konten satu artikel dengan watchdog timer 10 detik.
     Jika melebihi 10 detik, cetak peringatan [LAMBAT] tanpa memutus proses.
@@ -255,10 +284,170 @@ def extract_single_article_with_timer(item: dict) -> tuple[dict, str]:
     timer.daemon = True
     timer.start()
     try:
-        res = extract_one_article(item)
+        res = extract_one_article(item, allow_search_fallback=allow_search_fallback)
         return res, disp_url
     finally:
         timer.cancel()
+
+
+def _init_decode_stats() -> dict:
+    return {
+        "gnews_total": 0,
+        "cache_hit": 0,
+        "decode_offline": 0,
+        "decode_local": 0,
+        "decode_ok": 0,
+        "fallback_meta": 0,
+        "fallback_search": 0,
+        "decode_fail": 0,
+        "circuit_skipped": 0,
+    }
+
+
+def _record_decode_stat(stats: dict, raw_item: dict, res_item: dict) -> None:
+    raw_link = str(raw_item.get("link") or "")
+    if "news.google.com" not in raw_link:
+        return
+    stats["gnews_total"] += 1
+    method = str(res_item.get("decode_method") or "")
+    if res_item.get("decode_failed"):
+        stats["decode_fail"] += 1
+        if method == "circuit_skipped":
+            stats["circuit_skipped"] += 1
+        return
+    if method == "cache":
+        stats["cache_hit"] += 1
+    elif method == "decode_offline":
+        stats["decode_offline"] += 1
+        stats["decode_ok"] += 1
+    elif method == "decode_local":
+        stats["decode_local"] += 1
+        stats["decode_ok"] += 1
+    elif method == "fallback_meta":
+        stats["fallback_meta"] += 1
+    elif method in ("fallback_serper", "fallback_exa", "fallback_search"):
+        stats["fallback_search"] += 1
+    else:
+        stats["decode_ok"] += 1
+
+
+def _merge_retry_items(existing: list[dict], new_items: list[dict]) -> list[dict]:
+    """Menggabungkan item gagal dekode ke antrean retry secara unik berbasis URL Google News."""
+    by_url: dict[str, dict] = {}
+    for src in (existing or []) + (new_items or []):
+        raw_u = str(src.get("link") or src.get("Link Website") or "").strip()
+        if not raw_u:
+            continue
+        key = normalize_google_news_url(raw_u) if "news.google.com" in raw_u else raw_u.split("?")[0].rstrip("/")
+        if key not in by_url:
+            copy_item = dict(src)
+            copy_item.pop("decode_failed", None)
+            copy_item.pop("decode_method", None)
+            by_url[key] = copy_item
+        else:
+            merged_kw = merge_keywords(str(by_url[key].get("keyword") or ""), str(src.get("keyword") or ""))
+            by_url[key]["keyword"] = merged_kw
+    return list(by_url.values())
+
+
+def drain_retry_queue(
+    retry_items: list[dict],
+    name_map: dict[str, str],
+    min_length: int = 300,
+) -> tuple[list[dict], list[dict], dict]:
+    """
+    Layer 4: Menjalankan ulang antrean item gagal dekode di akhir run (concurrency=1 + fallback penuh)
+    lalu menyaring artikel yang berhasil pulih agar masuk ke hasil final.
+    """
+    unique_queue = _merge_retry_items([], retry_items)
+    summary = {
+        "queued": len(unique_queue),
+        "recovered_urls": 0,
+        "valid_articles": 0,
+        "still_failed": 0,
+        "methods": {},
+    }
+    if not unique_queue:
+        return [], [], summary
+
+    print("\n" + "=" * 60, flush=True)
+    print(f"=== LAYER 4 ANTREAN RETRY AKHIR RUN ({len(unique_queue)} artikel) ===", flush=True)
+    print("=" * 60, flush=True)
+
+    ctrl = get_decode_controller()
+    ctrl.reset_for_retry_pass()
+
+    recovered_raw: list[dict] = []
+    still_failed: list[dict] = []
+
+    for idx, item in enumerate(unique_queue, start=1):
+        work_item = dict(item)
+        # Gunakan keyword pertama untuk validasi topik utama saat filter_valid_articles, simpan keyword lengkap
+        full_kw = str(work_item.get("keyword") or "")
+        primary_kw = full_kw.split(",")[0].strip() if "," in full_kw else full_kw
+        work_item["keyword"] = primary_kw
+        work_item["_merged_retry_keywords"] = full_kw
+
+        try:
+            res = extract_one_article(work_item, allow_search_fallback=True)
+        except GoogleCaptchaBlockedError as cap_err:
+            print(f"  [Retry Queue CAPTCHA] {cap_err} -> Menghentikan dekode Google, lanjut fallback search sisa item.", flush=True)
+            work_item["decode_failed"] = True
+            res = work_item
+        except Exception:
+            work_item["decode_failed"] = True
+            res = work_item
+
+        m = str(res.get("decode_method") or "failed")
+        summary["methods"][m] = summary["methods"].get(m, 0) + 1
+
+        if res.get("decode_failed") or "news.google.com" in str(res.get("resolved_url") or res.get("link") or ""):
+            still_failed.append(res)
+        else:
+            recovered_raw.append(res)
+            summary["recovered_urls"] += 1
+
+        if idx % 10 == 0 or idx == len(unique_queue):
+            print(
+                f"  [Retry Queue Progress] {idx}/{len(unique_queue)} | Pulih URL: {summary['recovered_urls']} | Masih gagal: {len(still_failed)}",
+                flush=True,
+            )
+
+    save_decode_cache()
+
+    valid_flagged: list[dict] = []
+    if recovered_raw:
+        content_valid, retry_discarded = filter_valid_articles(recovered_raw, min_length=min_length)
+        discard_reasons: dict[str, int] = {}
+        for d in retry_discarded:
+            dr = str(d.get("discard_reason") or "other")
+            discard_reasons[dr] = discard_reasons.get(dr, 0) + 1
+        summary["discarded_reasons"] = discard_reasons
+        for item in content_valid:
+            merged_kw = item.pop("_merged_retry_keywords", None) or item.get("keyword", "")
+            is_rel, sig_type, sig_det = get_kemenperin_signal(
+                item.get("title", ""), item.get("text", ""), name_map
+            )
+            item_copy = dict(item)
+            item_copy["keyword"] = merged_kw
+            item_copy["terkait_kemenperin"] = "Ya" if is_rel else "Tidak"
+            item_copy["kemenperin_signal_type"] = sig_type
+            item_copy["kemenperin_signal_detail"] = sig_det
+            valid_flagged.append(item_copy)
+
+    summary["valid_articles"] = len(valid_flagged)
+    summary["still_failed"] = len(still_failed)
+
+    print("\n" + "-" * 50, flush=True)
+    print("[LAPORAN ANTREAN RETRY]", flush=True)
+    print(f"Total antrean gagal awal : {summary['queued']}", flush=True)
+    print(f"URL berhasil dipulihkan  : {summary['recovered_urls']}", flush=True)
+    print(f"Artikel lolos filter     : {summary['valid_articles']}", flush=True)
+    print(f"Tetap gagal dekode       : {summary['still_failed']}", flush=True)
+    print(f"Rincian metode retry     : {summary['methods']}", flush=True)
+    print("-" * 50, flush=True)
+
+    return valid_flagged, still_failed, summary
 
 
 def filter_valid_articles(
@@ -683,23 +872,53 @@ def process_single_keyword(
 
     # [4/6] Ekstraksi konten
     total_yest = len(yesterday_candidates)
-    log_granular(f"     [4/6] Ekstraksi konten ({total_yest} artikel)...")
+    ctrl = get_decode_controller()
+    rec_workers = ctrl.recommended_workers(max_workers)
+    workers = min(max_workers, 10) if use_serper else min(max_workers, rec_workers)
+    log_granular(f"     [4/6] Ekstraksi konten ({total_yest} artikel, workers={workers})...")
     extracted = []
+    retry_items = []
+    decode_stats = _init_decode_stats()
     if yesterday_candidates:
-        workers = min(max_workers, 10 if use_serper else 6)
         with ThreadPoolExecutor(max_workers=workers) as executor:
-            futures = [executor.submit(extract_single_article_with_timer, item) for item in yesterday_candidates]
+            future_map = {
+                executor.submit(extract_single_article_with_timer, item, True): item
+                for item in yesterday_candidates
+            }
             completed = 0
-            for f in as_completed(futures):
+            for f in as_completed(future_map):
                 completed += 1
+                raw_item = future_map[f]
                 try:
-                    res, disp_url = f.result(timeout=35)
-                    extracted.append(res)
+                    res, disp_url = f.result(timeout=45)
+                    _record_decode_stat(decode_stats, raw_item, res)
+                    if res.get("decode_failed"):
+                        q_item = dict(res)
+                        q_item["keyword"] = keyword
+                        retry_items.append(q_item)
+                    else:
+                        extracted.append(res)
                 except GoogleCaptchaBlockedError:
                     raise
                 except Exception:
-                    disp_url = "url"
+                    disp_url = format_display_url(raw_item)
+                    if "news.google.com" in str(raw_item.get("link") or ""):
+                        decode_stats["gnews_total"] += 1
+                        decode_stats["decode_fail"] += 1
+                        q_item = dict(raw_item)
+                        q_item["keyword"] = keyword
+                        retry_items.append(q_item)
                 log_granular(f"       -> mengekstrak artikel {completed}/{total_yest}: {disp_url}")
+        save_decode_cache()
+        if decode_stats["gnews_total"] > 0:
+            cb_snap = ctrl.snapshot()
+            log_granular(
+                f"     [Decode] GNews={decode_stats['gnews_total']} | Cache={decode_stats['cache_hit']} "
+                f"| Offline={decode_stats['decode_offline']} | Lokal={decode_stats['decode_local']} "
+                f"| Meta={decode_stats['fallback_meta']} | Search={decode_stats['fallback_search']} "
+                f"| Retry={decode_stats['decode_fail']} | CB={cb_snap['state']} "
+                f"(RollingFail={cb_snap['rolling_failure_rate']*100:.0f}%, NextWorkers={cb_snap['recommended_workers']})"
+            )
     else:
         log_granular(f"       -> tidak ada artikel tanggal kemarin untuk diekstrak")
 
@@ -744,6 +963,8 @@ def process_single_keyword(
         "valid_articles": flagged_articles,
         "discarded_count": len(discarded) + date_dropped_count,
         "discard_reasons": reasons,
+        "retry_items": retry_items,
+        "decode_stats": decode_stats,
     }
 
 
@@ -992,23 +1213,43 @@ def run_pipeline(
     total_yest = len(yesterday_candidates)
     log_granular(f"Mengekstrak {total_yest} artikel tanggal kemarin...")
     extracted_articles = []
+    retry_items = []
+    run_decode_stats = _init_decode_stats()
     if yesterday_candidates:
-        workers = min(8, 4 if USE_SERPER_ONLY else 2)
+        ctrl = get_decode_controller()
+        workers = min(8, 4) if USE_SERPER_ONLY else min(8, ctrl.recommended_workers(2))
         with ThreadPoolExecutor(max_workers=workers) as executor:
-            futures = [executor.submit(extract_single_article_with_timer, item) for item in yesterday_candidates]
+            future_map = {
+                executor.submit(extract_single_article_with_timer, item, True): item
+                for item in yesterday_candidates
+            }
             completed = 0
-            for f in as_completed(futures):
+            for f in as_completed(future_map):
                 completed += 1
+                raw_item = future_map[f]
                 try:
-                    res, disp_url = f.result(timeout=35)
-                    extracted_articles.append(res)
+                    res, disp_url = f.result(timeout=45)
+                    _record_decode_stat(run_decode_stats, raw_item, res)
+                    if res.get("decode_failed"):
+                        retry_items.append(res)
+                    else:
+                        extracted_articles.append(res)
                 except Exception:
-                    disp_url = "url"
+                    disp_url = format_display_url(raw_item)
+                    if "news.google.com" in str(raw_item.get("link") or ""):
+                        run_decode_stats["gnews_total"] += 1
+                        run_decode_stats["decode_fail"] += 1
+                        retry_items.append(raw_item)
                 log_granular(f"  -> mengekstrak artikel {completed}/{total_yest}: {disp_url}")
+        save_decode_cache()
     else:
         log_granular("  -> 0 artikel untuk diekstrak")
 
     content_valid, discarded = filter_valid_articles(extracted_articles, min_length=300)
+    if retry_items:
+        ret_valid, _still_failed, _ret_sum = drain_retry_queue(retry_items, name_map, min_length=300)
+        if ret_valid:
+            content_valid.extend(ret_valid)
     print(f"Artikel lolos filter konten & industri: {len(content_valid)} (Dibuang konten: {len(discarded)})")
 
     # Flagging Institusi: Terkait Kemenperin (Eksplisit atau Implisit) - OPSI B
@@ -1094,11 +1335,12 @@ def run_batch_pipeline(
 
     print(f"Total keyword: {len(keywords)} dibagi menjadi {total_batches} batch (ukuran batch: {batch_size})", flush=True)
 
-    checkpoint = {"batches_done": [], "batch_reports": [], "articles": []}
+    checkpoint = {"batches_done": [], "batch_reports": [], "articles": [], "retry_queue": []}
     if os.path.exists(checkpoint_path):
         try:
             with open(checkpoint_path, "r", encoding="utf-8") as f:
                 checkpoint = json.load(f)
+                checkpoint.setdefault("retry_queue", [])
                 print(f"Checkpoint dimuat: Batch yang sudah selesai: {checkpoint.get('batches_done', [])}", flush=True)
         except Exception as e:
             print(f"Warning membaca checkpoint: {e}", flush=True)
@@ -1125,6 +1367,8 @@ def run_batch_pipeline(
         batch_kemenperin_yes = 0
         batch_final_valid = 0
         batch_kw_stats = []
+        batch_retry_items = []
+        batch_decode_stats = _init_decode_stats()
 
         for kw in current_kws:
             try:
@@ -1143,6 +1387,10 @@ def run_batch_pipeline(
             batch_kemenperin_yes += res.get("kemenperin_yes_count", 0)
             batch_final_valid += len(res["valid_articles"])
             checkpoint["articles"].extend(res["valid_articles"])
+            batch_retry_items.extend(res.get("retry_items", []))
+            kw_dec = res.get("decode_stats") or {}
+            for dk in batch_decode_stats:
+                batch_decode_stats[dk] += int(kw_dec.get(dk, 0) or 0)
             batch_kw_stats.append({
                 "keyword": kw,
                 "initial": res["initial_candidates"],
@@ -1152,9 +1400,20 @@ def run_batch_pipeline(
                 "final_valid": len(res["valid_articles"]),
                 "discarded": res["discarded_count"],
                 "reasons": res["discard_reasons"],
+                "decode_stats": kw_dec,
             })
 
-        checkpoint["batches_done"].append(b_idx)
+        checkpoint["retry_queue"] = _merge_retry_items(checkpoint.get("retry_queue", []), batch_retry_items)
+        save_decode_cache()
+        cb_snapshot = get_decode_controller().snapshot()
+        batch_decode_report = dict(batch_decode_stats)
+        batch_decode_report["queued_retry"] = len(batch_retry_items)
+        batch_decode_report["circuit_trips"] = cb_snapshot["circuit_trips"]
+        batch_decode_report["rolling_failure_rate"] = cb_snapshot["rolling_failure_rate"]
+        batch_decode_report["circuit_state"] = cb_snapshot["state"]
+
+        if b_idx not in checkpoint["batches_done"]:
+            checkpoint["batches_done"].append(b_idx)
         checkpoint["batch_reports"].append({
             "batch_num": b_num,
             "keywords": current_kws,
@@ -1163,12 +1422,15 @@ def run_batch_pipeline(
             "total_date_dropped": batch_date_dropped,
             "total_kemenperin_yes": batch_kemenperin_yes,
             "total_final_valid": batch_final_valid,
+            "decode_stats": batch_decode_report,
             "details": batch_kw_stats,
         })
 
         with open(checkpoint_path, "w", encoding="utf-8") as f:
             json.dump(checkpoint, f, ensure_ascii=False, indent=2)
 
+        g_tot = batch_decode_report["gnews_total"]
+        fail_pct = (batch_decode_report["decode_fail"] / g_tot * 100.0) if g_tot else 0.0
         print("\n" + "-" * 50, flush=True)
         print(f"[LAPORAN SELESAI BATCH {b_num}/{total_batches}]", flush=True)
         print(f"Keywords diproses        : {', '.join(current_kws)}", flush=True)
@@ -1176,6 +1438,14 @@ def run_batch_pipeline(
         print(f"Gugur filter tanggal     : {batch_date_dropped}", flush=True)
         print(f"Total final lolos kemarin: {batch_final_valid}", flush=True)
         print(f"Terkait Kemenperin (Ya)  : {batch_kemenperin_yes} | Tidak: {batch_final_valid - batch_kemenperin_yes}", flush=True)
+        print(
+            f"Metrik Decode GNews      : Total={g_tot} | Cache={batch_decode_report['cache_hit']} "
+            f"| DecodeOK={batch_decode_report['decode_ok']} (Offline={batch_decode_report['decode_offline']}, Lokal={batch_decode_report['decode_local']}) "
+            f"| FallbackMeta={batch_decode_report['fallback_meta']} | FallbackSearch={batch_decode_report['fallback_search']} "
+            f"| Gagal/Retry={batch_decode_report['decode_fail']} ({fail_pct:.1f}%) "
+            f"| CircuitTrips={batch_decode_report['circuit_trips']}",
+            flush=True,
+        )
         print("Rincian per keyword:", flush=True)
         for s in batch_kw_stats:
             kw_init = int(s.get("initial", 0) or 0)
@@ -1190,6 +1460,27 @@ def run_batch_pipeline(
             )
         print(f"Checkpoint tersimpan ke: {checkpoint_path}", flush=True)
         print("-" * 50, flush=True)
+
+    # Layer 4: proses antrean retry item gagal dekode sebelum finalisasi (baik --all maupun --batch)
+    if checkpoint.get("retry_queue") and (len(checkpoint["batches_done"]) == total_batches or target_batch is not None):
+        ret_valid, ret_still_failed, ret_summary = drain_retry_queue(checkpoint["retry_queue"], name_map, min_length=300)
+        if ret_valid:
+            checkpoint["articles"].extend(ret_valid)
+        checkpoint["retry_queue"] = []
+        checkpoint["retry_report"] = ret_summary
+        if ret_still_failed:
+            checkpoint.setdefault("decode_failed_items", []).extend(
+                {
+                    "title": x.get("title", ""),
+                    "link": x.get("link", ""),
+                    "keyword": x.get("keyword", ""),
+                    "media_name": x.get("media_name", ""),
+                    "decode_method": x.get("decode_method", "failed"),
+                }
+                for x in ret_still_failed
+            )
+        with open(checkpoint_path, "w", encoding="utf-8") as f:
+            json.dump(checkpoint, f, ensure_ascii=False, indent=2)
 
     if len(checkpoint["batches_done"]) == total_batches:
         print("\nSeluruh batch telah selesai! Melanjutkan ke finalisasi...", flush=True)

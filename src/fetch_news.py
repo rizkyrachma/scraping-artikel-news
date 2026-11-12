@@ -4,6 +4,7 @@ Pengambilan data Google News RSS feed, verifikasi denylist domain & ekstensi ase
 """
 
 import os
+import re
 import json
 import time
 import random
@@ -333,6 +334,32 @@ def clean_title_suffix(raw_title: str, source_title: str | None) -> str:
     return title
 
 
+def _extract_rss_metadata_urls(entry) -> list[str]:
+    """Mengambil URL sumber non-Google artikel (bukan root homepage) dari links/summary/description RSS."""
+    found: list[str] = []
+    seen: set[str] = set()
+    candidates: list[str] = []
+    for link_obj in entry.get("links") or []:
+        if isinstance(link_obj, dict) and link_obj.get("href"):
+            candidates.append(str(link_obj["href"]))
+    for key in ("id", "origlink", "feedburner_origlink"):
+        val = entry.get(key)
+        if isinstance(val, str) and val.startswith("http"):
+            candidates.append(val)
+    for html_field in (entry.get("summary") or "", entry.get("description") or ""):
+        if html_field:
+            candidates.extend(re.findall(r'href=["\'](https?://[^"\'\s<>]+)["\']', str(html_field)))
+    for raw_u in candidates:
+        u = raw_u.strip()
+        if not u or u in seen or "news.google.com" in u.lower():
+            continue
+        parsed = urlparse(u)
+        if parsed.scheme in ("http", "https") and (parsed.path.strip("/") or parsed.query) and is_valid_domain(u):
+            seen.add(u)
+            found.append(u)
+    return found
+
+
 _KEYWORD_GROUPS_CACHE: dict[str, list[str]] | None = None
 
 
@@ -419,6 +446,7 @@ def search_keyword(keyword: str | list[str], delay: float | None = None, target_
                     "media_name": source_title,
                     "source": source_title or "",
                     "source_url": source_href,
+                    "rss_metadata_urls": _extract_rss_metadata_urls(entry),
                     "published": entry.get("published", ""),
                     "sumber_data": "RSS",
                 })
@@ -557,6 +585,7 @@ def search_pejabat_presisi(
                             "media_name": source_title,
                             "source": source_title or "",
                             "source_url": source_href,
+                            "rss_metadata_urls": _extract_rss_metadata_urls(entry),
                             "published": entry.get("published", ""),
                             "sumber_data": "RSS",
                             "terkait_kemenperin": "Ya",
