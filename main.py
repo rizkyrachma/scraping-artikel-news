@@ -126,7 +126,7 @@ from src.ai_relevance_classifier import (
     classify_articles_in_batches,
 )
 from src.tone_classifier import classify_tone_batch, classify_tone
-from src.negative_summarizer import summarize_negative_articles
+from src.negative_summarizer import summarize_negative_articles, validate_and_repair_negative_summaries
 from src.config import ENABLE_YOUTUBE
 from src.entity_mapper import find_spokespersons
 from src.export_excel import save_to_excel
@@ -1186,11 +1186,15 @@ def finalize_and_export(
     neg_summaries = None
     if any(r.get("Tone") == "Negatif" for r in records):
         print(f"\nMenjalankan ringkasan otomatis 5W+1H untuk berita bertone Negatif (khusus artikel hilir tersisa)...", flush=True)
-        txt_map = {
-            str(a.get("link") or "").strip(): str(a.get("text") or "").strip()
-            for a in hilir_articles if a.get("link")
-        }
-        neg_summaries = summarize_negative_articles(records, progress_text_map=txt_map)
+        txt_map = {}
+        for a in hilir_articles:
+            txt_val = str(a.get("text") or "").strip()
+            for u_field in (a.get("link"), a.get("resolved_url")):
+                if u_field:
+                    txt_map[str(u_field).strip()] = txt_val
+                    txt_map[canonical_url(str(u_field))] = txt_val
+        raw_neg_summaries = summarize_negative_articles(records, progress_text_map=txt_map)
+        neg_summaries = validate_and_repair_negative_summaries(records, raw_neg_summaries, progress_text_map=txt_map)
 
     # 5. Simpan ke file Excel
     save_to_excel(records, output_excel, merge_existing=False, negative_summaries=neg_summaries)

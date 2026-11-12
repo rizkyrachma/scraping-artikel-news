@@ -5,10 +5,16 @@ Penyusunan dataset ke DataFrame dan penyimpanan ke file Excel (.xlsx) beserta fo
 
 import os
 import re
+import sys
 import time
 import pandas as pd
 from openpyxl.styles import Alignment, Font, PatternFill  # type: ignore
 from openpyxl.utils import get_column_letter  # type: ignore
+
+try:
+    from stable import canonical_url as _canonical_url
+except ImportError:
+    from src.stable import canonical_url as _canonical_url
 
 BERITA_COLUMNS = [
     "Tanggal",
@@ -444,21 +450,25 @@ def write_styled_excel(
             if not df_neg_clean.empty and "Link Website" in df_neg_clean.columns:
                 df_neg_clean["Link Website"] = df_neg_clean["Link Website"].apply(_clean_url_str)
                 if not df.empty and "Link Website" in df.columns:
+                    neg_berita_df = (
+                        df[df["Tone"].astype(str).str.strip().str.lower() == "negatif"]
+                        if "Tone" in df.columns
+                        else df
+                    )
                     valid_links = {
-                        str(v).strip().lower().split("?")[0].rstrip("/")
-                        for v in df["Link Website"].dropna()
+                        _canonical_url(str(v))
+                        for v in neg_berita_df["Link Website"].dropna()
                         if str(v).strip()
                     }
                     valid_titles = {
                         str(v).strip().lower()
-                        for v in df["Title"].dropna()
+                        for v in neg_berita_df["Title"].dropna()
                         if str(v).strip()
-                    } if "Title" in df.columns else set()
-                    neg_l = df_neg_clean["Link Website"].fillna("").astype(str).str.strip().str.lower().str.split("?").str[0].str.rstrip("/")
+                    } if "Title" in neg_berita_df.columns else set()
+                    neg_l = df_neg_clean["Link Website"].fillna("").astype(str).apply(_canonical_url)
                     neg_t = df_neg_clean["Title"].fillna("").astype(str).str.strip().str.lower() if "Title" in df_neg_clean.columns else pd.Series([""] * len(df_neg_clean))
                     keep_neg = neg_l.isin(valid_links) | neg_t.isin(valid_titles)
-                    if "Isu Inti" in df_neg_clean.columns:
-                        keep_neg = keep_neg & (~df_neg_clean["Isu Inti"].fillna("").astype(str).str.lower().str.contains("ringkasan gagal dibuat", regex=False))
+                    # PERTAHANKAN baris 'Ringkasan gagal dibuat' / placeholder agar jumlah Ringkasan Negatif == Tone Negatif (Point E)
                     df_neg_clean = pd.DataFrame(df_neg_clean.loc[keep_neg]).reset_index(drop=True)
 
             for col in neg_columns:
@@ -467,6 +477,66 @@ def write_styled_excel(
                 elif col != "Tanggal":
                     df_neg_clean[col] = df_neg_clean[col].replace(["nan", "None"], "").fillna("")
             df_neg_clean = pd.DataFrame(df_neg_clean[neg_columns])
+
+            # Validasi akhir 1:1: jumlah baris Ringkasan Negatif HARUS sama dengan jumlah Berita bertone Negatif
+            if not df.empty and "Tone" in df.columns:
+                neg_berita_rows = df[df["Tone"].astype(str).str.strip().str.lower() == "negatif"]
+                if len(neg_berita_rows) > 0:
+                    pool_records = df_neg_clean.to_dict(orient="records")
+                    matched_flags = [False] * len(pool_records)
+                    added_placeholders = []
+
+                    for _, br in neg_berita_rows.iterrows():
+                        bu = _canonical_url(str(br.get("Link Website") or ""))
+                        bt = str(br.get("Title") or "").strip()
+                        bt_low = bt.lower()
+                        found = False
+                        # Prioritas 1: cocokkan URL kanonik
+                        for i_p, nr in enumerate(pool_records):
+                            if matched_flags[i_p]:
+                                continue
+                            nr_u = _canonical_url(str(nr.get("Link Website") or ""))
+                            if bu and nr_u and bu == nr_u:
+                                matched_flags[i_p] = True
+                                found = True
+                                break
+                        # Prioritas 2: fallback cocokkan judul
+                        if not found and bt_low:
+                            for i_p, nr in enumerate(pool_records):
+                                if matched_flags[i_p]:
+                                    continue
+                                nr_t = str(nr.get("Title") or "").strip().lower()
+                                if nr_t and bt_low == nr_t:
+                                    matched_flags[i_p] = True
+                                    found = True
+                                    break
+                        if not found:
+                            added_placeholders.append({
+                                "Tanggal": br.get("Tanggal"),
+                                "Title": bt,
+                                "Link Website": str(br.get("Link Website") or ""),
+                                "Media Name": str(br.get("Media Name") or ""),
+                                "Terkait Kemenperin": str(br.get("Terkait Kemenperin") or "Tidak"),
+                                "Isu Inti": f"[PLACEHOLDER - RINGKASAN BELUM TERSEDIA] {bt}",
+                                "Alasan Negatif": "Ringkasan AI gagal dibuat / tidak ditemukan (placeholder konsistensi 1:1)",
+                                "What": bt or "Ringkasan belum tersedia",
+                                "Who": "-",
+                                "When": str(br.get("Tanggal") or "-"),
+                                "Where": "-",
+                                "Why": "Placeholder otomatis karena baris negatif belum teringkas",
+                                "How": "-",
+                                "Stakeholder Terkait": "-",
+                                "Catatan": "PLACEHOLDER KONSISTENSI: ditambahkan otomatis saat ekspor Excel",
+                            })
+                    if added_placeholders:
+                        print(
+                            f"[ERROR KONSISTENSI EXCEL] Sheet Ringkasan Negatif kurang {len(added_placeholders)} baris dibanding Berita bertone Negatif ({len(neg_berita_rows)}). "
+                            f"Menulis placeholder eksplisit agar 1:1.",
+                            file=sys.stderr,
+                            flush=True,
+                        )
+                        df_neg_clean = pd.concat([df_neg_clean, pd.DataFrame(added_placeholders)], ignore_index=True)
+                        df_neg_clean = pd.DataFrame(df_neg_clean[neg_columns])
 
             if "Tanggal" in df_neg_clean.columns and not df_neg_clean.empty:
                 df_neg_clean["Tanggal"] = pd.Series(df_neg_clean["Tanggal"]).apply(_parse_date)

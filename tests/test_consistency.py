@@ -34,7 +34,13 @@ from src.auto_recheck import AutoRecheckPipeline, apply_ragu_rubric, check_deter
 from src.direct_crawl_agro import fetch_with_retry
 from src.export_excel import save_to_excel
 from src.gemini_pool import GeminiModelPool, _is_eligible_text_model
+from src.negative_summarizer import (
+    _call_gemini_summary_batch,
+    summarize_negative_articles,
+    validate_and_repair_negative_summaries,
+)
 from src.relevance_filter import classify_non_news_evergreen, is_likely_relevant
+import src.negative_summarizer as neg_sum_mod
 import main as pipeline_main
 
 
@@ -736,6 +742,125 @@ class TestPointDInfrastructureResilience(unittest.TestCase):
                 os.environ.pop("GEMINI_API_KEY", None)
             else:
                 os.environ["GEMINI_API_KEY"] = prev_key
+
+
+class TestPointENegativeSummaryConsistency(unittest.TestCase):
+    def test_reproduces_missing_kayonews_item_retries_per_item_and_guarantees_1_to_1_in_excel(self):
+        import pandas as pd
+
+        records = [
+            {
+                "Tanggal": "2026-11-11 08:00:00",
+                "Title": "Berita Negatif Satu",
+                "Link Website": "https://bisnis.com/neg-1",
+                "Media Name": "Bisnis.com",
+                "Tone": "Negatif",
+                "Terkait Kemenperin": "Tidak",
+            },
+            {
+                "Tanggal": "2026-11-11 09:00:00",
+                "Title": "Harga Karet Tertekan di Pasar Regional",
+                "Link Website": "https://kayonews.co.id/artikel/karet-tertekan?utm_source=rss",
+                "Media Name": "KayoNews",
+                "Tone": "Negatif",
+                "Terkait Kemenperin": "Tidak",
+            },
+            {
+                "Tanggal": "2026-11-11 10:00:00",
+                "Title": "Berita Netral",
+                "Link Website": "https://kontan.co.id/netral-1",
+                "Media Name": "Kontan",
+                "Tone": "Netral",
+                "Terkait Kemenperin": "Tidak",
+            },
+        ]
+
+        # Kasus 1: Batch AI hanya mengembalikan ID 1 (ID 2 kayonews terlewat), namun per-item retry berhasil
+        calls = []
+
+        class PartialThenSinglePool:
+            quota_exhausted = False
+
+            def peek_active_model_name(self):
+                return "mock-gemini"
+
+            def generate_deterministic(self, prompt, timeout=60, max_attempts=6):
+                calls.append(prompt)
+                if len(calls) == 1:
+                    # Simulasikan batch hanya mengembalikan ID 1 dan meninggalkan kayonews (ID 2)
+                    return (
+                        '{"hasil": [{"id": 1, "isu_inti": "Isu 1", "alasan_negatif": "Neg 1", "tone_valid": true, "catatan_tone": "", "w5h1": {"what": "Isu 1", "who": "Pelaku", "when": "2026-11-11", "where": "RI", "why": "Turun", "how": "Lesu"}, "stakeholder": []}]}',
+                        "mock-gemini",
+                        "",
+                    )
+                # Panggilan ke-2 adalah single-item retry untuk kayonews
+                return (
+                    '{"hasil": [{"id": 2, "isu_inti": "Karet Tertekan", "alasan_negatif": "Harga karet melemah", "tone_valid": true, "catatan_tone": "", "w5h1": {"what": "Harga karet", "who": "Industri karet", "when": "2026-11-11", "where": "RI", "why": "Lesu", "how": "Tertekan"}, "stakeholder": []}]}',
+                    "mock-gemini",
+                    "",
+                )
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            orig_pool = neg_sum_mod._MODEL_POOL
+            orig_cache = neg_sum_mod.CACHE_FILE
+            orig_log = neg_sum_mod.LOG_FILE
+            orig_q = neg_sum_mod.ANTREAN_FILE
+            orig_extract = neg_sum_mod.extract_article_text
+            prev_key = os.environ.get("GEMINI_API_KEY")
+            try:
+                neg_sum_mod._MODEL_POOL = PartialThenSinglePool()
+                neg_sum_mod.gemini_quota_exhausted = False
+                neg_sum_mod.CACHE_FILE = os.path.join(tmpdir, "cache_ringkasan.json")
+                neg_sum_mod.LOG_FILE = os.path.join(tmpdir, "log_ringkasan.jsonl")
+                neg_sum_mod.ANTREAN_FILE = os.path.join(tmpdir, "antrean_ringkasan.json")
+                neg_sum_mod.extract_article_text = lambda url, max_length=6000: (
+                    f"Artikel simulasi untuk {url} mengenai industri karet dan sawit nasional. " * 10
+                )
+                os.environ["GEMINI_API_KEY"] = "dummy-key"
+
+                neg_rows = summarize_negative_articles(records, delay_between_batches=0.0)
+                repaired = validate_and_repair_negative_summaries(records, neg_rows)
+                self.assertEqual(len(repaired), 2)
+                self.assertEqual(len(calls), 2)  # 1 batch + 1 per-item retry
+
+                # Kasus 2: Artikel tanpa cache + model gagal total -> placeholder ditulis & TIDAK dibuang oleh export_excel
+                neg_sum_mod.CACHE_FILE = os.path.join(tmpdir, "cache_ringkasan_fail.json")
+                neg_sum_mod._MODEL_POOL = type(
+                    "AlwaysFailPool",
+                    (),
+                    {
+                        "quota_exhausted": False,
+                        "peek_active_model_name": staticmethod(lambda: "mock-fail"),
+                        "generate_deterministic": staticmethod(lambda *a, **kw: (None, "mock-fail", "503")),
+                    },
+                )()
+                failed_rows = summarize_negative_articles(
+                    [records[1]],  # kayonews tanpa cache di cache_ringkasan_fail.json
+                    delay_between_batches=0.0,
+                )
+                self.assertEqual(len(failed_rows), 1)
+                self.assertIn("PLACEHOLDER", failed_rows[0]["Isu Inti"])
+
+                xlsx_path = os.path.join(tmpdir, "konsistensi_neg.xlsx")
+                # Simulasikan juga saat 1 baris negatif hilang dari df_neg -> export_excel wajib tambal 1:1
+                save_to_excel(records, xlsx_path, merge_existing=False, negative_summaries=[failed_rows[0]])
+                df_b = pd.read_excel(xlsx_path, sheet_name="Berita")
+                df_n = pd.read_excel(xlsx_path, sheet_name="Ringkasan Negatif")
+                neg_b_count = int((df_b["Tone"].astype(str).str.lower() == "negatif").sum())
+                self.assertEqual(neg_b_count, 2)
+                self.assertEqual(len(df_n), neg_b_count)
+                self.assertTrue(any("kayonews" in str(u) for u in df_n["Link Website"].tolist()))
+            finally:
+                neg_sum_mod._MODEL_POOL = orig_pool
+                neg_sum_mod.CACHE_FILE = orig_cache
+                neg_sum_mod.LOG_FILE = orig_log
+                neg_sum_mod.ANTREAN_FILE = orig_q
+                neg_sum_mod.extract_article_text = orig_extract
+                neg_sum_mod.gemini_quota_exhausted = False
+                if prev_key is None:
+                    os.environ.pop("GEMINI_API_KEY", None)
+                else:
+                    os.environ["GEMINI_API_KEY"] = prev_key
 
 
 if __name__ == "__main__":
