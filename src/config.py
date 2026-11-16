@@ -47,6 +47,10 @@ load_env_file()
 # Flag YouTube: dinonaktifkan sementara sesuai instruksi user (default: False)
 ENABLE_YOUTUBE = os.environ.get("ENABLE_YOUTUBE", "false").lower() in ("true", "1", "yes")
 
+# Batas anggaran kuota panggilan API pencarian per run (dapat dikonfigurasi via env var)
+MAX_SERPER_CALLS_PER_RUN = int(os.environ.get("MAX_SERPER_CALLS_PER_RUN", "150"))
+MAX_EXA_CALLS_PER_RUN = int(os.environ.get("MAX_EXA_CALLS_PER_RUN", "100"))
+
 
 def get_date_range(target_date: date | datetime | tuple | list | None = None):
     """

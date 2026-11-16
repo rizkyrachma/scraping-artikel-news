@@ -84,16 +84,28 @@ except ImportError:
             return bool(url)
 
 try:
-    from src.config import JOB_PORTAL_BLOCKLIST, parse_to_wib
+    from src.config import (
+        JOB_PORTAL_BLOCKLIST,
+        MAX_SERPER_CALLS_PER_RUN,
+        MAX_EXA_CALLS_PER_RUN,
+        parse_to_wib,
+    )
 except ImportError:
     try:
-        from config import JOB_PORTAL_BLOCKLIST, parse_to_wib
+        from config import (
+            JOB_PORTAL_BLOCKLIST,
+            MAX_SERPER_CALLS_PER_RUN,
+            MAX_EXA_CALLS_PER_RUN,
+            parse_to_wib,
+        )
     except ImportError:
         JOB_PORTAL_BLOCKLIST = [
             "glints.com", "kitalulus.com", "bebee.com", "jobstreet.co.id",
             "jobstreet.com", "kalibrr.com", "karir.com", "loker.id",
             "indeed.com", "jobsdb.com", "prosple.com",
         ]
+        MAX_SERPER_CALLS_PER_RUN = 150
+        MAX_EXA_CALLS_PER_RUN = 100
         def parse_to_wib(val):
             return None
 
@@ -705,10 +717,48 @@ _DEFAULT_NEGATIVE_DECODE_CACHE: DecodeNegativeCache | None = None
 _DEFAULT_DECODE_CONTROLLER: AdaptiveDecodeController | None = None
 _SINGLETON_LOCK = threading.Lock()
 _SEARCH_FALLBACK_LOCK = threading.Lock()
-_SEARCH_FALLBACK_MEMO: dict[tuple[str, str], tuple[str | None, str, str]] = {}
+_SEARCH_FALLBACK_MEMO: dict[tuple[str, str], tuple[str | None, str, str, str]] = {}
 _SERPER_EXHAUSTED = False
 _EXA_EXHAUSTED = False
+_SERPER_CALL_COUNT = 0
+_EXA_CALL_COUNT = 0
+_SEARCH_QUOTA_LOCK = threading.Lock()
 _LOGGED_DECODE_WARNINGS = 0
+
+
+def get_search_quota_usage() -> dict[str, int]:
+    """Mengembalikan metrik pemakaian kuota panggilan API pencarian per run saat ini."""
+    with _SEARCH_QUOTA_LOCK:
+        return {
+            "serper_calls": _SERPER_CALL_COUNT,
+            "serper_max": MAX_SERPER_CALLS_PER_RUN,
+            "exa_calls": _EXA_CALL_COUNT,
+            "exa_max": MAX_EXA_CALLS_PER_RUN,
+        }
+
+
+def reset_search_quota_usage() -> None:
+    """Mereset hitungan kuota panggilan API pencarian (untuk pengujian atau run baru)."""
+    global _SERPER_CALL_COUNT, _EXA_CALL_COUNT
+    with _SEARCH_QUOTA_LOCK:
+        _SERPER_CALL_COUNT = 0
+        _EXA_CALL_COUNT = 0
+
+
+def get_search_memo_status(item: dict) -> str:
+    """Mengembalikan status memo pencarian Layer 3: SEARCHED_OK, SEARCHED_EMPTY, NOT_SEARCHED, TRANSIENT_FAIL, atau ''."""
+    if not isinstance(item, dict):
+        return ""
+    media_name = str(item.get("media_name") or item.get("source") or "").strip()
+    clean_title = _clean_search_title(item.get("title", ""), media_name)
+    expected_domain = _extract_expected_domain(item)
+    memo_key = (clean_title.lower(), expected_domain or media_name.lower())
+    with _SEARCH_FALLBACK_LOCK:
+        if memo_key in _SEARCH_FALLBACK_MEMO:
+            val = _SEARCH_FALLBACK_MEMO[memo_key]
+            if len(val) >= 4:
+                return str(val[3])
+    return ""
 
 
 def get_decode_cache() -> DecodeCache:
@@ -844,16 +894,24 @@ def _score_search_candidate(
     return -1.0
 
 
-def fallback_url_from_search(item: dict, bypass_memo: bool = False) -> tuple[str | None, str, str]:
-    """Layer 3: mencari URL artikel asli melalui Serper.dev / Exa berdasarkan judul + nama sumber."""
-    global _SERPER_EXHAUSTED, _EXA_EXHAUSTED
+def fallback_url_from_search(item: dict, bypass_memo: bool = False) -> tuple[str | None, str, str, str]:
+    """
+    Layer 3: mencari URL artikel asli melalui Serper.dev / Exa berdasarkan judul + nama sumber.
+    Mengembalikan 4-tuple: (resolved_url, method, text, status).
+    Status adalah salah satu dari:
+      - SEARCHED_OK: artikel ditemukan
+      - SEARCHED_EMPTY: HTTP 200 sukses namun 0 kandidat relevan
+      - NOT_SEARCHED: tidak dipanggil karena kuota habis atau API key tidak tersedia
+      - TRANSIENT_FAIL: error jaringan / timeout / HTTP 5xx / 429
+    """
+    global _SERPER_EXHAUSTED, _EXA_EXHAUSTED, _SERPER_CALL_COUNT, _EXA_CALL_COUNT
     if not isinstance(item, dict):
-        return None, "", ""
+        return None, "", "", "NOT_SEARCHED"
 
     media_name = str(item.get("media_name") or item.get("source") or "").strip()
     clean_title = _clean_search_title(item.get("title", ""), media_name)
     if len(clean_title) < 12:
-        return None, "", ""
+        return None, "", "", "NOT_SEARCHED"
 
     expected_domain = _extract_expected_domain(item)
     memo_key = (clean_title.lower(), expected_domain or media_name.lower())
@@ -863,10 +921,20 @@ def fallback_url_from_search(item: dict, bypass_memo: bool = False) -> tuple[str
                 return _SEARCH_FALLBACK_MEMO[memo_key]
 
     best_result: tuple[str | None, str, str] = (None, "", "")
+    serper_called = False
+    exa_called = False
+    has_transient_err = False
 
     # 3A. Serper.dev (/search mendukung operator site:domain)
     serper_key = os.environ.get("SERPER_API_KEY", "").strip()
-    if serper_key and not _SERPER_EXHAUSTED:
+    can_call_serper = False
+    with _SEARCH_QUOTA_LOCK:
+        if serper_key and not _SERPER_EXHAUSTED and _SERPER_CALL_COUNT < MAX_SERPER_CALLS_PER_RUN:
+            _SERPER_CALL_COUNT += 1
+            can_call_serper = True
+
+    if can_call_serper:
+        serper_called = True
         try:
             q_str = f'"{clean_title}" site:{expected_domain}' if expected_domain else f'"{clean_title}" {media_name}'.strip()
             resp = requests.post(
@@ -890,58 +958,81 @@ def fallback_url_from_search(item: dict, bypass_memo: bool = False) -> tuple[str
                         best_url = cand_u
                 if best_url:
                     best_result = (best_url, "fallback_serper", "")
+            elif resp.status_code in (429, 500, 502, 503, 504):
+                has_transient_err = True
         except Exception:
-            pass
+            has_transient_err = True
 
     # 3B. Exa Search fallback (juga menyertakan teks jika website sumber memblokir scraping langsung)
     exa_key = os.environ.get("EXA_API_KEY", "").strip()
-    if not best_result[0] and exa_key and not _EXA_EXHAUSTED:
-        try:
-            payload: dict = {
-                "query": clean_title if expected_domain else f"{clean_title} {media_name}".strip(),
-                "type": "keyword",
-                "category": "news",
-                "numResults": 5,
-                "contents": {"text": True},
-            }
-            if expected_domain:
-                payload["includeDomains"] = [expected_domain]
-            pub_ts = parse_to_wib(item.get("published"))
-            if pub_ts is not None:
-                d_day = pub_ts.date()
-                payload["startPublishedDate"] = f"{(d_day - timedelta(days=2)).strftime('%Y-%m-%d')}T00:00:00.000Z"
-                payload["endPublishedDate"] = f"{(d_day + timedelta(days=2)).strftime('%Y-%m-%d')}T23:59:59.999Z"
+    can_call_exa = False
+    if not best_result[0]:
+        with _SEARCH_QUOTA_LOCK:
+            if exa_key and not _EXA_EXHAUSTED and _EXA_CALL_COUNT < MAX_EXA_CALLS_PER_RUN:
+                _EXA_CALL_COUNT += 1
+                can_call_exa = True
 
-            resp = requests.post(
-                EXA_SEARCH_URL,
-                headers={"x-api-key": exa_key, "Content-Type": "application/json"},
-                json=payload,
-                timeout=15,
-            )
-            if resp.status_code in (402, 403):
-                _EXA_EXHAUSTED = True
-                print(f"  [Fallback Exa] Kuota/key habis (HTTP {resp.status_code}), dinonaktifkan untuk sisa sesi.", flush=True)
-            elif resp.status_code == 200:
-                best_score = -1.0
-                best_url = None
-                best_text = ""
-                for entry in resp.json().get("results", []) or []:
-                    cand_u = str(entry.get("url") or "").strip()
-                    cand_t = str(entry.get("title") or "").strip()
-                    sc = _score_search_candidate(clean_title, cand_t, cand_u, expected_domain, media_name)
-                    if sc > best_score:
-                        best_score = sc
-                        best_url = cand_u
-                        txt = str(entry.get("text") or "").strip()
-                        best_text = txt[:8000] if len(txt) >= 300 else ""
-                if best_url:
-                    best_result = (best_url, "fallback_exa", best_text)
-        except Exception:
-            pass
+        if can_call_exa:
+            exa_called = True
+            try:
+                payload: dict = {
+                    "query": clean_title if expected_domain else f"{clean_title} {media_name}".strip(),
+                    "type": "keyword",
+                    "category": "news",
+                    "numResults": 5,
+                    "contents": {"text": True},
+                }
+                if expected_domain:
+                    payload["includeDomains"] = [expected_domain]
+                pub_ts = parse_to_wib(item.get("published"))
+                if pub_ts is not None:
+                    d_day = pub_ts.date()
+                    payload["startPublishedDate"] = f"{(d_day - timedelta(days=2)).strftime('%Y-%m-%d')}T00:00:00.000Z"
+                    payload["endPublishedDate"] = f"{(d_day + timedelta(days=2)).strftime('%Y-%m-%d')}T23:59:59.999Z"
 
+                resp = requests.post(
+                    EXA_SEARCH_URL,
+                    headers={"x-api-key": exa_key, "Content-Type": "application/json"},
+                    json=payload,
+                    timeout=15,
+                )
+                if resp.status_code in (402, 403):
+                    _EXA_EXHAUSTED = True
+                    print(f"  [Fallback Exa] Kuota/key habis (HTTP {resp.status_code}), dinonaktifkan untuk sisa sesi.", flush=True)
+                elif resp.status_code == 200:
+                    best_score = -1.0
+                    best_url = None
+                    best_text = ""
+                    for entry in resp.json().get("results", []) or []:
+                        cand_u = str(entry.get("url") or "").strip()
+                        cand_t = str(entry.get("title") or "").strip()
+                        sc = _score_search_candidate(clean_title, cand_t, cand_u, expected_domain, media_name)
+                        if sc > best_score:
+                            best_score = sc
+                            best_url = cand_u
+                            txt = str(entry.get("text") or "").strip()
+                            best_text = txt[:8000] if len(txt) >= 300 else ""
+                    if best_url:
+                        best_result = (best_url, "fallback_exa", best_text)
+                elif resp.status_code in (429, 500, 502, 503, 504):
+                    has_transient_err = True
+            except Exception:
+                has_transient_err = True
+
+    # Evaluasi status memo 3-state
+    if best_result[0]:
+        status = "SEARCHED_OK"
+    elif has_transient_err:
+        status = "TRANSIENT_FAIL"
+    elif serper_called or exa_called:
+        status = "SEARCHED_EMPTY"
+    else:
+        status = "NOT_SEARCHED"
+
+    final_result = (best_result[0], best_result[1], best_result[2], status)
     with _SEARCH_FALLBACK_LOCK:
-        _SEARCH_FALLBACK_MEMO[memo_key] = best_result
-    return best_result
+        _SEARCH_FALLBACK_MEMO[memo_key] = final_result
+    return final_result
 
 
 def _resolve_gnews_local_only(
@@ -1112,12 +1203,22 @@ def resolve_article_with_fallback(
 
     # Layer 3: fallback search (Serper / Exa) berdasar judul + media sumber
     search_attempted = False
+    s_status = "NOT_SEARCHED"
     if allow_search_fallback:
         search_attempted = True
         if search_fallback_fn is not None:
-            s_url, s_method, s_text = search_fallback_fn(item)
+            s_res = search_fallback_fn(item)
         else:
-            s_url, s_method, s_text = fallback_url_from_search(item, bypass_memo=bypass_search_memo)
+            s_res = fallback_url_from_search(item, bypass_memo=bypass_search_memo)
+
+        if isinstance(s_res, tuple) and len(s_res) >= 4:
+            s_url, s_method, s_text, s_status = s_res[0], s_res[1], s_res[2], s_res[3]
+        elif isinstance(s_res, tuple):
+            s_url, s_method, s_text = s_res[0], s_res[1], s_res[2]
+            s_status = "SEARCHED_OK" if s_url else "SEARCHED_EMPTY"
+        else:
+            s_url, s_method, s_text, s_status = None, "", "", "SEARCHED_EMPTY"
+
         if s_url and is_valid_decoded_url(s_url):
             cache.set(link, s_url)
             neg_cache.remove(link)
@@ -1126,6 +1227,7 @@ def resolve_article_with_fallback(
                 "resolved": True,
                 "method": s_method or "fallback_search",
                 "text": s_text or "",
+                "search_status": "SEARCHED_OK",
             }
 
     final_method = "circuit_skipped" if method == "circuit_skipped" else "failed"
@@ -1137,6 +1239,7 @@ def resolve_article_with_fallback(
         "resolved": False,
         "method": final_method,
         "text": "",
+        "search_status": s_status if search_attempted else "NOT_SEARCHED",
     }
 
 

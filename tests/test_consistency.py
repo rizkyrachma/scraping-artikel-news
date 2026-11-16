@@ -24,6 +24,10 @@ from src.extract_content import (
     resolve_article_with_fallback,
     is_prefiltered_rss_item,
     DECODE_VALIDATOR_VERSION,
+    fallback_url_from_search,
+    get_search_quota_usage,
+    reset_search_quota_usage,
+    get_search_memo_status,
 )
 import src.extract_content as extract_content_mod
 from src.fetch_news import _extract_rss_metadata_urls, dedup_by_link
@@ -593,6 +597,118 @@ class TestPointADecoderAndCircuitBreaker(unittest.TestCase):
             pipeline_main.filter_valid_articles = orig_filter
             pipeline_main.get_kemenperin_signal = orig_sig
             pipeline_main.save_decode_cache = orig_save
+
+    def test_layer3_memo_three_states_and_layer4_retry_and_quota_caps(self):
+        reset_search_quota_usage()
+        orig_post = extract_content_mod.requests.post
+        orig_serper_key = os.environ.get("SERPER_API_KEY")
+        orig_exa_key = os.environ.get("EXA_API_KEY")
+        orig_serp_max = extract_content_mod.MAX_SERPER_CALLS_PER_RUN
+        orig_exa_max = extract_content_mod.MAX_EXA_CALLS_PER_RUN
+
+        try:
+            os.environ["SERPER_API_KEY"] = "fake-key"
+            os.environ["EXA_API_KEY"] = "fake-key"
+            extract_content_mod.MAX_SERPER_CALLS_PER_RUN = 2
+            extract_content_mod.MAX_EXA_CALLS_PER_RUN = 2
+            extract_content_mod._SERPER_EXHAUSTED = False
+            extract_content_mod._EXA_EXHAUSTED = False
+
+            # 1. State: SEARCHED_EMPTY (HTTP 200, 0 hits)
+            class FakeResp200:
+                status_code = 200
+                def json(self): return {"organic": [], "results": []}
+
+            extract_content_mod.requests.post = lambda *a, **kw: FakeResp200()
+            item_empty = {
+                "title": "Judul Kosong Tidak Ditemukan",
+                "media_name": "Media Satu",
+                "link": "https://news.google.com/rss/articles/CBMiEMPTY1",
+            }
+            res_empty = fallback_url_from_search(item_empty, bypass_memo=True)
+            self.assertEqual(res_empty[3], "SEARCHED_EMPTY")
+            self.assertEqual(get_search_memo_status(item_empty), "SEARCHED_EMPTY")
+
+            # 2. State: TRANSIENT_FAIL (Network error/timeout)
+            def fake_timeout(*a, **kw):
+                raise extract_content_mod.requests.exceptions.Timeout("Timeout")
+            extract_content_mod.requests.post = fake_timeout
+            item_timeout = {
+                "title": "Judul Mengalami Gangguan Jaringan",
+                "media_name": "Media Dua",
+                "link": "https://news.google.com/rss/articles/CBMiTIMEOUT2",
+            }
+            res_timeout = fallback_url_from_search(item_timeout, bypass_memo=True)
+            self.assertEqual(res_timeout[3], "TRANSIENT_FAIL")
+            self.assertEqual(get_search_memo_status(item_timeout), "TRANSIENT_FAIL")
+
+            # 3. State: NOT_SEARCHED (Batas kuota habis)
+            extract_content_mod._SERPER_CALL_COUNT = extract_content_mod.MAX_SERPER_CALLS_PER_RUN
+            extract_content_mod._EXA_CALL_COUNT = extract_content_mod.MAX_EXA_CALLS_PER_RUN
+            item_quota = {
+                "title": "Judul Ketika Kuota Habis",
+                "media_name": "Media Tiga",
+                "link": "https://news.google.com/rss/articles/CBMiQUOTA3",
+            }
+            res_quota = fallback_url_from_search(item_quota, bypass_memo=True)
+            self.assertEqual(res_quota[3], "NOT_SEARCHED")
+            self.assertEqual(get_search_memo_status(item_quota), "NOT_SEARCHED")
+
+            # Cek pemakaian kuota tidak bertambah saat limit tercapai
+            q_usage = get_search_quota_usage()
+            self.assertEqual(q_usage["serper_calls"], 2)
+            self.assertEqual(q_usage["exa_calls"], 2)
+
+            # 4. Layer 4 verifikasi:
+            # SEARCHED_EMPTY -> allow_search_fallback=False
+            # TRANSIENT_FAIL & NOT_SEARCHED -> allow_search_fallback=True, bypass_search_memo=True
+            l4_calls = []
+            orig_extract = pipeline_main.extract_one_article
+            orig_filter = pipeline_main.filter_valid_articles
+            orig_sig = pipeline_main.get_kemenperin_signal
+            orig_save = pipeline_main.save_decode_cache
+            try:
+                def fake_l4_extract(it, allow_search_fallback=True, bypass_search_memo=False, **kw):
+                    l4_calls.append({
+                        "link": it.get("link"),
+                        "allow_search": allow_search_fallback,
+                        "bypass_memo": bypass_search_memo,
+                    })
+                    return {"decode_failed": True, "decode_method": "failed", "link": it.get("link")}
+                pipeline_main.extract_one_article = fake_l4_extract
+                pipeline_main.filter_valid_articles = lambda items, **kw: ([], items)
+                pipeline_main.get_kemenperin_signal = lambda *a: (False, "", "")
+                pipeline_main.save_decode_cache = lambda *a, **kw: None
+
+                pipeline_main.drain_retry_queue([item_empty, item_timeout, item_quota], name_map={})
+                self.assertEqual(len(l4_calls), 3)
+                call_empty = next(c for c in l4_calls if c["link"] == item_empty["link"])
+                self.assertFalse(call_empty["allow_search"])
+                self.assertFalse(call_empty["bypass_memo"])
+                call_to = next(c for c in l4_calls if c["link"] == item_timeout["link"])
+                self.assertTrue(call_to["allow_search"])
+                self.assertTrue(call_to["bypass_memo"])
+                call_q = next(c for c in l4_calls if c["link"] == item_quota["link"])
+                self.assertTrue(call_q["allow_search"])
+                self.assertTrue(call_q["bypass_memo"])
+            finally:
+                pipeline_main.extract_one_article = orig_extract
+                pipeline_main.filter_valid_articles = orig_filter
+                pipeline_main.get_kemenperin_signal = orig_sig
+                pipeline_main.save_decode_cache = orig_save
+        finally:
+            extract_content_mod.requests.post = orig_post
+            if orig_serper_key is not None:
+                os.environ["SERPER_API_KEY"] = orig_serper_key
+            else:
+                os.environ.pop("SERPER_API_KEY", None)
+            if orig_exa_key is not None:
+                os.environ["EXA_API_KEY"] = orig_exa_key
+            else:
+                os.environ.pop("EXA_API_KEY", None)
+            extract_content_mod.MAX_SERPER_CALLS_PER_RUN = orig_serp_max
+            extract_content_mod.MAX_EXA_CALLS_PER_RUN = orig_exa_max
+            reset_search_quota_usage()
 
 
 class TestPointBDeterminismAndSnapshot(unittest.TestCase):

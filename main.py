@@ -76,6 +76,8 @@ from src.extract_content import (
     save_decode_cache,
     normalize_google_news_url,
     is_prefiltered_rss_item,
+    get_search_quota_usage,
+    get_search_memo_status,
 )
 from src.relevance_filter import (
     is_pdf_document,
@@ -462,19 +464,23 @@ def drain_retry_queue(
         work_item["keyword"] = primary_kw
         work_item["_merged_retry_keywords"] = full_kw
 
+        # Evaluasi status memo Layer 3: L4 hanya mencoba ulang jika NOT_SEARCHED atau TRANSIENT_FAIL
+        s_status = get_search_memo_status(work_item) or str(work_item.get("search_status") or "")
+        allow_search = (s_status != "SEARCHED_EMPTY")
+        bypass_memo = (s_status in ("NOT_SEARCHED", "TRANSIENT_FAIL"))
+
         try:
             ext_params = inspect.signature(extract_one_article).parameters
+            call_kw = {"allow_search_fallback": allow_search}
+            if "max_retries" in ext_params:
+                call_kw["max_retries"] = 1
             if "use_negative_cache" in ext_params:
-                res = extract_one_article(
-                    work_item,
-                    allow_search_fallback=True,
-                    max_retries=1,
-                    use_negative_cache=False,
-                    allow_circuit_trip=False,
-                    bypass_search_memo=True,
-                )
-            else:
-                res = extract_one_article(work_item, allow_search_fallback=True)
+                call_kw["use_negative_cache"] = False
+            if "allow_circuit_trip" in ext_params:
+                call_kw["allow_circuit_trip"] = False
+            if "bypass_search_memo" in ext_params:
+                call_kw["bypass_search_memo"] = bypass_memo
+            res = extract_one_article(work_item, **call_kw)
         except GoogleCaptchaBlockedError as cap_err:
             print(f"  [Retry Queue CAPTCHA] {cap_err} -> Menghentikan dekode Google, lanjut fallback search sisa item.", flush=True)
             work_item["decode_failed"] = True
@@ -1562,6 +1568,11 @@ def run_batch_pipeline(
             f"Metrik Ekstraksi Teks    : ExtractOK={ext_ok}/{ext_tot} ({ext_pct:.1f}%) (>= 300 char, tidak setara metrik decode-only)",
             flush=True,
         )
+        q_usage = get_search_quota_usage()
+        print(
+            f"Pemakaian Kuota Search   : Serper={q_usage['serper_calls']}/{q_usage['serper_max']} | Exa={q_usage['exa_calls']}/{q_usage['exa_max']}",
+            flush=True,
+        )
         print("Rincian per keyword:", flush=True)
         for s in batch_kw_stats:
             kw_init = int(s.get("initial", 0) or 0)
@@ -1645,6 +1656,11 @@ def run_batch_pipeline(
         except Exception as e:
             print(f"[Snapshot Union Warning] {e}", flush=True)
 
+        q_tot = get_search_quota_usage()
+        print(
+            f"\n[Ringkasan Kuota Search Run] Serper: {q_tot['serper_calls']}/{q_tot['serper_max']} | Exa: {q_tot['exa_calls']}/{q_tot['exa_max']}",
+            flush=True,
+        )
         finalize_and_export(checkpoint["articles"], name_map, output_excel=out_excel_path)
     elif target_batch is not None:
         batch_out = os.path.join(date_folder, f"checkpoint_batch_{target_batch}.xlsx")
