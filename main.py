@@ -1588,8 +1588,10 @@ def run_batch_pipeline(
             flush=True,
         )
         q_usage = get_search_quota_usage()
+        serp_alert = " [LIMIT TERCAPAI!]" if q_usage.get("serper_limit_reached") else ""
+        exa_alert = " [LIMIT TERCAPAI!]" if q_usage.get("exa_limit_reached") else ""
         print(
-            f"Pemakaian Kuota Search   : Serper={q_usage['serper_calls']}/{q_usage['serper_max']} | Exa={q_usage['exa_calls']}/{q_usage['exa_max']}",
+            f"Pemakaian Kuota Search   : Serper={q_usage['serper_calls']}/{q_usage['serper_max']}{serp_alert} | Exa={q_usage['exa_calls']}/{q_usage['exa_max']}{exa_alert}",
             flush=True,
         )
         print("Rincian per keyword:", flush=True)

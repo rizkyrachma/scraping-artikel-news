@@ -707,29 +707,35 @@ _SEARCH_FALLBACK_LOCK = threading.Lock()
 _SEARCH_FALLBACK_MEMO: dict[tuple[str, str], tuple[str | None, str, str, str]] = {}
 _SERPER_EXHAUSTED = False
 _EXA_EXHAUSTED = False
+_SERPER_LIMIT_WARNED = False
+_EXA_LIMIT_WARNED = False
 _SERPER_CALL_COUNT = 0
 _EXA_CALL_COUNT = 0
 _SEARCH_QUOTA_LOCK = threading.Lock()
 _LOGGED_DECODE_WARNINGS = 0
 
 
-def get_search_quota_usage() -> dict[str, int]:
+def get_search_quota_usage() -> dict:
     """Mengembalikan metrik pemakaian kuota panggilan API pencarian per run saat ini."""
     with _SEARCH_QUOTA_LOCK:
         return {
             "serper_calls": _SERPER_CALL_COUNT,
             "serper_max": MAX_SERPER_CALLS_PER_RUN,
+            "serper_limit_reached": _SERPER_CALL_COUNT >= MAX_SERPER_CALLS_PER_RUN,
             "exa_calls": _EXA_CALL_COUNT,
             "exa_max": MAX_EXA_CALLS_PER_RUN,
+            "exa_limit_reached": _EXA_CALL_COUNT >= MAX_EXA_CALLS_PER_RUN,
         }
 
 
 def reset_search_quota_usage() -> None:
     """Mereset hitungan kuota panggilan API pencarian (untuk pengujian atau run baru)."""
-    global _SERPER_CALL_COUNT, _EXA_CALL_COUNT
+    global _SERPER_CALL_COUNT, _EXA_CALL_COUNT, _SERPER_LIMIT_WARNED, _EXA_LIMIT_WARNED
     with _SEARCH_QUOTA_LOCK:
         _SERPER_CALL_COUNT = 0
         _EXA_CALL_COUNT = 0
+        _SERPER_LIMIT_WARNED = False
+        _EXA_LIMIT_WARNED = False
 
 
 def get_search_memo_status(item: dict) -> str:
@@ -891,7 +897,7 @@ def fallback_url_from_search(item: dict, bypass_memo: bool = False) -> tuple[str
       - NOT_SEARCHED: tidak dipanggil karena kuota habis atau API key tidak tersedia
       - TRANSIENT_FAIL: error jaringan / timeout / HTTP 5xx / 429
     """
-    global _SERPER_EXHAUSTED, _EXA_EXHAUSTED, _SERPER_CALL_COUNT, _EXA_CALL_COUNT
+    global _SERPER_EXHAUSTED, _EXA_EXHAUSTED, _SERPER_CALL_COUNT, _EXA_CALL_COUNT, _SERPER_LIMIT_WARNED, _EXA_LIMIT_WARNED
     if not isinstance(item, dict):
         return None, "", "", "NOT_SEARCHED"
 
@@ -916,9 +922,22 @@ def fallback_url_from_search(item: dict, bypass_memo: bool = False) -> tuple[str
     serper_key = os.environ.get("SERPER_API_KEY", "").strip()
     can_call_serper = False
     with _SEARCH_QUOTA_LOCK:
-        if serper_key and not _SERPER_EXHAUSTED and _SERPER_CALL_COUNT < MAX_SERPER_CALLS_PER_RUN:
-            _SERPER_CALL_COUNT += 1
-            can_call_serper = True
+        if serper_key and not _SERPER_EXHAUSTED:
+            if _SERPER_CALL_COUNT < MAX_SERPER_CALLS_PER_RUN:
+                _SERPER_CALL_COUNT += 1
+                can_call_serper = True
+                if _SERPER_CALL_COUNT == MAX_SERPER_CALLS_PER_RUN and not _SERPER_LIMIT_WARNED:
+                    _SERPER_LIMIT_WARNED = True
+                    print(
+                        f"  [QUOTA LIMIT ALERT] Batas kuota Serper per run ({MAX_SERPER_CALLS_PER_RUN}/{MAX_SERPER_CALLS_PER_RUN}) tercapai di tengah run! Panggilan Serper berikutnya dialihkan ke retry/fallback.",
+                        flush=True,
+                    )
+            elif not _SERPER_LIMIT_WARNED:
+                _SERPER_LIMIT_WARNED = True
+                print(
+                    f"  [QUOTA LIMIT ALERT] Batas kuota Serper per run ({MAX_SERPER_CALLS_PER_RUN}/{MAX_SERPER_CALLS_PER_RUN}) tercapai di tengah run! Panggilan Serper berikutnya dialihkan ke retry/fallback.",
+                    flush=True,
+                )
 
     if can_call_serper:
         serper_called = True
@@ -955,9 +974,22 @@ def fallback_url_from_search(item: dict, bypass_memo: bool = False) -> tuple[str
     can_call_exa = False
     if not best_result[0]:
         with _SEARCH_QUOTA_LOCK:
-            if exa_key and not _EXA_EXHAUSTED and _EXA_CALL_COUNT < MAX_EXA_CALLS_PER_RUN:
-                _EXA_CALL_COUNT += 1
-                can_call_exa = True
+            if exa_key and not _EXA_EXHAUSTED:
+                if _EXA_CALL_COUNT < MAX_EXA_CALLS_PER_RUN:
+                    _EXA_CALL_COUNT += 1
+                    can_call_exa = True
+                    if _EXA_CALL_COUNT == MAX_EXA_CALLS_PER_RUN and not _EXA_LIMIT_WARNED:
+                        _EXA_LIMIT_WARNED = True
+                        print(
+                            f"  [QUOTA LIMIT ALERT] Batas kuota Exa per run ({MAX_EXA_CALLS_PER_RUN}/{MAX_EXA_CALLS_PER_RUN}) tercapai di tengah run! Panggilan Exa berikutnya dialihkan ke retry.",
+                            flush=True,
+                        )
+                elif not _EXA_LIMIT_WARNED:
+                    _EXA_LIMIT_WARNED = True
+                    print(
+                        f"  [QUOTA LIMIT ALERT] Batas kuota Exa per run ({MAX_EXA_CALLS_PER_RUN}/{MAX_EXA_CALLS_PER_RUN}) tercapai di tengah run! Panggilan Exa berikutnya dialihkan ke retry.",
+                        flush=True,
+                    )
 
         if can_call_exa:
             exa_called = True

@@ -685,10 +685,12 @@ class TestPointADecoderAndCircuitBreaker(unittest.TestCase):
             self.assertEqual(res_quota[3], "NOT_SEARCHED")
             self.assertEqual(get_search_memo_status(item_quota), "NOT_SEARCHED")
 
-            # Cek pemakaian kuota tidak bertambah saat limit tercapai
+            # Cek pemakaian kuota tidak bertambah saat limit tercapai dan flag alert aktif
             q_usage = get_search_quota_usage()
             self.assertEqual(q_usage["serper_calls"], 2)
             self.assertEqual(q_usage["exa_calls"], 2)
+            self.assertTrue(q_usage["serper_limit_reached"])
+            self.assertTrue(q_usage["exa_limit_reached"])
 
             # 4. Layer 4 verifikasi:
             # SEARCHED_EMPTY -> allow_search_fallback=False

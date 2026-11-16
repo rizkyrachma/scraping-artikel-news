@@ -47,7 +47,24 @@ load_env_file()
 # Flag YouTube: dinonaktifkan sementara sesuai instruksi user (default: False)
 ENABLE_YOUTUBE = os.environ.get("ENABLE_YOUTUBE", "false").lower() in ("true", "1", "yes")
 
-# Batas anggaran kuota panggilan API pencarian per run (dapat dikonfigurasi via env var)
+# ==============================================================================
+# BATAS ANGGARAN KUOTA PANGGILAN API PENCARIAN (PER RUN)
+# ==============================================================================
+# Rasionale default:
+# - Dalam 1 run penuh (19 batch), pipeline memproses ~200-500 artikel kandidat.
+# - Layer 1 (offline base64 decoder) dan Layer 2 (metadata HTML) menyelesaikan ~90%+ URL secara gratis.
+# - Layer 3 (Search Fallback) hanya aktif saat L1 & L2 gagal (misal rate-limit Google /sorry/index).
+#   Beban normal: ~2-5 fallback per batch (total ~40-80 pencarian per run 19 batch).
+#   Beban badai 429: dapat mencapai ~100-120 pencarian per run.
+# - MAX_SERPER_CALLS_PER_RUN = 150:
+#   Batas perlindungan anggaran (circuit budget) agar pipeline tidak menghabiskan kuota Serper
+#   bila Google News mengalami pemblokiran masif, namun tetap cukup melayani kebutuhan normal 19 batch.
+# - MAX_EXA_CALLS_PER_RUN = 100:
+#   Exa adalah secondary fallback yang hanya dipanggil jika Serper menghasilkan 0 hit organik.
+#   Batas 100 panggilan per run cukup untuk artikel yang benar-benar tidak ditemukan di Google Search.
+# - Catatan: Nilai ini BUKAN kuota total akun pengguna, melainkan batas alokasi per run yang dapat
+#   dikonfigurasi ulang melalui environment variable MAX_SERPER_CALLS_PER_RUN dan MAX_EXA_CALLS_PER_RUN.
+# ==============================================================================
 MAX_SERPER_CALLS_PER_RUN = int(os.environ.get("MAX_SERPER_CALLS_PER_RUN", "150"))
 MAX_EXA_CALLS_PER_RUN = int(os.environ.get("MAX_EXA_CALLS_PER_RUN", "100"))
 
