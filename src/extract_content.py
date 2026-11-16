@@ -84,11 +84,16 @@ except ImportError:
             return bool(url)
 
 try:
-    from src.config import parse_to_wib
+    from src.config import JOB_PORTAL_BLOCKLIST, parse_to_wib
 except ImportError:
     try:
-        from config import parse_to_wib
+        from config import JOB_PORTAL_BLOCKLIST, parse_to_wib
     except ImportError:
+        JOB_PORTAL_BLOCKLIST = [
+            "glints.com", "kitalulus.com", "bebee.com", "jobstreet.co.id",
+            "jobstreet.com", "kalibrr.com", "karir.com", "loker.id",
+            "indeed.com", "jobsdb.com", "prosple.com",
+        ]
         def parse_to_wib(val):
             return None
 
@@ -129,6 +134,45 @@ def normalize_google_news_url(url: str) -> str:
     except Exception:
         pass
     return raw.split("?")[0].rstrip("/")
+
+
+def is_prefiltered_rss_item(item: dict) -> tuple[bool, str]:
+    """
+    Pra-filter item berita berdasarkan metadata RSS sebelum dekoding Google News:
+    1. Judul berpola '- Google Maps'
+    2. Domain source_url di JOB_PORTAL_BLOCKLIST atau google.com
+    Mengembalikan (is_prefiltered, reason). Item yang tertolak tidak boleh memanggil dekoder Google.
+    """
+    if not isinstance(item, dict):
+        return False, ""
+
+    title = str(item.get("title") or "").strip()
+    raw_title = str(item.get("raw_title") or "").strip()
+    source_name = str(item.get("source") or item.get("media_name") or "").strip().lower()
+
+    if (
+        re.search(r"-\s*google\s*maps\s*$", title, re.IGNORECASE)
+        or re.search(r"-\s*google\s*maps\s*$", raw_title, re.IGNORECASE)
+        or source_name in ("google maps", "maps.google.com")
+    ):
+        return True, "prefiltered_google_maps"
+
+    src_u = str(item.get("source_url") or "").strip()
+    if src_u:
+        try:
+            parsed = urlparse(src_u if "://" in src_u else f"http://{src_u}")
+            netloc = parsed.netloc.lower().split(":")[0]
+            if netloc:
+                if netloc == "google.com" or netloc.endswith(".google.com"):
+                    return True, "prefiltered_google_source"
+                for bl in JOB_PORTAL_BLOCKLIST:
+                    bl_clean = bl.strip().lower()
+                    if netloc == bl_clean or netloc.endswith(f".{bl_clean}"):
+                        return True, f"prefiltered_job_portal:{bl_clean}"
+        except Exception:
+            pass
+
+    return False, ""
 
 
 def is_valid_decoded_url(url: str) -> bool:
@@ -961,6 +1005,17 @@ def resolve_article_with_fallback(
     cached_ok = cache.get(link)
     if cached_ok:
         return {"url": cached_ok, "resolved": True, "method": "cache", "text": ""}
+
+    # Pre-filter metadata RSS sebelum menyentuh decoder atau rolling window CB
+    is_pre, pre_reason = is_prefiltered_rss_item(item)
+    if is_pre:
+        return {
+            "url": link,
+            "resolved": False,
+            "method": "pre_filtered",
+            "text": "",
+            "reason": pre_reason,
+        }
 
     if use_negative_cache:
         neg_reason = neg_cache.get_reason(link)

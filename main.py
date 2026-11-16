@@ -75,6 +75,7 @@ from src.extract_content import (
     get_decode_controller,
     save_decode_cache,
     normalize_google_news_url,
+    is_prefiltered_rss_item,
 )
 from src.relevance_filter import (
     is_pdf_document,
@@ -226,6 +227,18 @@ def extract_one_article(
 
     pre_text = ""
     if "news.google.com" in link:
+        is_pre, pre_reason = is_prefiltered_rss_item(item)
+        if is_pre:
+            item_copy = dict(item)
+            item_copy["text"] = str(item.get("text") or "")
+            item_copy["resolved_url"] = link
+            item_copy["decode_method"] = "pre_filtered"
+            item_copy["decode_failed"] = True
+            item_copy["skip_retry"] = True
+            item_copy["is_suspiciously_short"] = False
+            item_copy["prefiltered_reason"] = pre_reason
+            return item_copy
+
         try:
             dec_res = resolve_article_with_fallback(
                 item,
@@ -250,7 +263,7 @@ def extract_one_article(
             item_copy["resolved_url"] = resolved if decode_method == "rejected_target" else link
             item_copy["decode_method"] = decode_method
             item_copy["decode_failed"] = True
-            item_copy["skip_retry"] = decode_method in ("negative_cache", "rejected_target")
+            item_copy["skip_retry"] = decode_method in ("negative_cache", "rejected_target", "pre_filtered")
             item_copy["is_suspiciously_short"] = False
             return item_copy
     else:
@@ -321,6 +334,7 @@ def _init_decode_stats() -> dict:
         "cache_hit": 0,
         "negative_cache_hit": 0,
         "rejected_target": 0,
+        "pre_filtered": 0,
         "decode_offline": 0,
         "decode_local": 0,
         "decode_ok": 0,
@@ -367,6 +381,9 @@ def _record_decode_stat(stats: dict, raw_item: dict, res_item: dict) -> None:
             return
         if method == "rejected_target":
             stats["rejected_target"] += 1
+            return
+        if method == "pre_filtered":
+            stats["pre_filtered"] = stats.get("pre_filtered", 0) + 1
             return
         stats["decode_fail"] += 1
         if method == "circuit_skipped":
@@ -1001,6 +1018,7 @@ def process_single_keyword(
                 f"| NegCache={decode_stats['negative_cache_hit']} | Offline={decode_stats['decode_offline']} "
                 f"| Lokal={decode_stats['decode_local']} | Meta={decode_stats['fallback_meta']} "
                 f"| Search={decode_stats['fallback_search']} | Rejected={decode_stats['rejected_target']} "
+                f"| PreFiltered={decode_stats.get('pre_filtered', 0)} "
                 f"| Retry={f_num}/{f_denom} ({f_pct:.1f}%) | ExtractOK={decode_stats['extract_ok']}/{ext_tot} ({ext_pct:.0f}%) "
                 f"| CB={cb_snap['state']} (RollingFail={cb_snap['rolling_failure_rate']*100:.0f}%, NextWorkers={cb_snap['recommended_workers']})"
             )
@@ -1535,6 +1553,7 @@ def run_batch_pipeline(
             f"| DecodeOK={batch_decode_report['decode_ok']} (Offline={batch_decode_report['decode_offline']}, Lokal={batch_decode_report['decode_local']}) "
             f"| FallbackMeta={batch_decode_report['fallback_meta']} | FallbackSearch={batch_decode_report['fallback_search']} "
             f"| Rejected={batch_decode_report.get('rejected_target', 0)} "
+            f"| PreFiltered={batch_decode_report.get('pre_filtered', 0)} "
             f"| Gagal/Retry={f_num}/{f_denom} ({fail_pct:.1f}%) "
             f"| CircuitTrips={batch_decode_report['circuit_trips']}",
             flush=True,

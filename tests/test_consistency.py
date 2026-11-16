@@ -21,6 +21,7 @@ from src.extract_content import (
     is_valid_decoded_url,
     normalize_google_news_url,
     resolve_article_with_fallback,
+    is_prefiltered_rss_item,
 )
 import src.extract_content as extract_content_mod
 from src.fetch_news import _extract_rss_metadata_urls, dedup_by_link
@@ -353,7 +354,7 @@ class TestPointADecoderAndCircuitBreaker(unittest.TestCase):
                     "decoded_url": "https://www.google.com/maps/search/?api=1&query=Kopi+Tarts",
                 }
                 maps_item = {
-                    "title": "Kopi & Tarts - Google Maps",
+                    "title": "Kopi & Tarts Resto",
                     "link": "https://news.google.com/rss/articles/CBMiMAPS1?oc=5",
                 }
                 r_maps = resolve_article_with_fallback(
@@ -439,6 +440,65 @@ class TestPointADecoderAndCircuitBreaker(unittest.TestCase):
         self.assertEqual(num, 1)
         self.assertEqual(denom, 4)
         self.assertAlmostEqual(pct, 25.0)
+
+    def test_prefiltered_rss_item_and_metric_exclusion(self):
+        # 1. Judul Google Maps
+        maps_item = {"title": "Pusat Kelapa Sawit - Google Maps", "link": "https://news.google.com/rss/articles/CBMiMAPS"}
+        is_pre, reason = is_prefiltered_rss_item(maps_item)
+        self.assertTrue(is_pre)
+        self.assertIn("maps", reason)
+
+        # 2. Source URL di blocklist loker atau google.com
+        job_item = {
+            "title": "Lowongan Staff Agro",
+            "link": "https://news.google.com/rss/articles/CBMiJOB",
+            "source_url": "https://glints.com/id/opportunities/jobs/123",
+        }
+        is_pre, reason = is_prefiltered_rss_item(job_item)
+        self.assertTrue(is_pre)
+        self.assertIn("job_portal", reason)
+
+        g_item = {
+            "title": "Lokasi Kebun",
+            "link": "https://news.google.com/rss/articles/CBMiGLOC",
+            "source_url": "https://maps.google.com/location/456",
+        }
+        is_pre, reason = is_prefiltered_rss_item(g_item)
+        self.assertTrue(is_pre)
+        self.assertIn("google", reason)
+
+        # 3. Berita normal tidak boleh ter-prefilter
+        normal_item = {
+            "title": "Kemenperin Dorong Hilirisasi Minyak Sawit",
+            "link": "https://news.google.com/rss/articles/CBMiOK",
+            "source_url": "https://ekonomi.bisnis.com/read/123",
+        }
+        is_pre, reason = is_prefiltered_rss_item(normal_item)
+        self.assertFalse(is_pre)
+
+        # 4. extract_one_article menolak langsung tanpa dekoder
+        ext_res = pipeline_main.extract_one_article(maps_item)
+        self.assertTrue(ext_res.get("decode_failed"))
+        self.assertTrue(ext_res.get("skip_retry"))
+        self.assertEqual(ext_res.get("decode_method"), "pre_filtered")
+
+        # 5. Metrik compute_decode_failure_rate mengeluarkan pre_filtered dari pembilang & penyebut
+        stats = pipeline_main._init_decode_stats()
+        # gnews_total = 2, 1 pre_filtered, 1 decode_fail
+        pipeline_main._record_decode_stat(stats, maps_item, ext_res)
+        pipeline_main._record_decode_stat(
+            stats,
+            {"link": "https://news.google.com/rss/articles/CBMiFAIL"},
+            {"decode_failed": True, "decode_method": "failed", "text": ""},
+        )
+        self.assertEqual(stats["gnews_total"], 2)
+        self.assertEqual(stats["pre_filtered"], 1)
+        self.assertEqual(stats["decode_fail"], 1)
+        num, denom, pct = pipeline_main.compute_decode_failure_rate(stats)
+        # Denom = 2 - 1 = 1, Num = 1 -> 100% (bukan 1/2 = 50%)
+        self.assertEqual(num, 1)
+        self.assertEqual(denom, 1)
+        self.assertAlmostEqual(pct, 100.0)
 
     def test_rss_metadata_extraction_ignores_google_and_root_links(self):
         fake_entry = {
