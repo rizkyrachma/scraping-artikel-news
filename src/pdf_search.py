@@ -10,7 +10,7 @@ from datetime import date, datetime
 from urllib.parse import urlparse
 import requests
 
-from config import load_env_file, get_date_range
+from src.config import load_env_file, get_date_range
 
 load_env_file()
 

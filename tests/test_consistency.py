@@ -12,7 +12,6 @@ import tempfile
 import unittest
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "src")))
 
 from src.extract_content import (
     AdaptiveDecodeController,
@@ -402,11 +401,30 @@ class TestPointADecoderAndCircuitBreaker(unittest.TestCase):
                 self.assertTrue(r_cap["resolved"])
                 self.assertEqual(r_cap["method"], "fallback_serper")
                 self.assertGreaterEqual(ctrl.snapshot()["rolling_failures"], 1)
-                self.assertIs(sys.modules.get("extract_content"), sys.modules.get("src.extract_content"))
-                self.assertIs(sys.modules.get("stable"), sys.modules.get("src.stable"))
                 self.assertIs(pipeline_main.GoogleCaptchaBlockedError, extract_content_mod.GoogleCaptchaBlockedError)
             finally:
                 extract_content_mod._decoder_fn = orig_decoder
+
+    def test_no_dual_module_identities(self):
+        """Memastikan semua modul intra-repo diimpor via 'src.<modul>' dan tidak ada modul ganda di sys.modules."""
+        core_modules = [
+            "config",
+            "stable",
+            "extract_content",
+            "fetch_news",
+            "relevance_filter",
+            "gemini_pool",
+            "negative_summarizer",
+            "auto_recheck",
+        ]
+        for mod_name in core_modules:
+            src_name = f"src.{mod_name}"
+            self.assertIn(src_name, sys.modules, f"{src_name} harus ada di sys.modules")
+            self.assertNotIn(
+                mod_name,
+                sys.modules,
+                f"Duplikasi identitas modul terdeteksi: bare module '{mod_name}' ada di sys.modules bersama '{src_name}'",
+            )
 
     def test_rejected_target_versioned_persistence_and_invalidation(self):
         with tempfile.TemporaryDirectory() as td:

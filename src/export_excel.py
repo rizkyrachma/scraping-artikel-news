@@ -11,10 +11,7 @@ import pandas as pd
 from openpyxl.styles import Alignment, Font, PatternFill  # type: ignore
 from openpyxl.utils import get_column_letter  # type: ignore
 
-try:
-    from stable import canonical_url as _canonical_url
-except ImportError:
-    from src.stable import canonical_url as _canonical_url
+from src.stable import canonical_url as _canonical_url
 
 BERITA_COLUMNS = [
     "Tanggal",
@@ -146,7 +143,7 @@ def save_to_excel(
         try:
             existing_df = pd.read_excel(output_path)
             if not existing_df.empty:
-                from fetch_news import dedup_by_link, dedup_by_title
+                from src.fetch_news import dedup_by_link, dedup_by_title
                 combined_raw = existing_df.to_dict(orient="records") + final_input_records
                 link_deduped = dedup_by_link(combined_raw)
                 final_input_records = dedup_by_title(link_deduped, threshold=85)
@@ -224,7 +221,7 @@ def save_to_excel(
         df["Sumber Data"] = df["Sumber Data"].replace("", "RSS").fillna("RSS")
 
         # Filter proteksi: singkirkan seluruh dokumen PDF (sesuai instruksi user)
-        from relevance_filter import is_pdf_document
+        from src.relevance_filter import is_pdf_document
         is_pdf_mask = (
             pd.Series(df["Sumber Data"]).astype(str).str.upper().eq("PDF") |
             df.apply(lambda r: is_pdf_document(url=str(r.get("Link Website", "")), title=str(r.get("Title", "")), sumber_data=str(r.get("Sumber Data", ""))), axis=1)
@@ -268,9 +265,9 @@ def save_to_excel(
             df[col] = df[col].astype("object")
 
         # 2. Auto-enrichment NLP & Deteksi Ketat Kemenperin
-        from entity_mapper import find_spokespersons
-        from relevance_filter import is_kemenperin_related
-        from sentiment import classify_tone
+        from src.entity_mapper import find_spokespersons
+        from src.relevance_filter import is_kemenperin_related
+        from src.sentiment import classify_tone
 
         for idx in range(len(df)):
             t = str(df.at[idx, "Title"] or "")
@@ -343,10 +340,7 @@ def write_styled_excel(
     dengan styling standar: header bold, freeze_panes A2, auto-fit lebar kolom,
     format tanggal WIB, highlight kuning review, dan hyperlink aktif berwarna biru.
     """
-    try:
-        from src.config import parse_to_wib as _parse_date
-    except ImportError:
-        from config import parse_to_wib as _parse_date
+    from src.config import parse_to_wib as _parse_date
 
     output_str = str(output_path)
     out_dir = os.path.dirname(output_str)
@@ -367,10 +361,7 @@ def write_styled_excel(
     columns.extend(trailing_cols)
     if not df.empty:
         # Proteksi eksklusif Ditjen Industri Agro: singkirkan dokumen PDF & status 'buang'; pertahankan baris 'review' untuk tanda kuning
-        try:
-            from src.relevance_filter import is_pdf_document as _is_pdf
-        except ImportError:
-            from relevance_filter import is_pdf_document as _is_pdf
+        from src.relevance_filter import is_pdf_document as _is_pdf
         if "Sumber Data" in df.columns:
             pdf_m = (
                 pd.Series(df["Sumber Data"]).astype(str).str.upper().eq("PDF")

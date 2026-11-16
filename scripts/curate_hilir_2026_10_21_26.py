@@ -15,11 +15,11 @@ import json
 import shutil
 import pandas as pd
 
-# Tambahkan src ke sys.path
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "src")))
-from export_excel import save_to_excel
-from config import load_spokesperson_map
-from entity_mapper import find_spokespersons
+# Pastikan root repo berada di sys.path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+from src.export_excel import save_to_excel
+from src.config import load_spokesperson_map
+from src.entity_mapper import find_spokespersons
 
 
 NON_HILIR_RULES = [

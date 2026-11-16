@@ -12,18 +12,18 @@ import requests
 from datetime import date
 from urllib.parse import urlparse
 
-from query_builder import build_media_query, build_gov_query
-from config import (
+from src.query_builder import build_media_query, build_gov_query
+from src.config import (
     is_published_yesterday,
     get_date_range,
 )
-from fetch_news import (
+from src.fetch_news import (
     is_valid_domain,
     clean_title_suffix,
     dedup_by_link,
     dedup_by_title,
 )
-from relevance_filter import is_likely_relevant
+from src.relevance_filter import is_likely_relevant
 
 SERPER_NEWS_URL = "https://google.serper.dev/news"
 
@@ -91,7 +91,7 @@ def search_serper_news(
 
     # Khusus pejabat Kemenperin umum: panggil chunk nama pejabat
     if base_kw.lower() in ("pejabat_kemenperin", "pejabat kemenperin", "kemenperin_pejabat"):
-        from config import get_officials_query_variants
+        from src.config import get_officials_query_variants
         chunks = get_officials_query_variants()
         all_res = []
         for chunk in chunks:
@@ -103,7 +103,7 @@ def search_serper_news(
         return dedup_by_link(all_res)
 
     # Perluas query jika berupa kata dasar komoditas yang memiliki varian
-    from config import build_keyword_groups
+    from src.config import build_keyword_groups
     groups = build_keyword_groups()
     if base_kw.lower() in groups and len(groups[base_kw.lower()]) > 1:
         variants = groups[base_kw.lower()]

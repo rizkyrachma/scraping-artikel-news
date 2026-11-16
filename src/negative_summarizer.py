@@ -18,22 +18,18 @@ from datetime import datetime
 from rapidfuzz import fuzz
 
 try:
-    from config import load_env_file
+    from src.config import load_env_file
     load_env_file()
 except Exception:
     pass
 
 try:
-    from extract_content import extract_article_text
+    from src.extract_content import extract_article_text
 except Exception:
     extract_article_text = None
 
-try:
-    from gemini_pool import CANDIDATE_MODELS, GeminiModelPool
-    from stable import canonical_url
-except ImportError:
-    from src.gemini_pool import CANDIDATE_MODELS, GeminiModelPool
-    from src.stable import canonical_url
+from src.gemini_pool import CANDIDATE_MODELS, GeminiModelPool
+from src.stable import canonical_url
 
 _MODEL_POOL = GeminiModelPool("NEGATIVE SUMMARIZER")
 gemini_quota_exhausted = False

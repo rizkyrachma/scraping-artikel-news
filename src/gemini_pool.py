@@ -10,11 +10,8 @@ import threading
 import time
 import warnings
 
-sys.modules.setdefault("src.gemini_pool", sys.modules[__name__])
-sys.modules.setdefault("gemini_pool", sys.modules[__name__])
-
 try:
-    from config import load_env_file
+    from src.config import load_env_file
     load_env_file()
 except Exception:
     pass

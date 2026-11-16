@@ -15,9 +15,9 @@ import json
 import shutil
 import pandas as pd
 
-# Tambahkan src ke sys.path
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "src")))
-from export_excel import save_to_excel
+# Pastikan root repo berada di sys.path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+from src.export_excel import save_to_excel
 
 # Aturan eliminasi non-hilir / hulu / non-agro / noise
 NON_HILIR_RULES = [

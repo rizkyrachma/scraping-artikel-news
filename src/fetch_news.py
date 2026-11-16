@@ -14,11 +14,8 @@ from datetime import date, datetime
 from urllib.parse import urlparse, parse_qs
 import feedparser  # type: ignore
 
-sys.modules.setdefault("src.fetch_news", sys.modules[__name__])
-sys.modules.setdefault("fetch_news", sys.modules[__name__])
-
-from query_builder import build_media_query, build_gov_query, build_rss_url
-from config import (
+from src.query_builder import build_media_query, build_gov_query, build_rss_url
+from src.config import (
     MARKETPLACE_BLOCKLIST,
     ASSET_HOST_BLOCKLIST,
     SOCIAL_MEDIA_BLOCKLIST,
@@ -28,7 +25,7 @@ from config import (
     GOV_DOMAIN_SUFFIX,
     get_date_folder,
 )
-from relevance_filter import is_likely_relevant
+from src.relevance_filter import is_likely_relevant
 from rapidfuzz import fuzz
 
 
@@ -77,7 +74,7 @@ def check_google_news_access() -> tuple[bool, str]:
             feed = feedparser.parse(resp.content)
             if feed.entries:
                 try:
-                    from extract_content import check_google_news_access as check_decoder_access
+                    from src.extract_content import check_google_news_access as check_decoder_access
                     dec_ok, dec_msg = check_decoder_access(feed.entries[0].link)
                     if not dec_ok:
                         return False, f"RSS HTTP 200 ({len(feed.entries)} entri), namun dekode URL Google News gagal: {dec_msg}"
@@ -371,7 +368,7 @@ def get_cached_keyword_groups() -> dict[str, list[str]]:
     """Mengambil cache grup keyword untuk mencegah re-read disk berulang."""
     global _KEYWORD_GROUPS_CACHE
     if _KEYWORD_GROUPS_CACHE is None:
-        from config import build_keyword_groups
+        from src.config import build_keyword_groups
         _KEYWORD_GROUPS_CACHE = build_keyword_groups()
     return _KEYWORD_GROUPS_CACHE
 
@@ -388,8 +385,8 @@ def search_keyword(keyword: str | list[str], delay: float | None = None, target_
     """
     results = []
     from datetime import timedelta
-    from query_builder import format_keyword_query
-    from config import get_officials_query_variants
+    from src.query_builder import format_keyword_query
+    from src.config import get_officials_query_variants
 
     if isinstance(keyword, str) and keyword.lower() in ("pejabat_kemenperin", "pejabat kemenperin", "kemenperin_pejabat"):
         variants_list = get_officials_query_variants()
@@ -412,7 +409,7 @@ def search_keyword(keyword: str | list[str], delay: float | None = None, target_
         query_kw = kw_expr
         override = os.environ.get("OVERRIDE_DATE", "").strip()
         if target_date is not None or override:
-            from config import get_date_range
+            from src.config import get_date_range
             start_d, end_d = get_date_range(target_date)
             prev_d = start_d - timedelta(days=1)
             next_d = end_d + timedelta(days=1)
@@ -473,8 +470,8 @@ def search_pejabat_presisi(
     Mendukung mode Serper.dev maupun Google News RSS.
     """
     from datetime import timedelta
-    from config import load_pejabat_precision_mapping
-    from query_builder import build_media_query, build_gov_query, build_rss_url
+    from src.config import load_pejabat_precision_mapping
+    from src.query_builder import build_media_query, build_gov_query, build_rss_url
 
     if pejabat_list is None:
         pejabat_list = load_pejabat_precision_mapping(active_only=True)
@@ -547,7 +544,7 @@ def search_pejabat_presisi(
             else:
                 query_kw = base_kw_expr
                 if target_date is not None:
-                    from config import get_date_range
+                    from src.config import get_date_range
                     start_d, end_d = get_date_range(target_date)
                     prev_d = start_d - timedelta(days=1)
                     next_d = end_d + timedelta(days=1)
@@ -622,10 +619,7 @@ def merge_keywords(kw_a: str, kw_b: str) -> str:
     return ", ".join(result)
 
 
-try:
-    from stable import canonical_url as _canonical_url
-except ImportError:
-    from src.stable import canonical_url as _canonical_url
+from src.stable import canonical_url as _canonical_url
 
 
 def dedup_by_link(items: list[dict]) -> list[dict]:

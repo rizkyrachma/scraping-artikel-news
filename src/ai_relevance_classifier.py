@@ -13,17 +13,13 @@ from pathlib import Path
 from datetime import datetime
 
 try:
-    from config import load_env_file
+    from src.config import load_env_file
     load_env_file()
 except Exception:
     pass
 
-try:
-    from gemini_pool import CANDIDATE_MODELS, GeminiModelPool
-    from stable import get_decision_cache
-except ImportError:
-    from src.gemini_pool import CANDIDATE_MODELS, GeminiModelPool
-    from src.stable import get_decision_cache
+from src.gemini_pool import CANDIDATE_MODELS, GeminiModelPool
+from src.stable import get_decision_cache
 
 AI_RELEVANCE_PROMPT_VERSION = "v2026-11-12-b"
 _MODEL_POOL = GeminiModelPool("AI RELEVANCE")

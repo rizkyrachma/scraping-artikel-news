@@ -85,7 +85,7 @@ def crawl_kemenperin_siaran_pers(target_date: date | tuple | list | None = None,
 
                     override = os.environ.get("OVERRIDE_DATE", "").strip()
                     if target_date is not None or override:
-                        from config import get_date_range
+                        from src.config import get_date_range
                         start_d, end_d = get_date_range(target_date)
                         if pub_date is None or not (start_d <= pub_date <= end_d):
                             continue

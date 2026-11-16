@@ -13,7 +13,7 @@ import html
 from datetime import date, datetime, timedelta
 import requests
 from concurrent.futures import ThreadPoolExecutor
-from config import load_env_file, get_date_range
+from src.config import load_env_file, get_date_range
 
 # Channel resmi Kemenperin & Ditjen Industri Agro
 KEMENPERIN_CHANNEL_ID = "UCO5bOHu52UDNG1q8im7YM8w"      # @kemenperin_ri

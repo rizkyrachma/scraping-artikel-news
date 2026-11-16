@@ -49,30 +49,23 @@ from datetime import datetime
 
 # Impor internal
 try:
-    from config import load_env_file
+    from src.config import load_env_file
     load_env_file()
 except Exception:
     pass
 
 try:
-    from relevance_filter import is_pdf_document, is_foreign_noise_domain, classify_non_news_evergreen
+    from src.relevance_filter import is_pdf_document, is_foreign_noise_domain, classify_non_news_evergreen
 except Exception:
-    try:
-        from src.relevance_filter import is_pdf_document, is_foreign_noise_domain, classify_non_news_evergreen
-    except Exception:
-        def is_pdf_document(url="", title="", sumber_data=""):
-            return bool(sumber_data and sumber_data.upper() == "PDF") or ".pdf" in (url or "").lower()
-        def is_foreign_noise_domain(url=""):
-            return ".vn" in (url or "").lower()
-        def classify_non_news_evergreen(title="", text="", url=""):
-            return False, ""
+    def is_pdf_document(url="", title="", sumber_data=""):
+        return bool(sumber_data and sumber_data.upper() == "PDF") or ".pdf" in (url or "").lower()
+    def is_foreign_noise_domain(url=""):
+        return ".vn" in (url or "").lower()
+    def classify_non_news_evergreen(title="", text="", url=""):
+        return False, ""
 
-try:
-    from gemini_pool import CANDIDATE_MODELS, GeminiModelPool
-    from stable import canonical_url, get_decision_cache
-except ImportError:
-    from src.gemini_pool import CANDIDATE_MODELS, GeminiModelPool
-    from src.stable import canonical_url, get_decision_cache
+from src.gemini_pool import CANDIDATE_MODELS, GeminiModelPool
+from src.stable import canonical_url, get_decision_cache
 
 PASS2_PROMPT_VERSION = "v2026-11-12-b"
 AUDIT_PROMPT_VERSION = "v2026-11-12-b"

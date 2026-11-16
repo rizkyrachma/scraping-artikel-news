@@ -118,7 +118,7 @@ def classify_tone(text: str = "", title: str = "") -> str:
     Menggunakan tone_classifier sistem revisi (perspektif dampak industri agro, negasi & konteks).
     """
     try:
-        from tone_classifier import classify_tone_fallback
+        from src.tone_classifier import classify_tone_fallback
         t_res, _, _ = classify_tone_fallback(title=title, text=text)
         return t_res
     except Exception:

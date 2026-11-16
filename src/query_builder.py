@@ -4,7 +4,7 @@ Penyusunan search query Google News RSS dengan denylist filtering marketplace da
 """
 
 from urllib.parse import quote
-from config import MARKETPLACE_BLOCKLIST, ASSET_HOST_BLOCKLIST, GOV_DOMAIN_SUFFIX
+from src.config import MARKETPLACE_BLOCKLIST, ASSET_HOST_BLOCKLIST, GOV_DOMAIN_SUFFIX
 
 
 def format_keyword_query(keyword: str | list[str]) -> str:

@@ -17,9 +17,6 @@ import threading
 import time
 from urllib.parse import urlparse
 
-sys.modules.setdefault("src.extract_content", sys.modules[__name__])
-sys.modules.setdefault("extract_content", sys.modules[__name__])
-
 import requests
 import trafilatura
 import urllib3
@@ -73,15 +70,12 @@ except ImportError:
 try:
     from src.fetch_news import GoogleCaptchaBlockedError, is_valid_domain
 except ImportError:
-    try:
-        from fetch_news import GoogleCaptchaBlockedError, is_valid_domain
-    except ImportError:
-        class GoogleCaptchaBlockedError(Exception):
-            """Exception khusus jika Google News mengalihkan ke CAPTCHA gate (google.com/sorry/index)."""
-            pass
+    class GoogleCaptchaBlockedError(Exception):
+        """Exception khusus jika Google News mengalihkan ke CAPTCHA gate (google.com/sorry/index)."""
+        pass
 
-        def is_valid_domain(url: str) -> bool:
-            return bool(url)
+    def is_valid_domain(url: str) -> bool:
+        return bool(url)
 
 try:
     from src.config import (
@@ -91,23 +85,15 @@ try:
         parse_to_wib,
     )
 except ImportError:
-    try:
-        from config import (
-            JOB_PORTAL_BLOCKLIST,
-            MAX_SERPER_CALLS_PER_RUN,
-            MAX_EXA_CALLS_PER_RUN,
-            parse_to_wib,
-        )
-    except ImportError:
-        JOB_PORTAL_BLOCKLIST = [
-            "glints.com", "kitalulus.com", "bebee.com", "jobstreet.co.id",
-            "jobstreet.com", "kalibrr.com", "karir.com", "loker.id",
-            "indeed.com", "jobsdb.com", "prosple.com",
-        ]
-        MAX_SERPER_CALLS_PER_RUN = 150
-        MAX_EXA_CALLS_PER_RUN = 100
-        def parse_to_wib(val):
-            return None
+    JOB_PORTAL_BLOCKLIST = [
+        "glints.com", "kitalulus.com", "bebee.com", "jobstreet.co.id",
+        "jobstreet.com", "kalibrr.com", "karir.com", "loker.id",
+        "indeed.com", "jobsdb.com", "prosple.com",
+    ]
+    MAX_SERPER_CALLS_PER_RUN = 150
+    MAX_EXA_CALLS_PER_RUN = 100
+    def parse_to_wib(val):
+        return None
 
 
 SERPER_SEARCH_URL = "https://google.serper.dev/search"

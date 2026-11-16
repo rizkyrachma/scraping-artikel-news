@@ -20,8 +20,10 @@ Orkestrasi pipeline scraping berita industri end-to-end:
 import sys
 import os
 
-# Tambahkan src ke sys.path agar seluruh modul dalam src/ dapat diimpor langsung
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "src")))
+# Pastikan direktori root repo berada di sys.path agar impor src.<modul> konsisten dan tanpa duplikasi
+REPO_ROOT = os.path.abspath(os.path.dirname(__file__))
+if REPO_ROOT not in sys.path:
+    sys.path.insert(0, REPO_ROOT)
 import json
 import inspect
 import time

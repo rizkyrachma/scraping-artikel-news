@@ -17,9 +17,6 @@ import threading
 import time
 from urllib.parse import parse_qsl, urlencode, urlparse, urlunparse
 
-sys.modules.setdefault("src.stable", sys.modules[__name__])
-sys.modules.setdefault("stable", sys.modules[__name__])
-
 DEFAULT_DECISION_CACHE_FILE = os.path.join("hasil_scrapping", "cache_decisions.json")
 DEFAULT_SNAPSHOT_DIR = os.path.join("hasil_scrapping", "snapshots")
 DEFAULT_SNAPSHOT_RETENTION_DAYS = 30
@@ -614,12 +611,8 @@ def merge_runs_from_excel(
     if not merge_from_path or not os.path.exists(merge_from_path):
         raise FileNotFoundError(f"File --merge-from tidak ditemukan: {merge_from_path}")
 
-    try:
-        from export_excel import save_to_excel
-        from relevance_filter import is_pdf_document
-    except ImportError:
-        from src.export_excel import save_to_excel
-        from src.relevance_filter import is_pdf_document
+    from src.export_excel import save_to_excel
+    from src.relevance_filter import is_pdf_document
 
     if isinstance(base_source, str):
         base_rows, loaded_base_neg = _read_excel_run_sheets(base_source)

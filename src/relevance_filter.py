@@ -1996,7 +1996,7 @@ def get_kemenperin_signal(
     Untuk pejabat lintas-direktorat (Menteri/Wamen/Sekjen/Irjen): HANYA lolos jika isi artikel
     BENAR-BENAR menyinggung komoditas Agro / Ditjen Industri Agro (bukan soal halal/batik/net zero/politik).
     """
-    from entity_mapper import find_spokespersons
+    from src.entity_mapper import find_spokespersons
 
     clean_kw = (keyword or "").strip().lower()
     combined = f"{title or ''} {text or ''}"
@@ -2090,9 +2090,9 @@ def has_kemenperin_or_agro_override(title: str = "", text: str = "") -> bool:
         return True
 
     # 2. Cek nama salah satu dari 13 pejabat
-    from entity_mapper import match_name_in_text
+    from src.entity_mapper import match_name_in_text
     if _OFFICIALS_DETAILS_CACHE is None:
-        from config import load_spokesperson_details
+        from src.config import load_spokesperson_details
         _OFFICIALS_DETAILS_CACHE = load_spokesperson_details()
 
     for d in _OFFICIALS_DETAILS_CACHE:
