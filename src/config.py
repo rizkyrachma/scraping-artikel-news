@@ -50,7 +50,7 @@ ENABLE_YOUTUBE = os.environ.get("ENABLE_YOUTUBE", "false").lower() in ("true", "
 # ==============================================================================
 # BATAS ANGGARAN KUOTA PANGGILAN API PENCARIAN (PER RUN)
 # ==============================================================================
-# Rasionale default:
+# Dasar kuota: estimasi awal, akan dikalibrasi dari hasil run GHA.
 # - Dalam 1 run penuh (19 batch), pipeline memproses ~200-500 artikel kandidat.
 # - Layer 1 (offline base64 decoder) dan Layer 2 (metadata HTML) menyelesaikan ~90%+ URL secara gratis.
 # - Layer 3 (Search Fallback) hanya aktif saat L1 & L2 gagal (misal rate-limit Google /sorry/index).
