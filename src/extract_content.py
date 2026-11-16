@@ -140,7 +140,7 @@ def is_prefiltered_rss_item(item: dict) -> tuple[bool, str]:
     """
     Pra-filter item berita berdasarkan metadata RSS sebelum dekoding Google News:
     1. Judul berpola '- Google Maps'
-    2. Domain source_url di JOB_PORTAL_BLOCKLIST atau google.com
+    2. Domain source_url penerbit di JOB_PORTAL_BLOCKLIST atau google.com (HANYA source_url penerbit, BUKAN link news.google.com milik item)
     Mengembalikan (is_prefiltered, reason). Item yang tertolak tidak boleh memanggil dekoder Google.
     """
     if not isinstance(item, dict):
@@ -157,13 +157,14 @@ def is_prefiltered_rss_item(item: dict) -> tuple[bool, str]:
     ):
         return True, "prefiltered_google_maps"
 
+    # Periksa domain source_url penerbit (pastikan HANYA source_url yang diuji, bukan link artikel Google News)
     src_u = str(item.get("source_url") or "").strip()
     if src_u:
         try:
             parsed = urlparse(src_u if "://" in src_u else f"http://{src_u}")
             netloc = parsed.netloc.lower().split(":")[0]
-            if netloc:
-                if netloc == "google.com" or netloc.endswith(".google.com"):
+            if netloc and netloc != "news.google.com":
+                if netloc == "google.com" or (netloc.endswith(".google.com") and netloc != "news.google.com"):
                     return True, "prefiltered_google_source"
                 for bl in JOB_PORTAL_BLOCKLIST:
                     bl_clean = bl.strip().lower()

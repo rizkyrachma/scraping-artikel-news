@@ -233,6 +233,10 @@ def extract_one_article(
     if "news.google.com" in link:
         is_pre, pre_reason = is_prefiltered_rss_item(item)
         if is_pre:
+            src_u = str(item.get("source_url") or "")
+            src_dom = urlparse(src_u if "://" in src_u else f"http://{src_u}").netloc.lower().split(":")[0] if src_u else "-"
+            t_disp = str(item.get("title") or "")[:70]
+            log_granular(f"       [PreFiltered] '{t_disp}' (SourceDomain: {src_dom}, Alasan: {pre_reason})")
             item_copy = dict(item)
             item_copy["text"] = str(item.get("text") or "")
             item_copy["resolved_url"] = link
@@ -241,6 +245,7 @@ def extract_one_article(
             item_copy["skip_retry"] = True
             item_copy["is_suspiciously_short"] = False
             item_copy["prefiltered_reason"] = pre_reason
+            item_copy["prefiltered_domain"] = src_dom
             return item_copy
 
         try:
@@ -339,6 +344,7 @@ def _init_decode_stats() -> dict:
         "negative_cache_hit": 0,
         "rejected_target": 0,
         "pre_filtered": 0,
+        "prefiltered_samples": [],
         "decode_offline": 0,
         "decode_local": 0,
         "decode_ok": 0,
@@ -388,6 +394,13 @@ def _record_decode_stat(stats: dict, raw_item: dict, res_item: dict) -> None:
             return
         if method == "pre_filtered":
             stats["pre_filtered"] = stats.get("pre_filtered", 0) + 1
+            samples = stats.setdefault("prefiltered_samples", [])
+            if len(samples) < 20:
+                samples.append({
+                    "title": str(res_item.get("title") or "")[:80],
+                    "domain": str(res_item.get("prefiltered_domain") or "-"),
+                    "reason": str(res_item.get("prefiltered_reason") or ""),
+                })
             return
         stats["decode_fail"] += 1
         if method == "circuit_skipped":
@@ -1566,6 +1579,10 @@ def run_batch_pipeline(
             f"| CircuitTrips={batch_decode_report['circuit_trips']}",
             flush=True,
         )
+        pre_samples = batch_decode_report.get("prefiltered_samples") or []
+        if pre_samples:
+            sample_str = "; ".join([f"'{s['title']}' ({s['domain']}: {s['reason']})" for s in pre_samples[:5]])
+            print(f"Sampel PreFiltered       : {sample_str}", flush=True)
         print(
             f"Metrik Ekstraksi Teks    : ExtractOK={ext_ok}/{ext_tot} ({ext_pct:.1f}%) (>= 300 char, tidak setara metrik decode-only)",
             flush=True,

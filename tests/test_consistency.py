@@ -516,7 +516,7 @@ class TestPointADecoderAndCircuitBreaker(unittest.TestCase):
         self.assertTrue(is_pre)
         self.assertIn("google", reason)
 
-        # 3. Berita normal tidak boleh ter-prefilter
+        # 3. Berita normal tidak boleh ter-prefilter (pastikan link news.google.com tidak salah dideteksi)
         normal_item = {
             "title": "Kemenperin Dorong Hilirisasi Minyak Sawit",
             "link": "https://news.google.com/rss/articles/CBMiOK",
@@ -525,11 +525,22 @@ class TestPointADecoderAndCircuitBreaker(unittest.TestCase):
         is_pre, reason = is_prefiltered_rss_item(normal_item)
         self.assertFalse(is_pre)
 
-        # 4. extract_one_article menolak langsung tanpa dekoder
+        # 3b. source_url www.google.com harus ter-prefilter, tetapi news.google.com pada link artikel tidak boleh memicu filter
+        g_direct = {
+            "title": "Google Search Info",
+            "link": "https://news.google.com/rss/articles/CBMiGDIRECT",
+            "source_url": "https://www.google.com/search?q=test",
+        }
+        is_pre_g, reason_g = is_prefiltered_rss_item(g_direct)
+        self.assertTrue(is_pre_g)
+        self.assertEqual(reason_g, "prefiltered_google_source")
+
+        # 4. extract_one_article menolak langsung tanpa dekoder dan mencatat domain & sampel
         ext_res = pipeline_main.extract_one_article(maps_item)
         self.assertTrue(ext_res.get("decode_failed"))
         self.assertTrue(ext_res.get("skip_retry"))
         self.assertEqual(ext_res.get("decode_method"), "pre_filtered")
+        self.assertIn("prefiltered_domain", ext_res)
 
         # 5. Metrik compute_decode_failure_rate mengeluarkan pre_filtered dari pembilang & penyebut
         stats = pipeline_main._init_decode_stats()
@@ -542,6 +553,8 @@ class TestPointADecoderAndCircuitBreaker(unittest.TestCase):
         )
         self.assertEqual(stats["gnews_total"], 2)
         self.assertEqual(stats["pre_filtered"], 1)
+        self.assertEqual(len(stats.get("prefiltered_samples", [])), 1)
+        self.assertIn("maps", stats["prefiltered_samples"][0]["reason"])
         self.assertEqual(stats["decode_fail"], 1)
         num, denom, pct = pipeline_main.compute_decode_failure_rate(stats)
         # Denom = 2 - 1 = 1, Num = 1 -> 100% (bukan 1/2 = 50%)
