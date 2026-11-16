@@ -12,9 +12,13 @@ import os
 import random
 import re
 import socket
+import sys
 import threading
 import time
 from urllib.parse import urlparse
+
+sys.modules.setdefault("src.extract_content", sys.modules[__name__])
+sys.modules.setdefault("extract_content", sys.modules[__name__])
 
 import requests
 import trafilatura
@@ -67,10 +71,10 @@ except ImportError:
     _offline_decoder_fn = None
 
 try:
-    from fetch_news import GoogleCaptchaBlockedError, is_valid_domain
+    from src.fetch_news import GoogleCaptchaBlockedError, is_valid_domain
 except ImportError:
     try:
-        from src.fetch_news import GoogleCaptchaBlockedError, is_valid_domain
+        from fetch_news import GoogleCaptchaBlockedError, is_valid_domain
     except ImportError:
         class GoogleCaptchaBlockedError(Exception):
             """Exception khusus jika Google News mengalihkan ke CAPTCHA gate (google.com/sorry/index)."""
@@ -80,10 +84,10 @@ except ImportError:
             return bool(url)
 
 try:
-    from config import parse_to_wib
+    from src.config import parse_to_wib
 except ImportError:
     try:
-        from src.config import parse_to_wib
+        from config import parse_to_wib
     except ImportError:
         def parse_to_wib(val):
             return None
@@ -848,6 +852,7 @@ def _resolve_gnews_local_only(
     cache: DecodeCache | None = None,
     controller: AdaptiveDecodeController | None = None,
     allow_circuit_trip: bool = True,
+    raise_on_captcha: bool = False,
 ) -> tuple[str, str]:
     """Menjalankan Layer 1 (cache, decode offline v1, dan decode online GoogleDecoder dengan adaptive throttling)."""
     global _LOGGED_DECODE_WARNINGS
@@ -891,7 +896,13 @@ def _resolve_gnews_local_only(
                 msg = str(res.get("message", ""))
                 msg_low = msg.lower()
                 if "sorry/index" in msg_low or "google.com/sorry" in msg_low:
-                    raise GoogleCaptchaBlockedError(f"CAPTCHA gate terdeteksi ({msg[:120]}).")
+                    controller.record_failure(allow_trip=allow_circuit_trip)
+                    if _LOGGED_DECODE_WARNINGS < 5:
+                        _LOGGED_DECODE_WARNINGS += 1
+                        print(f"  [Decoder Warning] Google CAPTCHA/rate-limit terdeteksi ({msg[:120]}), lanjut ke fallback...", flush=True)
+                    if raise_on_captcha:
+                        raise GoogleCaptchaBlockedError(f"CAPTCHA gate terdeteksi ({msg[:120]}).")
+                    break
 
                 if _LOGGED_DECODE_WARNINGS < 5 and msg:
                     _LOGGED_DECODE_WARNINGS += 1

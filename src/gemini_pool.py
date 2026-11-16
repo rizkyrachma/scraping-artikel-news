@@ -5,9 +5,13 @@ rotasi model tahan 404/429/timeout, dan pemanggilan deterministik `temperature=0
 """
 
 import os
+import sys
 import threading
 import time
 import warnings
+
+sys.modules.setdefault("src.gemini_pool", sys.modules[__name__])
+sys.modules.setdefault("gemini_pool", sys.modules[__name__])
 
 try:
     from config import load_env_file

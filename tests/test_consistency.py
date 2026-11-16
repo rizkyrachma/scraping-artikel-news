@@ -368,6 +368,36 @@ class TestPointADecoderAndCircuitBreaker(unittest.TestCase):
                 self.assertEqual(r_maps["method"], "rejected_target")
                 self.assertEqual(search_calls[0], 2)
                 self.assertEqual(ctrl.snapshot()["circuit_trips"], 0)
+
+                # Saat GoogleDecoder mengembalikan google.com/sorry/index (rate-limit/CAPTCHA gate),
+                # harus mencatat failure ke controller dan lanjut ke Layer 3 fallback (bukan crash)
+                extract_content_mod._decoder_fn = lambda _u: {
+                    "status": False,
+                    "message": "https://www.google.com/sorry/index?continue=...",
+                }
+                cap_item = {
+                    "title": "Industri Biodiesel Nasional Tumbuh Positif",
+                    "link": "https://news.google.com/rss/articles/CBMiCAP999?oc=5",
+                    "source_url": "https://ekonomi.bisnis.com",
+                }
+                r_cap = resolve_article_with_fallback(
+                    cap_item,
+                    allow_search_fallback=True,
+                    cache=cache,
+                    neg_cache=neg_cache,
+                    controller=ctrl,
+                    search_fallback_fn=lambda _it: (
+                        "https://ekonomi.bisnis.com/read/20261111/257/1999/industri-biodiesel-nasional-tumbuh-positif",
+                        "fallback_serper",
+                        "",
+                    ),
+                )
+                self.assertTrue(r_cap["resolved"])
+                self.assertEqual(r_cap["method"], "fallback_serper")
+                self.assertGreaterEqual(ctrl.snapshot()["rolling_failures"], 1)
+                self.assertIs(sys.modules.get("extract_content"), sys.modules.get("src.extract_content"))
+                self.assertIs(sys.modules.get("stable"), sys.modules.get("src.stable"))
+                self.assertIs(pipeline_main.GoogleCaptchaBlockedError, extract_content_mod.GoogleCaptchaBlockedError)
             finally:
                 extract_content_mod._decoder_fn = orig_decoder
 

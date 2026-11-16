@@ -12,9 +12,13 @@ import hashlib
 import json
 import os
 import re
+import sys
 import threading
 import time
 from urllib.parse import parse_qsl, urlencode, urlparse, urlunparse
+
+sys.modules.setdefault("src.stable", sys.modules[__name__])
+sys.modules.setdefault("stable", sys.modules[__name__])
 
 DEFAULT_DECISION_CACHE_FILE = os.path.join("hasil_scrapping", "cache_decisions.json")
 DEFAULT_SNAPSHOT_DIR = os.path.join("hasil_scrapping", "snapshots")

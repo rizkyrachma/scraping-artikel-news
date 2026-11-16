@@ -5,6 +5,7 @@ Pengambilan data Google News RSS feed, verifikasi denylist domain & ekstensi ase
 
 import os
 import re
+import sys
 import json
 import time
 import random
@@ -12,6 +13,9 @@ import requests
 from datetime import date, datetime
 from urllib.parse import urlparse, parse_qs
 import feedparser  # type: ignore
+
+sys.modules.setdefault("src.fetch_news", sys.modules[__name__])
+sys.modules.setdefault("fetch_news", sys.modules[__name__])
 
 from query_builder import build_media_query, build_gov_query, build_rss_url
 from config import (
