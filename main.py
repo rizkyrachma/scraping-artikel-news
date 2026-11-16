@@ -30,6 +30,8 @@ import time
 import threading
 import argparse
 from datetime import date
+from urllib.parse import urlparse
+from typing import Any
 import pandas as pd
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
@@ -265,8 +267,8 @@ def extract_one_article(
         except Exception:
             dec_res = {"url": link, "resolved": False, "method": "failed", "text": ""}
 
-        resolved = dec_res.get("url") or link
-        decode_method = dec_res.get("method") or "failed"
+        resolved = str(dec_res.get("url") or link or "").strip()
+        decode_method = str(dec_res.get("method") or "failed")
         pre_text = str(dec_res.get("text") or "").strip()
 
         if not dec_res.get("resolved") or (decode_method != "rejected_target" and "news.google.com" in resolved):
@@ -448,6 +450,7 @@ def drain_retry_queue(
     retry_items: list[dict],
     name_map: dict[str, str],
     min_length: int = 300,
+    skip_ai: bool = False,
 ) -> tuple[list[dict], list[dict], dict]:
     """
     Layer 4: Menjalankan ulang antrean item gagal dekode di akhir run (concurrency=1 + fallback penuh)
@@ -489,7 +492,7 @@ def drain_retry_queue(
 
         try:
             ext_params = inspect.signature(extract_one_article).parameters
-            call_kw = {"allow_search_fallback": allow_search}
+            call_kw: dict[str, Any] = {"allow_search_fallback": allow_search}
             if "max_retries" in ext_params:
                 call_kw["max_retries"] = 1
             if "use_negative_cache" in ext_params:
@@ -526,7 +529,13 @@ def drain_retry_queue(
 
     valid_flagged: list[dict] = []
     if recovered_raw:
-        content_valid, retry_discarded = filter_valid_articles(recovered_raw, min_length=min_length)
+        if skip_ai:
+            try:
+                content_valid, retry_discarded = filter_valid_articles(recovered_raw, min_length=min_length, skip_ai=True)
+            except TypeError:
+                content_valid, retry_discarded = filter_valid_articles(recovered_raw, min_length=min_length)
+        else:
+            content_valid, retry_discarded = filter_valid_articles(recovered_raw, min_length=min_length)
         discard_reasons: dict[str, int] = {}
         for d in retry_discarded:
             dr = str(d.get("discard_reason") or "other")
@@ -560,7 +569,7 @@ def drain_retry_queue(
 
 
 def filter_valid_articles(
-    articles: list[dict], min_length: int = 300, default_keyword: str | None = None
+    articles: list[dict], min_length: int = 300, default_keyword: str | None = None, skip_ai: bool = False
 ) -> tuple[list[dict], list[dict]]:
     """
     Menyaring artikel yang valid secara konten:
@@ -883,43 +892,53 @@ def filter_valid_articles(
     # BAGIAN 2: AI Relevance Classifier (Google Gemini API) Mode Batch
     # Mengevaluasi kandidat yang lolos rule-based dalam batch efisien (tanpa terkena RPM limit)
     if candidates_for_ai:
-        for idx, c in enumerate(candidates_for_ai, start=1):
-            c["id"] = idx
-        batch_res = classify_articles_in_batches(candidates_for_ai, batch_size=25, delay_between_batches=1.0)
-        by_id = batch_res.get("by_id", {})
-
-        for c in candidates_for_ai:
-            info = by_id.get(c["id"]) or by_id.get(str(c["id"])) or {}
-            status_ai = info.get("status", "review")
-            is_rel = status_ai in ["relevan", "review"]
-            ai_reason = info.get("alasan", "")
-            sub_sektor = info.get("sub_sektor", "-")
-
-            if is_rel is False:
-                c_copy = dict(c)
-                c_copy["discard_reason"] = "ai_irrelevant"
-                c_copy["ai_reason"] = ai_reason
-                c_copy["status"] = "buang"
-                discarded.append(c_copy)
-                log_ai_rejection(
-                    title=c.get("title", ""),
-                    reason=ai_reason,
-                    published=c.get("published", ""),
-                    keyword=c.get("keyword") or default_keyword or ""
-                )
-            else:
-                c["status"] = status_ai
-                c["status_ai"] = status_ai
-                c["alasan"] = ai_reason
-                c["alasan_ai"] = ai_reason
-                c["sub_sektor"] = sub_sektor
-                if "ai tidak dijalankan" in str(ai_reason).lower():
-                    c["Status Review"] = ai_reason
-                elif status_ai == "review":
-                    c["Status Review"] = f"PERLU CEK MANUAL: {ai_reason}" if ai_reason else "PERLU CEK MANUAL"
-                else:
-                    c["Status Review"] = ""
+        if skip_ai:
+            for c in candidates_for_ai:
+                c["status"] = "review"
+                c["status_ai"] = "skip_ai_decode_only"
+                c["alasan"] = "AI dilewati (mode decode-only)"
+                c["alasan_ai"] = "AI dilewati (mode decode-only)"
+                c["sub_sektor"] = "-"
+                c["Status Review"] = "PERLU CEK MANUAL (Decode-Only)"
                 valid.append(c)
+        else:
+            for idx, c in enumerate(candidates_for_ai, start=1):
+                c["id"] = idx
+            batch_res = classify_articles_in_batches(candidates_for_ai, batch_size=25, delay_between_batches=1.0)
+            by_id = batch_res.get("by_id", {})
+
+            for c in candidates_for_ai:
+                info = by_id.get(c["id"]) or by_id.get(str(c["id"])) or {}
+                status_ai = info.get("status", "review")
+                is_rel = status_ai in ["relevan", "review"]
+                ai_reason = info.get("alasan", "")
+                sub_sektor = info.get("sub_sektor", "-")
+
+                if is_rel is False:
+                    c_copy = dict(c)
+                    c_copy["discard_reason"] = "ai_irrelevant"
+                    c_copy["ai_reason"] = ai_reason
+                    c_copy["status"] = "buang"
+                    discarded.append(c_copy)
+                    log_ai_rejection(
+                        title=c.get("title", ""),
+                        reason=ai_reason,
+                        published=c.get("published", ""),
+                        keyword=c.get("keyword") or default_keyword or ""
+                    )
+                else:
+                    c["status"] = status_ai
+                    c["status_ai"] = status_ai
+                    c["alasan"] = ai_reason
+                    c["alasan_ai"] = ai_reason
+                    c["sub_sektor"] = sub_sektor
+                    if "ai tidak dijalankan" in str(ai_reason).lower():
+                        c["Status Review"] = ai_reason
+                    elif status_ai == "review":
+                        c["Status Review"] = f"PERLU CEK MANUAL: {ai_reason}" if ai_reason else "PERLU CEK MANUAL"
+                    else:
+                        c["Status Review"] = ""
+                    valid.append(c)
 
     return valid, discarded
 
@@ -931,6 +950,7 @@ def process_single_keyword(
     name_map: dict[str, str] | None = None,
     serper_only: bool = False,
     target_date: date | tuple | list | None = None,
+    decode_only: bool = False,
 ) -> dict:
     """
     Mengambil, mengekstrak, dan menyaring berita untuk satu kata kunci,
@@ -1050,7 +1070,7 @@ def process_single_keyword(
         log_granular(f"       -> tidak ada artikel tanggal kemarin untuk diekstrak")
 
     # [5/6] Filter relevansi & dedup
-    content_valid, discarded = filter_valid_articles(extracted, min_length=300, default_keyword=keyword)
+    content_valid, discarded = filter_valid_articles(extracted, min_length=300, default_keyword=keyword, skip_ai=decode_only)
     log_granular(f"     [5/6] Filter relevansi & dedup...          -> {len(content_valid)} lolos")
 
     reasons = {}
@@ -1464,7 +1484,7 @@ def run_batch_pipeline(
 
     print(f"Total keyword: {len(keywords)} dibagi menjadi {total_batches} batch (ukuran batch: {batch_size})", flush=True)
 
-    checkpoint = {"batches_done": [], "batch_reports": [], "articles": [], "retry_queue": []}
+    checkpoint: dict[str, Any] = {"batches_done": [], "batch_reports": [], "articles": [], "retry_queue": []}
     if os.path.exists(checkpoint_path):
         try:
             with open(checkpoint_path, "r", encoding="utf-8") as f:
@@ -1498,19 +1518,19 @@ def run_batch_pipeline(
         batch_date_dropped = 0
         batch_kemenperin_yes = 0
         batch_final_valid = 0
-        batch_kw_stats = []
+        batch_kw_stats: list[dict[str, Any]] = []
         batch_retry_items = []
         batch_decode_stats = _init_decode_stats()
 
         for kw in current_kws:
             try:
-                res = process_single_keyword(kw, name_map=name_map, target_date=(start_date, end_date))
+                res = process_single_keyword(kw, name_map=name_map, target_date=(start_date, end_date), decode_only=decode_only)
             except GoogleCaptchaBlockedError as cap_err:
                 if os.environ.get("SERPER_API_KEY", "").strip():
                     global USE_SERPER_ONLY
                     print(f"  [CAPTCHA FALLBACK] {cap_err} -> Beralih ke Serper.dev untuk sisa sesi.", flush=True)
                     USE_SERPER_ONLY = True
-                    res = process_single_keyword(kw, name_map=name_map, serper_only=True, target_date=(start_date, end_date))
+                    res = process_single_keyword(kw, name_map=name_map, serper_only=True, target_date=(start_date, end_date), decode_only=decode_only)
                 else:
                     raise
             batch_initial += res["initial_candidates"]
@@ -1521,8 +1541,12 @@ def run_batch_pipeline(
             checkpoint["articles"].extend(res["valid_articles"])
             batch_retry_items.extend(res.get("retry_items", []))
             kw_dec = res.get("decode_stats") or {}
-            for dk in batch_decode_stats:
-                batch_decode_stats[dk] += int(kw_dec.get(dk, 0) or 0)
+            for dk, val in kw_dec.items():
+                if dk == "prefiltered_samples":
+                    if isinstance(val, list):
+                        batch_decode_stats.setdefault("prefiltered_samples", []).extend(val)
+                elif dk in batch_decode_stats and isinstance(batch_decode_stats[dk], int):
+                    batch_decode_stats[dk] += int(val or 0)
             batch_kw_stats.append({
                 "keyword": kw,
                 "initial": res["initial_candidates"],
@@ -1573,6 +1597,9 @@ def run_batch_pipeline(
         with open(checkpoint_path, "w", encoding="utf-8") as f:
             json.dump(checkpoint, f, ensure_ascii=False, indent=2)
 
+        if decode_only:
+            generate_verification_report(checkpoint.get("batch_reports", []), output_dir=date_folder)
+
         g_tot = batch_decode_report["gnews_total"]
         f_num, f_denom, fail_pct = compute_decode_failure_rate(batch_decode_report)
         batch_decode_report["decode_eval_total"] = f_denom
@@ -1620,8 +1647,9 @@ def run_batch_pipeline(
             kw_final = int(s.get("final_valid", 0) or 0)
             kw_kem_yes = int(s.get("kemenperin_yes", 0) or 0)
             kw_kem_no = kw_final - kw_kem_yes
-            kw_ds = s.get("decode_stats") or {}
-            kw_rej = int(kw_ds.get("rejected_target", 0) or 0)
+            kw_ds = s.get("decode_stats")
+            kw_ds_dict: dict[str, Any] = kw_ds if isinstance(kw_ds, dict) else {}
+            kw_rej = int(kw_ds_dict.get("rejected_target", 0) or 0)
             print(
                 f"  - '{s.get('keyword', '')}': Awal={kw_init} -> LolosKemarin={kw_init - kw_dropped} -> "
                 f"FINAL={kw_final} (Kemenperin: Ya={kw_kem_yes} / Tidak={kw_kem_no} | Rejected={kw_rej})",
@@ -1632,7 +1660,7 @@ def run_batch_pipeline(
 
     # Layer 4: proses antrean retry item gagal dekode sebelum finalisasi (baik --all maupun --batch)
     if checkpoint.get("retry_queue") and (len(checkpoint["batches_done"]) == total_batches or target_batch is not None):
-        ret_valid, ret_still_failed, ret_summary = drain_retry_queue(checkpoint["retry_queue"], name_map, min_length=300)
+        ret_valid, ret_still_failed, ret_summary = drain_retry_queue(checkpoint["retry_queue"], name_map, min_length=300, skip_ai=decode_only)
         if ret_valid:
             checkpoint["articles"].extend(ret_valid)
         checkpoint["retry_queue"] = []
@@ -1650,6 +1678,9 @@ def run_batch_pipeline(
             )
         with open(checkpoint_path, "w", encoding="utf-8") as f:
             json.dump(checkpoint, f, ensure_ascii=False, indent=2)
+
+        if decode_only:
+            generate_verification_report(checkpoint.get("batch_reports", []), output_dir=date_folder)
 
     if len(checkpoint["batches_done"]) == total_batches:
         print("\nSeluruh batch telah selesai! Melanjutkan ke finalisasi...", flush=True)

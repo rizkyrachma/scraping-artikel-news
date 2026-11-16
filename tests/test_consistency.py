@@ -607,7 +607,7 @@ class TestPointADecoderAndCircuitBreaker(unittest.TestCase):
                 return it
 
             pipeline_main.extract_one_article = fake_extract
-            pipeline_main.filter_valid_articles = lambda items, min_length=300, default_keyword=None: (items, [])
+            pipeline_main.filter_valid_articles = lambda items, min_length=300, default_keyword=None, **_kwargs: (items, [])
             pipeline_main.get_kemenperin_signal = lambda t, tx, nm: (True, "eksplisit", "kemenperin")
             pipeline_main.save_decode_cache = lambda force=False: None
 
@@ -1437,6 +1437,203 @@ class TestPointFMergeRuns(unittest.TestCase):
             self.assertTrue(rep["target_passed"])
             self.assertTrue((Path(tmp_out) / "verification_point_a_report.md").exists())
             self.assertTrue((Path(tmp_out) / "verification_point_a_metrics.csv").exists())
+
+    def test_verify_reporter_synthetic_19_batches_and_edge_cases(self):
+        """
+        Unit test komprehensif src/verify_reporter.py:
+        1. Verifikasi data sintetis 19 batch (tabel Markdown, CSV, rumus failure rate tanpa rejected/prefiltered).
+        2. Evaluasi ambang target 40% (LOLOS < 40% vs BELUM LOLOS >= 40%).
+        3. Kasus edge: batch kosong (empty list).
+        4. Kasus edge: denominator nol (total_gnews == rejected + pre_filtered).
+        """
+        import csv
+        from pathlib import Path
+        from src.verify_reporter import generate_verification_report
+
+        # -------------------------------------------------------------
+        # Kasus 1: 19 batch sintetis lolos ambang (< 40%)
+        # -------------------------------------------------------------
+        batches_pass = []
+        for i in range(1, 20):
+            if i <= 7:
+                # B1-B7: 20 total, 2 rejected, 3 pre_filtered -> denom = 15. Fail = 3 -> 20.0%
+                g_tot, rej, pre, fail = 20, 2, 3, 3
+            else:
+                # B8-B19: 25 total, 3 rejected, 2 pre_filtered -> denom = 20. Fail = 5 -> 25.0% (< 40%)
+                g_tot, rej, pre, fail = 25, 3, 2, 5
+
+            batches_pass.append({
+                "batch_num": i,
+                "keywords": [f"kategori_{i}"],
+                "duration_sec": 10.5,
+                "serper_calls": 2,
+                "exa_calls": 1,
+                "sorry_index_count": 0,
+                "circuit_breaker_state": "CLOSED",
+                "decode_stats": {
+                    "gnews_total": g_tot,
+                    "decode_ok": g_tot - rej - pre - fail,
+                    "rejected_target": rej,
+                    "pre_filtered": pre,
+                    "fallback_meta": 1,
+                    "fallback_search": 1,
+                    "decode_fail": fail,
+                    "extract_ok": 10,
+                    "extract_total": 12,
+                },
+            })
+
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            rep = generate_verification_report(batches_pass, output_dir=tmp_dir)
+
+            # Verifikasi B1-B7
+            s17 = rep["summary_b1_b7"]
+            self.assertEqual(s17["batch_count"], 7)
+            self.assertEqual(s17["total_gnews"], 7 * 20)
+            self.assertEqual(s17["rejected"], 7 * 2)
+            self.assertEqual(s17["pre_filtered"], 7 * 3)
+            self.assertEqual(s17["eval_denom"], 7 * 15)  # 105
+            self.assertEqual(s17["decode_fail"], 7 * 3)  # 21
+            self.assertAlmostEqual(s17["fail_rate_pct"], 20.0, places=1)
+
+            # Verifikasi B8-B19 (Target evaluation)
+            s819 = rep["summary_b8_b19"]
+            self.assertEqual(s819["batch_count"], 12)
+            self.assertEqual(s819["total_gnews"], 12 * 25)
+            self.assertEqual(s819["rejected"], 12 * 3)
+            self.assertEqual(s819["pre_filtered"], 12 * 2)
+            self.assertEqual(s819["eval_denom"], 12 * 20)  # 240
+            self.assertEqual(s819["decode_fail"], 12 * 5)  # 60
+            self.assertAlmostEqual(s819["fail_rate_pct"], 25.0, places=1)
+            self.assertTrue(rep["target_passed"])
+
+            # Verifikasi Konten Markdown
+            md_path = Path(tmp_dir) / "verification_point_a_report.md"
+            self.assertTrue(md_path.exists())
+            md_content = md_path.read_text(encoding="utf-8")
+            self.assertIn("# Hasil Verifikasi Poin A: Benchmark Decode Google News (19 Batch)", md_content)
+            self.assertIn("✅ LOLOS (< 40%)", md_content)
+            self.assertIn("**B1-B7**", md_content)
+            self.assertIn("**B8-B19**", md_content)
+            self.assertIn("**B1-B999**", md_content)
+            self.assertIn("| B1 |", md_content)
+            self.assertIn("| B19 |", md_content)
+
+            # Verifikasi Konten CSV
+            csv_path = Path(tmp_dir) / "verification_point_a_metrics.csv"
+            self.assertTrue(csv_path.exists())
+            with open(csv_path, encoding="utf-8") as f:
+                reader = list(csv.DictReader(f))
+                self.assertEqual(len(reader), 19)
+                self.assertEqual(reader[0]["Batch"], "B1")
+                self.assertEqual(reader[0]["Total GNews"], "20")
+                self.assertEqual(reader[0]["Rejected"], "2")
+                self.assertEqual(reader[0]["PreFiltered"], "3")
+                self.assertEqual(reader[0]["Gagal"], "3")
+                self.assertEqual(reader[0]["Fail %"], "20.0%")
+                self.assertEqual(reader[18]["Batch"], "B19")
+                self.assertEqual(reader[18]["Fail %"], "25.0%")
+
+        # -------------------------------------------------------------
+        # Kasus 2: 19 batch sintetis TIDAK lolos ambang (>= 40%)
+        # -------------------------------------------------------------
+        batches_fail = []
+        for i in range(1, 20):
+            # B8-B19 fail_rate = 9 / (20 - 1 - 1) = 9/18 = 50.0% (>= 40%)
+            fail_cnt = 1 if i <= 7 else 9
+            batches_fail.append({
+                "batch_num": i,
+                "keywords": [f"kategori_{i}"],
+                "duration_sec": 10.0,
+                "decode_stats": {
+                    "gnews_total": 20,
+                    "decode_ok": 20 - 2 - fail_cnt,
+                    "rejected_target": 1,
+                    "pre_filtered": 1,
+                    "fallback_meta": 0,
+                    "fallback_search": 0,
+                    "decode_fail": fail_cnt,
+                    "extract_ok": 5,
+                    "extract_total": 10,
+                },
+            })
+
+        rep_fail = generate_verification_report(batches_fail)
+        self.assertAlmostEqual(rep_fail["summary_b8_b19"]["fail_rate_pct"], 50.0, places=1)
+        self.assertFalse(rep_fail["target_passed"])
+        self.assertIn("❌ BELUM LOLOS (>= 40%)", rep_fail["table_md"])
+
+        # -------------------------------------------------------------
+        # Kasus 3: Kasus batch kosong ([])
+        # -------------------------------------------------------------
+        rep_empty = generate_verification_report([])
+        self.assertFalse(rep_empty["target_passed"])
+        self.assertEqual(rep_empty["summary_b8_b19"]["batch_count"], 0)
+        self.assertEqual(rep_empty["summary_b8_b19"]["fail_rate_pct"], 0.0)
+        self.assertEqual(len(rep_empty["rows"]), 0)
+        self.assertIn("❌ BELUM LOLOS", rep_empty["table_md"])
+
+        # -------------------------------------------------------------
+        # Kasus 4: Kasus denominator nol (total_gnews == rejected + pre_filtered)
+        # -------------------------------------------------------------
+        zero_denom_batches = [
+            {
+                "batch_num": 1,
+                "keywords": ["zero_denom_1"],
+                "decode_stats": {
+                    "gnews_total": 10,
+                    "decode_ok": 0,
+                    "rejected_target": 6,
+                    "pre_filtered": 4,  # 10 - 6 - 4 = 0 denom
+                    "decode_fail": 0,
+                    "extract_ok": 0,
+                    "extract_total": 0,
+                },
+            },
+            {
+                "batch_num": 8,
+                "keywords": ["zero_denom_8"],
+                "decode_stats": {
+                    "gnews_total": 0,  # 0 items
+                    "decode_ok": 0,
+                    "rejected_target": 0,
+                    "pre_filtered": 0,
+                    "decode_fail": 0,
+                    "extract_ok": 0,
+                    "extract_total": 0,
+                },
+            },
+        ]
+        rep_zero = generate_verification_report(zero_denom_batches)
+        # Memastikan tidak timbul ZeroDivisionError
+        self.assertEqual(rep_zero["summary_b1_b7"]["eval_denom"], 0)
+        self.assertEqual(rep_zero["summary_b1_b7"]["fail_rate_pct"], 0.0)
+        self.assertEqual(rep_zero["summary_b8_b19"]["eval_denom"], 0)
+        self.assertEqual(rep_zero["summary_b8_b19"]["fail_rate_pct"], 0.0)
+        self.assertEqual(rep_zero["rows"][0]["Fail %"], "0.0%")
+        self.assertEqual(rep_zero["rows"][1]["Fail %"], "0.0%")
+
+    def test_empty_search_api_keys_treated_as_not_searched_without_requests(self):
+        from unittest.mock import patch
+        from src.extract_content import fallback_url_from_search
+
+        # 1. Kunci kosong string ""
+        with patch.dict(os.environ, {"SERPER_API_KEY": "", "EXA_API_KEY": ""}):
+            with patch("requests.post") as mock_post:
+                item = {"title": "Pabrik Minyak Sawit Berkelanjutan", "media_name": "Kompas.com"}
+                res = fallback_url_from_search(item, bypass_memo=True)
+                self.assertIsNone(res[0])
+                self.assertEqual(res[3], "NOT_SEARCHED")
+                self.assertEqual(mock_post.call_count, 0)
+
+        # 2. Kunci hanya spasi "   "
+        with patch.dict(os.environ, {"SERPER_API_KEY": "   ", "EXA_API_KEY": "  "}):
+            with patch("requests.post") as mock_post:
+                item = {"title": "Industri Makanan Minuman Nasional", "media_name": "Kontan.co.id"}
+                res = fallback_url_from_search(item, bypass_memo=True)
+                self.assertIsNone(res[0])
+                self.assertEqual(res[3], "NOT_SEARCHED")
+                self.assertEqual(mock_post.call_count, 0)
 
 
 if __name__ == "__main__":

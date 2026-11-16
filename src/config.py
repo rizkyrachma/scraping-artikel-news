@@ -69,16 +69,29 @@ MAX_SERPER_CALLS_PER_RUN = int(os.environ.get("MAX_SERPER_CALLS_PER_RUN", "150")
 MAX_EXA_CALLS_PER_RUN = int(os.environ.get("MAX_EXA_CALLS_PER_RUN", "100"))
 
 
-def get_date_range(target_date: date | datetime | tuple | list | None = None):
+def get_date_range(target_date: date | datetime | tuple | list | str | None = None):
     """
     Menghitung rentang tanggal dinamis: persis kemarin (H-1 dari hari eksekusi)
     atau rentang tanggal (start_date, end_date) jika diberikan.
     """
     if target_date is not None:
+        def _parse_item(item):
+            if isinstance(item, str):
+                return datetime.strptime(item.strip(), "%Y-%m-%d").date()
+            if isinstance(item, datetime):
+                return item.date()
+            return item
+
+        if isinstance(target_date, str):
+            target_str = target_date.strip()
+            for sep in (":", "_sd_", "..", " to ", " - "):
+                if sep in target_str:
+                    p1, p2 = target_str.split(sep, 1)
+                    return _parse_item(p1), _parse_item(p2)
+            d = _parse_item(target_str)
+            return d, d
         if isinstance(target_date, (tuple, list)):
-            d1 = target_date[0].date() if isinstance(target_date[0], datetime) else target_date[0]
-            d2 = target_date[1].date() if isinstance(target_date[1], datetime) else target_date[1]
-            return d1, d2
+            return _parse_item(target_date[0]), _parse_item(target_date[1])
         d = target_date.date() if isinstance(target_date, datetime) else target_date
         return d, d
     override = os.environ.get("OVERRIDE_DATE", "").strip()
