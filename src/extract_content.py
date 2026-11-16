@@ -713,6 +713,18 @@ _SERPER_CALL_COUNT = 0
 _EXA_CALL_COUNT = 0
 _SEARCH_QUOTA_LOCK = threading.Lock()
 _LOGGED_DECODE_WARNINGS = 0
+_SORRY_INDEX_COUNT = 0
+
+
+def get_sorry_index_count() -> int:
+    """Mengembalikan jumlah deteksi pengalihan /sorry/index (Google CAPTCHA/rate-limit)."""
+    return _SORRY_INDEX_COUNT
+
+
+def reset_sorry_index_count() -> None:
+    """Mereset hitungan /sorry/index."""
+    global _SORRY_INDEX_COUNT
+    _SORRY_INDEX_COUNT = 0
 
 
 def get_search_quota_usage() -> dict:
@@ -1064,7 +1076,7 @@ def _resolve_gnews_local_only(
     raise_on_captcha: bool = False,
 ) -> tuple[str, str]:
     """Menjalankan Layer 1 (cache, decode offline v1, dan decode online GoogleDecoder dengan adaptive throttling)."""
-    global _LOGGED_DECODE_WARNINGS
+    global _LOGGED_DECODE_WARNINGS, _SORRY_INDEX_COUNT
     if not url or "news.google.com" not in url:
         return url, "direct"
 
@@ -1105,6 +1117,7 @@ def _resolve_gnews_local_only(
                 msg = str(res.get("message", ""))
                 msg_low = msg.lower()
                 if "sorry/index" in msg_low or "google.com/sorry" in msg_low:
+                    _SORRY_INDEX_COUNT += 1
                     controller.record_failure(allow_trip=allow_circuit_trip)
                     if _LOGGED_DECODE_WARNINGS < 5:
                         _LOGGED_DECODE_WARNINGS += 1

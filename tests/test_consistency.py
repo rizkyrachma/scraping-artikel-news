@@ -1391,6 +1391,53 @@ class TestPointFMergeRuns(unittest.TestCase):
                 sync_mod.WEB_FILES_DIR = orig_web_files
                 sync_mod.get_date_folder = orig_get_date_folder
 
+    def test_decode_only_flag_and_verify_reporter(self):
+        import subprocess
+        from pathlib import Path
+        from src.verify_reporter import generate_verification_report
+
+        # 1. Pastikan CLI help memuat --decode-only
+        main_py = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "main.py")
+        proc = subprocess.run([sys.executable, main_py, "--help"], capture_output=True, text=True, check=True)
+        self.assertIn("--decode-only", proc.stdout)
+
+        # 2. Verifikasi perhitungan metrik reporter 19 batch
+        mock_batches = []
+        for i in range(1, 20):
+            # B1-B7 failure rate ~10% (1 gagal dari 10)
+            # B8-B19 failure rate ~20% (2 gagal dari 10, target < 40%)
+            fail_cnt = 1 if i <= 7 else 2
+            mock_batches.append({
+                "batch_num": i,
+                "keywords": [f"kw_{i}"],
+                "duration_sec": 15.0,
+                "serper_calls": 3,
+                "exa_calls": 1,
+                "sorry_index_count": 0,
+                "circuit_breaker_state": "CLOSED",
+                "decode_stats": {
+                    "gnews_total": 12,
+                    "decode_ok": 8,
+                    "rejected_target": 1,
+                    "pre_filtered": 1,
+                    "fallback_meta": 2,
+                    "fallback_search": 2,
+                    "decode_fail": fail_cnt,
+                    "extract_ok": 8,
+                    "extract_total": 10,
+                },
+            })
+
+        with tempfile.TemporaryDirectory() as tmp_out:
+            rep = generate_verification_report(mock_batches, output_dir=tmp_out)
+            self.assertEqual(rep["summary_b1_b7"]["batch_count"], 7)
+            self.assertEqual(rep["summary_b8_b19"]["batch_count"], 12)
+            # B8-B19: 12 batches * 2 gagal = 24 gagal. Denom = 12 * (12 - 1 - 1) = 120. Fail rate = 20.0%
+            self.assertAlmostEqual(rep["summary_b8_b19"]["fail_rate_pct"], 20.0, places=1)
+            self.assertTrue(rep["target_passed"])
+            self.assertTrue((Path(tmp_out) / "verification_point_a_report.md").exists())
+            self.assertTrue((Path(tmp_out) / "verification_point_a_metrics.csv").exists())
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

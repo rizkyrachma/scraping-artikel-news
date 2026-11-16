@@ -80,7 +80,10 @@ from src.extract_content import (
     is_prefiltered_rss_item,
     get_search_quota_usage,
     get_search_memo_status,
+    get_sorry_index_count,
+    reset_sorry_index_count,
 )
+from src.verify_reporter import generate_verification_report
 from src.relevance_filter import (
     is_pdf_document,
     is_recipe,
@@ -1426,6 +1429,7 @@ def run_batch_pipeline(
     target_batch: int | None = None,
     checkpoint_file: str | None = None,
     output_excel: str | None = None,
+    decode_only: bool = False,
 ):
     """
     Menjalankan scraping per batch (misal 5 keyword per batch),
@@ -1482,6 +1486,9 @@ def run_batch_pipeline(
     for b_idx in batches_to_run:
         b_num = b_idx + 1
         current_kws = batches[b_idx]
+        t_b_start = time.time()
+        q_b_start = get_search_quota_usage()
+        sorry_b_start = get_sorry_index_count()
         print("\n" + "=" * 60, flush=True)
         print(f"=== MEMULAI BATCH {b_num}/{total_batches}: {current_kws} ===", flush=True)
         print("=" * 60, flush=True)
@@ -1537,11 +1544,23 @@ def run_batch_pipeline(
         batch_decode_report["rolling_failure_rate"] = cb_snapshot["rolling_failure_rate"]
         batch_decode_report["circuit_state"] = cb_snapshot["state"]
 
+        b_duration_sec = round(time.time() - t_b_start, 1)
+        q_b_end = get_search_quota_usage()
+        sorry_b_end = get_sorry_index_count()
+        serp_batch = max(0, q_b_end["serper_calls"] - q_b_start["serper_calls"])
+        exa_batch = max(0, q_b_end["exa_calls"] - q_b_start["exa_calls"])
+        sorry_batch = max(0, sorry_b_end - sorry_b_start)
+
         if b_idx not in checkpoint["batches_done"]:
             checkpoint["batches_done"].append(b_idx)
         checkpoint["batch_reports"].append({
             "batch_num": b_num,
             "keywords": current_kws,
+            "duration_sec": b_duration_sec,
+            "serper_calls": serp_batch,
+            "exa_calls": exa_batch,
+            "sorry_index_count": sorry_batch,
+            "circuit_breaker_state": cb_snapshot["state"],
             "total_initial": batch_initial,
             "total_content_valid": batch_content_valid,
             "total_date_dropped": batch_date_dropped,
@@ -1682,10 +1701,21 @@ def run_batch_pipeline(
             f"\n[Ringkasan Kuota Search Run] Serper: {q_tot['serper_calls']}/{q_tot['serper_max']} | Exa: {q_tot['exa_calls']}/{q_tot['exa_max']}",
             flush=True,
         )
+        if decode_only:
+            print("\n" + "=" * 60, flush=True)
+            print("=== MODE VERIFIKASI DECODE-ONLY SELESAI ===", flush=True)
+            print("Melewati tahap klasifikasi AI Gemini & ringkasan negatif.", flush=True)
+            print("=" * 60 + "\n", flush=True)
+            rep = generate_verification_report(checkpoint.get("batch_reports", []), output_dir=date_folder)
+            print(rep["table_md"], flush=True)
+            return
         finalize_and_export(checkpoint["articles"], name_map, output_excel=out_excel_path)
     elif target_batch is not None:
         batch_out = os.path.join(date_folder, f"checkpoint_batch_{target_batch}.xlsx")
         print(f"\nBatch {target_batch} selesai diproses. Mengekspor hasil batch ke {batch_out}...", flush=True)
+        if decode_only:
+            print("\n[DECODE ONLY] Target batch selesai diproses. Melewati finalize_and_export.", flush=True)
+            return
         finalize_and_export(checkpoint["articles"], name_map, output_excel=batch_out)
         print(f"Jalankan batch berikutnya dengan --batch {target_batch + 1} atau --all.", flush=True)
 
@@ -1705,6 +1735,7 @@ if __name__ == "__main__":
     parser.add_argument("--merge-from", dest="merge_from", type=str, default=None, help="Path file Excel (.xlsx) dari run lain pada tanggal yang sama untuk digabungkan")
     parser.add_argument("--overwrite", action="store_true", help="Izinkan menimpa data/file lama saat --merge-from (default: tidak menimpa)")
     parser.add_argument("--publish", action="store_true", help="Izinkan pembaruan ke data_export/ (branch data); default NONAKTIF selama pengujian")
+    parser.add_argument("--decode-only", action="store_true", help="Mode verifikasi: hanya jalankan fetch, decode L1-L4, dan ekstraksi teks tanpa pemanggilan Gemini AI")
 
     args = parser.parse_args()
 
@@ -1794,11 +1825,11 @@ if __name__ == "__main__":
         out = args.output if args.output else os.path.join(OUTPUT_DIR, f"hasil_scraping_{args.keyword}.xlsx")
         run_pipeline(keywords_or_file=[args.keyword], output_excel=out)
     elif args.batch is not None:
-        run_batch_pipeline(batch_size=5, target_batch=args.batch)
+        run_batch_pipeline(batch_size=5, target_batch=args.batch, decode_only=args.decode_only)
     elif args.all:
-        run_batch_pipeline(batch_size=5)
+        run_batch_pipeline(batch_size=5, decode_only=args.decode_only)
     else:
-        run_batch_pipeline(batch_size=5)
+        run_batch_pipeline(batch_size=5, decode_only=args.decode_only)
 
     if args.merge_from:
         _run_merge_for_target_date(args.merge_from, overwrite=args.overwrite, output_override=args.output)
