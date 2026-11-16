@@ -1302,6 +1302,95 @@ class TestPointFMergeRuns(unittest.TestCase):
             src = f.read()
         self.assertIn("if not publish_flag:\n            return", src)
 
+    def test_sync_dashboard_data_end_to_end_sandbox(self):
+        import scripts.sync_dashboard_data as sync_mod
+        import pandas as pd
+        from pathlib import Path
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            tmp_root = Path(tmp_dir)
+            export_dir = tmp_root / "data_export"
+            files_export = export_dir / "files"
+            web_data = tmp_root / "web" / "public" / "data"
+            web_files = tmp_root / "web" / "public" / "files"
+            input_dir = tmp_root / "hasil_scrapping" / "2026-11-11"
+
+            for p in (export_dir, files_export, web_data, web_files, input_dir):
+                p.mkdir(parents=True, exist_ok=True)
+
+            # Buat sample Excel hasil scrapping di input_dir
+            sample_xlsx = input_dir / "all_2026-11-11_ringkasan.xlsx"
+            sample_df = pd.DataFrame([
+                {
+                    "Tanggal": "2026-11-11 09:00:00",
+                    "Title": "Kemenperin Fasilitasi Ekspor Hilirisasi Minyak Sawit",
+                    "Link Website": "https://ekonomi.bisnis.com/read/test-sync-1",
+                    "Keywords": "sawit, cpo",
+                    "Tone": "Positif",
+                    "Spokesperson": "Menteri Perindustrian",
+                    "Spokesperson Context": "Apresiasi kinerja ekspor",
+                    "Kemenperin Terkait": "Ya",
+                    "Alasan Relevansi Kemenperin": "Hilirisasi agro binaan Kemenperin",
+                    "Media / Source": "Bisnis.com",
+                    "Rangkuman": "Pemerintah mendorong ekspor CPO olahan.",
+                    "Perlu Review": "Tidak",
+                }
+            ])
+            with pd.ExcelWriter(sample_xlsx, engine="openpyxl") as writer:
+                sample_df.to_excel(writer, sheet_name="Berita", index=False)
+
+            # Monkeypatch direktori di sync_mod agar tidak menyentuh data_export/ asli
+            orig_data_export = sync_mod.DATA_EXPORT_DIR
+            orig_files_export = sync_mod.FILES_EXPORT_DIR
+            orig_web_data = sync_mod.WEB_DATA_DIR
+            orig_web_files = sync_mod.WEB_FILES_DIR
+            orig_get_date_folder = sync_mod.get_date_folder
+
+            try:
+                sync_mod.DATA_EXPORT_DIR = export_dir
+                sync_mod.FILES_EXPORT_DIR = files_export
+                sync_mod.WEB_DATA_DIR = web_data
+                sync_mod.WEB_FILES_DIR = web_files
+                sync_mod.get_date_folder = lambda dr: str(input_dir)
+
+                sync_mod.sync_after_run(
+                    start_date="2026-11-11",
+                    end_date="2026-11-11",
+                    status="Berhasil",
+                    duration_sec=75,
+                    trigger="Manual",
+                )
+
+                # Verifikasi file JSON dihasilkan di sandbox
+                art_all = export_dir / "articles_all.json"
+                summary_f = export_dir / "summary.json"
+                runs_f = export_dir / "runs.json"
+                daily_xlsx = files_export / "Media_Monitoring_Agro_2026-11-11.xlsx"
+                all_data_xlsx = files_export / "Media_Monitoring_Agro_Semua_Data.xlsx"
+
+                self.assertTrue(art_all.exists(), "articles_all.json harus ada di sandbox")
+                self.assertTrue(summary_f.exists(), "summary.json harus ada di sandbox")
+                self.assertTrue(runs_f.exists(), "runs.json harus ada di sandbox")
+                self.assertTrue(daily_xlsx.exists(), "Media_Monitoring_Agro_2026-11-11.xlsx harus ada di sandbox")
+                self.assertTrue(all_data_xlsx.exists(), "Media_Monitoring_Agro_Semua_Data.xlsx harus ada di sandbox")
+
+                with open(art_all, "r", encoding="utf-8") as f:
+                    articles_data = json.load(f)
+                self.assertEqual(len(articles_data), 1)
+                self.assertEqual(articles_data[0]["title"], "Kemenperin Fasilitasi Ekspor Hilirisasi Minyak Sawit")
+
+                with open(runs_f, "r", encoding="utf-8") as f:
+                    runs_data = json.load(f)
+                self.assertEqual(len(runs_data), 1)
+                self.assertEqual(runs_data[0]["status"], "Berhasil")
+                self.assertEqual(runs_data[0]["target_date"], "2026-11-11")
+
+            finally:
+                sync_mod.DATA_EXPORT_DIR = orig_data_export
+                sync_mod.FILES_EXPORT_DIR = orig_files_export
+                sync_mod.WEB_DATA_DIR = orig_web_data
+                sync_mod.WEB_FILES_DIR = orig_web_files
+                sync_mod.get_date_folder = orig_get_date_folder
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
