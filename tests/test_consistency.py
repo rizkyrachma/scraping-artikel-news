@@ -418,11 +418,27 @@ class TestPointADecoderAndCircuitBreaker(unittest.TestCase):
             {"link": "https://news.google.com/rss/articles/CBMi3"},
             {"decode_failed": True, "decode_method": "negative_cache", "text": ""},
         )
-        self.assertEqual(stats["extract_total"], 3)
+        pipeline_main._record_decode_stat(
+            stats,
+            {"link": "https://news.google.com/rss/articles/CBMi4"},
+            {"decode_failed": True, "decode_method": "rejected_target", "text": ""},
+        )
+        pipeline_main._record_decode_stat(
+            stats,
+            {"link": "https://news.google.com/rss/articles/CBMi5"},
+            {"decode_failed": True, "decode_method": "failed", "text": ""},
+        )
+        self.assertEqual(stats["extract_total"], 5)
         self.assertEqual(stats["extract_ok"], 1)
         self.assertEqual(stats["extract_short"], 1)
         self.assertEqual(stats["negative_cache_hit"], 1)
-        self.assertEqual(stats["decode_fail"], 0)
+        self.assertEqual(stats["rejected_target"], 1)
+        self.assertEqual(stats["decode_fail"], 1)
+        # gnews_total=5, rejected_target=1 -> penyebut efektif = 4, pembilang = 1 (25.0%), bukan 1/5 atau 2/5
+        num, denom, pct = pipeline_main.compute_decode_failure_rate(stats)
+        self.assertEqual(num, 1)
+        self.assertEqual(denom, 4)
+        self.assertAlmostEqual(pct, 25.0)
 
     def test_rss_metadata_extraction_ignores_google_and_root_links(self):
         fake_entry = {

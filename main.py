@@ -334,6 +334,20 @@ def _init_decode_stats() -> dict:
     }
 
 
+def compute_decode_failure_rate(stats: dict) -> tuple[int, int, float]:
+    """
+    Menghitung (numerator_fail, denominator_valid_gnews, fail_pct).
+    Item rejected_target (dan pre_filtered) dikeluarkan dari pembilang maupun penyebut.
+    """
+    g_tot = int(stats.get("gnews_total", 0) or 0)
+    rej = int(stats.get("rejected_target", 0) or 0)
+    pre = int(stats.get("pre_filtered", 0) or 0)
+    num = int(stats.get("decode_fail", 0) or 0)
+    denom = max(0, g_tot - rej - pre)
+    pct = (num / denom * 100.0) if denom > 0 else 0.0
+    return num, denom, pct
+
+
 def _record_decode_stat(stats: dict, raw_item: dict, res_item: dict) -> None:
     stats["extract_total"] += 1
     txt_len = len(str(res_item.get("text") or "").strip())
@@ -979,12 +993,15 @@ def process_single_keyword(
             cb_snap = ctrl.snapshot()
             ext_tot = decode_stats["extract_total"]
             ext_pct = (decode_stats["extract_ok"] / ext_tot * 100.0) if ext_tot else 0.0
+            f_num, f_denom, f_pct = compute_decode_failure_rate(decode_stats)
+            decode_stats["decode_eval_total"] = f_denom
+            decode_stats["decode_fail_pct"] = round(f_pct, 1)
             log_granular(
                 f"     [Decode] GNews={decode_stats['gnews_total']} | Cache={decode_stats['cache_hit']} "
                 f"| NegCache={decode_stats['negative_cache_hit']} | Offline={decode_stats['decode_offline']} "
                 f"| Lokal={decode_stats['decode_local']} | Meta={decode_stats['fallback_meta']} "
                 f"| Search={decode_stats['fallback_search']} | Rejected={decode_stats['rejected_target']} "
-                f"| Retry={decode_stats['decode_fail']} | ExtractOK={decode_stats['extract_ok']}/{ext_tot} ({ext_pct:.0f}%) "
+                f"| Retry={f_num}/{f_denom} ({f_pct:.1f}%) | ExtractOK={decode_stats['extract_ok']}/{ext_tot} ({ext_pct:.0f}%) "
                 f"| CB={cb_snap['state']} (RollingFail={cb_snap['rolling_failure_rate']*100:.0f}%, NextWorkers={cb_snap['recommended_workers']})"
             )
     else:
@@ -1499,7 +1516,9 @@ def run_batch_pipeline(
             json.dump(checkpoint, f, ensure_ascii=False, indent=2)
 
         g_tot = batch_decode_report["gnews_total"]
-        fail_pct = (batch_decode_report["decode_fail"] / g_tot * 100.0) if g_tot else 0.0
+        f_num, f_denom, fail_pct = compute_decode_failure_rate(batch_decode_report)
+        batch_decode_report["decode_eval_total"] = f_denom
+        batch_decode_report["decode_fail_pct"] = round(fail_pct, 1)
         ext_tot = batch_decode_report.get("extract_total", 0)
         ext_ok = batch_decode_report.get("extract_ok", 0)
         ext_pct = (ext_ok / ext_tot * 100.0) if ext_tot else 0.0
@@ -1516,7 +1535,7 @@ def run_batch_pipeline(
             f"| DecodeOK={batch_decode_report['decode_ok']} (Offline={batch_decode_report['decode_offline']}, Lokal={batch_decode_report['decode_local']}) "
             f"| FallbackMeta={batch_decode_report['fallback_meta']} | FallbackSearch={batch_decode_report['fallback_search']} "
             f"| Rejected={batch_decode_report.get('rejected_target', 0)} "
-            f"| Gagal/Retry={batch_decode_report['decode_fail']} ({fail_pct:.1f}%) "
+            f"| Gagal/Retry={f_num}/{f_denom} ({fail_pct:.1f}%) "
             f"| CircuitTrips={batch_decode_report['circuit_trips']}",
             flush=True,
         )
@@ -1531,9 +1550,11 @@ def run_batch_pipeline(
             kw_final = int(s.get("final_valid", 0) or 0)
             kw_kem_yes = int(s.get("kemenperin_yes", 0) or 0)
             kw_kem_no = kw_final - kw_kem_yes
+            kw_ds = s.get("decode_stats") or {}
+            kw_rej = int(kw_ds.get("rejected_target", 0) or 0)
             print(
                 f"  - '{s.get('keyword', '')}': Awal={kw_init} -> LolosKemarin={kw_init - kw_dropped} -> "
-                f"FINAL={kw_final} (Kemenperin: Ya={kw_kem_yes} / Tidak={kw_kem_no})",
+                f"FINAL={kw_final} (Kemenperin: Ya={kw_kem_yes} / Tidak={kw_kem_no} | Rejected={kw_rej})",
                 flush=True,
             )
         print(f"Checkpoint tersimpan ke: {checkpoint_path}", flush=True)
