@@ -103,7 +103,9 @@ SERPER_NEWS_URL = "https://google.serper.dev/news"
 EXA_SEARCH_URL = "https://api.exa.ai/search"
 DEFAULT_DECODE_CACHE_FILE = os.path.join("hasil_scrapping", "cache_decode.json")
 DEFAULT_NEGATIVE_CACHE_FILE = os.path.join("hasil_scrapping", "cache_decode_failed.json")
+DECODE_VALIDATOR_VERSION = "v1"
 DEFAULT_NEGATIVE_CACHE_TTL_SECONDS = 6 * 3600
+DEFAULT_REJECTED_CACHE_TTL_SECONDS = 30 * 86400
 
 _BLOCKED_DECODED_HOSTS = {
     "news.google.com",
@@ -302,16 +304,20 @@ class DecodeCache:
 
 
 class DecodeNegativeCache:
-    """Cache negatif ber-TTL pendek (default 6 jam) khusus untuk URL Google News gagal/ditolak, terpisah dari cache sukses permanen."""
+    """Cache negatif ber-TTL pendek khusus untuk URL Google News gagal/ditolak, terpisah dari cache sukses permanen."""
 
     def __init__(
         self,
         filepath: str | None = None,
         ttl_seconds: float = DEFAULT_NEGATIVE_CACHE_TTL_SECONDS,
+        rejected_ttl_seconds: float = DEFAULT_REJECTED_CACHE_TTL_SECONDS,
+        validator_version: str = DECODE_VALIDATOR_VERSION,
         time_fn=None,
     ):
         self.filepath = filepath or os.environ.get("DECODE_NEGATIVE_CACHE_FILE") or DEFAULT_NEGATIVE_CACHE_FILE
         self.ttl_seconds = max(1.0, float(ttl_seconds))
+        self.rejected_ttl_seconds = max(1.0, float(rejected_ttl_seconds))
+        self.validator_version = str(validator_version or DECODE_VALIDATOR_VERSION).strip()
         self._time_fn = time_fn or time.time
         self._lock = threading.RLock()
         self._data: dict[str, dict] = {}
@@ -319,12 +325,27 @@ class DecodeNegativeCache:
         self._dirty = False
         self.load()
 
+    def _make_key(self, url: str, reason: str = "") -> str:
+        norm = normalize_google_news_url(url)
+        if reason == "rejected_target":
+            return f"{norm}::val_{self.validator_version}"
+        return norm
+
     def _prune_expired_locked(self, now: float | None = None) -> int:
         cur = self._time_fn() if now is None else float(now)
-        expired = [
-            k for k, entry in self._data.items()
-            if not isinstance(entry, dict) or (cur - float(entry.get("ts", 0.0))) >= self.ttl_seconds
-        ]
+        expired = []
+        for k, entry in self._data.items():
+            if not isinstance(entry, dict):
+                expired.append(k)
+                continue
+            ts = float(entry.get("ts", 0.0) or 0.0)
+            max_ttl = self.rejected_ttl_seconds if "::val_" in k else self.ttl_seconds
+            if (cur - ts) >= max_ttl:
+                expired.append(k)
+            elif "::val_" in k:
+                k_ver = k.split("::val_", 1)[1] if "::val_" in k else ""
+                if k_ver and k_ver != self.validator_version:
+                    expired.append(k)
         for k in expired:
             del self._data[k]
         if expired:
@@ -353,14 +374,28 @@ class DecodeNegativeCache:
                 for k, v in raw.items():
                     if isinstance(k, str) and "news.google.com" in k and isinstance(v, dict):
                         ts = float(v.get("ts", 0.0) or 0.0)
-                        if (now - ts) < self.ttl_seconds:
-                            cleaned[normalize_google_news_url(k)] = {
-                                "ts": ts,
-                                "reason": str(v.get("reason") or "failed")[:120],
-                            }
+                        reason = str(v.get("reason") or "failed")[:120]
+                        v_ver = str(v.get("validator_version") or "")
+                        if "::val_" in k:
+                            k_ver = k.split("::val_", 1)[1] if "::val_" in k else v_ver
+                            if k_ver == self.validator_version and (now - ts) < self.rejected_ttl_seconds:
+                                cleaned[k] = {
+                                    "ts": ts,
+                                    "reason": reason,
+                                    "validator_version": k_ver,
+                                }
+                        else:
+                            if (now - ts) < self.ttl_seconds:
+                                cleaned[normalize_google_news_url(k)] = {
+                                    "ts": ts,
+                                    "reason": reason,
+                                }
                 for k, v in self._data.items():
-                    if k not in cleaned and (now - float(v.get("ts", 0.0))) < self.ttl_seconds:
-                        cleaned[k] = v
+                    if k not in cleaned:
+                        ts = float(v.get("ts", 0.0) or 0.0)
+                        max_ttl = self.rejected_ttl_seconds if "::val_" in k else self.ttl_seconds
+                        if (now - ts) < max_ttl:
+                            cleaned[k] = v
                 self._data = cleaned
             self._loaded_mtime = os.path.getmtime(self.filepath)
         except Exception:
@@ -374,16 +409,31 @@ class DecodeNegativeCache:
         if not url or "news.google.com" not in url:
             return None
         norm = normalize_google_news_url(url)
+        val_key = f"{norm}::val_{self.validator_version}"
         with self._lock:
             self._reload_if_newer_locked()
-            entry = self._data.get(norm)
-            if not entry:
-                return None
-            if (self._time_fn() - float(entry.get("ts", 0.0))) >= self.ttl_seconds:
-                del self._data[norm]
-                self._dirty = True
-                return None
-            return str(entry.get("reason") or "failed")
+            now = self._time_fn()
+            # 1. Cek rejected_target dengan versi validator saat ini
+            if val_key in self._data:
+                entry = self._data[val_key]
+                ts = float(entry.get("ts", 0.0) or 0.0)
+                if (now - ts) < self.rejected_ttl_seconds:
+                    return str(entry.get("reason") or "rejected_target")
+                else:
+                    del self._data[val_key]
+                    self._dirty = True
+
+            # 2. Cek transient failure biasa
+            if norm in self._data:
+                entry = self._data[norm]
+                ts = float(entry.get("ts", 0.0) or 0.0)
+                if (now - ts) < self.ttl_seconds:
+                    return str(entry.get("reason") or "failed")
+                else:
+                    del self._data[norm]
+                    self._dirty = True
+
+            return None
 
     def is_failed(self, url: str) -> bool:
         return self.get_reason(url) is not None
@@ -391,11 +441,13 @@ class DecodeNegativeCache:
     def mark_failed(self, url: str, reason: str = "failed") -> bool:
         if not url or "news.google.com" not in url:
             return False
-        norm = normalize_google_news_url(url)
+        reason_str = str(reason or "failed")[:120]
+        key = self._make_key(url, reason=reason_str)
         with self._lock:
-            self._data[norm] = {
+            self._data[key] = {
                 "ts": float(self._time_fn()),
-                "reason": str(reason or "failed")[:120],
+                "reason": reason_str,
+                "validator_version": self.validator_version,
             }
             self._dirty = True
         return True
@@ -404,12 +456,15 @@ class DecodeNegativeCache:
         if not url or "news.google.com" not in url:
             return False
         norm = normalize_google_news_url(url)
+        removed = False
         with self._lock:
-            if norm in self._data:
-                del self._data[norm]
+            to_del = [k for k in self._data if k == norm or k.startswith(f"{norm}::val_")]
+            for k in to_del:
+                del self._data[k]
+                removed = True
+            if removed:
                 self._dirty = True
-                return True
-        return False
+        return removed
 
     def size(self) -> int:
         with self._lock:

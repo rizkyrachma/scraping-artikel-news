@@ -5,6 +5,7 @@ determinisme, filter non-berita, dan konsistensi Ringkasan Negatif.
 Jalankan: python tests/test_consistency.py
 """
 
+import json
 import os
 import sys
 import tempfile
@@ -22,6 +23,7 @@ from src.extract_content import (
     normalize_google_news_url,
     resolve_article_with_fallback,
     is_prefiltered_rss_item,
+    DECODE_VALIDATOR_VERSION,
 )
 import src.extract_content as extract_content_mod
 from src.fetch_news import _extract_rss_metadata_urls, dedup_by_link
@@ -401,6 +403,31 @@ class TestPointADecoderAndCircuitBreaker(unittest.TestCase):
                 self.assertIs(pipeline_main.GoogleCaptchaBlockedError, extract_content_mod.GoogleCaptchaBlockedError)
             finally:
                 extract_content_mod._decoder_fn = orig_decoder
+
+    def test_rejected_target_versioned_persistence_and_invalidation(self):
+        with tempfile.TemporaryDirectory() as td:
+            neg_path = os.path.join(td, "cache_decode_failed.json")
+            cache_v1 = DecodeNegativeCache(filepath=neg_path, validator_version="v1")
+            url = "https://news.google.com/rss/articles/CBMiREJECTED1"
+
+            # 1. Simpan penolakan di v1
+            cache_v1.mark_failed(url, reason="rejected_target")
+            cache_v1.save(force=True)
+            self.assertEqual(cache_v1.get_reason(url), "rejected_target")
+
+            # Cek isi file json memuat key dengan versi validator v1
+            with open(neg_path, "r", encoding="utf-8") as f:
+                saved = json.load(f)
+            matching_keys = [k for k in saved if "val_v1" in k]
+            self.assertTrue(len(matching_keys) > 0)
+
+            # 2. Muat dengan validator_version="v2": cache penolakan lama tidak boleh terpakai
+            cache_v2 = DecodeNegativeCache(filepath=neg_path, validator_version="v2")
+            self.assertIsNone(cache_v2.get_reason(url))
+
+            # 3. Muat kembali dengan v1: masih terbaca
+            cache_v1_again = DecodeNegativeCache(filepath=neg_path, validator_version="v1")
+            self.assertEqual(cache_v1_again.get_reason(url), "rejected_target")
 
     def test_decode_stats_track_extraction_length_separately(self):
         stats = pipeline_main._init_decode_stats()
