@@ -1,15 +1,16 @@
 {
   "metadata": {
-    "last_updated": "2026-11-16",
-    "last_updated_display": "Senin, 16 November 2026",
+    "last_updated": "2026-11-17",
+    "last_updated_display": "Selasa, 17 November 2026",
     "earliest_date": "2026-08-06",
-    "total_articles": 1619,
+    "total_articles": 1642,
     "tone_summary": {
-      "Positif": 1141,
-      "Netral": 174,
-      "Negatif": 304
+      "Positif": 1152,
+      "Netral": 181,
+      "Negatif": 309
     },
     "calendar_counts": {
+      "2026-11-17": 23,
       "2026-11-16": 36,
       "2026-11-15": 25,
       "2026-11-14": 19,
@@ -71,15 +72,15 @@
   "commodities": [
     {
       "name": "Kelapa Sawit & CPO",
-      "count": 386
+      "count": 389
     },
     {
       "name": "Hasil Tembakau",
-      "count": 291
+      "count": 300
     },
     {
       "name": "Makanan & Minuman",
-      "count": 241
+      "count": 243
     },
     {
       "name": "Lainnya",
@@ -87,7 +88,7 @@
     },
     {
       "name": "Tepung, Sagu & Pati",
-      "count": 114
+      "count": 116
     },
     {
       "name": "Kakao & Cokelat",
@@ -107,7 +108,7 @@
     },
     {
       "name": "Rumput Laut",
-      "count": 48
+      "count": 49
     },
     {
       "name": "Pulp & Kertas",
@@ -122,16 +123,16 @@
       "count": 38
     },
     {
+      "name": "Susu & Olahan",
+      "count": 22
+    },
+    {
       "name": "Karet & Olahan",
       "count": 20
     },
     {
-      "name": "Susu & Olahan",
-      "count": 18
-    },
-    {
       "name": "Pakan Ternak",
-      "count": 7
+      "count": 9
     }
   ],
   "spokespersons": [
@@ -167,6 +168,374 @@
   "recent_articles": [
     {
       "id": 1,
+      "title": "Sidang Larangan Vape Digelar 25 November, MK Akan Dengar Pengusaha, BNN, dan MUI",
+      "link": "https://radarbanjarmasin.jawapos.com/hukum-peristiwa/2611170059/sidang-larangan-vape-digelar-25-november-mk-akan-dengar-pengusaha-bnn-dan-mui",
+      "media": "Radar Banjarmasin",
+      "tone": "Netral",
+      "date": "2026-11-17",
+      "datetime": "2026-11-17T20:35:10",
+      "time": "20:35",
+      "date_display": "Selasa, 17 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Hasil Tembakau",
+      "has_review": false,
+      "review_text": ""
+    },
+    {
+      "id": 2,
+      "title": "Pasar dunia minati produk olahan kelor asal NTB",
+      "link": "https://mataram.antaranews.com/berita/583159/pasar-dunia-minati-produk-olahan-kelor-asal-ntb",
+      "media": "ANTARA News Mataram",
+      "tone": "Positif",
+      "date": "2026-11-17",
+      "datetime": "2026-11-17T20:24:44",
+      "time": "20:24",
+      "date_display": "Selasa, 17 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Pakan Ternak",
+      "has_review": false,
+      "review_text": ""
+    },
+    {
+      "id": 3,
+      "title": "Menperin Terbitkan Surat Dukungan PSN Hilirisasi Sagu di SBT Maluku",
+      "link": "https://ameks.fajar.co.id/2026/11/17/menperin-terbitkan-surat-dukungan-psn-hilirisasi-sagu-di-sbt-maluku/",
+      "media": "Ameks Online",
+      "tone": "Positif",
+      "date": "2026-11-17",
+      "datetime": "2026-11-17T18:43:46",
+      "time": "18:43",
+      "date_display": "Selasa, 17 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Tepung, Sagu & Pati",
+      "has_review": false,
+      "review_text": ""
+    },
+    {
+      "id": 4,
+      "title": "Royal Canin Proyeksi Industri Pet Food RI Tumbuh Double Digit, Ini Pendorongnya",
+      "link": "https://www.fortuneidn.com/news/industri-pet-food-tumbuh-double-digit-tahun-depan-00-6cmtl-v2435n",
+      "media": "FORTUNE Indonesia",
+      "tone": "Positif",
+      "date": "2026-11-17",
+      "datetime": "2026-11-17T18:28:47",
+      "time": "18:28",
+      "date_display": "Selasa, 17 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Makanan & Minuman",
+      "has_review": false,
+      "review_text": ""
+    },
+    {
+      "id": 5,
+      "title": "Industri REL Nasional: Pelaku Usaha dan Pekerja Memohon Perlindungan Pemerintah Jaga Tenaga Kerja",
+      "link": "https://indexsumut.com/2026/11/17/industri-rel-nasional-pelaku-usaha-dan-pekerja-memohon-perlindungan-pemerintah-jaga-tenaga-kerja/",
+      "media": "Index Sumut",
+      "tone": "Positif",
+      "date": "2026-11-17",
+      "datetime": "2026-11-17T17:10:00",
+      "time": "17:10",
+      "date_display": "Selasa, 17 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Hasil Tembakau",
+      "has_review": false,
+      "review_text": ""
+    },
+    {
+      "id": 6,
+      "title": "Dulu Digadang-gadang Masuk Menu MBG, Begini Kabar Terbaru Susu Ikan",
+      "link": "https://www.cnbcindonesia.com/news/20261117150803-4-786002/dulu-digadang-gadang-masuk-menu-mbg-begini-kabar-terbaru-susu-ikan",
+      "media": "CNBC Indonesia",
+      "tone": "Netral",
+      "date": "2026-11-17",
+      "datetime": "2026-11-17T16:45:04",
+      "time": "16:45",
+      "date_display": "Selasa, 17 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Susu & Olahan",
+      "has_review": false,
+      "review_text": ""
+    },
+    {
+      "id": 7,
+      "title": "Industri Rokok Elektronik Minta Perlindungan Pemerintah, Soroti Nasib Pekerja",
+      "link": "https://www.harianjogja.com/r-1279259/industri-rokok-elektronik-minta-perlindungan-pemerintah-soroti-nasib-pekerja",
+      "media": "Harian Jogja",
+      "tone": "Negatif",
+      "date": "2026-11-17",
+      "datetime": "2026-11-17T16:02:51",
+      "time": "16:02",
+      "date_display": "Selasa, 17 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Hasil Tembakau",
+      "has_review": false,
+      "review_text": ""
+    },
+    {
+      "id": 8,
+      "title": "Industri Rokok Elektronik Minta Pemerintah Lindungi Tenaga Kerja",
+      "link": "https://www.cnnindonesia.com/ekonomi/20261117153751-625-1428171/industri-rokok-elektronik-minta-pemerintah-lindungi-tenaga-kerja",
+      "media": "CNN Indonesia",
+      "tone": "Negatif",
+      "date": "2026-11-17",
+      "datetime": "2026-11-17T15:58:09",
+      "time": "15:58",
+      "date_display": "Selasa, 17 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Hasil Tembakau",
+      "has_review": false,
+      "review_text": ""
+    },
+    {
+      "id": 9,
+      "title": "Perkuat ISPO, Pemerintah Dorong Sawit Berkelanjutan hingga Hilirisasi B50",
+      "link": "https://www.metrotvnews.com/play/b3JC9vyM-perkuat-ispo-pemerintah-dorong-sawit-berkelanjutan-hingga-hilirisasi-b50",
+      "media": "MetroTVNews.com",
+      "tone": "Positif",
+      "date": "2026-11-17",
+      "datetime": "2026-11-17T15:02:57",
+      "time": "15:02",
+      "date_display": "Selasa, 17 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Kelapa Sawit & CPO",
+      "has_review": false,
+      "review_text": ""
+    },
+    {
+      "id": 10,
+      "title": "Pakar tegaskan pelarangan rokok elektronik harus berbasis bukti",
+      "link": "https://bengkulu.antaranews.com/berita/486743/pakar-tegaskan-pelarangan-rokok-elektronik-harus-berbasis-bukti",
+      "media": "ANTARA News",
+      "tone": "Netral",
+      "date": "2026-11-17",
+      "datetime": "2026-11-17T14:57:27",
+      "time": "14:57",
+      "date_display": "Selasa, 17 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Hasil Tembakau",
+      "has_review": false,
+      "review_text": ""
+    },
+    {
+      "id": 11,
+      "title": "KKP Jelaskan Perkembangan Susu Ikan untuk MBG - kumparan.com",
+      "link": "https://kumparan.com/kumparanbisnis/kkp-jelaskan-perkembangan-susu-ikan-untuk-mbg-28aegDYgsXP",
+      "media": "kumparan",
+      "tone": "Netral",
+      "date": "2026-11-17",
+      "datetime": "2026-11-17T14:40:00",
+      "time": "14:40",
+      "date_display": "Selasa, 17 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Susu & Olahan",
+      "has_review": false,
+      "review_text": ""
+    },
+    {
+      "id": 12,
+      "title": "Anggota DPR dukung Presiden percepat pembangunan pabrik pakan ternak",
+      "link": "https://www.antaranews.com/berita/5859299/anggota-dpr-dukung-presiden-percepat-pembangunan-pabrik-pakan-ternak",
+      "media": "ANTARA News",
+      "tone": "Positif",
+      "date": "2026-11-17",
+      "datetime": "2026-11-17T13:50:04",
+      "time": "13:50",
+      "date_display": "Selasa, 17 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Pakan Ternak",
+      "has_review": false,
+      "review_text": ""
+    },
+    {
+      "id": 13,
+      "title": "Digadang Masuk MBG, Begini Nasib Proyek Susu Ikan",
+      "link": "https://www.liputan6.com/bisnis/read/8336871/digadang-masuk-mbg-begini-nasib-proyek-susu-ikan",
+      "media": "Liputan6.com",
+      "tone": "Netral",
+      "date": "2026-11-17",
+      "datetime": "2026-11-17T13:30:37",
+      "time": "13:30",
+      "date_display": "Selasa, 17 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Susu & Olahan",
+      "has_review": false,
+      "review_text": ""
+    },
+    {
+      "id": 14,
+      "title": "Ekspor Sawit RI Diproyeksi Turun hingga 5 Juta Ton Gegara El Nino hingga B50",
+      "link": "https://www.metrotvnews.com/play/kWDCmodm-ekspor-sawit-ri-diproyeksi-turun-hingga-5-juta-ton-gegara-el-nino-hingga-b50",
+      "media": "MetroTVNews.com",
+      "tone": "Negatif",
+      "date": "2026-11-17",
+      "datetime": "2026-11-17T13:23:19",
+      "time": "13:23",
+      "date_display": "Selasa, 17 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Kelapa Sawit & CPO",
+      "has_review": false,
+      "review_text": ""
+    },
+    {
+      "id": 15,
+      "title": "Wacana Larangan Vape Disorot karena Berdampak pada Ekonomi",
+      "link": "https://bsinews.id/larangan-vape-dampak-ekonomi",
+      "media": "bsinews.id",
+      "tone": "Positif",
+      "date": "2026-11-17",
+      "datetime": "2026-11-17T13:08:13",
+      "time": "13:08",
+      "date_display": "Selasa, 17 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Hasil Tembakau",
+      "has_review": false,
+      "review_text": ""
+    },
+    {
+      "id": 16,
+      "title": "Pelaku Usaha Rokok Elektrik Minta Pemerintah Lindungi Industri & Pekerja",
+      "link": "https://finance.detik.com/berita-ekonomi-bisnis/d-8756586/pelaku-usaha-rokok-elektrik-minta-pemerintah-lindungi-industri-pekerja",
+      "media": "detikFinance",
+      "tone": "Negatif",
+      "date": "2026-11-17",
+      "datetime": "2026-11-17T12:59:32",
+      "time": "12:59",
+      "date_display": "Selasa, 17 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Hasil Tembakau",
+      "has_review": false,
+      "review_text": ""
+    },
+    {
+      "id": 17,
+      "title": "Program Susu Ikan Masih PR: KKP Sudah Bikin Prototipe yang Diserahkan ke Daerah",
+      "link": "https://www.inilah.com/nasib-program-susu-ikan-prabowo-gantung-kkp-akui-masih-terkendala-koordinasi",
+      "media": "Inilah.com",
+      "tone": "Netral",
+      "date": "2026-11-17",
+      "datetime": "2026-11-17T12:01:00",
+      "time": "12:01",
+      "date_display": "Selasa, 17 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Susu & Olahan",
+      "has_review": false,
+      "review_text": ""
+    },
+    {
+      "id": 18,
+      "title": "Mengoptimalkan Potensi Rumput Laut Indonesia melalui Hilirisasi dan Penguatan Rantai Pasok",
+      "link": "https://bursaikan.kkp.go.id/berita/strategi-ekspor-perikanan-kkp-hilirisasi-rumput-laut-dan-solusi-logistik-cold-chain-xxpj",
+      "media": "Kementerian Kelautan dan Perikanan",
+      "tone": "Positif",
+      "date": "2026-11-17",
+      "datetime": "2026-11-17T11:25:36",
+      "time": "11:25",
+      "date_display": "Selasa, 17 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Rumput Laut",
+      "has_review": false,
+      "review_text": ""
+    },
+    {
+      "id": 19,
+      "title": "Sawit Dominasi Ekspor Sumut, Penerimaan Bea Keluar Lampaui Target Rp3 Triliun",
+      "link": "https://www.sawitsetara.co/artikel/Berita/sawit-dominasi-ekspor-sumut-penerimaan-bea-keluar-lampaui-target-rp3-triliun",
+      "media": "sawitsetara.co",
+      "tone": "Positif",
+      "date": "2026-11-17",
+      "datetime": "2026-11-17T10:45:33",
+      "time": "10:45",
+      "date_display": "Selasa, 17 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Kelapa Sawit & CPO",
+      "has_review": false,
+      "review_text": ""
+    },
+    {
+      "id": 20,
+      "title": "Pelaku Industri Rokok Elektronik Minta Pemerintah Lindungi Usaha dan Tenaga Kerja",
+      "link": "https://sumutpos.jawapos.com/ekonomi/2611170002/pelaku-industri-rokok-elektronik-minta-pemerintah-lindungi-usaha-dan-tenaga-kerja",
+      "media": "Sumut Pos",
+      "tone": "Negatif",
+      "date": "2026-11-17",
+      "datetime": "2026-11-17T09:09:57",
+      "time": "09:09",
+      "date_display": "Selasa, 17 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Hasil Tembakau",
+      "has_review": false,
+      "review_text": ""
+    },
+    {
+      "id": 21,
+      "title": "Wacana Larangan Vape, Pakar Tekankan Kajian Ilmiah dan Pertimbangan Ekonomi",
+      "link": "https://sumutpos.jawapos.com/ekonomi/2611170001/wacana-larangan-vape-pakar-tekankan-kajian-ilmiah-dan-pertimbangan-ekonomi",
+      "media": "Sumut Pos",
+      "tone": "Netral",
+      "date": "2026-11-17",
+      "datetime": "2026-11-17T09:03:55",
+      "time": "09:03",
+      "date_display": "Selasa, 17 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Hasil Tembakau",
+      "has_review": false,
+      "review_text": ""
+    },
+    {
+      "id": 22,
+      "title": "Pemkab SBT dorong sagu masuk Proyek Strategis Nasional",
+      "link": "https://rakyatmaluku.fajar.co.id/2026/11/17/pemkab-sbt-dorong-sagu-masuk-proyek-strategis-nasional/",
+      "media": "Rakyat Maluku",
+      "tone": "Positif",
+      "date": "2026-11-17",
+      "datetime": "2026-11-17T08:21:11",
+      "time": "08:21",
+      "date_display": "Selasa, 17 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Tepung, Sagu & Pati",
+      "has_review": false,
+      "review_text": ""
+    },
+    {
+      "id": 23,
+      "title": "Apa Itu TKDN? Pengertian, Cara Menghitung, dan Cara Mengurusnya",
+      "link": "https://www.industry.co.id/read/159334/apa-itu-tkdn-pengertian-cara-menghitung-dan-cara-mengurusnya",
+      "media": "Industry.co.id",
+      "tone": "Positif",
+      "date": "2026-11-17",
+      "datetime": "2026-11-17T07:58:11",
+      "time": "07:58",
+      "date_display": "Selasa, 17 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Makanan & Minuman",
+      "has_review": false,
+      "review_text": ""
+    },
+    {
+      "id": 24,
       "title": "Ekspor Rokok Elektrik RI Naik Tiga Kali Lipat dalam Tiga Tahun",
       "link": "https://www.metrotvnews.com/read/NLMCz99G-ekspor-rokok-elektrik-ri-naik-tiga-kali-lipat-dalam-tiga-tahun",
       "media": "MetroTVNews.com",
@@ -182,7 +551,7 @@
       "review_text": ""
     },
     {
-      "id": 2,
+      "id": 25,
       "title": "Ekspor Sawit Bikin Bea Keluar Sumut Tembus Rp 3,6 T",
       "link": "https://www.detik.com/sumut/bisnis/d-8755989/ekspor-sawit-bikin-bea-keluar-sumut-tembus-rp-3-6-t",
       "media": "detikcom",
@@ -198,7 +567,7 @@
       "review_text": ""
     },
     {
-      "id": 3,
+      "id": 26,
       "title": "Industri Rokok Elektronik Nasional: Pelaku Usaha dan Pekerja Memohon Perlindungan Pemerintah Jaga Tenaga Kerja",
       "link": "https://analisadaily.com/berita/baca/2026/11/16/1079575/industri-rokok-elektronik-nasional-pelaku-usaha-dan-pekerja-memohon-perlindungan-pemerintah-jaga-tenaga-kerja/",
       "media": "AnalisaDaily.com",
@@ -214,7 +583,7 @@
       "review_text": ""
     },
     {
-      "id": 4,
+      "id": 27,
       "title": "Rokok Elektronik Dilarang, Ada Lebih dari 100 Ribu Tenaga Kerja yang Bisa Kena Imbas - disway.id",
       "link": "https://disway.id/amp/979586/rokok-elektronik-dilarang-ada-lebih-dari-100-ribu-tenaga-kerja-yang-bisa-kena-imbas",
       "media": "Disway",
@@ -230,7 +599,7 @@
       "review_text": ""
     },
     {
-      "id": 5,
+      "id": 28,
       "title": "Suara Industri Rokok Elektronik Lewat Pakta Integritas, Khawatir Pelarangan Total Picu PHK Massal - disway.id",
       "link": "https://disway.id/read/979577/suara-industri-rokok-elektronik-lewat-pakta-integritas-khawatir-pelarangan-total-picu-phk-massal",
       "media": "Disway",
@@ -246,7 +615,7 @@
       "review_text": ""
     },
     {
-      "id": 6,
+      "id": 29,
       "title": "Prabowo Pamer Program Biodiesel B50 & PLTS 100 GW di Forum ASEAN",
       "link": "https://finance.detik.com/energi/d-8755830/prabowo-pamer-program-biodiesel-b50-plts-100-gw-di-forum-asean",
       "media": "detikFinance",
@@ -262,7 +631,7 @@
       "review_text": ""
     },
     {
-      "id": 7,
+      "id": 30,
       "title": "Impor Gandum Masih Tinggi, Industri Mamin Perlu Diversifikasi Pemasok",
       "link": "https://industri.kontan.co.id/news/impor-gandum-masih-tinggi-industri-mamin-perlu-diversifikasi-pemasok",
       "media": "kontan.co.id",
@@ -278,7 +647,7 @@
       "review_text": ""
     },
     {
-      "id": 8,
+      "id": 31,
       "title": "Dolphin hadirkan kreasi cokelat dalam pameran pangan di Tangerang",
       "link": "https://banten.antaranews.com/berita/397135/dolphin-hadirkan-kreasi-cokelat-dalam-pameran-pangan-di-tangerang",
       "media": "ANTARA News Banten",
@@ -294,7 +663,7 @@
       "review_text": ""
     },
     {
-      "id": 9,
+      "id": 32,
       "title": "Harga CPO Global Naik, Industri Hilir Sawit Berpotensi Tertekan",
       "link": "https://industri.kontan.co.id/news/harga-cpo-global-naik-industri-hilir-sawit-berpotensi-tertekan",
       "media": "kontan.co.id",
@@ -310,7 +679,7 @@
       "review_text": ""
     },
     {
-      "id": 10,
+      "id": 33,
       "title": "Strategi SSMS Jaga Produktivitas dan Perkuat Bisnis Hilir Sawit",
       "link": "https://sawitindonesia.com/strategi-ssms-jaga-produktivitas-dan-perkuat-bisnis-hilir-sawit",
       "media": "Sawit Indonesia",
@@ -326,7 +695,7 @@
       "review_text": ""
     },
     {
-      "id": 11,
+      "id": 34,
       "title": "Menko Airlangga: Sawit Jadi Pilar Ketahanan Pangan dan Energi, Ekspor Tembus US$28,84 Miliar",
       "link": "https://www.agricom.id/2026/2027/sawit/menko-airlangga-sawit-jadi-pilar-ketahanan-pangan-dan-energi-ekspor-tembus-us2884-miliar/",
       "media": "Agricom.id",
@@ -342,7 +711,7 @@
       "review_text": ""
     },
     {
-      "id": 12,
+      "id": 35,
       "title": "SSMS Siapkan Capex Rp600 Miliar untuk Peningkatan Produktivitas Sawit",
       "link": "https://www.agrofarm.co.id/2026/11/ssms-siapkan-capex-rp600-miliar-untuk-peningkatan-produktivitas-sawit/",
       "media": "agrofarm.co.id",
@@ -358,7 +727,7 @@
       "review_text": ""
     },
     {
-      "id": 13,
+      "id": 36,
       "title": "Produsen Specialty Oil asal Thailand Dukung Industri Karet Indonesia Melalui Rangkaian Produk Process Oil Jelang Pemberlakuan IEU-CEPA",
       "link": "https://www.antaranews.com/berita/5856983/produsen-specialty-oil-asal-thailand-dukung-industri-karet-indonesia-melalui-rangkaian-produk-process-oil-jelang-pemberlakuan-ieu-cepa",
       "media": "ANTARA News",
@@ -374,7 +743,7 @@
       "review_text": ""
     },
     {
-      "id": 14,
+      "id": 37,
       "title": "Prabowo Pamer Keberhasilan Biodiesel B50 & PLTS 100 GW di KTT ASEAN",
       "link": "https://www.cnbcindonesia.com/news/20261116140536-4-785609/prabowo-pamer-keberhasilan-biodiesel-b50-plts-100-gw-di-ktt-asean",
       "media": "CNBC Indonesia",
@@ -390,7 +759,7 @@
       "review_text": ""
     },
     {
-      "id": 15,
+      "id": 38,
       "title": "Industri Sawit Hadapi Tantangan Global, GAPKI Kalteng Ikuti Pembahasan di IPOC 2026",
       "link": "https://borneonews.co.id/berita/10002545-industri-sawit-hadapi-tantangan-global-gapki-kalteng-ikuti-pembahasan-di-ipoc-2026",
       "media": "borneonews",
@@ -406,7 +775,7 @@
       "review_text": ""
     },
     {
-      "id": 16,
+      "id": 39,
       "title": "Kebijakan Mandatori Biodiesel B50 Juli 2026: Kritik, Argumen Pemerintah, Standar Dunia, dan Realisasi Anggaran",
       "link": "https://www.zonasatunews.com/kebijakan-mandatori-biodiesel-b50-juli-2026-kritik-argumen-pemerintah-standar-dunia-dan-realisasi-anggaran/",
       "media": "zonasatunews.com",
@@ -422,7 +791,7 @@
       "review_text": ""
     },
     {
-      "id": 17,
+      "id": 40,
       "title": "KLH Tak Setuju AMDK di Bawah 1 Liter Dilarang di Jakarta",
       "link": "https://rm.id/baca-berita/government-action/334623/klh-tak-setuju-amdk-di-bawah-1-liter-dilarang-di-jakarta",
       "media": "RM.ID",
@@ -438,7 +807,7 @@
       "review_text": ""
     },
     {
-      "id": 18,
+      "id": 41,
       "title": "Prabowo Dorong Energi Bersih & Biodiesel B50 di KTT ASEAN",
       "link": "https://listrikindonesia.com/detail/21808/prabowo-bawa-agenda-energi-bersih-ke-ktt-asean",
       "media": "Listrik Indonesia",
@@ -454,7 +823,7 @@
       "review_text": ""
     },
     {
-      "id": 19,
+      "id": 42,
       "title": "Kemenperin Perkuat Industri Pangan Nasional Lewat Sinergi Rantai Pasok Lokal di Sumatera Selatan",
       "link": "https://infoekonomi.id/2026/11/kemenperin-perkuat-industri-pangan-nasional-lewat-sinergi-rantai-pasok-lokal-di-sumatera-selatan/",
       "media": "Info Ekonomi",
@@ -470,7 +839,7 @@
       "review_text": ""
     },
     {
-      "id": 20,
+      "id": 43,
       "title": "MUI Haramkan Vape, Pelaku Industri Khawatir Ribuan Toko Terancam Tutup",
       "link": "https://jakarta.nu.or.id/nasional/mui-haramkan-vape-pelaku-industri-khawatir-ribuan-toko-terancam-tutup-fp3I3",
       "media": "NU Online Jakarta",
@@ -486,7 +855,7 @@
       "review_text": ""
     },
     {
-      "id": 21,
+      "id": 44,
       "title": "Lepas dari Ketergantungan Ekspor Bahan Baku, Menteri PPN/Kepala Bappenas Pacu Ekosistem Manufaktur Hijau Berbasis Sawit",
       "link": "https://sawitindonesia.com/lepas-dari-ketergantungan-ekspor-bahan-baku-menteri-ppn-kepala-bappenas-pacu-ekosistem-manufaktur-hijau-berbasis-sawit",
       "media": "Sawit Indonesia",
@@ -502,7 +871,7 @@
       "review_text": ""
     },
     {
-      "id": 22,
+      "id": 45,
       "title": "Menguatkan Industri Lokal, Membuka Peluang di Timur Indonesia",
       "link": "https://nusantara-news.co/2026/11/16/menguatkan-industri-lokal-membuka-peluang-di-timur-indonesia/",
       "media": "Nusantara news",
@@ -518,7 +887,7 @@
       "review_text": ""
     },
     {
-      "id": 23,
+      "id": 46,
       "title": "Strategi Woca Indonesia Bidik Pasar Luas lewat Kopi Luwak Terjangkau hingga Ekspansi Ekspor ke Tiongkok",
       "link": "https://www.stapo.id/news/strategi-woca-indonesia-bidik-pasar-luas-lewat-kop/",
       "media": "Stapo.id",
@@ -534,7 +903,7 @@
       "review_text": ""
     },
     {
-      "id": 24,
+      "id": 47,
       "title": "PTPN IV PalmCo Kembangkan POME Jadi Energi, Perkuat Hilirisasi dan Target Penurunan Emisi 71 Persen",
       "link": "https://www.infosawit.com/2026/11/16/ptpn-iv-palmco-kembangkan-pome-jadi-energi-perkuat-hilirisasi-dan-target-penurunan-emisi-71-persen/",
       "media": "InfoSAWIT",
@@ -550,7 +919,7 @@
       "review_text": ""
     },
     {
-      "id": 25,
+      "id": 48,
       "title": "Industri Makanan Tumbuh 6,77 Persen, Pemerintah Pacu ini",
       "link": "https://www.emitennews.com/news/industri-makanan-tumbuh-677-persen-pemerintah-pacu-ini",
       "media": "Emitennews.com",
@@ -566,7 +935,7 @@
       "review_text": ""
     },
     {
-      "id": 26,
+      "id": 49,
       "title": "Ekspor Karet Remah Indonesia 2024 Capai US$2,8 Miliar, Jepang Tujuan Utama",
       "link": "https://medialokal.co/amp/66411/ekspor-karet-remah-indonesia-2024-capai-us28-miliar-jepang-tujuan-utama",
       "media": "Medialokal.co",
@@ -582,7 +951,7 @@
       "review_text": ""
     },
     {
-      "id": 27,
+      "id": 50,
       "title": "Jejak Ekspor Karet Remah Indonesia",
       "link": "https://goodstats.id/video/jejak-ekspor-karet-remah-indonesia-7oPFv",
       "media": "GoodStats",
@@ -598,7 +967,7 @@
       "review_text": ""
     },
     {
-      "id": 28,
+      "id": 51,
       "title": "Permendag 26 Tahun 2026 Atur Spesifikasi Teknis Karet Alam yang Akan Diekspor",
       "link": "https://www.niaga.asia/permendag-26-tahun-2026-atur-spesifikasi-teknis-karet-alam-yang-akan-diekspor/",
       "media": "Niaga.Asia",
@@ -614,7 +983,7 @@
       "review_text": ""
     },
     {
-      "id": 29,
+      "id": 52,
       "title": "Asparminas Sebut Seruan Pelarangan AMDK di Bawah 1 Liter di DKI Jakarta tak Didukung Data Riset",
       "link": "https://www.sinarharapan.net/asparminas-sebut-seruan-pelarangan-amdk-di-bawah-1-liter-di-dki-jakarta-tak-didukung-data-riset/",
       "media": "sinarharapan.net",
@@ -630,7 +999,7 @@
       "review_text": ""
     },
     {
-      "id": 30,
+      "id": 53,
       "title": "Jaga Kinerja, Sawit Sumbermas Sarana (SSMS) Andalkan Produktivitas dan Hilirisasi",
       "link": "https://industri.kontan.co.id/news/jaga-kinerja-sawit-sumbermas-sarana-ssms-andalkan-produktivitas-dan-hilirisasi",
       "media": "kontan.co.id",
@@ -646,7 +1015,7 @@
       "review_text": ""
     },
     {
-      "id": 31,
+      "id": 54,
       "title": "Hugua Kunjungi Industri Tapioka di Konawe Selatan, Pasokan Singkong Jadi Tantangan Ekspor",
       "link": "https://pelakita.id/2026/11/15/hugua-kunjungi-industri-tapioka-di-konawe-selatan-pasokan-singkong-jadi-tantangan-ekspor/",
       "media": "PELAKITA.ID",
@@ -662,7 +1031,7 @@
       "review_text": ""
     },
     {
-      "id": 32,
+      "id": 55,
       "title": "Diduga Korsleting Listrik, Api Lumat Habis Gudang Pabrik Karet di Sidoarjo",
       "link": "https://voiceindonesia.co/peristiwa/korsleting-listrik-picu-kebakaran-pt-supranusa-indogita-sidoarjo",
       "media": "VOICE Indonesia",
@@ -678,7 +1047,7 @@
       "review_text": ""
     },
     {
-      "id": 33,
+      "id": 56,
       "title": "Larangan AMDK di Bawah 1 Liter, Pemulung dan Industri Soroti Dampak Ekonominya",
       "link": "https://money.kompas.com/read/2026/11/15/212112326/larangan-amdk-di-bawah-1-liter-pemulung-dan-industri-soroti-dampak-ekonominya?page=all",
       "media": "Kompas.com",
@@ -694,7 +1063,7 @@
       "review_text": ""
     },
     {
-      "id": 34,
+      "id": 57,
       "title": "Prabowo Dorong Ketahanan ASEAN, RI Andalkan Biodiesel B50 dan Energi Surya 100 GW",
       "link": "https://nasional.kontan.co.id/news/prabowo-dorong-ketahanan-asean-ri-andalkan-biodiesel-b50-dan-energi-surya-100-gw",
       "media": "kontan.co.id",
@@ -710,7 +1079,7 @@
       "review_text": ""
     },
     {
-      "id": 35,
+      "id": 58,
       "title": "Kemenperin Perkuat Industri Pangan Lewat Kemitraan dengan Petani dan Pemasok Lokal",
       "link": "https://akurat.co/riil/906982/kemenperin-perkuat-industri-pangan-lewat-kemitraan-dengan-petani-dan-pemasok-lokal",
       "media": "Akurat.co",
@@ -726,7 +1095,7 @@
       "review_text": ""
     },
     {
-      "id": 36,
+      "id": 59,
       "title": "Penerimaan Cukai Tumbuh 0,9%, Produksi Rokok Jadi Penopang",
       "link": "https://ekbis.harianjogja.com/r-1279023/penerimaan-cukai-tumbuh-09-produksi-rokok-jadi-penopang",
       "media": "Harian Jogja",
@@ -742,7 +1111,7 @@
       "review_text": ""
     },
     {
-      "id": 37,
+      "id": 60,
       "title": "Larangan AMDK di Bawah 1 Liter, Pemulung dan Industri Soroti Dampak Ekonominya",
       "link": "https://money.kompas.com/read/2026/11/15/212112326/larangan-amdk-di-bawah-1-liter-pemulung-dan-industri-soroti-dampak-ekonominya",
       "media": "Kompas.com",
@@ -758,7 +1127,7 @@
       "review_text": ""
     },
     {
-      "id": 38,
+      "id": 61,
       "title": "Pemprov Sumsel perkuat hilirisasi kopi untuk perluas pasar ekspor",
       "link": "https://www.antaranews.com/berita/5855971/pemprov-sumsel-perkuat-hilirisasi-kopi-untuk-perluas-pasar-ekspor",
       "media": "ANTARA News",
@@ -774,7 +1143,7 @@
       "review_text": ""
     },
     {
-      "id": 39,
+      "id": 62,
       "title": "Menteri Bappenas Dorong Transformasi Sawit Melalui Proyek Strategis Nasional",
       "link": "https://sawitindonesia.com/menteri-bappenas-dorong-transformasi-sawit-melalui-proyek-strategis-nasional",
       "media": "Sawit Indonesia",
@@ -790,7 +1159,7 @@
       "review_text": ""
     },
     {
-      "id": 40,
+      "id": 63,
       "title": "Impor Sawit China Turun 40,7%, Industri Sawit RI Hadapi Tekanan",
       "link": "https://industri.kontan.co.id/news/impor-sawit-china-turun-407-industri-sawit-ri-hadapi-tekanan",
       "media": "kontan.co.id",
@@ -806,7 +1175,7 @@
       "review_text": ""
     },
     {
-      "id": 41,
+      "id": 64,
       "title": "Sawit Sumbermas Sarana (SSMS) Andalkan Produktivitas dan Hilirisasi Demi Jaga Kinerja",
       "link": "https://industri.kontan.co.id/news/sawit-sumbermas-sarana-ssms-andalkan-produktivitas-dan-hilirisasi-demi-jaga-kinerja",
       "media": "kontan.co.id",
@@ -822,7 +1191,7 @@
       "review_text": ""
     },
     {
-      "id": 42,
+      "id": 65,
       "title": "Ekspor Satu Pintu Sawit Berlaku Januari, DSI Pastikan Tak Hambat Industri dan Arus Ekspor",
       "link": "https://pontianakpost.jawapos.com/ekonomi/2611150039/ekspor-satu-pintu-sawit-berlaku-januari-dsi-pastikan-tak-hambat-industri-dan-arus-ekspor",
       "media": "Pontianak Post",
@@ -838,7 +1207,7 @@
       "review_text": ""
     },
     {
-      "id": 43,
+      "id": 66,
       "title": "Pemerintah Proyeksikan Produksi Sawit 2026 Tembus 60 Juta Ton",
       "link": "https://www.agrofarm.co.id/2026/11/pemerintah-proyeksikan-produksi-sawit-2026-tembus-60-juta-ton/",
       "media": "agrofarm.co.id",
@@ -854,7 +1223,7 @@
       "review_text": ""
     },
     {
-      "id": 44,
+      "id": 67,
       "title": "Perjanjian Dagang Indonesia-Uni Eropa Bisa Perkuat Posisi Sawit di Pasar Eropa",
       "link": "https://www.infosawit.com/2026/11/15/perjanjian-dagang-indonesia-uni-eropa-bisa-perkuat-posisi-sawit-di-pasar-eropa/",
       "media": "InfoSAWIT",
@@ -870,7 +1239,7 @@
       "review_text": ""
     },
     {
-      "id": 45,
+      "id": 68,
       "title": "Terancam Gagal Penerapan Mandatori B-50 Tahun 2027, ESD...",
       "link": "https://egindo.com/terancam-gagal-penerapan-mandatori-b-50-tahun-2027-esdm-masih-dikaji-pemerintah/",
       "media": "EGINDO",
@@ -886,7 +1255,7 @@
       "review_text": ""
     },
     {
-      "id": 46,
+      "id": 69,
       "title": "Industri Kelapa Sawit Tetap Tangguh Hadapi El Nino, Produksi dan Ekspor Tumbuh Positif - https://jambiekspres.disway.id/",
       "link": "https://jambiekspres.disway.id/amp/726309/industri-kelapa-sawit-tetap-tangguh-hadapi-el-nino-produksi-dan-ekspor-tumbuh-positif",
       "media": "Jambi Ekspres",
@@ -902,7 +1271,7 @@
       "review_text": ""
     },
     {
-      "id": 47,
+      "id": 70,
       "title": "Ekspor Sawit Indonesia Diproyeksikan Turun 12,27 Persen pada 2027",
       "link": "https://pontianakpost.jawapos.com/ekonomi/2611150028/ekspor-sawit-indonesia-diproyeksikan-turun-1227-persen-pada-2027",
       "media": "Pontianak Post",
@@ -918,7 +1287,7 @@
       "review_text": ""
     },
     {
-      "id": 48,
+      "id": 71,
       "title": "Sasar Pasar Kopi Jabodetabek, Ave-Natur Rilis Susu Oat Khusus Barista di JICC 2026",
       "link": "https://www.stapo.id/news/sasar-pasar-kopi-jabodetabek-ave-natur-rilis-susu/",
       "media": "Stapo.id",
@@ -934,7 +1303,7 @@
       "review_text": ""
     },
     {
-      "id": 49,
+      "id": 72,
       "title": "Produksi Sawit Tembus 47 Juta Ton, GAPKI Sebut B50 Jadi Penggerak Industri Nasional",
       "link": "https://www.riaupembaruan.com/info-sawit/produksi-sawit-tembus-47-juta-ton--gapki-sebut-b50-jadi-penggerak-industri-nasional/",
       "media": "riaupembaruan.com",
@@ -950,7 +1319,7 @@
       "review_text": ""
     },
     {
-      "id": 50,
+      "id": 73,
       "title": "Hilirisasi Kakao, Biji dari 14 Daerah di Indonesia Diolah Jadi Produk Cokelat",
       "link": "https://www.gosumut.com/berita/baca/2026/11/15/hilirisasi-kakao-biji-dari-14-daerah-di-indonesia-diolah-jadi-produk-cokelat",
       "media": "GoSumut.com",
@@ -966,7 +1335,7 @@
       "review_text": ""
     },
     {
-      "id": 51,
+      "id": 74,
       "title": "Industri Makanan Tumbuh 6,77 Persen, Kemenperin Gandeng Indofood dan Petani Lokal",
       "link": "https://www.industry.co.id/read/159213/industri-makanan-tumbuh-677-persen-kemenperin-gandeng-indofood-dan-petani-lokal",
       "media": "Industry.co.id",
@@ -982,7 +1351,7 @@
       "review_text": ""
     },
     {
-      "id": 52,
+      "id": 75,
       "title": "Kemenperin Perkuat Ekosistem Industri Pangan Nasional Bersama Pelaku Industri",
       "link": "https://agroindonesia.co.id/kemenperin-perkuat-ekosistem-industri-pangan-nasional-bersama-pelaku-industri/",
       "media": "AgroIndonesia",
@@ -998,7 +1367,7 @@
       "review_text": ""
     },
     {
-      "id": 53,
+      "id": 76,
       "title": "Tembus Pasar Taiwan, Ekspor 23 Ton Cocopeat Buka Peluang Industri Kelapa PPU",
       "link": "https://timurmedia.com/tembus-pasar-taiwan-ekspor-23-ton-cocopeat-buka-peluang-industri-kelapa-ppu/",
       "media": "timur media",
@@ -1014,7 +1383,7 @@
       "review_text": ""
     },
     {
-      "id": 54,
+      "id": 77,
       "title": "Jangan Remehkan Biskuit Lokal: India, Malaysia-AS Saja Sampai Berebut!",
       "link": "https://www.cnbcindonesia.com/research/20261114131048-128-785229/jangan-remehkan-biskuit-lokal-india-malaysia-as-saja-sampai-berebut",
       "media": "CNBC Indonesia",
@@ -1030,7 +1399,7 @@
       "review_text": ""
     },
     {
-      "id": 55,
+      "id": 78,
       "title": "DPR Minta Pemerintah Perketat Penindakan Rokok Ilegal",
       "link": "https://todaynews.id/dpr-minta-pemerintah-perketat-penindakan-rokok-ilegal/",
       "media": "Todaynews.id",
@@ -1046,7 +1415,7 @@
       "review_text": ""
     },
     {
-      "id": 56,
+      "id": 79,
       "title": "Cina Diprediksi Pangkas Impor Minyak Sawit pada 2027, RI Bisa Terdampak",
       "link": "https://katadata.co.id/berita/industri/6af8170723282/cina-diprediksi-pangkas-impor-minyak-sawit-pada-2027-ri-bisa-terdampak",
       "media": "Katadata.co.id",
@@ -1062,7 +1431,7 @@
       "review_text": ""
     },
     {
-      "id": 57,
+      "id": 80,
       "title": "Pasar CPO China Bakal Berubah Arah pada 2027, Ini Penjelasannya",
       "link": "https://www.idxchannel.com/amp/economics/pasar-cpo-china-bakal-berubah-arah-pada-2027-ini-penjelasannya",
       "media": "IDX Channel",
@@ -1078,7 +1447,7 @@
       "review_text": ""
     },
     {
-      "id": 58,
+      "id": 81,
       "title": "Ekspor Sawit Indonesia Terancam Anjlok pada 2027, Ini Penyebabnya - belitongekspres.disway.id",
       "link": "https://belitongekspres.disway.id/amp/652812/ekspor-sawit-indonesia-terancam-anjlok-pada-2027-ini-penyebabnya",
       "media": "Disway",
@@ -1094,7 +1463,7 @@
       "review_text": ""
     },
     {
-      "id": 59,
+      "id": 82,
       "title": "B50 Jadi Senjata Baru Sawit Indonesia! Rp170 Triliun Devisa Bisa Diselamatkan, 14 Juta Ton CPO Diserap",
       "link": "https://www.goparlement.com/2026/11/b50-jadi-senjata-baru-sawit-indonesia.html",
       "media": "Go Parlement",
@@ -1110,7 +1479,7 @@
       "review_text": ""
     },
     {
-      "id": 60,
+      "id": 83,
       "title": "SSMS Perkuat Hilirisasi Sawit, Bidik Pengembangan Oleokimia hingga Biodiesel",
       "link": "https://borneonews.co.id/berita/10002347-ssms-perkuat-hilirisasi-sawit-bidik-pengembangan-oleokimia-hingga-biodiesel",
       "media": "borneonews",
@@ -1126,7 +1495,7 @@
       "review_text": ""
     },
     {
-      "id": 61,
+      "id": 84,
       "title": "Jakarta International Coffee Conference 2026 Hadirkan Pelaku Industri Kopi Nasional",
       "link": "https://garuda.tv/jakarta-international-coffee-conference-2026-hadirkan-pelaku-industri-kopi-nasional/",
       "media": "garuda tv",
@@ -1142,7 +1511,7 @@
       "review_text": ""
     },
     {
-      "id": 62,
+      "id": 85,
       "title": "Cocopeat PPU Tembus Pasar Taiwan, Peluang Baru Tingkatkan Nilai Ekonomi Sabut Kelapa",
       "link": "https://jurnalborneo.com/cocopeat-ppu-tembus-pasar-taiwan-peluang-baru-tingkatkan-nilai-ekonomi-sabut-kelapa/",
       "media": "Jurnal Borneo",
@@ -1158,7 +1527,7 @@
       "review_text": ""
     },
     {
-      "id": 63,
+      "id": 86,
       "title": "Ekspor Sawit Tembus USD28,84 Miliar, Pemerintah Pacu Produktivitas hingga Hilirisasi B50",
       "link": "https://www.idxchannel.com/amp/economics/ekspor-sawit-tembus-usd2884-miliar-pemerintah-pacu-produktivitas-hingga-hilirisasi-b50",
       "media": "IDX Channel",
@@ -1174,7 +1543,7 @@
       "review_text": ""
     },
     {
-      "id": 64,
+      "id": 87,
       "title": "Gula Aren Indonesia Tembus Pasar Malaysia, Pasok Lebih dari 300 Gerai Kopi - jektvnews.disway.id",
       "link": "https://jektvnews.disway.id/nasional/read/27578/gula-aren-indonesia-tembus-pasar-malaysia-pasok-lebih-dari-300-gerai-kopi",
       "media": "Disway",
@@ -1190,7 +1559,7 @@
       "review_text": ""
     },
     {
-      "id": 65,
+      "id": 88,
       "title": "Prabowo Minta Pabrik Pakan Ternak BUMN Dipercepat, Ini Target Pemerintah",
       "link": "https://nasional.kontan.co.id/news/prabowo-minta-pabrik-pakan-ternak-bumn-dipercepat-ini-target-pemerintah",
       "media": "kontan.co.id",
@@ -1206,7 +1575,7 @@
       "review_text": ""
     },
     {
-      "id": 66,
+      "id": 89,
       "title": "Komisi VII: Berantas peredaran rokok ilegal guna sehatkan iklim usaha",
       "link": "https://ambon.antaranews.com/amp/berita/353039/komisi-vii-berantas-peredaran-rokok-ilegal-guna-sehatkan-iklim-usaha",
       "media": "ANTARA News",
@@ -1222,7 +1591,7 @@
       "review_text": ""
     },
     {
-      "id": 67,
+      "id": 90,
       "title": "Pakar: Kebijakan B50 Harus Hitung Risiko Ekspor, Fiskal, dan Lingkungan",
       "link": "https://www.infosawit.com/2026/11/14/pakar-kebijakan-b50-harus-hitung-risiko-ekspor-fiskal-dan-lingkungan/amp/",
       "media": "InfoSAWIT",
@@ -1238,7 +1607,7 @@
       "review_text": ""
     },
     {
-      "id": 68,
+      "id": 91,
       "title": "BSPJI Pontianak dan ASPADIN Perkuat Sinergi, Industri AMDK Kalbar Didorong Lebih Berdaya Saing",
       "link": "https://pontianakpost.jawapos.com/pro-bisnis/2611140021/bspji-pontianak-dan-aspadin-perkuat-sinergi-industri-amdk-kalbar-didorong-lebih-berdaya-saing",
       "media": "Pontianak Post",
@@ -1254,7 +1623,7 @@
       "review_text": ""
     },
     {
-      "id": 69,
+      "id": 92,
       "title": "B50 2027 Belum Final, Pemerintah Hitung Ulang Pasokan Sawit dan Dana Insentif",
       "link": "https://listrikindonesia.com/detail/21789/b50-2027-belum-final-pemerintah-hitung-ulang-pasokan-sawit-dan-dana-insentif",
       "media": "Listrik Indonesia",
@@ -1270,7 +1639,7 @@
       "review_text": ""
     },
     {
-      "id": 70,
+      "id": 93,
       "title": "Dari Sleman Tembus Pasar Eropa, Java Connection Sulap Kayu Jati Daur Ulang Jadi Furnitur Kelas Dunia",
       "link": "https://radarjogja.jawapos.com/sleman/2611140006/dari-sleman-tembus-pasar-eropa-java-connection-sulap-kayu-jati-daur-ulang-jadi-furnitur-kelas-dunia",
       "media": "Radar Jogja",
@@ -1286,7 +1655,7 @@
       "review_text": ""
     },
     {
-      "id": 71,
+      "id": 94,
       "title": "Rokok Ilegal Menggerus Industri Legal, Petani Tembakau Ikut Terancam",
       "link": "https://monitorindonesia.com/nasional/read/2026/11/638823/rokok-ilegal-makin-marak-chusnunia-peringatkan-ancaman-phk-dan-nasib-petani",
       "media": "Monitor Indonesia",
@@ -1302,7 +1671,7 @@
       "review_text": ""
     },
     {
-      "id": 72,
+      "id": 95,
       "title": "Terancam Dilarang, Industri Rokok Elektronik Mohon Perlindungan ke Prabowo: Topang Penghidupan 1 Juta Rakyat Indonesia",
       "link": "https://www.viva.co.id/berita/nasional/1943542-terancam-dilarang-industri-rokok-elektronik-mohon-perlindungan-ke-prabowo-topang-penghidupan-1-juta-rakyat-indonesia",
       "media": "VIVA.co.id",
@@ -1318,7 +1687,7 @@
       "review_text": ""
     },
     {
-      "id": 73,
+      "id": 96,
       "title": "Wamenkop Dorong Koperasi Susu dan HKTI Bersinergi di INNOFOOD 2026",
       "link": "https://lineperistiwa.com/amp/detail/10898/wamenkop-dorong-koperasi-susu-dan-hkti-bersinergi-di-innofood-2026",
       "media": "lineperistiwa.com",
@@ -1334,7 +1703,7 @@
       "review_text": ""
     },
     {
-      "id": 74,
+      "id": 97,
       "title": "Pemkab SBT dorong sagu masuk Proyek Strategis Nasional",
       "link": "https://ambon.antaranews.com/amp/berita/352959/pemkab-sbt-dorong-sagu-masuk-proyek-strategis-nasional",
       "media": "ANTARA News",
@@ -1350,7 +1719,7 @@
       "review_text": ""
     },
     {
-      "id": 75,
+      "id": 98,
       "title": "Pemkot Tarakan Jajaki Pengembangan Pabrik Rumput Laut, Investor Tinjau Sejumlah Lokasi",
       "link": "https://headlinews.id/pemkot-tarakan-jajaki-pengembangan-pabrik-rumput-laut-investor-tinjau-sejumlah-lokasi/",
       "media": "Headlinews.id",
@@ -1366,7 +1735,7 @@
       "review_text": ""
     },
     {
-      "id": 76,
+      "id": 99,
       "title": "Industri Daur Ulang dan AMDK Tolak Wacana Larangan Kemasan di Bawah 1 Liter di Jakarta",
       "link": "https://www.jawapos.com/berita-daerah/2611130272/industri-daur-ulang-dan-amdk-tolak-wacana-larangan-kemasan-di-bawah-1-liter-di-jakarta?page=all",
       "media": "Jawa Pos",
@@ -1382,7 +1751,7 @@
       "review_text": ""
     },
     {
-      "id": 77,
+      "id": 100,
       "title": "Dari Furnitur Hingga Kopi, Produk Indonesia Perluas Pasar Di Amerika Serikat",
       "link": "https://forestinsights.id/dari-furnitur-hingga-kopi-produk-indonesia-perluas-pasar-di-amerika-serikat/",
       "media": "Forest Insights Indonesia",
@@ -1396,381 +1765,23 @@
       "commodity": "Kopi & Teh",
       "has_review": false,
       "review_text": ""
-    },
-    {
-      "id": 78,
-      "title": "India dan Pakistan Masih Jadi Pasar Sawit, Indonesia Diminta Jaga Daya Saing",
-      "link": "https://batampos.jawapos.com/ekbis/2611130046/india-dan-pakistan-masih-jadi-pasar-sawit-indonesia-diminta-jaga-daya-saing",
-      "media": "Jawa Pos",
-      "tone": "Negatif",
-      "date": "2026-11-14",
-      "datetime": "2026-11-14T03:31:30",
-      "time": "03:31",
-      "date_display": "Sabtu, 14 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Kelapa Sawit & CPO",
-      "has_review": false,
-      "review_text": ""
-    },
-    {
-      "id": 79,
-      "title": "Bappenas Dorong Hilirisasi Sawit dan Peningkatan Produktivitas untuk Transformasi Industri Nasional",
-      "link": "https://gapki.id/news/2026/11/13/bappenas-dorong-hilirisasi-sawit-dan-peningkatan-produktivitas-untuk-transformasi-industri-nasional/",
-      "media": "Gabungan Pengusaha Kelapa Sawit Indonesia (GAPKI)",
-      "tone": "Positif",
-      "date": "2026-11-14",
-      "datetime": "2026-11-14T03:31:30",
-      "time": "03:31",
-      "date_display": "Sabtu, 14 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Kelapa Sawit & CPO",
-      "has_review": false,
-      "review_text": ""
-    },
-    {
-      "id": 80,
-      "title": "DSI Jadi Perantara Tunggal Ekspor Sawit, Bagaimana Dampaknya terhadap Industri CPO RI?",
-      "link": "https://money.kompas.com/read/2026/11/13/153420426/dsi-jadi-perantara-tunggal-ekspor-sawit-bagaimana-dampaknya-terhadap-industri?page=all&utm_source=Google&utm_medium=Newstand&utm_campaign=partner",
-      "media": "Kompas.com",
-      "tone": "Negatif",
-      "date": "2026-11-14",
-      "datetime": "2026-11-14T03:31:30",
-      "time": "03:31",
-      "date_display": "Sabtu, 14 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Kelapa Sawit & CPO",
-      "has_review": false,
-      "review_text": ""
-    },
-    {
-      "id": 81,
-      "title": "Investasi Industri Kosmetik dan Produk Pembersih Tumbuh 8 Persen",
-      "link": "https://bisnislife.com/investasi-industri-kosmetik-dan-produk-pembersih-tumbuh-8-persen/?amp=1",
-      "media": "BisnisLife",
-      "tone": "Positif",
-      "date": "2026-11-13",
-      "datetime": "2026-11-13T22:04:20",
-      "time": "22:04",
-      "date_display": "Jumat, 13 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Makanan & Minuman",
-      "has_review": false,
-      "review_text": ""
-    },
-    {
-      "id": 82,
-      "title": "Ekspor CPO Naik 16 Persen pada Januari-Oktober 2026 di Tengah Kebijakan Hilirisasi",
-      "link": "https://akurat.co/riil/906648/ekspor-cpo-naik-16-persen-pada-januari-oktober-2026-di-tengah-kebijakan-hilirisasi",
-      "media": "Akurat.co",
-      "tone": "Positif",
-      "date": "2026-11-13",
-      "datetime": "2026-11-13T21:20:24",
-      "time": "21:20",
-      "date_display": "Jumat, 13 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Kelapa Sawit & CPO",
-      "has_review": false,
-      "review_text": ""
-    },
-    {
-      "id": 83,
-      "title": "Kebijakan Ekspor Sawit Tak Pasti, Indonesia Berisiko Kehilangan Pasar",
-      "link": "https://batampos.jawapos.com/ekbis/2611130041/kebijakan-ekspor-sawit-tak-pasti-indonesia-berisiko-kehilangan-pasar",
-      "media": "Jawa Pos",
-      "tone": "Negatif",
-      "date": "2026-11-13",
-      "datetime": "2026-11-13T21:00:33",
-      "time": "21:00",
-      "date_display": "Jumat, 13 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Kelapa Sawit & CPO",
-      "has_review": false,
-      "review_text": ""
-    },
-    {
-      "id": 84,
-      "title": "Produksi Sawit Indonesia 2026 Diprediksi Tembus 60 Juta Ton! Ekspor Melonjak 60 Persen, Ini Strategi Besarnya - sumeks.disway.id",
-      "link": "https://sumeks.disway.id/ekbis/read/801324/produksi-sawit-indonesia-2026-diprediksi-tembus-60-juta-ton-ekspor-melonjak-60-persen-ini-strategi-besarnya",
-      "media": "Sumeks",
-      "tone": "Positif",
-      "date": "2026-11-13",
-      "datetime": "2026-11-13T21:00:40",
-      "time": "21:00",
-      "date_display": "Jumat, 13 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Kelapa Sawit & CPO",
-      "has_review": false,
-      "review_text": ""
-    },
-    {
-      "id": 85,
-      "title": "PTPN I Gandeng Investor Korea Selatan untuk Hilirisasi Kayu di Lahan 14 Ribu Hektare Jawa Timur",
-      "link": "https://www.pantau.com/nasional/379002/ptpn-i-gandeng-investor-korea-selatan-untuk-hilirisasi-kayu-di-lahan-14-ribu-hektare-jawa-timur",
-      "media": "pantau.com",
-      "tone": "Positif",
-      "date": "2026-11-13",
-      "datetime": "2026-11-13T20:50:00",
-      "time": "20:50",
-      "date_display": "Jumat, 13 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Hasil Tembakau",
-      "has_review": false,
-      "review_text": ""
-    },
-    {
-      "id": 86,
-      "title": "Pemkab SBT dorong sagu masuk Proyek Strategis Nasional",
-      "link": "https://www.antaranews.com/berita/5852291/pemkab-sbt-dorong-sagu-masuk-proyek-strategis-nasional",
-      "media": "ANTARA News",
-      "tone": "Positif",
-      "date": "2026-11-13",
-      "datetime": "2026-11-13T19:37:28",
-      "time": "19:37",
-      "date_display": "Jumat, 13 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Tepung, Sagu & Pati",
-      "has_review": false,
-      "review_text": ""
-    },
-    {
-      "id": 87,
-      "title": "Pasar Asia Masih Jadi Andalan, Industri Sawit Indonesia Dituntut Jaga Daya Saing",
-      "link": "https://radarjogja.jawapos.com/ekonomi/2611130049/pasar-asia-masih-jadi-andalan-industri-sawit-indonesia-dituntut-jaga-daya-saing",
-      "media": "Radar Jogja",
-      "tone": "Netral",
-      "date": "2026-11-13",
-      "datetime": "2026-11-13T18:52:00",
-      "time": "18:52",
-      "date_display": "Jumat, 13 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Kelapa Sawit & CPO",
-      "has_review": false,
-      "review_text": ""
-    },
-    {
-      "id": 88,
-      "title": "Pasar Asia Jadi Jangkar Utama Ekspor Sawit RI, Pengusaha India Ingatkan Soal Daya Saing Harga",
-      "link": "https://radarmadiun.jawapos.com/nasional/2611130019/pasar-asia-jadi-jangkar-utama-ekspor-sawit-ri-pengusaha-india-ingatkan-soal-daya-saing-harga",
-      "media": "Radar Madiun",
-      "tone": "Netral",
-      "date": "2026-11-13",
-      "datetime": "2026-11-13T17:58:33",
-      "time": "17:58",
-      "date_display": "Jumat, 13 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Kelapa Sawit & CPO",
-      "has_review": false,
-      "review_text": ""
-    },
-    {
-      "id": 89,
-      "title": "PTPN I Gandeng Investor Korea, Bidik Hilirisasi 14 Ribu Hektare Tanaman Kayu",
-      "link": "https://lampost.co/kompliment/ptpn-i-gandeng-investor-korea-bidik-hilirisasi-14-ribu-hektare-tanaman-kayu/",
-      "media": "Lampost.co",
-      "tone": "Positif",
-      "date": "2026-11-13",
-      "datetime": "2026-11-13T17:55:29",
-      "time": "17:55",
-      "date_display": "Jumat, 13 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Hasil Tembakau",
-      "has_review": false,
-      "review_text": ""
-    },
-    {
-      "id": 90,
-      "title": "Impor Sawit China Diprediksi Turun, Industri dan Bioenergi Justru Makin Haus Pasokan",
-      "link": "https://padek.jawapos.com/bisnis/2611130026/impor-sawit-china-diprediksi-turun-industri-dan-bioenergi-justru-makin-haus-pasokan",
-      "media": "Padang Ekspres",
-      "tone": "Positif",
-      "date": "2026-11-13",
-      "datetime": "2026-11-13T17:50:24",
-      "time": "17:50",
-      "date_display": "Jumat, 13 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Kelapa Sawit & CPO",
-      "has_review": false,
-      "review_text": ""
-    },
-    {
-      "id": 91,
-      "title": "Industri Sawit Indonesia Dituntut Jaga Daya Saing Global",
-      "link": "https://radarpati.jawapos.com/nasional/2611130055/industri-sawit-indonesia-dituntut-jaga-daya-saing-global",
-      "media": "Radar Pati",
-      "tone": "Netral",
-      "date": "2026-11-13",
-      "datetime": "2026-11-13T17:50:37",
-      "time": "17:50",
-      "date_display": "Jumat, 13 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Kelapa Sawit & CPO",
-      "has_review": false,
-      "review_text": ""
-    },
-    {
-      "id": 92,
-      "title": "Industri Sawit Indonesia Hadapi Persaingan Global, India dan Pakistan Makin Selektif Memilih Pemasok",
-      "link": "https://pontianakpost.jawapos.com/ekonomi/2611130126/industri-sawit-indonesia-hadapi-persaingan-global-india-dan-pakistan-makin-selektif-memilih-pemasok",
-      "media": "Pontianak Post",
-      "tone": "Netral",
-      "date": "2026-11-13",
-      "datetime": "2026-11-13T17:42:05",
-      "time": "17:42",
-      "date_display": "Jumat, 13 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Kelapa Sawit & CPO",
-      "has_review": false,
-      "review_text": ""
-    },
-    {
-      "id": 93,
-      "title": "India dan Pakistan Masih Jadi Pasar Gemuk Sawit Indonesia, tapi Ancaman Minyak Kedelai Menguat",
-      "link": "https://radarbanyuwangi.jawapos.com/ekonomi/2611130067/india-dan-pakistan-masih-jadi-pasar-gemuk-sawit-indonesia-tapi-ancaman-minyak-kedelai-menguat",
-      "media": "Radar Banyuwangi",
-      "tone": "Negatif",
-      "date": "2026-11-13",
-      "datetime": "2026-11-13T17:41:12",
-      "time": "17:41",
-      "date_display": "Jumat, 13 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Kelapa Sawit & CPO",
-      "has_review": false,
-      "review_text": ""
-    },
-    {
-      "id": 94,
-      "title": "Pasar India Berubah, Dominasi Sawit Indonesia Mulai Mendapat Tekanan",
-      "link": "https://padek.jawapos.com/bisnis/2611130025/pasar-india-berubah-dominasi-sawit-indonesia-mulai-mendapat-tekanan",
-      "media": "Padang Ekspres",
-      "tone": "Negatif",
-      "date": "2026-11-13",
-      "datetime": "2026-11-13T17:40:20",
-      "time": "17:40",
-      "date_display": "Jumat, 13 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Kelapa Sawit & CPO",
-      "has_review": false,
-      "review_text": ""
-    },
-    {
-      "id": 95,
-      "title": "Industri Sawit Harus Pertahankan Keunggulan di Tengah Persaingan Minyak Nabati Global",
-      "link": "https://radarsurabaya.jawapos.com/nasional/2611130016/industri-sawit-harus-pertahankan-keunggulan-di-tengah-persaingan-minyak-nabati-global",
-      "media": "Radar Surabaya",
-      "tone": "Netral",
-      "date": "2026-11-13",
-      "datetime": "2026-11-13T17:34:28",
-      "time": "17:34",
-      "date_display": "Jumat, 13 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Kelapa Sawit & CPO",
-      "has_review": false,
-      "review_text": ""
-    },
-    {
-      "id": 96,
-      "title": "IPOC 2026: Industri Sawit Harus Pertahankan Keunggulan di Tengah Persaingan Minyak Nabati Global",
-      "link": "https://radarjombang.jawapos.com/nasional/2611130023/ipoc-2026-industri-sawit-harus-pertahankan-keunggulan-di-tengah-persaingan-minyak-nabati-global",
-      "media": "Radar Jombang",
-      "tone": "Netral",
-      "date": "2026-11-13",
-      "datetime": "2026-11-13T17:33:22",
-      "time": "17:33",
-      "date_display": "Jumat, 13 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Kelapa Sawit & CPO",
-      "has_review": false,
-      "review_text": ""
-    },
-    {
-      "id": 97,
-      "title": "Ekspansi Minyak Kedelai AS dan Brasil Tekan Daya Saing Pasar Sawit Indonesia",
-      "link": "https://katadata.co.id/berita/energi/6af6e79608fdc/ekspansi-minyak-kedelai-as-dan-brasil-tekan-daya-saing-pasar-sawit-indonesia",
-      "media": "Katadata.co.id",
-      "tone": "Negatif",
-      "date": "2026-11-13",
-      "datetime": "2026-11-13T17:33:00",
-      "time": "17:33",
-      "date_display": "Jumat, 13 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Kelapa Sawit & CPO",
-      "has_review": false,
-      "review_text": ""
-    },
-    {
-      "id": 98,
-      "title": "Impor Sawit China Diprediksi Anjlok 40% pada 2027, Ini Pemicunya",
-      "link": "https://wartaekonomi.co.id/read647774/impor-sawit-china-diprediksi-anjlok-40-pada-2027-ini-pemicunya",
-      "media": "Warta Ekonomi",
-      "tone": "Negatif",
-      "date": "2026-11-13",
-      "datetime": "2026-11-13T17:30:00",
-      "time": "17:30",
-      "date_display": "Jumat, 13 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Kelapa Sawit & CPO",
-      "has_review": false,
-      "review_text": ""
-    },
-    {
-      "id": 99,
-      "title": "Standar Codex CXS 210: Rujukan Internasional untuk Minyak Nabati Bernama",
-      "link": "https://gimni.org/standar-codex-cxs-210-rujukan-internasional-untuk-minyak-nabati-bernama/",
-      "media": "GIMNI - Gabungan Industri Minyak Nabati Indonesia",
-      "tone": "Netral",
-      "date": "2026-11-13",
-      "datetime": "2026-11-13T17:26:16",
-      "time": "17:26",
-      "date_display": "Jumat, 13 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Kelapa Sawit & CPO",
-      "has_review": false,
-      "review_text": ""
-    },
-    {
-      "id": 100,
-      "title": "Malaysia Ungguli Indonesia dalam Pasokan Sawit ke India, Selisih 70 Ribu Ton",
-      "link": "https://radarbanjarmasin.jawapos.com/nasional/2611130056/malaysia-ungguli-indonesia-dalam-pasokan-sawit-ke-india-selisih-70-ribu-ton",
-      "media": "Radar Banjarmasin",
-      "tone": "Negatif",
-      "date": "2026-11-13",
-      "datetime": "2026-11-13T17:14:03",
-      "time": "17:14",
-      "date_display": "Jumat, 13 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Kelapa Sawit & CPO",
-      "has_review": false,
-      "review_text": ""
     }
   ],
   "recent_days": [
     {
+      "fileDate": "2026-11-17",
+      "tglDisplay": "Selasa, 17 Nov 2026",
+      "isNew": true,
+      "count": 23,
+      "countStr": "23 berita",
+      "pos": 11,
+      "net": 7,
+      "neg": 5
+    },
+    {
       "fileDate": "2026-11-16",
       "tglDisplay": "Senin, 16 Nov 2026",
-      "isNew": true,
+      "isNew": false,
       "count": 36,
       "countStr": "36 berita",
       "pos": 22,
@@ -1896,16 +1907,6 @@
       "pos": 65,
       "net": 5,
       "neg": 3
-    },
-    {
-      "fileDate": "2026-11-03",
-      "tglDisplay": "Selasa, 3 Nov 2026",
-      "isNew": false,
-      "count": 16,
-      "countStr": "16 berita",
-      "pos": 13,
-      "net": 3,
-      "neg": 0
     }
   ]
 }
