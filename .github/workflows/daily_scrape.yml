@@ -62,14 +62,19 @@ jobs:
             git fetch origin data
             git checkout origin/data -- data_export 2>/dev/null || true
             git checkout origin/data -- pipeline_state 2>/dev/null || true
+            git reset -q HEAD -- data_export pipeline_state 2>/dev/null || true
             cp -r data_export/files/* web/public/files/ 2>/dev/null || true
             cp -r data_export/*.json web/public/data/ 2>/dev/null || true
-            for f in cache_decode.json cache_decode_failed.json cache_decisions.json cache_ai_recheck.json cache_ringkasan.json; do
+            for f in cache_decode.json cache_decode_failed.json cache_decisions.json cache_ai_recheck.json cache_ringkasan.json isu_registry.json; do
               if [ -f "pipeline_state/$f" ]; then
-                cp "pipeline_state/$f" "hasil_scrapping/$f"
+                cp "pipeline_state/$f" "hasil_scrapping/$f.tmp.$$" && mv -f "hasil_scrapping/$f.tmp.$$" "hasil_scrapping/$f"
+              elif [ "$f" = "isu_registry.json" ]; then
+                echo "[Registry] pipeline_state/isu_registry.json belum ada (run pertama) - mulai dari registri baru."
               fi
             done
             cp -r pipeline_state/snapshots/* hasil_scrapping/snapshots/ 2>/dev/null || true
+          else
+            echo "[Registry] Branch data belum ada (run pertama) - mulai dari registri baru."
           fi
 
       - name: Setup Python 3.11
@@ -92,6 +97,7 @@ jobs:
             hasil_scrapping/cache_decisions.json
             hasil_scrapping/cache_ai_recheck.json
             hasil_scrapping/cache_ringkasan.json
+            hasil_scrapping/isu_registry.json
             hasil_scrapping/snapshots
           key: agro-pipeline-cache-${{ runner.os }}-${{ github.run_id }}
           restore-keys: |
@@ -224,6 +230,38 @@ jobs:
           done
           cp -r hasil_scrapping/snapshots/* /tmp/agro_sync/pipeline_state/snapshots/ 2>/dev/null || true
 
+          # Simpan hasil_scrapping/isu_registry.json secara atomik + pangkas klaster >14 hari HANYA jika run sukses
+          if [ "${{ steps.run_scraper.outcome }}" = "success" ] && [ -f "hasil_scrapping/isu_registry.json" ]; then
+            END_DATE="${{ steps.target_dates.outputs.end_date }}" python - <<'PY'
+          import datetime, json, os, tempfile
+          from pathlib import Path
+          from src.isu_grouping import IsuRegistry
+
+          src = Path("hasil_scrapping/isu_registry.json")
+          dst = Path("/tmp/agro_sync/pipeline_state/isu_registry.json")
+          dst.parent.mkdir(parents=True, exist_ok=True)
+          reg = IsuRegistry(filepath=src)
+          ref_d = datetime.date.fromisoformat(os.environ["END_DATE"])
+          pruned = reg.prune_expired(ref_d)
+          payload = {
+              "updated_at": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+              "issues": list(reg.issues.values()),
+          }
+          fd, tmp_path = tempfile.mkstemp(prefix=".isu_registry_", suffix=".tmp", dir=str(dst.parent))
+          try:
+              with os.fdopen(fd, "w", encoding="utf-8") as fh:
+                  json.dump(payload, fh, ensure_ascii=False, indent=2)
+              os.replace(tmp_path, dst)
+              print(f"[Registry] Disiapkan untuk persist atomik ({len(reg.issues)} isu aktif, {pruned} klaster >14 hari dipangkas).")
+          except Exception:
+              if os.path.exists(tmp_path):
+                  os.remove(tmp_path)
+              raise
+          PY
+          else
+            echo "[Registry] Melewati penyimpanan isu_registry.json (outcome=${{ steps.run_scraper.outcome }}, ada=$([ -f hasil_scrapping/isu_registry.json ] && echo ya || echo tidak))."
+          fi
+
           # Hapus pipeline_state sementara dari working tree main agar tidak terbawa ke branch main
           rm -rf pipeline_state 2>/dev/null || true
 
@@ -249,7 +287,11 @@ jobs:
           mkdir -p data_export web/public pipeline_state/snapshots
           cp -r /tmp/agro_sync/data_export/* data_export/ 2>/dev/null || true
           cp -r /tmp/agro_sync/web_public/* web/public/ 2>/dev/null || true
-          cp -r /tmp/agro_sync/pipeline_state/*.json pipeline_state/ 2>/dev/null || true
+          for f in /tmp/agro_sync/pipeline_state/*.json; do
+            [ -f "$f" ] || continue
+            b=$(basename "$f")
+            cp "$f" "pipeline_state/${b}.tmp.$$" && mv -f "pipeline_state/${b}.tmp.$$" "pipeline_state/${b}"
+          done
           rm -rf pipeline_state/snapshots/* 2>/dev/null || true
           cp -r /tmp/agro_sync/pipeline_state/snapshots/* pipeline_state/snapshots/ 2>/dev/null || true
           git add data_export/ web/public/data/ web/public/files/ pipeline_state/
@@ -269,7 +311,11 @@ jobs:
                 mkdir -p data_export web/public pipeline_state/snapshots
                 cp -r /tmp/agro_sync/data_export/* data_export/ 2>/dev/null || true
                 cp -r /tmp/agro_sync/web_public/* web/public/ 2>/dev/null || true
-                cp -r /tmp/agro_sync/pipeline_state/*.json pipeline_state/ 2>/dev/null || true
+                for f in /tmp/agro_sync/pipeline_state/*.json; do
+                  [ -f "$f" ] || continue
+                  b=$(basename "$f")
+                  cp "$f" "pipeline_state/${b}.tmp.$$" && mv -f "pipeline_state/${b}.tmp.$$" "pipeline_state/${b}"
+                done
                 cp -r /tmp/agro_sync/pipeline_state/snapshots/* pipeline_state/snapshots/ 2>/dev/null || true
                 git add data_export/ web/public/data/ web/public/files/ pipeline_state/
                 git commit -m "chore(data): update data & pipeline_state ${{ steps.target_dates.outputs.start_date }} s/d ${{ steps.target_dates.outputs.end_date }}" || true
