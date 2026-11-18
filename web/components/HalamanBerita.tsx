@@ -9,6 +9,8 @@ import {
   ExternalLink,
   ChevronLeft,
   ChevronRight,
+  ChevronDown,
+  ChevronUp,
   RotateCcw,
   Calendar,
   ArrowUpDown,
@@ -26,9 +28,12 @@ interface HalamanBeritaProps {
 
 const ITEMS_PER_PAGE = 24;
 const GROUPS_PER_PAGE = 12;
+const LARGE_GROUP_THRESHOLD = 12;
+const GROUP_ITEMS_PER_PAGE = 12;
 
 interface IssueGroup {
   isu: string;
+  isNoIssueGroup: boolean;
   items: Article[];
   mediaList: string[];
   tone: Article["tone"];
@@ -80,14 +85,17 @@ export default function HalamanBerita({ summaryData }: HalamanBeritaProps) {
   const [sortBy, setSortBy] = useState<"terbaru" | "terlama" | "media">("terbaru");
   const [groupByIsu, setGroupByIsu] = useState<boolean>(false);
 
-  // State paginasi
+  // State paginasi & grup besar
   const [currentPage, setCurrentPage] = useState(1);
+  const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({});
+  const [groupPages, setGroupPages] = useState<Record<string, number>>({});
 
   // Debounce search 300ms
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearch(searchQuery.trim());
       setCurrentPage(1);
+      setGroupPages({});
     }, 300);
     return () => clearTimeout(timer);
   }, [searchQuery]);
@@ -119,6 +127,7 @@ export default function HalamanBerita({ summaryData }: HalamanBeritaProps) {
   const handleFilterChange = (setter: (val: string) => void, val: string) => {
     setter(val);
     setCurrentPage(1);
+    setGroupPages({});
   };
 
   const handleResetFilters = () => {
@@ -130,6 +139,7 @@ export default function HalamanBerita({ summaryData }: HalamanBeritaProps) {
     setSelectedDate("Semua");
     setSortBy("terbaru");
     setCurrentPage(1);
+    setGroupPages({});
   };
 
   // Daftar opsi unik untuk dropdown
@@ -291,7 +301,7 @@ export default function HalamanBerita({ summaryData }: HalamanBeritaProps) {
         groupedMap.set(isuName, [art]);
       }
     }
-    const buildGroup = (isuLabel: string, items: Article[]): IssueGroup => {
+    const buildGroup = (isuLabel: string, items: Article[], isNoIssueGroup: boolean): IssueGroup => {
       const mediaSeen = new Set<string>();
       const mediaList: string[] = [];
       let sumberIsu: string | undefined;
@@ -306,12 +316,12 @@ export default function HalamanBerita({ summaryData }: HalamanBeritaProps) {
         }
       }
       const { tone, isMixed } = resolveGroupTone(items);
-      return { isu: isuLabel, items, mediaList, tone, isMixedTone: isMixed, sumberIsu };
+      return { isu: isuLabel, isNoIssueGroup, items, mediaList, tone, isMixedTone: isMixed, sumberIsu };
     };
     const out: IssueGroup[] = [];
-    groupedMap.forEach((items, isuName) => out.push(buildGroup(isuName, items)));
+    groupedMap.forEach((items, isuName) => out.push(buildGroup(isuName, items, false)));
     if (noIssueItems.length > 0) {
-      out.push(buildGroup("Tanpa isu", noIssueItems));
+      out.push(buildGroup("Tanpa isu", noIssueItems, true));
     }
     return out;
   }, [sortedArticles, groupByIsu]);
@@ -337,6 +347,7 @@ export default function HalamanBerita({ summaryData }: HalamanBeritaProps) {
     const displayCommodity = isNoCommodity ? "Tanpa komoditas" : art.commodity;
     const isuText = (art.isu || "").trim();
     const alasanTone = (art.alasan_tone || "").trim();
+    const hasMeta = Boolean(isuText || alasanTone);
 
     return (
       <a
@@ -344,7 +355,7 @@ export default function HalamanBerita({ summaryData }: HalamanBeritaProps) {
         href={art.link}
         target="_blank"
         rel="noopener noreferrer"
-        className={`news-card-uniform ${toneClass}`}
+        className={`news-card-uniform ${toneClass}${hasMeta ? " news-card-has-meta" : ""}`}
         title="Klik untuk membuka berita di tab baru"
       >
         {/* Header Kartu: Badge Tone + External Icon */}
@@ -631,17 +642,49 @@ export default function HalamanBerita({ summaryData }: HalamanBeritaProps) {
                   group.mediaList.length > 5
                     ? `${group.mediaList.slice(0, 5).join(", ")} +${group.mediaList.length - 5} lainnya`
                     : group.mediaList.join(", ");
+                const isLargeGroup = group.items.length > LARGE_GROUP_THRESHOLD;
+                const isExpanded = isLargeGroup ? Boolean(expandedGroups[group.isu]) : true;
+                const subTotalPages = Math.max(1, Math.ceil(group.items.length / GROUP_ITEMS_PER_PAGE));
+                const subPage = Math.min(groupPages[group.isu] || 1, subTotalPages);
+                const subStart = (subPage - 1) * GROUP_ITEMS_PER_PAGE;
+                const visibleItems = isLargeGroup
+                  ? group.items.slice(subStart, subStart + GROUP_ITEMS_PER_PAGE)
+                  : group.items;
+
                 return (
                   <section key={group.isu} className="issue-group-section">
                     <header className="issue-group-header">
-                      <div className="issue-group-title-row">
-                        <span className={`badge-tone ${groupBadgeClass}`}>
-                          {group.tone}
-                          {group.isMixedTone ? " (Mayoritas)" : ""}
-                        </span>
-                        <h3 className="issue-group-name">{group.isu}</h3>
-                        {group.sumberIsu === "rilis" && (
-                          <span className="issue-source-tag">Rilis</span>
+                      <div className="issue-group-header-top">
+                        <div className="issue-group-title-row">
+                          {group.isNoIssueGroup ? (
+                            <span className="issue-neutral-note">Tone dinilai per berita</span>
+                          ) : (
+                            <span className={`badge-tone ${groupBadgeClass}`}>
+                              {group.tone}
+                              {group.isMixedTone ? " (Mayoritas)" : ""}
+                            </span>
+                          )}
+                          <h3 className="issue-group-name">{group.isu}</h3>
+                          {group.sumberIsu === "rilis" && (
+                            <span className="issue-source-tag">Rilis</span>
+                          )}
+                        </div>
+                        {isLargeGroup && (
+                          <button
+                            type="button"
+                            aria-expanded={isExpanded}
+                            onClick={() =>
+                              setExpandedGroups((prev) => ({ ...prev, [group.isu]: !isExpanded }))
+                            }
+                            className="issue-group-expand-btn"
+                          >
+                            {isExpanded ? <ChevronUp size={13} /> : <ChevronDown size={13} />}
+                            <span>
+                              {isExpanded
+                                ? "Tutup daftar"
+                                : `Tampilkan (${formatNumberIndo(group.items.length)} berita)`}
+                            </span>
+                          </button>
                         )}
                       </div>
                       <div className="issue-group-meta">
@@ -657,9 +700,51 @@ export default function HalamanBerita({ summaryData }: HalamanBeritaProps) {
                         </span>
                       </div>
                     </header>
-                    <div className="news-grid-uniform">
-                      {group.items.map((art) => renderArticleCard(art))}
-                    </div>
+                    {isExpanded && (
+                      <>
+                        <div className="news-grid-uniform">
+                          {visibleItems.map((art) => renderArticleCard(art))}
+                        </div>
+                        {isLargeGroup && subTotalPages > 1 && (
+                          <div className="issue-subpage-bar">
+                            <button
+                              type="button"
+                              disabled={subPage <= 1}
+                              onClick={() =>
+                                setGroupPages((prev) => ({
+                                  ...prev,
+                                  [group.isu]: Math.max(1, subPage - 1),
+                                }))
+                              }
+                              className="pagination-btn"
+                            >
+                              <ChevronLeft size={14} />
+                              <span>Sebelumnya</span>
+                            </button>
+                            <span className="issue-subpage-info">
+                              Hal <strong>{subPage}</strong>/{formatNumberIndo(subTotalPages)} (
+                              {formatNumberIndo(subStart + 1)}–
+                              {formatNumberIndo(Math.min(subStart + GROUP_ITEMS_PER_PAGE, group.items.length))} dari{" "}
+                              {formatNumberIndo(group.items.length)})
+                            </span>
+                            <button
+                              type="button"
+                              disabled={subPage >= subTotalPages}
+                              onClick={() =>
+                                setGroupPages((prev) => ({
+                                  ...prev,
+                                  [group.isu]: Math.min(subTotalPages, subPage + 1),
+                                }))
+                              }
+                              className="pagination-btn"
+                            >
+                              <span>Berikutnya</span>
+                              <ChevronRight size={14} />
+                            </button>
+                          </div>
+                        )}
+                      </>
+                    )}
                   </section>
                 );
               })}
