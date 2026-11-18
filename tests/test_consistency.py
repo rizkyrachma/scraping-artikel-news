@@ -1383,6 +1383,9 @@ class TestPointFMergeRuns(unittest.TestCase):
                 self.assertEqual(len(runs_data), 1)
                 self.assertEqual(runs_data[0]["status"], "Berhasil")
                 self.assertEqual(runs_data[0]["target_date"], "2026-11-11")
+                self.assertEqual(articles_data[0]["isu"], "")
+                self.assertEqual(articles_data[0]["alasan_tone"], "")
+                self.assertNotIn("sumber_isu", articles_data[0])
 
             finally:
                 sync_mod.DATA_EXPORT_DIR = orig_data_export
@@ -1390,6 +1393,71 @@ class TestPointFMergeRuns(unittest.TestCase):
                 sync_mod.WEB_DATA_DIR = orig_web_data
                 sync_mod.WEB_FILES_DIR = orig_web_files
                 sync_mod.get_date_folder = orig_get_date_folder
+
+    def test_sync_dashboard_data_exports_isu_and_alasan_tone_and_legacy_fixture(self):
+        import scripts.sync_dashboard_data as sync_mod
+        import pandas as pd
+        from pathlib import Path
+
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            tmp_root = Path(tmp_dir)
+            new_xlsx = tmp_root / "new_isu.xlsx"
+            old_xlsx = tmp_root / "old_no_isu.xlsx"
+
+            pd.DataFrame([
+                {
+                    "Tanggal": "2026-11-17 09:00:00",
+                    "Title": "Menperin Terbitkan Surat Dukungan PSN Hilirisasi Sagu di SBT",
+                    "Link Website": "https://rri.co.id/sagu-1",
+                    "Media Name": "RRI.co.id",
+                    "Keywords": "sagu",
+                    "Tone": "Positif",
+                    "Isu": "Dukungan PSN Hilirisasi Sagu di Seram Bagian Timur",
+                    "Alasan Tone": "Kemenperin menjadi pelaku utama mendukung proyek strategis nasional.",
+                    "Sumber Isu": "klaster",
+                },
+                {
+                    "Tanggal": "2026-11-17 10:00:00",
+                    "Title": "Berita Tanpa Isu dan Alasan Kosong",
+                    "Link Website": "https://media.test/kosong-1",
+                    "Media Name": "Media Test",
+                    "Keywords": "sawit",
+                    "Tone": "Netral",
+                    "Isu": None,
+                    "Alasan Tone": float("nan"),
+                    "Sumber Isu": "",
+                },
+            ]).to_excel(new_xlsx, sheet_name="Berita", index=False)
+
+            pd.DataFrame([
+                {
+                    "Tanggal": "2026-11-10 08:00:00",
+                    "Title": "Artikel Arsip Lama Tanpa Kolom Isu",
+                    "Link Website": "https://lama.test/1",
+                    "Media Name": "Media Lama",
+                    "Keywords": "cpo",
+                    "Tone": "Netral",
+                }
+            ]).to_excel(old_xlsx, sheet_name="Berita", index=False)
+
+            res_new = sync_mod.read_excel_articles(new_xlsx, fallback_date="2026-11-17")
+            self.assertEqual(len(res_new), 2)
+            self.assertEqual(res_new[0]["isu"], "Dukungan PSN Hilirisasi Sagu di Seram Bagian Timur")
+            self.assertEqual(
+                res_new[0]["alasan_tone"],
+                "Kemenperin menjadi pelaku utama mendukung proyek strategis nasional.",
+            )
+            self.assertEqual(res_new[0]["sumber_isu"], "klaster")
+            self.assertEqual(res_new[1]["isu"], "")
+            self.assertEqual(res_new[1]["alasan_tone"], "")
+            self.assertNotIn("sumber_isu", res_new[1])
+
+            res_old = sync_mod.read_excel_articles(old_xlsx, fallback_date="2026-11-10")
+            self.assertEqual(len(res_old), 1)
+            self.assertEqual(res_old[0]["isu"], "")
+            self.assertEqual(res_old[0]["alasan_tone"], "")
+            self.assertNotIn("sumber_isu", res_old[0])
+            self.assertEqual(res_old[0]["commodity"], "Kelapa Sawit & CPO")
 
     def test_decode_only_flag_and_verify_reporter(self):
         import subprocess
