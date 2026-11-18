@@ -19,6 +19,8 @@ BERITA_COLUMNS = [
     "Link Website",
     "Media Name",
     "Tone",
+    "Isu",
+    "Alasan Tone",
     "Spokesperson 1",
     "Spokesperson 2",
     "Unit Eselon",
@@ -150,25 +152,13 @@ def save_to_excel(
         except Exception as e:
             print(f"  [WARNING] Gagal merge dengan file yang ada ({output_path}): {e}")
 
-    columns = [
-        "Tanggal",
-        "Title",
-        "Link Website",
-        "Media Name",
-        "Tone",
-        "Spokesperson 1",
-        "Spokesperson 2",
-        "Unit Eselon",
-        "Terkait Kemenperin",
-        "Status Review",
-        "Keywords",
-        "Sumber Data",
-    ]
+    columns = list(BERITA_COLUMNS)
     df = pd.DataFrame(final_input_records)
     if not df.empty:
         # 1. Normalisasi nama kolom dari berbagai variasi key dictionary pipeline
         mappings = {
             "Isu": ["Isu", "isu", "issue", "topik_isu"],
+            "Alasan Tone": ["Alasan Tone", "alasan_tone", "tone_alasan"],
             "Sub Sektor": ["Sub Sektor", "sub_sektor", "subsektor", "Sub-Sektor"],
             "Status Review": ["Status Review", "status_review"],
             "Title": ["Title", "title", "judul"],
@@ -267,11 +257,13 @@ def save_to_excel(
         # 2. Auto-enrichment NLP & Deteksi Ketat Kemenperin
         from src.entity_mapper import find_spokespersons
         from src.relevance_filter import is_kemenperin_related
-        from src.sentiment import classify_tone
+        from src.tone_classifier import _classify_tone_fallback_detail
 
         for idx in range(len(df)):
             t = str(df.at[idx, "Title"] or "")
             txt = str(df.at[idx, "text"] or "") if "text" in df.columns else ""
+            if not txt and "isi" in df.columns:
+                txt = str(df.at[idx, "isi"] or "")
             kw = str(df.at[idx, "Keywords"] or "")
             sd = str(df.at[idx, "Sumber Data"] or "")
 
@@ -308,9 +300,14 @@ def save_to_excel(
                 if not curr_u or curr_u in ["-", "nan", "None"]:
                     df.at[idx, "Unit Eselon"] = "IA"
 
-            # 3. Tone
-            if pd.isna(df.at[idx, "Tone"]) or str(df.at[idx, "Tone"]).strip() in ["", "nan", "None"]:
-                df.at[idx, "Tone"] = classify_tone(txt, t)
+            # 3. Tone & Alasan Tone
+            curr_tone = str(df.at[idx, "Tone"] or "").strip()
+            curr_alasan = str(df.at[idx, "Alasan Tone"] or "").strip()
+            if pd.isna(df.at[idx, "Tone"]) or curr_tone in ["", "nan", "None"]:
+                fb_det = _classify_tone_fallback_detail(title=t, text=txt, keyword=kw, sumber_data=sd)
+                df.at[idx, "Tone"] = fb_det["tone"]
+                if pd.isna(df.at[idx, "Alasan Tone"]) or curr_alasan in ["", "nan", "None"]:
+                    df.at[idx, "Alasan Tone"] = fb_det["alasan"]
 
             # 4. Normalisasi keyword rokok agar sesuai keyword_data.txt
             curr_kw = str(df.at[idx, "Keywords"] or "").strip()
@@ -389,7 +386,7 @@ def write_styled_excel(
             df["Tone"] = df["Tone"].replace(["nan", "None", ""], "Netral").fillna("Netral")
         if "Unit Eselon" in df.columns:
             df["Unit Eselon"] = df["Unit Eselon"].replace(["nan", "None", ""], "-").fillna("-")
-        for c in ("Spokesperson 1", "Spokesperson 2", "Status Review", "Keywords", "Title", "Media Name"):
+        for c in ("Isu", "Alasan Tone", "Spokesperson 1", "Spokesperson 2", "Status Review", "Keywords", "Title", "Media Name"):
             if c in df.columns:
                 df[c] = df[c].replace(["nan", "None"], "").fillna("")
         if "Terkait Kemenperin" in df.columns:

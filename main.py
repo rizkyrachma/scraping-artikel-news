@@ -29,7 +29,7 @@ import inspect
 import time
 import threading
 import argparse
-from datetime import date
+from datetime import date, timedelta
 from urllib.parse import urlparse
 from typing import Any
 import pandas as pd
@@ -136,7 +136,16 @@ from src.ai_relevance_classifier import (
     log_ai_rejection,
     classify_articles_in_batches,
 )
-from src.tone_classifier import classify_tone_batch, classify_tone
+from src.tone_classifier import USE_COMBINED_ISU_TONE, classify_tone_batch, classify_tone_by_issue, classify_tone
+from src.isu_grouping import (
+    DEFAULT_LOG_ISU_PATH,
+    DEFAULT_RILIS_MAX_DAYS_AFTER,
+    DEFAULT_RILIS_MAX_DAYS_BEFORE,
+    IsuRegistry,
+    assign_and_cluster_issues,
+    load_rilis_kemenperin,
+    write_isu_log,
+)
 from src.negative_summarizer import summarize_negative_articles, validate_and_repair_negative_summaries
 from src.config import ENABLE_YOUTUBE
 from src.entity_mapper import find_spokespersons
@@ -149,6 +158,7 @@ from src.direct_crawl_agro import (
     cocokkan_rilis_resmi,
     integrate_agro_kemenperin_pipeline,
 )
+from src.direct_crawl_kemenperin import crawl_kemenperin_siaran_pers
 
 USE_SERPER_ONLY = os.environ.get("USE_SERPER_ONLY", "false").lower() in ("true", "1", "yes")
 
@@ -1116,21 +1126,73 @@ def process_single_keyword(
 
 
 
-def finalize_and_export(
+def _classify_with_issue_grouping(
     articles: list[dict],
-    name_map: dict[str, str],
-    output_excel: str = os.path.join(OUTPUT_DIR, "hasil_scraping_berita_lengkap.xlsx"),
-):
+    use_ai: bool = True,
+    combined_isu_tone: bool | None = None,
+) -> dict:
     """
-    Deduplikasi lintas keyword, entity mapping, sentiment analysis, dan export ke file Excel.
+    Menjalankan Fase 1 (pencocokan rilis & pengelompokan isu) lalu Fase 2 (satu tone per isu).
+    Mengembalikan dict {id_artikel: tone} dan memperbarui field 'Isu' serta log_isu.jsonl.
     """
-    print("\n" + "=" * 60, flush=True)
-    print("=== TAHAP FINAL: DEDUPLIKASI LINTAS KEYWORD & NLP ===", flush=True)
-    print("=" * 60, flush=True)
-
-    # 0. Direct crawl portal resmi Ditjen Industri Agro (agro.kemenperin.go.id)
+    for idx, art in enumerate(articles, start=1):
+        art["id"] = idx
+    reg = IsuRegistry()
     try:
-        start_date, end_date = get_date_range()
+        s_d, e_d = get_date_range()
+        rilis_window = (
+            s_d - timedelta(days=DEFAULT_RILIS_MAX_DAYS_AFTER),
+            e_d + timedelta(days=DEFAULT_RILIS_MAX_DAYS_BEFORE),
+        )
+        releases = load_rilis_kemenperin(crawl_online=use_ai, target_date_range=rilis_window)
+    except Exception:
+        releases = load_rilis_kemenperin(crawl_online=False)
+    if releases:
+        reg.seed_releases(releases)
+    use_comb = USE_COMBINED_ISU_TONE if combined_isu_tone is None else bool(combined_isu_tone)
+    grouped = assign_and_cluster_issues(
+        articles,
+        registry=reg,
+        method="tfidf",
+        use_ai=use_ai,
+        label_with_llm=(False if use_comb else use_ai),
+        log_path=None,
+    )
+    for orig, g in zip(articles, grouped):
+        orig["isu_id"] = g.get("isu_id", "")
+        orig["isu"] = g.get("isu", orig.get("title", ""))
+        orig["Isu"] = orig["isu"]
+        orig["sumber_isu"] = g.get("sumber_isu", "klaster")
+        orig["skor_isu"] = g.get("skor_isu", 0.0)
+        orig["margin_isu"] = g.get("margin_isu", 0.0)
+    tone_results = classify_tone_by_issue(
+        articles,
+        registry=reg,
+        use_ai=use_ai,
+        combined_isu_tone=use_comb,
+    )
+    res_by_id = {res["id"]: res for res in tone_results if res}
+    for orig in articles:
+        res = res_by_id.get(orig.get("id"))
+        if res:
+            if res.get("isu_id"):
+                orig["isu_id"] = res["isu_id"]
+            if res.get("isu"):
+                orig["isu"] = res["isu"]
+                orig["Isu"] = res["isu"]
+            if res.get("sumber_isu"):
+                orig["sumber_isu"] = res["sumber_isu"]
+            alasan_tone = str(res.get("alasan") or res.get("tone_alasan") or "").strip()
+            if alasan_tone:
+                orig["Alasan Tone"] = alasan_tone
+                orig["alasan_tone"] = alasan_tone
+    write_isu_log(articles, log_path=DEFAULT_LOG_ISU_PATH)
+    return {res["id"]: res.get("tone", "Netral") for res in tone_results if res}
+
+
+def _append_direct_crawl_portals(articles: list[dict], start_date: date, end_date: date) -> None:
+    """Mengambil rilis resmi dari agro.kemenperin.go.id dan www.kemenperin.go.id ke antrean artikel."""
+    try:
         print(f"\n[Direct Crawl Ditjen Agro] Memeriksa portal agro.kemenperin.go.id ({start_date} s.d {end_date})...", flush=True)
         agro_articles = fetch_agro_kemenperin(start_date, end_date, include_content=True)
         if agro_articles:
@@ -1144,6 +1206,8 @@ def finalize_and_export(
                     "resolved_url": a.get("Link Website", ""),
                     "published": tgl_str,
                     "media_name": "Kemenperin (agro.kemenperin.go.id)",
+                    "unit_eselon": a.get("Unit Eselon", "IA"),
+                    "terkait_kemenperin": "Ya",
                     "sumber_data": "agro.kemenperin.go.id",
                     "text": a.get("isi", ""),
                     "keyword": "Rilis Resmi Ditjen Agro",
@@ -1152,6 +1216,36 @@ def finalize_and_export(
             print("  -> Tidak ada rilis baru di agro.kemenperin.go.id pada rentang tanggal tersebut.", flush=True)
     except Exception as e:
         print(f"  -> Peringatan direct crawl agro.kemenperin.go.id: {e}", flush=True)
+
+    try:
+        print(f"[Direct Crawl Kemenperin] Memeriksa portal www.kemenperin.go.id ({start_date} s.d {end_date})...", flush=True)
+        kem_articles = crawl_kemenperin_siaran_pers(target_date=(start_date, end_date), max_pages=3)
+        if kem_articles:
+            print(f"  -> Ditemukan {len(kem_articles)} siaran pers www.kemenperin.go.id. Menggabungkan ke antrean...", flush=True)
+            articles.extend(kem_articles)
+        else:
+            print("  -> Tidak ada siaran pers baru di www.kemenperin.go.id pada rentang tanggal tersebut.", flush=True)
+    except Exception as e:
+        print(f"  -> Peringatan direct crawl www.kemenperin.go.id: {e}", flush=True)
+
+
+def finalize_and_export(
+    articles: list[dict],
+    name_map: dict[str, str],
+    output_excel: str = os.path.join(OUTPUT_DIR, "hasil_scraping_berita_lengkap.xlsx"),
+    crawl_direct: bool = True,
+):
+    """
+    Deduplikasi lintas keyword, entity mapping, sentiment analysis, dan export ke file Excel.
+    """
+    print("\n" + "=" * 60, flush=True)
+    print("=== TAHAP FINAL: DEDUPLIKASI LINTAS KEYWORD & NLP ===", flush=True)
+    print("=" * 60, flush=True)
+
+    # 0. Direct crawl portal resmi Ditjen Industri Agro & portal utama Kemenperin
+    if crawl_direct:
+        start_date, end_date = get_date_range()
+        _append_direct_crawl_portals(articles, start_date, end_date)
 
     total_before = len(articles)
 
@@ -1212,13 +1306,8 @@ def finalize_and_export(
     sp_count = 0
     tone_dist = {"Positif": 0, "Netral": 0, "Negatif": 0}
 
-    # Beri ID untuk batch tone classification
-    for idx, art in enumerate(hilir_articles, start=1):
-        art["id"] = idx
-
-    print(f"Menginspeksi tone dengan Gemini AI API untuk {total_hilir} artikel...", flush=True)
-    tone_batch_results = classify_tone_batch(hilir_articles, use_ai=True)
-    tone_map = {res["id"]: res.get("tone", "Netral") for res in tone_batch_results}
+    print(f"Menginspeksi isu & tone dengan Fase 1+2 untuk {total_hilir} artikel...", flush=True)
+    tone_map = _classify_with_issue_grouping(hilir_articles, use_ai=True)
 
     for idx, art in enumerate(hilir_articles, start=1):
         text = art.get("text", "")
@@ -1236,6 +1325,7 @@ def finalize_and_export(
         records.append({
             "Tanggal": art.get("published", ""),
             "Isu": art.get("Isu") or art.get("isu") or art["title"],
+            "Alasan Tone": art.get("Alasan Tone") or art.get("alasan_tone") or "",
             "Title": art["title"],
             "Link Website": art.get("link", ""),
             "Media Name": art.get("media_name") or "",
@@ -1406,10 +1496,13 @@ def run_pipeline(
     spokesperson_empty = 0
     kemenperin_yes_count = 0
 
+    # Pengelompokan isu & klasifikasi tone satu kali per isu (fallback otomatis jika offline/kuota habis)
+    tone_map = _classify_with_issue_grouping(content_valid, use_ai=True)
+
     for item in content_valid:
         text = item["text"]
         sp1, sp2, unit = find_spokespersons(text, name_map)
-        tone = classify_tone(text=text, title=item.get("title", ""))
+        tone = tone_map.get(item.get("id"), "Netral")
         is_rel, sig_type, sig_det = get_kemenperin_signal(
             item.get("title", ""), text, name_map
         )
@@ -1428,6 +1521,8 @@ def run_pipeline(
             "Link Website": item["link"],
             "Media Name": item.get("media_name") or "",
             "Tone": tone,
+            "Isu": item.get("Isu") or item.get("isu") or item["title"],
+            "Alasan Tone": item.get("Alasan Tone") or item.get("alasan_tone") or "",
             "Spokesperson 1": sp1,
             "Spokesperson 2": sp2,
             "Unit Eselon": unit,
@@ -1684,31 +1779,7 @@ def run_batch_pipeline(
 
     if len(checkpoint["batches_done"]) == total_batches:
         print("\nSeluruh batch telah selesai! Melanjutkan ke finalisasi...", flush=True)
-        try:
-            from direct_crawl_kemenperin import crawl_kemenperin_siaran_pers
-            from direct_crawl_agro import fetch_agro_kemenperin
-            c_items = crawl_kemenperin_siaran_pers(target_date=(start_date, end_date), max_pages=3)
-            if c_items:
-                print(f"[Direct Crawl] Ditemukan {len(c_items)} siaran pers kemenperin.go.id", flush=True)
-                for a in c_items:
-                    checkpoint["articles"].append(a)
-            a_items = fetch_agro_kemenperin(date_from=start_date, date_to=end_date, include_content=True)
-            if a_items:
-                print(f"[Direct Crawl] Ditemukan {len(a_items)} rilis resmi Ditjen Agro", flush=True)
-                for a in a_items:
-                    checkpoint["articles"].append({
-                        "title": a.get("Title", ""),
-                        "link": a.get("Link Website", ""),
-                        "published": a.get("Tanggal"),
-                        "media_name": a.get("Media Name", "Kemenperin (agro.kemenperin.go.id)"),
-                        "unit_eselon": a.get("Unit Eselon", "IA"),
-                        "terkait_kemenperin": "Ya",
-                        "keyword": "agro_kemenperin_resmi",
-                        "sumber_data": "agro.kemenperin.go.id",
-                        "text": a.get("isi", ""),
-                    })
-        except Exception as e:
-            print(f"[Direct Crawl Warning] {e}", flush=True)
+        _append_direct_crawl_portals(checkpoint["articles"], start_date, end_date)
 
         # Gabungkan dengan snapshot kandidat harian agar run pada jam berbeda tetap >= 95% konsisten
         try:
@@ -1740,7 +1811,7 @@ def run_batch_pipeline(
             rep = generate_verification_report(checkpoint.get("batch_reports", []), output_dir=date_folder)
             print(rep["table_md"], flush=True)
             return
-        finalize_and_export(checkpoint["articles"], name_map, output_excel=out_excel_path)
+        finalize_and_export(checkpoint["articles"], name_map, output_excel=out_excel_path, crawl_direct=False)
     elif target_batch is not None:
         batch_out = os.path.join(date_folder, f"checkpoint_batch_{target_batch}.xlsx")
         print(f"\nBatch {target_batch} selesai diproses. Mengekspor hasil batch ke {batch_out}...", flush=True)

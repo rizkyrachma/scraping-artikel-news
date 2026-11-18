@@ -584,8 +584,11 @@ def _apply_decision_cache_to_record(rec: dict, cached_by_stage: dict[str, dict])
     tone_dec = cached_by_stage.get("tone")
     if isinstance(tone_dec, dict):
         t_val = str(tone_dec.get("tone") or "").strip().capitalize()
+        t_alasan = str(tone_dec.get("alasan") or "").strip()
         if t_val in ("Positif", "Netral", "Negatif"):
             out["Tone"] = t_val
+            if t_alasan:
+                out["Alasan Tone"] = t_alasan
             used_cache = True
 
     return out, True, used_cache
