@@ -15,6 +15,9 @@ export interface Article {
   commodity?: string;
   has_review?: boolean;
   review_text?: string;
+  isu?: string;
+  alasan_tone?: string;
+  sumber_isu?: string;
 }
 
 export interface SummaryData {
