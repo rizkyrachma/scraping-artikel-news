@@ -55,28 +55,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Ambil data_export dan pipeline_state terbaru dari branch data (jika ada)
-        run: |
-          mkdir -p hasil_scrapping/snapshots web/public/files web/public/data
-          if git ls-remote --exit-code --heads origin data >/dev/null 2>&1; then
-            git fetch origin data
-            git checkout origin/data -- data_export 2>/dev/null || true
-            git checkout origin/data -- pipeline_state 2>/dev/null || true
-            git reset -q HEAD -- data_export pipeline_state 2>/dev/null || true
-            cp -r data_export/files/* web/public/files/ 2>/dev/null || true
-            cp -r data_export/*.json web/public/data/ 2>/dev/null || true
-            for f in cache_decode.json cache_decode_failed.json cache_decisions.json cache_ai_recheck.json cache_ringkasan.json isu_registry.json; do
-              if [ -f "pipeline_state/$f" ]; then
-                cp "pipeline_state/$f" "hasil_scrapping/$f.tmp.$$" && mv -f "hasil_scrapping/$f.tmp.$$" "hasil_scrapping/$f"
-              elif [ "$f" = "isu_registry.json" ]; then
-                echo "[Registry] pipeline_state/isu_registry.json belum ada (run pertama) - mulai dari registri baru."
-              fi
-            done
-            cp -r pipeline_state/snapshots/* hasil_scrapping/snapshots/ 2>/dev/null || true
-          else
-            echo "[Registry] Branch data belum ada (run pertama) - mulai dari registri baru."
-          fi
-
       - name: Setup Python 3.11
         uses: actions/setup-python@v5
         with:
@@ -88,7 +66,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Cache Pipeline State & AI (Lapis Kedua)
+      - name: Cache Pipeline State & AI (Lapis Kedua - dipulihkan sebelum branch data agar cache lama tidak menimpa data terbaru)
         uses: actions/cache@v4
         with:
           path: |
@@ -102,6 +80,59 @@ jobs:
           key: agro-pipeline-cache-${{ runner.os }}-${{ github.run_id }}
           restore-keys: |
             agro-pipeline-cache-${{ runner.os }}-
+
+      - name: Ambil data_export dan pipeline_state terbaru dari branch data (Lapis Utama, prioritas di atas cache)
+        run: |
+          mkdir -p hasil_scrapping/snapshots web/public/files web/public/data
+          if git ls-remote --exit-code --heads origin data >/dev/null 2>&1; then
+            git fetch origin data
+            git checkout origin/data -- data_export 2>/dev/null || true
+            git checkout origin/data -- pipeline_state 2>/dev/null || true
+            # Unstage hasil checkout origin/data agar tidak mencemari indeks branch aktif saat commit ke main
+            git reset -q HEAD -- data_export pipeline_state 2>/dev/null || true
+            cp -r data_export/files/* web/public/files/ 2>/dev/null || true
+            cp -r data_export/*.json web/public/data/ 2>/dev/null || true
+            for f in cache_decode.json cache_decode_failed.json cache_decisions.json cache_ai_recheck.json cache_ringkasan.json; do
+              if [ -f "pipeline_state/$f" ]; then
+                cp "pipeline_state/$f" "hasil_scrapping/$f.tmp.$$" && mv -f "hasil_scrapping/$f.tmp.$$" "hasil_scrapping/$f"
+              fi
+            done
+            # Pilih isu_registry.json paling baru; bila timestamp sama/tidak terbaca, branch data (Lapis Utama) selalu menang atas cache
+            python - <<'PY'
+          import json, os, shutil, tempfile
+          from pathlib import Path
+
+          branch_reg = Path("pipeline_state/isu_registry.json")
+          cache_reg = Path("hasil_scrapping/isu_registry.json")
+
+          def _read_ts(p: Path) -> tuple[bool, str]:
+              if not p.exists():
+                  return False, ""
+              try:
+                  d = json.loads(p.read_text(encoding="utf-8"))
+                  if isinstance(d, dict) and isinstance(d.get("issues"), list):
+                      return True, str(d.get("updated_at") or "").strip()
+              except Exception:
+                  pass
+              return False, ""
+
+          b_ok, b_ts = _read_ts(branch_reg)
+          c_ok, c_ts = _read_ts(cache_reg)
+          if b_ok and (not c_ok or not c_ts or b_ts >= c_ts):
+              fd, tmp_p = tempfile.mkstemp(prefix=".isu_registry_", suffix=".tmp", dir=str(cache_reg.parent))
+              os.close(fd)
+              shutil.copy2(branch_reg, tmp_p)
+              os.replace(tmp_p, cache_reg)
+              print(f"[Registry] Dipulihkan dari branch data (updated_at={b_ts or '-'}, prioritas utama).")
+          elif c_ok:
+              print(f"[Registry] Mempertahankan isu_registry.json dari actions/cache (lebih baru: {c_ts} > {b_ts or 'kosong'}).")
+          else:
+              print("[Registry] isu_registry.json belum ada (run pertama) - mulai dari registri baru.")
+          PY
+            cp -r pipeline_state/snapshots/* hasil_scrapping/snapshots/ 2>/dev/null || true
+          else
+            echo "[Registry] Branch data belum ada (run pertama) - memakai fallback actions/cache bila ada atau mulai baru."
+          fi
 
       - name: Tentukan rentang tanggal target (WIB)
         id: target_dates
@@ -210,9 +241,18 @@ jobs:
             --note "$NOTE" \
             --log-url "$LOG_URL"
 
-      - name: Commit & Push pembaruan data dan pipeline_state ke branch data dan main
-        if: always() && steps.target_dates.outputs.should_skip != 'true'
+      - name: Lewati Commit, Push, dan Persist Pipeline State (Bukan refs/heads/main)
+        if: always() && steps.target_dates.outputs.should_skip != 'true' && github.ref != 'refs/heads/main'
         run: |
+          echo "[Guard] Melewati commit/push ke branch main dan data serta penyimpanan pipeline_state karena github.ref (${{ github.ref }}) != 'refs/heads/main'."
+
+      - name: Commit & Push pembaruan data dan pipeline_state ke branch data dan main
+        if: always() && steps.target_dates.outputs.should_skip != 'true' && github.ref == 'refs/heads/main'
+        run: |
+          if [ "${{ github.ref }}" != "refs/heads/main" ]; then
+            echo "[Guard] Ditolak: hanya refs/heads/main yang boleh menulis ke branch main dan data."
+            exit 0
+          fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
