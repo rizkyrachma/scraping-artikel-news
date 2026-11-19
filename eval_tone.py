@@ -1,9 +1,11 @@
 """
 eval_tone.py
 Skrip evaluasi performa klasifikasi tone (Positif, Netral, Negatif):
-- Membaca golden set CSV (kolom: title, label_benar).
-- Menghasilkan Confusion Matrix 3x3, Akurasi Global, Precision, Recall, dan F1 per kelas.
-- Menghitung persentase prediksi Negatif vs persentase Negatif sebenarnya (bias check).
+- Mode Blind + Key (utama): membaca data/label_tone_blind.csv (label manusia) dan
+  data/label_tone_key.csv (prediksi model) berdasar kolom id.
+- Mode Golden Set (kompatibilitas): membaca satu CSV (kolom: title, label_benar).
+- Menghasilkan Confusion Matrix 3x3, Akurasi Global, Precision, Recall, F1 per kelas,
+  Recall Negatif terpisah, dan pembanding baseline "selalu Netral".
 """
 
 from __future__ import annotations
@@ -21,6 +23,86 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from src.tone_classifier import classify_tone_batch, classify_tone_fallback
 
 CLASSES = ["Positif", "Netral", "Negatif"]
+DEFAULT_BLIND_PATH = Path("data/label_tone_blind.csv")
+DEFAULT_KEY_PATH = Path("data/label_tone_key.csv")
+
+
+def _norm_tone(val: str | None) -> str:
+    s = (val or "").strip().capitalize()
+    return s if s in CLASSES else ""
+
+
+def load_blind_and_key(
+    blind_path: str | Path = DEFAULT_BLIND_PATH,
+    key_path: str | Path = DEFAULT_KEY_PATH,
+) -> tuple[list[dict], list[dict], dict]:
+    """
+    Membaca file blind (label manusia) dan file key (output model), dicocokkan lewat kolom id.
+    Hanya baris dengan tone_manusia terisi valid yang masuk ke evaluasi.
+    """
+    bp = Path(blind_path)
+    kp = Path(key_path)
+    if not bp.exists():
+        raise FileNotFoundError(f"File blind tidak ditemukan: {bp}")
+    if not kp.exists():
+        raise FileNotFoundError(f"File key tidak ditemukan: {kp}")
+
+    key_by_id: dict[str, dict] = {}
+    with open(kp, mode="r", encoding="utf-8-sig") as f:
+        for row in csv.DictReader(f):
+            rid = (row.get("id") or "").strip()
+            if rid:
+                key_by_id[rid] = {
+                    "id": rid,
+                    "tone": _norm_tone(row.get("tone_model")) or "Netral",
+                    "kategori_K_model": (row.get("kategori_K_model") or "").strip().upper(),
+                    "alasan": (row.get("alasan_tone") or "").strip(),
+                }
+
+    records: list[dict] = []
+    predictions: list[dict] = []
+    total_blind = 0
+    unlabeled = 0
+    invalid_labels = 0
+    missing_in_key = 0
+
+    with open(bp, mode="r", encoding="utf-8-sig") as f:
+        for row_idx, row in enumerate(csv.DictReader(f), start=2):
+            rid = (row.get("id") or "").strip()
+            judul = (row.get("judul") or row.get("title") or "").strip()
+            if not rid and not judul:
+                continue
+            total_blind += 1
+            raw_human = (row.get("tone_manusia") or "").strip()
+            if not raw_human:
+                unlabeled += 1
+                continue
+            human_tone = _norm_tone(raw_human)
+            if not human_tone:
+                invalid_labels += 1
+                print(f"[Warning] Baris {row_idx} (id={rid}): tone_manusia '{raw_human}' tidak valid, dilewati.", file=sys.stderr)
+                continue
+            if rid not in key_by_id:
+                missing_in_key += 1
+                print(f"[Warning] Baris {row_idx}: id '{rid}' tidak ditemukan di {kp}, dilewati.", file=sys.stderr)
+                continue
+
+            records.append({
+                "id": rid,
+                "title": judul,
+                "label_benar": human_tone,
+                "kategori_K": (row.get("kategori_K") or "").strip().upper(),
+            })
+            predictions.append(key_by_id[rid])
+
+    meta = {
+        "total_blind_rows": total_blind,
+        "labeled_rows": len(records),
+        "unlabeled_rows": unlabeled,
+        "invalid_labels": invalid_labels,
+        "missing_in_key": missing_in_key,
+    }
+    return records, predictions, meta
 
 
 def load_golden_set(csv_path: str | Path) -> list[dict]:
@@ -116,19 +198,49 @@ def evaluate_predictions(records: list[dict], predictions: list[dict]) -> dict:
             "f1": f1,
         }
 
-    # Analisis bias negatif
+    # Analisis bias negatif & metrik ringkas
     actual_neg = actual_counts["Negatif"]
     pred_neg = pred_counts["Negatif"]
     pct_actual_neg = (actual_neg / total * 100.0) if total > 0 else 0.0
     pct_pred_neg = (pred_neg / total * 100.0) if total > 0 else 0.0
     neg_ratio = (pred_neg / actual_neg) if actual_neg > 0 else (0.0 if pred_neg == 0 else float("inf"))
+    macro_f1 = sum(class_metrics[c]["f1"] for c in CLASSES) / len(CLASSES)
+    recall_negatif = class_metrics["Negatif"]["recall"]
+
+    # Baseline "selalu Netral" pada himpunan yang sama
+    neutral_correct = actual_counts["Netral"]
+    neutral_acc = (neutral_correct / total * 100.0) if total > 0 else 0.0
+    neutral_prec = neutral_acc
+    neutral_rec = 100.0 if neutral_correct > 0 else 0.0
+    neutral_f1 = (2 * neutral_prec * neutral_rec / (neutral_prec + neutral_rec)) if (neutral_prec + neutral_rec) > 0 else 0.0
+    baseline_always_neutral = {
+        "correct": neutral_correct,
+        "accuracy": neutral_acc,
+        "macro_f1": neutral_f1 / len(CLASSES),
+        "recall_negatif": 0.0,
+        "netral_f1": neutral_f1,
+    }
+
+    # Kesesuaian kategori K (bila manusia & key sama-sama mengisi K1-K4)
+    k_pairs = [
+        (r.get("kategori_K", ""), p.get("kategori_K_model", ""))
+        for r, p in zip(records, predictions)
+        if r.get("kategori_K") and p.get("kategori_K_model")
+    ]
+    k_match = sum(1 for a, b in k_pairs if a == b)
 
     return {
         "total": total,
         "correct": correct,
         "accuracy": accuracy,
+        "macro_f1": macro_f1,
+        "recall_negatif": recall_negatif,
         "confusion_matrix": cm,
         "class_metrics": class_metrics,
+        "baseline_always_neutral": baseline_always_neutral,
+        "k_evaluated": len(k_pairs),
+        "k_correct": k_match,
+        "k_accuracy": (k_match / len(k_pairs) * 100.0) if k_pairs else None,
         "pct_actual_neg": pct_actual_neg,
         "pct_pred_neg": pct_pred_neg,
         "neg_ratio": neg_ratio,
@@ -136,19 +248,36 @@ def evaluate_predictions(records: list[dict], predictions: list[dict]) -> dict:
     }
 
 
-def print_evaluation_report(results: dict, mode_label: str = "Fallback Rule-Based"):
-    total = results["total"]
+def print_evaluation_report(results: dict, mode_label: str = "Fallback Rule-Based", blind_meta: dict | None = None):
+    total = results.get("total", 0)
     if total == 0:
-        print("Tidak ada data untuk dievaluasi.")
+        if blind_meta is not None:
+            print("=" * 75)
+            print(f"LAPORAN EVALUASI TONE CLASSIFIER ({mode_label})")
+            print(
+                f"Belum ada label manusia terisi (0/{blind_meta['total_blind_rows']} baris). "
+                "Isi kolom 'tone_manusia' pada data/label_tone_blind.csv terlebih dahulu."
+            )
+            print("=" * 75)
+        else:
+            print("Tidak ada data untuk dievaluasi.")
         return
 
     cm = results["confusion_matrix"]
     cm_metrics = results["class_metrics"]
+    base = results["baseline_always_neutral"]
 
     print("=" * 75)
     print(f"LAPORAN EVALUASI TONE CLASSIFIER ({mode_label})")
-    print(f"Total Dataset Golden: {total} artikel")
+    if blind_meta is not None:
+        print(f"Baris Berlabel      : {total}/{blind_meta['total_blind_rows']} baris (belum dilabel: {blind_meta['unlabeled_rows']})")
+    else:
+        print(f"Total Dataset       : {total} artikel")
     print(f"Akurasi Global      : {results['accuracy']:.2f}% ({results['correct']}/{total} benar)")
+    print(f"Macro F1 (3 kelas)  : {results['macro_f1']:.2f}%")
+    print(f"Recall Negatif      : {results['recall_negatif']:.2f}% (aktual Negatif: {cm_metrics['Negatif']['support']})")
+    if results.get("k_evaluated"):
+        print(f"Akurasi Kategori K  : {results['k_accuracy']:.2f}% ({results['k_correct']}/{results['k_evaluated']})")
     print("=" * 75)
 
     print("\n[1] CONFUSION MATRIX (Baris = Aktual / Kolom = Prediksi)")
@@ -175,11 +304,15 @@ def print_evaluation_report(results: dict, mode_label: str = "Fallback Rule-Base
         )
     print("-" * 75)
 
-    print("\n[3] ANALISIS BIAS NEGATIF")
+    print("\n[3] RECALL NEGATIF & BASELINE 'SELALU NETRAL'")
     print("-" * 75)
-    print(f"Persentase Sebenarnya Negatif : {results['pct_actual_neg']:.1f}%")
-    print(f"Persentase Prediksi Negatif   : {results['pct_pred_neg']:.1f}%")
-    print(f"Rasio Prediksi vs Sebenarnya  : {results['neg_ratio']:.2f}x", end="")
+    print(f"Recall Negatif (Model)           : {results['recall_negatif']:.2f}% (aktual={cm_metrics['Negatif']['support']}, prediksi={cm_metrics['Negatif']['predicted_count']})")
+    print(f"Baseline Selalu Netral - Akurasi : {base['accuracy']:.2f}% ({base['correct']}/{total}) | selisih model: {results['accuracy'] - base['accuracy']:+.2f} pp")
+    print(f"Baseline Selalu Netral - MacroF1 : {base['macro_f1']:.2f}% | selisih model: {results['macro_f1'] - base['macro_f1']:+.2f} pp")
+    print(f"Baseline Selalu Netral - RecNeg  : {base['recall_negatif']:.2f}%")
+    print(f"Persentase Sebenarnya Negatif    : {results['pct_actual_neg']:.1f}%")
+    print(f"Persentase Prediksi Negatif      : {results['pct_pred_neg']:.1f}%")
+    print(f"Rasio Prediksi vs Sebenarnya     : {results['neg_ratio']:.2f}x", end="")
     if 0.9 <= results["neg_ratio"] <= 1.1:
         print(" (Ideal / Seimbang)")
     elif results["neg_ratio"] > 1.1:
@@ -198,17 +331,38 @@ def print_evaluation_report(results: dict, mode_label: str = "Fallback Rule-Base
             print(f"   Alasan   : {m['alasan']}")
             print("-" * 75)
     else:
-        print("\n[4] DAFTAR SALAH PREDIKSI: 0 artikel (100% Sempurna pada Golden Set)")
+        print("\n[4] DAFTAR SALAH PREDIKSI: 0 artikel")
     print("=" * 75 + "\n")
 
 
-def main():
-    parser = argparse.ArgumentParser(description="Evaluasi Tone Classifier terhadap Golden Set")
-    parser.add_argument("csv_path", nargs="?", default="data/golden_tone_dataset.csv", help="Path file CSV golden set")
-    parser.add_argument("--use-ai", action="store_true", help="Gunakan Gemini API (memerlukan GEMINI_API_KEY)")
-    args = parser.parse_args()
+def main(argv: list[str] | None = None):
+    parser = argparse.ArgumentParser(description="Evaluasi Tone Classifier (Blind+Key atau Golden Set)")
+    parser.add_argument("csv_path", nargs="?", default=None, help="Path file CSV golden set (mode legacy)")
+    parser.add_argument("--blind", default=None, help="Path file blind berlabel manusia (default: data/label_tone_blind.csv)")
+    parser.add_argument("--key", default=None, help="Path file key prediksi model (default: data/label_tone_key.csv)")
+    parser.add_argument("--use-ai", action="store_true", help="Gunakan Gemini API (khusus mode golden set legacy)")
+    args = parser.parse_args(argv)
 
-    records = load_golden_set(args.csv_path)
+    use_blind_mode = (
+        args.blind is not None
+        or args.key is not None
+        or (args.csv_path is None and DEFAULT_BLIND_PATH.exists() and DEFAULT_KEY_PATH.exists())
+    )
+
+    if use_blind_mode:
+        blind_path = Path(args.blind) if args.blind else DEFAULT_BLIND_PATH
+        key_path = Path(args.key) if args.key else DEFAULT_KEY_PATH
+        records, predictions, meta = load_blind_and_key(blind_path, key_path)
+        results = evaluate_predictions(records, predictions)
+        print_evaluation_report(
+            results,
+            mode_label=f"Blind vs Key ({blind_path.name} vs {key_path.name})",
+            blind_meta=meta,
+        )
+        return
+
+    csv_path = args.csv_path or "data/golden_tone_dataset.csv"
+    records = load_golden_set(csv_path)
 
     if args.use_ai:
         api_key = os.getenv("GEMINI_API_KEY", "").strip()
@@ -223,7 +377,6 @@ def main():
         use_ai_flag = False
         mode_label = "Fallback Rule-Based"
 
-    # Prediksi
     if use_ai_flag:
         predictions = classify_tone_batch(records, use_ai=True, ensure_consistency=False)
     else:

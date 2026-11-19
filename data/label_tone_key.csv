@@ -1,0 +1,87 @@
+﻿id,tone_model,kategori_K_model,alasan_tone
+BLD-001,Positif,K1,Kemenperin melalui Menperin menjadi pelaku utama menerbitkan surat dukungan resmi untuk program strategis industri.
+BLD-002,Positif,K1,"Menperin tampil sebagai narasumber utama yang memberikan tanggapan dan penjelasan resmi institusi, sehingga dikategorikan Positif (P1)."
+BLD-003,Netral,K3,"Permintaan perlindungan ditujukan kepada ""pemerintah"" secara umum tanpa menyebut Kemenperin secara langsung dan tanpa serangan terhadap kebijakan Kemenperin."
+BLD-004,Netral,K4,"Berita mengenai hilirisasi dan peresmian pabrik oleh Pemprov Sumbar tidak berkaitan langsung dengan Kemenperin, masuk K4 dan Netral."
+BLD-005,Netral,K4,"Berita membahas dorongan DPR kepada perusahaan swasta tanpa menyebut Kemenperin, sehingga masuk kategori K4 dan Netral."
+BLD-006,Netral,K3,"Berita tentang partisipasi swasta di pameran global menyebut dukungan pemerintah secara umum tanpa mengarah langsung ke Kemenperin, masuk K3 netral (Ne2)."
+BLD-007,Netral,K3,Berita memaparkan keberhasilan program strategis pemerintah termasuk energi dan industri tanpa ada serangan ke Kemenperin.
+BLD-008,Netral,K4,"Berita membahas kerja sama Indonesia-Prancis di sektor kakao tanpa menyebut Kemenperin, sehingga tidak berkaitan dan bernilai Netral."
+BLD-009,Netral,K3,"Permintaan perlindungan ditujukan kepada ""pemerintah"" secara umum tanpa menyebut Kemenperin secara langsung dan tanpa serangan terhadap kebijakan Kemenperin."
+BLD-010,Positif,K1,"Kemenperin melalui Menperin menjadi narasumber utama yang merespons isu fatwa tanpa adanya serangan langsung ke institusi, memenuhi indikator Positif (P1)."
+BLD-011,Netral,K3,Berita membahas dampak kebijakan energi dan komoditas terhadap pasar global tanpa ada sorotan atau serangan langsung kepada Kemenperin.
+BLD-012,Netral,K3,Berita membahas dampak kebijakan energi dan komoditas terhadap pasar global tanpa ada sorotan atau serangan langsung kepada Kemenperin.
+BLD-013,Positif,K1,Kemenperin melalui Menperin menjadi pelaku utama menerbitkan surat dukungan resmi untuk program strategis industri.
+BLD-014,Netral,K3,Berita membahas wacana pelarangan vape dan kajian ilmiah serta hukum tanpa menyebut atau menyerang Kemenperin.
+BLD-015,Netral,K3,"Permintaan perlindungan ditujukan kepada ""pemerintah"" secara umum tanpa menyebut Kemenperin secara langsung dan tanpa serangan terhadap kebijakan Kemenperin."
+BLD-016,Netral,K3,Berita menyoroti penindakan rokok ilegal dan pemanfaatan DBHCHT oleh Pemkot Semarang serta Bea Cukai tanpa melibatkan institusi Kemenperin secara langsung.
+BLD-017,Netral,K3,"Isu pertumbuhan industri dan devisa terkait kepentingan Kemenperin namun tanpa menyebut institusi secara langsung, masuk Ne2 dan Netral."
+BLD-018,Netral,K4,Berita menyoroti kinerja ekspor sawit dan penerimaan bea cukai di Sumatera Utara tanpa ada kaitan langsung dengan Kemenperin.
+BLD-019,Netral,K4,Berita membahas kebijakan biaya layanan PT Danantara Sumber Daya Indonesia (DSI) dan tanggapan GAPKI tanpa melibatkan Kemenperin.
+BLD-020,Positif,K3,Berita mengangkat ekspor produk agroindustri olahan kelor yang sejalan dengan program hilirisasi dan ekspor Kemenperin tanpa ada serangan.
+BLD-021,Netral,K4,"Berita mengenai pameran industri F&B dan perusahaan swasta tanpa menyebut atau berkaitan langsung dengan Kemenperin, sehingga Netral."
+BLD-022,Positif,K1,"Kemenperin melalui pejabatnya menjadi narasumber utama yang menyampaikan dukungan terhadap keseimbangan regulasi industri vape, memenuhi indikator P1 (Positif)."
+BLD-023,Netral,K4,"Berita membahas tantangan produksi dan impor gula industri tanpa menyebut Kemenperin, sehingga dinilai Netral (K4)."
+BLD-024,Netral,K3,"Isu penurunan produksi sawit dan kebijakan B50 berkaitan dengan industri, namun tanpa menyebut Kemenperin secara langsung sehingga netral (Ne2 + A1)."
+BLD-025,Netral,K4,"Sorotan terhadap perbaikan standar ekspor porang dan tapioka melibatkan Karantina Jatim tanpa melibatkan Kemenperin, sehingga bernilai Netral sesuai A3."
+BLD-026,Positif,K1,"Menperin Sarmuji menjadi pelaku utama dalam pertemuan dengan APINDO membahas masalah industri, memenuhi kriteria P1 sebagai Positif."
+BLD-027,Netral,K3,Berita mengenai pameran industri plastik dan karet yang berkaitan dengan sektor binaan Kemenperin namun tidak menyebut Kemenperin secara langsung.
+BLD-028,Positif,K1,"Menperin memaparkan pertumbuhan industri pengolahan yang menonjolkan capaian positif sektor industri, memenuhi indikator Positif (P1)."
+BLD-029,Netral,K4,Berita mengenai pameran plastik dan karet internasional di Jakarta tidak menyebutkan Kemenperin sehingga dikategorikan Netral.
+BLD-030,Netral,K4,"Berita membahas hilirisasi rumput laut dan logistik cold chain oleh KKP tanpa keterlibatan Kemenperin, sehingga dinilai netral (K4)."
+BLD-031,Netral,K4,"Artikel menyoroti program bioenergi PTPN dan pernyataan Mendiktisaintek tanpa menyebut Kemenperin, sehingga dikategorikan netral (K4)."
+BLD-032,Netral,K4,Berita membahas pengembangan susu ikan oleh KKP tanpa menyebut atau melibatkan Kemenperin sehingga tidak berkaitan dengan Kemenperin.
+BLD-033,Netral,K3,Berita memaparkan keberhasilan program strategis pemerintah termasuk energi dan industri tanpa ada serangan ke Kemenperin.
+BLD-034,Netral,K3,"Berita mengulas isu industri rokok elektronik dan mengutip data Kemenperin tanpa menampilkan Kemenperin sebagai pelaku utama atau menyerangnya, sehingga masuk kategori Netral (Ne2)."
+BLD-035,Netral,K3,"Artikel membahas dorongan hilirisasi sawit oleh Pemprov Sumbar tanpa menyebut Kemenperin secara langsung, sehingga masuk kategori Netral (Ne2)."
+BLD-036,Netral,K4,"Berita mengenai kerja sama Pemprov Gorontalo dan PT Berdikari tidak berkaitan dengan Kemenperin, masuk Netral (K4)."
+BLD-037,Netral,K4,Berita membahas rapat internal Pemerintah Aceh mengenai potensi ekonomi daerah dan hilirisasi sawit tanpa melibatkan atau menyebut Kemenperin.
+BLD-038,Netral,K3,Wacana pelarangan vape dan dampaknya pada industri disorot secara umum tanpa menyasar atau menyerang kebijakan Kemenperin (Ne2 + A2).
+BLD-039,Netral,K3,"Pembangunan pabrik kelapa sawit berkaitan dengan industri agro namun Kemenperin tidak disebut secara langsung, dikategorikan Netral (Ne2)."
+BLD-040,Positif,K1,"Wamenperin menjadi narasumber utama yang menyampaikan proyeksi positif industri mamin dan fesyen, memenuhi indikator P1 Positif."
+BLD-041,Netral,K4,"Berita membahas sertifikasi emisi PTPN IV tanpa keterlibatan atau penyebutan Kemenperin, sehingga dikategorikan netral (K4)."
+BLD-042,Netral,K4,Berita membahas inovasi bahan baku dan pengembangan produk oleh perusahaan swasta di pameran tanpa menyebut atau berkaitan langsung dengan Kemenperin.
+BLD-043,Positif,K1,"Menperin menjadi narasumber utama menjelaskan kebijakan industri untuk menjaga pertumbuhan, masuk P1 dan Positif."
+BLD-044,Netral,K4,"Berita membahas pernyataan anggota DPR terkait pabrik pakan ternak BUMN tanpa menyebut Kemenperin, sehingga dinilai Netral karena tidak berkaitan langsung dengan Kemenperin."
+BLD-045,Netral,K4,"Berita membahas rencana pembangunan pabrik sawit oleh Koperasi Desa dan isu karhutla tanpa menyebut atau berkaitan langsung dengan Kemenperin, sehingga masuk K4 dan bernilai Netral."
+BLD-046,Netral,K3,"Isu biomassa sawit berkaitan dengan program industri agro namun Kemenperin tidak disebut secara langsung, dikategorikan Netral (Ne2)."
+BLD-047,Positif,K1,"Menperin menjadi narasumber utama yang mendorong hilirisasi sagu untuk mendukung eksistensi industri, sesuai indikator P1."
+BLD-048,Netral,K4,Berita membahas proyeksi pertumbuhan industri makanan hewan oleh pihak swasta tanpa keterkaitan langsung dengan kebijakan atau institusi Kemenperin.
+BLD-049,Netral,K3,"Berita membahas kebijakan EPR oleh KLH yang berkaitan dengan sektor industri secara umum tanpa menyebut institusi Kemenperin, dikategorikan Netral (Ne2)."
+BLD-050,Netral,K3,"Permintaan perlindungan ditujukan kepada ""pemerintah"" secara umum tanpa menyebut Kemenperin secara langsung dan tanpa serangan terhadap kebijakan Kemenperin."
+BLD-051,Positif,K1,"Menteri Perindustrian menjadi pihak utama yang berinteraksi dengan APINDO terkait isu industri, masuk dalam kategori P1 Positif."
+BLD-052,Netral,K4,"Artikel membahas apresiasi DPRD terhadap perusahaan air minum daerah di Trenggalek tanpa ada kaitan dengan kebijakan atau institusi Kemenperin (K4), sehingga bernilai Netral."
+BLD-053,Positif,K3,Berita memuat aspirasi asosiasi yang mengutip data Kemenperin guna mendukung eksistensi dan pentingnya perlindungan terhadap industri rokok elektrik.
+BLD-054,Positif,K1,"Pejabat Kemenperin menjadi narasumber utama yang menyampaikan penjelasan dan pembelaan kebijakan industri rokok elektronik, sehingga masuk kategori Positif (P1)."
+BLD-055,Positif,K1,Kemenperin melalui Menperin menjadi pelaku utama menerbitkan surat dukungan resmi untuk program strategis industri.
+BLD-056,Netral,K3,Isu tekanan pasokan sawit akibat El Nino berkaitan dengan sektor industri agro tetapi tidak menyebut Kemenperin dan tidak ada serangan.
+BLD-057,Netral,K4,"Berita kerja sama daerah dan badan usaha tidak menyebut Kemenperin sama sekali, sehingga dinilai Netral (K4)."
+BLD-058,Positif,K1,"Menperin menjadi pelaku utama dalam berita pembahasan hambatan industri, memenuhi indikator Positif (P1)."
+BLD-059,Netral,K4,"Berita membahas tantangan sawit dan biodiesel secara umum tanpa menyebut Kemenperin maupun kebijakan spesifiknya, sehingga dikategorikan Netral (K4)."
+BLD-060,Netral,K2,"Kemenperin disebut sekadar sebagai salah satu pihak yang akan memberikan keterangan di sidang MK, sehingga posisinya sebagai pelengkap (Ne1) dan bernada Netral."
+BLD-061,Netral,K4,Berita mengenai pengelolaan limbah POME oleh PTPN IV PalmCo tanpa menyebutkan Kemenperin sehingga dikategorikan Netral.
+BLD-062,Positif,K1,"Menperin menjadi pelaku utama yang mengungkap tantangan industri, masuk dalam kategori P1 sebagai Positif."
+BLD-063,Positif,K1,"Menperin menjadi narasumber utama yang menyampaikan komitmen kebijakan berbasis masalah nyata pelaku usaha untuk kepentingan industri, memenuhi indikator Positif (P1)."
+BLD-064,Positif,K1,"Menperin menjadi narasumber utama memastikan keberlanjutan kebijakan HGBT untuk industri, masuk P1 dan Positif."
+BLD-065,Netral,K4,"Artikel membahas peluncuran proyek cokelat IndoKAKAO oleh Kementerian Pembangunan Nasional dan Prancis tanpa menyebutkan Kemenperin, sehingga dikategorikan Netral (K4)."
+BLD-066,Netral,K4,Berita membahas agenda kunjungan Gubernur Maluku Utara terkait potensi kelapa dan daerah tanpa keterlibatan Kemenperin sehingga dikategorikan Netral.
+BLD-067,Positif,K3,Berita memuat pernyataan pemerintah terkait penguatan ISPO dan hilirisasi sawit yang sejalan dengan kepentingan sektor industri.
+BLD-068,Netral,K3,Kenaikan harga bahan baku industri mamin dibahas secara umum oleh asosiasi tanpa menyerang atau melibatkan Kemenperin (Ne2 + A2).
+BLD-069,Netral,K4,Berita membahas rapat internal Pemerintah Aceh mengenai potensi ekonomi daerah dan hilirisasi sawit tanpa melibatkan atau menyebut Kemenperin.
+BLD-070,Netral,K4,Berita mengulas kinerja emiten CPO dan tantangan global tanpa menyebut atau berkaitan langsung dengan Kemenperin.
+BLD-071,Netral,K4,"Berita sepenuhnya membahas program susu ikan dan kebijakan di Kementerian Kelautan dan Perikanan (KKP) tanpa melibatkan Kemenperin, sehingga dinilai Netral."
+BLD-072,Netral,K4,"Berita mengulas pengembangan industri cokelat olahan 'Cokbang' di Pulau Sabang tanpa menyebut atau melibatkan Kemenperin, sehingga dikategorikan Netral (K4)."
+BLD-073,Netral,K4,"Berita membahas tindakan Karantina Papua Tengah terkait pengawasan CPO tanpa melibatkan Kemenperin, sehingga dinilai Netral."
+BLD-074,Netral,K4,"Artikel opini mengenai Hari Pahlawan dan minyak goreng tidak menyebut Kemenperin, sehingga masuk Netral (K4)."
+BLD-075,Positif,K1,"Kemenperin menjadi narasumber atau pelaku utama yang mengungkapkan tantangan industri manufaktur, memenuhi indikator K1 dengan sikap mendukung eksistensi institusi (P1)."
+BLD-076,Positif,K1,"Kemenperin menjadi pelaku utama yang menetapkan fokus pengembangan industri minyak atsiri, memenuhi kriteria Positif (P1)."
+BLD-077,Netral,K3,"Berita mengenai promosi kopi oleh swasta di pameran luar negeri tidak menyebut Kemenperin secara langsung, namun berkaitan dengan sektor industri sehingga dikategorikan K3 netral (Ne2)."
+BLD-078,Positif,K1,Kemenperin melalui Menperin menjadi pelaku utama menerbitkan surat dukungan resmi untuk program strategis industri.
+BLD-079,Netral,K3,"Permintaan perlindungan ditujukan kepada ""pemerintah"" secara umum tanpa menyebut Kemenperin secara langsung dan tanpa serangan terhadap kebijakan Kemenperin."
+BLD-080,Netral,K4,Berita mengenai keikutsertaan PTPN IV PalmCo dalam pameran teknologi di Surabaya tidak berkaitan langsung dengan Kemenperin sehingga dikategorikan Netral.
+BLD-081,Positif,K1,"Menteri Perindustrian menjadi narasumber/pelaku utama dalam kegiatan Sago Business Forum yang diinisiasi Kemenperin, masuk indikator P1 Positif."
+BLD-082,Positif,K1,"Menperin menjadi narasumber utama yang memberikan respons resmi terkait fatwa vape, memuat aktivitas dan pernyataan institusi, sehingga bernilai Positif (P1)."
+BLD-083,Netral,K4,"Persaingan komoditas kakao AS antara Indonesia dan Malaysia tidak menyebut atau berkaitan langsung dengan Kemenperin, masuk K4 dan Netral."
+BLD-084,Netral,K4,Berita mengulas pameran perdagangan makanan dan minuman di PIK 2 tanpa kaitan langsung dengan institusi Kemenperin.
+BLD-085,Netral,K4,Berita membahas kebijakan biaya layanan PT Danantara Sumber Daya Indonesia (DSI) dan tanggapan GAPKI tanpa melibatkan Kemenperin.
+BLD-086,Netral,K3,Berita membahas wacana pelarangan vape dan kajian ilmiah serta hukum tanpa menyebut atau menyerang Kemenperin.
