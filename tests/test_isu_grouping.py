@@ -708,3 +708,226 @@ def test_direct_crawl_portals_includes_www_kemenperin_in_main(monkeypatch):
     assert any(q["link"].startswith("https://www.kemenperin.go.id/") for q in queue)
 
 
+def test_isu_registry_workflow_roundtrip_and_restore_priority(tmp_path):
+    """Round-trip IsuRegistry -> persist (format branch data) -> restore -> IsuRegistry sama persis."""
+    import json
+    from scripts.isu_registry_state import persist_isu_registry, restore_isu_registry
+
+    src_reg = tmp_path / "run_local" / "isu_registry.json"
+    branch_reg = tmp_path / "branch_data" / "pipeline_state" / "isu_registry.json"
+    restored_reg = tmp_path / "next_run" / "hasil_scrapping" / "isu_registry.json"
+
+    reg = IsuRegistry(filepath=src_reg)
+    reg.issues = {
+        "rilis_001": {
+            "isu_id": "rilis_001",
+            "isu": "Menperin Perkuat Hilirisasi Industri Agro Nasional",
+            "sumber_isu": "rilis",
+            "tanggal_awal": "2026-10-01",
+            "tanggal_terakhir": "2026-10-01",
+            "nama_acara": "Rilis Resmi Kemenperin",
+            "entitas": ["kemenperin", "agro"],
+            "contoh_judul": ["Menperin Perkuat Hilirisasi Industri Agro Nasional"],
+            "jumlah_berita": 3,
+        },
+        "klaster_aktif": {
+            "isu_id": "klaster_aktif",
+            "isu": "Industri Rokok Elektrik Minta Perlindungan Pemerintah",
+            "sumber_isu": "klaster",
+            "tanggal_awal": "2026-11-17",
+            "tanggal_terakhir": "2026-11-17",
+            "nama_acara": "",
+            "entitas": ["rokok elektrik"],
+            "contoh_judul": ["Industri Rokok Elektronik Minta Pemerintah Lindungi Tenaga Kerja"],
+            "jumlah_berita": 5,
+        },
+        "klaster_expired": {
+            "isu_id": "klaster_expired",
+            "isu": "Isu Lama Lebih dari 14 Hari",
+            "sumber_isu": "klaster",
+            "tanggal_awal": "2026-10-20",
+            "tanggal_terakhir": "2026-10-20",
+            "nama_acara": "",
+            "entitas": ["lama"],
+            "contoh_judul": ["Isu Lama Lebih dari 14 Hari"],
+            "jumlah_berita": 1,
+        },
+    }
+    reg.save()
+
+    # Pastikan IsuRegistry.save() menulis updated_at
+    saved_raw = json.loads(src_reg.read_text(encoding="utf-8"))
+    assert saved_raw.get("updated_at"), "IsuRegistry.save() harus menulis updated_at"
+
+    # Persist: pangkas klaster > 14 hari dari end_date, pertahankan rilis & klaster aktif
+    active_cnt, pruned_cnt = persist_isu_registry(
+        src=src_reg,
+        dst=branch_reg,
+        end_date="2026-11-18",
+        updated_at="2026-11-18 03:20:00",
+    )
+    assert active_cnt == 2
+    assert pruned_cnt == 1
+    assert not list(branch_reg.parent.glob("*.tmp"))
+
+    # Restore run normal (cache kosong -> ambil dari branch data)
+    assert restore_isu_registry(branch_reg, restored_reg) == "branch"
+    loaded = IsuRegistry(filepath=restored_reg)
+    expected_issues = {k: v for k, v in reg.issues.items() if k != "klaster_expired"}
+    assert loaded.issues == expected_issues
+
+    # Prioritas: cache lebih lama TIDAK boleh menimpa branch data
+    stale_cache = tmp_path / "stale_cache.json"
+    stale_cache.write_text(
+        json.dumps({"updated_at": "2026-11-17 03:00:00", "issues": [{"isu_id": "stale", "isu": "Stale"}]}),
+        encoding="utf-8",
+    )
+    assert restore_isu_registry(branch_reg, stale_cache) == "branch"
+    assert IsuRegistry(filepath=stale_cache).issues == expected_issues
+
+    # Prioritas: timestamp sama -> branch data (Lapis Utama) menang
+    tie_cache = tmp_path / "tie_cache.json"
+    tie_cache.write_text(
+        json.dumps({"updated_at": "2026-11-18 03:20:00", "issues": [{"isu_id": "tie", "isu": "Tie"}]}),
+        encoding="utf-8",
+    )
+    assert restore_isu_registry(branch_reg, tie_cache) == "branch"
+    assert IsuRegistry(filepath=tie_cache).issues == expected_issues
+
+    # Prioritas: cache secara ketat lebih baru -> dipertahankan
+    newer_cache = tmp_path / "newer_cache.json"
+    newer_issues = [{"isu_id": "klaster_newer", "isu": "Lebih Baru", "sumber_isu": "klaster", "tanggal_terakhir": "2026-11-19"}]
+    newer_cache.write_text(
+        json.dumps({"updated_at": "2026-11-19 03:20:00", "issues": newer_issues}),
+        encoding="utf-8",
+    )
+    assert restore_isu_registry(branch_reg, newer_cache) == "cache"
+    assert list(IsuRegistry(filepath=newer_cache).issues.keys()) == ["klaster_newer"]
+
+    # Run pertama: keduanya tidak ada -> fresh tanpa error
+    assert restore_isu_registry(tmp_path / "missing_b.json", tmp_path / "missing_c.json") == "fresh"
+
+
+def test_isu_registry_local_git_restore_persist_simulation(tmp_path):
+    """Simulasi urutan restore dan persist di git repo lokal sementara (tanpa remote asli)."""
+    import json
+    import shutil
+    import subprocess
+    import sys
+    from pathlib import Path
+
+    script_path = Path(__file__).resolve().parent.parent / "scripts" / "isu_registry_state.py"
+    remote = tmp_path / "origin.git"
+    work = tmp_path / "work"
+
+    def git(*args, cwd=work):
+        res = subprocess.run(["git", *args], cwd=str(cwd), capture_output=True, text=True)
+        assert res.returncode == 0, f"git {' '.join(args)} gagal:\nSTDOUT:{res.stdout}\nSTDERR:{res.stderr}"
+        return res.stdout.strip()
+
+    subprocess.run(["git", "init", "--bare", str(remote)], check=True, capture_output=True)
+    subprocess.run(["git", "clone", str(remote), str(work)], check=True, capture_output=True)
+    git("config", "user.name", "test-bot")
+    git("config", "user.email", "test@local")
+    git("checkout", "-b", "main")
+    (work / "README.md").write_text("init\n", encoding="utf-8")
+    git("add", "README.md")
+    git("commit", "-m", "init main")
+    git("push", "-u", "origin", "main")
+
+    # Buat branch data awal (belum ada pipeline_state/isu_registry.json)
+    git("checkout", "-b", "data")
+    (work / "data_export").mkdir()
+    (work / "data_export" / "runs.json").write_text("[]", encoding="utf-8")
+    git("add", "data_export/runs.json")
+    git("commit", "-m", "init data branch")
+    git("push", "-u", "origin", "data")
+    git("checkout", "main")
+
+    # --- RUN 1: Pertama kali (belum ada isu_registry.json di branch data) ---
+    git("fetch", "origin", "data")
+    subprocess.run(["git", "checkout", "origin/data", "--", "pipeline_state"], cwd=str(work), capture_output=True)
+    res1 = subprocess.run(
+        [sys.executable, str(script_path), "restore", "--branch-reg", "pipeline_state/isu_registry.json", "--cache-reg", "hasil_scrapping/isu_registry.json"],
+        cwd=str(work), capture_output=True, text=True, check=True,
+    )
+    assert "run pertama" in res1.stdout.lower()
+
+    reg1 = IsuRegistry(filepath=work / "hasil_scrapping" / "isu_registry.json")
+    reg1.issues = {
+        "klaster_run1": {"isu_id": "klaster_run1", "isu": "Isu Run 1", "sumber_isu": "klaster", "tanggal_awal": "2026-11-17", "tanggal_terakhir": "2026-11-17"},
+        "klaster_lama": {"isu_id": "klaster_lama", "isu": "Isu Expired", "sumber_isu": "klaster", "tanggal_awal": "2026-10-15", "tanggal_terakhir": "2026-10-15"},
+    }
+    reg1.save()
+
+    staging = tmp_path / "agro_sync" / "pipeline_state" / "isu_registry.json"
+    subprocess.run(
+        [sys.executable, str(script_path), "persist", "--src", "hasil_scrapping/isu_registry.json", "--dst", str(staging), "--end-date", "2026-11-17"],
+        cwd=str(work), capture_output=True, text=True, check=True,
+    )
+    git("checkout", "-B", "data", "origin/data")
+    (work / "pipeline_state").mkdir(exist_ok=True)
+    shutil.copy2(staging, work / "pipeline_state" / "isu_registry.json")
+    git("add", "pipeline_state/isu_registry.json")
+    git("commit", "-m", "chore(data): persist run 1")
+    git("push", "origin", "data")
+    git("checkout", "main")
+
+    # --- RUN 2: Runner baru dengan cache lama -> branch data harus menang ---
+    work2 = tmp_path / "work2"
+    subprocess.run(["git", "clone", "-b", "main", str(remote), str(work2)], check=True, capture_output=True)
+    git("config", "user.name", "test-bot", cwd=work2)
+    git("config", "user.email", "test@local", cwd=work2)
+    (work2 / "hasil_scrapping").mkdir(parents=True, exist_ok=True)
+    (work2 / "hasil_scrapping" / "isu_registry.json").write_text(
+        json.dumps({"updated_at": "2026-11-16 01:00:00", "issues": [{"isu_id": "stale_cache", "isu": "Cache Usang"}]}),
+        encoding="utf-8",
+    )
+    git("fetch", "origin", "data", cwd=work2)
+    git("checkout", "origin/data", "--", "pipeline_state", cwd=work2)
+    git("reset", "-q", "HEAD", "--", "pipeline_state", cwd=work2)
+    # Pastikan main index tidak tercemar oleh pipeline_state
+    assert git("diff", "--staged", "--name-only", cwd=work2) == ""
+
+    res2 = subprocess.run(
+        [sys.executable, str(script_path), "restore", "--branch-reg", "pipeline_state/isu_registry.json", "--cache-reg", "hasil_scrapping/isu_registry.json"],
+        cwd=str(work2), capture_output=True, text=True, check=True,
+    )
+    assert "dipulihkan dari branch data" in res2.stdout.lower()
+
+    reg2 = IsuRegistry(filepath=work2 / "hasil_scrapping" / "isu_registry.json")
+    assert set(reg2.issues.keys()) == {"klaster_run1"}
+
+    reg2.issues["klaster_run2"] = {
+        "isu_id": "klaster_run2", "isu": "Isu Run 2", "sumber_isu": "klaster", "tanggal_awal": "2026-11-18", "tanggal_terakhir": "2026-11-18"
+    }
+    reg2.save()
+
+    staging2 = tmp_path / "agro_sync2" / "pipeline_state" / "isu_registry.json"
+    subprocess.run(
+        [sys.executable, str(script_path), "persist", "--src", "hasil_scrapping/isu_registry.json", "--dst", str(staging2), "--end-date", "2026-11-18"],
+        cwd=str(work2), capture_output=True, text=True, check=True,
+    )
+    shutil.rmtree(work2 / "pipeline_state")
+    git("checkout", "-B", "data", "origin/data", cwd=work2)
+    (work2 / "pipeline_state").mkdir(exist_ok=True)
+    shutil.copy2(staging2, work2 / "pipeline_state" / "isu_registry.json")
+    git("add", "pipeline_state/isu_registry.json", cwd=work2)
+    git("commit", "-m", "chore(data): persist run 2", cwd=work2)
+    git("push", "origin", "data", cwd=work2)
+
+    # Verifikasi isi akhir di remote lokal origin/data dan pastikan branch main bersih dari pipeline_state
+    remote_json = json.loads(git("show", "origin/data:pipeline_state/isu_registry.json", cwd=work2))
+    assert {it["isu_id"] for it in remote_json["issues"]} == {"klaster_run1", "klaster_run2"}
+    main_files = git("ls-tree", "-r", "--name-only", "origin/main", cwd=work2).splitlines()
+    assert not any(f.startswith("pipeline_state/") for f in main_files)
+
+    # --- RUN 3: Simulasi run gagal (persist dilewati, data branch tetap utuh dari Run 2) ---
+    run_outcome = "failure"
+    if run_outcome == "success":
+        raise AssertionError("Persist tidak boleh berjalan saat run gagal")
+    after_fail_json = json.loads(git("show", "origin/data:pipeline_state/isu_registry.json", cwd=work2))
+    assert after_fail_json == remote_json
+
+
+

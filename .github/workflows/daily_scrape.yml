@@ -98,37 +98,9 @@ jobs:
               fi
             done
             # Pilih isu_registry.json paling baru; bila timestamp sama/tidak terbaca, branch data (Lapis Utama) selalu menang atas cache
-            python - <<'PY'
-          import json, os, shutil, tempfile
-          from pathlib import Path
-
-          branch_reg = Path("pipeline_state/isu_registry.json")
-          cache_reg = Path("hasil_scrapping/isu_registry.json")
-
-          def _read_ts(p: Path) -> tuple[bool, str]:
-              if not p.exists():
-                  return False, ""
-              try:
-                  d = json.loads(p.read_text(encoding="utf-8"))
-                  if isinstance(d, dict) and isinstance(d.get("issues"), list):
-                      return True, str(d.get("updated_at") or "").strip()
-              except Exception:
-                  pass
-              return False, ""
-
-          b_ok, b_ts = _read_ts(branch_reg)
-          c_ok, c_ts = _read_ts(cache_reg)
-          if b_ok and (not c_ok or not c_ts or b_ts >= c_ts):
-              fd, tmp_p = tempfile.mkstemp(prefix=".isu_registry_", suffix=".tmp", dir=str(cache_reg.parent))
-              os.close(fd)
-              shutil.copy2(branch_reg, tmp_p)
-              os.replace(tmp_p, cache_reg)
-              print(f"[Registry] Dipulihkan dari branch data (updated_at={b_ts or '-'}, prioritas utama).")
-          elif c_ok:
-              print(f"[Registry] Mempertahankan isu_registry.json dari actions/cache (lebih baru: {c_ts} > {b_ts or 'kosong'}).")
-          else:
-              print("[Registry] isu_registry.json belum ada (run pertama) - mulai dari registri baru.")
-          PY
+            python scripts/isu_registry_state.py restore \
+              --branch-reg pipeline_state/isu_registry.json \
+              --cache-reg hasil_scrapping/isu_registry.json
             cp -r pipeline_state/snapshots/* hasil_scrapping/snapshots/ 2>/dev/null || true
           else
             echo "[Registry] Branch data belum ada (run pertama) - memakai fallback actions/cache bila ada atau mulai baru."
@@ -272,32 +244,10 @@ jobs:
 
           # Simpan hasil_scrapping/isu_registry.json secara atomik + pangkas klaster >14 hari HANYA jika run sukses
           if [ "${{ steps.run_scraper.outcome }}" = "success" ] && [ -f "hasil_scrapping/isu_registry.json" ]; then
-            END_DATE="${{ steps.target_dates.outputs.end_date }}" python - <<'PY'
-          import datetime, json, os, tempfile
-          from pathlib import Path
-          from src.isu_grouping import IsuRegistry
-
-          src = Path("hasil_scrapping/isu_registry.json")
-          dst = Path("/tmp/agro_sync/pipeline_state/isu_registry.json")
-          dst.parent.mkdir(parents=True, exist_ok=True)
-          reg = IsuRegistry(filepath=src)
-          ref_d = datetime.date.fromisoformat(os.environ["END_DATE"])
-          pruned = reg.prune_expired(ref_d)
-          payload = {
-              "updated_at": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-              "issues": list(reg.issues.values()),
-          }
-          fd, tmp_path = tempfile.mkstemp(prefix=".isu_registry_", suffix=".tmp", dir=str(dst.parent))
-          try:
-              with os.fdopen(fd, "w", encoding="utf-8") as fh:
-                  json.dump(payload, fh, ensure_ascii=False, indent=2)
-              os.replace(tmp_path, dst)
-              print(f"[Registry] Disiapkan untuk persist atomik ({len(reg.issues)} isu aktif, {pruned} klaster >14 hari dipangkas).")
-          except Exception:
-              if os.path.exists(tmp_path):
-                  os.remove(tmp_path)
-              raise
-          PY
+            python scripts/isu_registry_state.py persist \
+              --src hasil_scrapping/isu_registry.json \
+              --dst /tmp/agro_sync/pipeline_state/isu_registry.json \
+              --end-date "${{ steps.target_dates.outputs.end_date }}"
           else
             echo "[Registry] Melewati penyimpanan isu_registry.json (outcome=${{ steps.run_scraper.outcome }}, ada=$([ -f hasil_scrapping/isu_registry.json ] && echo ya || echo tidak))."
           fi
