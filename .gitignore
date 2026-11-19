@@ -21,6 +21,9 @@ scratch/
 
 # Output Data Hasil Scraping & Backup Lokal
 hasil_scrapping/
+cache_decode.json
+cache_decode_failed.json
+verification_output/
 backup_sebelum_web/
 screenshots/
 web/screenshots/

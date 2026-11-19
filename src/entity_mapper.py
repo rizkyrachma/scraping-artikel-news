@@ -70,7 +70,7 @@ def find_spokespersons(
     if not text:
         return "", "", "-"
 
-    from config import load_spokesperson_details
+    from src.config import load_spokesperson_details
     details = load_spokesperson_details()
 
     matches = []

@@ -4,6 +4,8 @@ Pengambilan data Google News RSS feed, verifikasi denylist domain & ekstensi ase
 """
 
 import os
+import re
+import sys
 import json
 import time
 import random
@@ -12,8 +14,8 @@ from datetime import date, datetime
 from urllib.parse import urlparse, parse_qs
 import feedparser  # type: ignore
 
-from query_builder import build_media_query, build_gov_query, build_rss_url
-from config import (
+from src.query_builder import build_media_query, build_gov_query, build_rss_url
+from src.config import (
     MARKETPLACE_BLOCKLIST,
     ASSET_HOST_BLOCKLIST,
     SOCIAL_MEDIA_BLOCKLIST,
@@ -23,7 +25,7 @@ from config import (
     GOV_DOMAIN_SUFFIX,
     get_date_folder,
 )
-from relevance_filter import is_likely_relevant
+from src.relevance_filter import is_likely_relevant
 from rapidfuzz import fuzz
 
 
@@ -72,7 +74,7 @@ def check_google_news_access() -> tuple[bool, str]:
             feed = feedparser.parse(resp.content)
             if feed.entries:
                 try:
-                    from extract_content import check_google_news_access as check_decoder_access
+                    from src.extract_content import check_google_news_access as check_decoder_access
                     dec_ok, dec_msg = check_decoder_access(feed.entries[0].link)
                     if not dec_ok:
                         return False, f"RSS HTTP 200 ({len(feed.entries)} entri), namun dekode URL Google News gagal: {dec_msg}"
@@ -333,6 +335,32 @@ def clean_title_suffix(raw_title: str, source_title: str | None) -> str:
     return title
 
 
+def _extract_rss_metadata_urls(entry) -> list[str]:
+    """Mengambil URL sumber non-Google artikel (bukan root homepage) dari links/summary/description RSS."""
+    found: list[str] = []
+    seen: set[str] = set()
+    candidates: list[str] = []
+    for link_obj in entry.get("links") or []:
+        if isinstance(link_obj, dict) and link_obj.get("href"):
+            candidates.append(str(link_obj["href"]))
+    for key in ("id", "origlink", "feedburner_origlink"):
+        val = entry.get(key)
+        if isinstance(val, str) and val.startswith("http"):
+            candidates.append(val)
+    for html_field in (entry.get("summary") or "", entry.get("description") or ""):
+        if html_field:
+            candidates.extend(re.findall(r'href=["\'](https?://[^"\'\s<>]+)["\']', str(html_field)))
+    for raw_u in candidates:
+        u = raw_u.strip()
+        if not u or u in seen or "news.google.com" in u.lower():
+            continue
+        parsed = urlparse(u)
+        if parsed.scheme in ("http", "https") and (parsed.path.strip("/") or parsed.query) and is_valid_domain(u):
+            seen.add(u)
+            found.append(u)
+    return found
+
+
 _KEYWORD_GROUPS_CACHE: dict[str, list[str]] | None = None
 
 
@@ -340,7 +368,7 @@ def get_cached_keyword_groups() -> dict[str, list[str]]:
     """Mengambil cache grup keyword untuk mencegah re-read disk berulang."""
     global _KEYWORD_GROUPS_CACHE
     if _KEYWORD_GROUPS_CACHE is None:
-        from config import build_keyword_groups
+        from src.config import build_keyword_groups
         _KEYWORD_GROUPS_CACHE = build_keyword_groups()
     return _KEYWORD_GROUPS_CACHE
 
@@ -357,8 +385,8 @@ def search_keyword(keyword: str | list[str], delay: float | None = None, target_
     """
     results = []
     from datetime import timedelta
-    from query_builder import format_keyword_query
-    from config import get_officials_query_variants
+    from src.query_builder import format_keyword_query
+    from src.config import get_officials_query_variants
 
     if isinstance(keyword, str) and keyword.lower() in ("pejabat_kemenperin", "pejabat kemenperin", "kemenperin_pejabat"):
         variants_list = get_officials_query_variants()
@@ -381,7 +409,7 @@ def search_keyword(keyword: str | list[str], delay: float | None = None, target_
         query_kw = kw_expr
         override = os.environ.get("OVERRIDE_DATE", "").strip()
         if target_date is not None or override:
-            from config import get_date_range
+            from src.config import get_date_range
             start_d, end_d = get_date_range(target_date)
             prev_d = start_d - timedelta(days=1)
             next_d = end_d + timedelta(days=1)
@@ -419,6 +447,7 @@ def search_keyword(keyword: str | list[str], delay: float | None = None, target_
                     "media_name": source_title,
                     "source": source_title or "",
                     "source_url": source_href,
+                    "rss_metadata_urls": _extract_rss_metadata_urls(entry),
                     "published": entry.get("published", ""),
                     "sumber_data": "RSS",
                 })
@@ -441,8 +470,8 @@ def search_pejabat_presisi(
     Mendukung mode Serper.dev maupun Google News RSS.
     """
     from datetime import timedelta
-    from config import load_pejabat_precision_mapping
-    from query_builder import build_media_query, build_gov_query, build_rss_url
+    from src.config import load_pejabat_precision_mapping
+    from src.query_builder import build_media_query, build_gov_query, build_rss_url
 
     if pejabat_list is None:
         pejabat_list = load_pejabat_precision_mapping(active_only=True)
@@ -515,7 +544,7 @@ def search_pejabat_presisi(
             else:
                 query_kw = base_kw_expr
                 if target_date is not None:
-                    from config import get_date_range
+                    from src.config import get_date_range
                     start_d, end_d = get_date_range(target_date)
                     prev_d = start_d - timedelta(days=1)
                     next_d = end_d + timedelta(days=1)
@@ -557,6 +586,7 @@ def search_pejabat_presisi(
                             "media_name": source_title,
                             "source": source_title or "",
                             "source_url": source_href,
+                            "rss_metadata_urls": _extract_rss_metadata_urls(entry),
                             "published": entry.get("published", ""),
                             "sumber_data": "RSS",
                             "terkait_kemenperin": "Ya",
@@ -589,18 +619,21 @@ def merge_keywords(kw_a: str, kw_b: str) -> str:
     return ", ".join(result)
 
 
+from src.stable import canonical_url as _canonical_url
+
+
 def dedup_by_link(items: list[dict]) -> list[dict]:
     """
-    Deduplikasi hasil berdasarkan URL link (tanpa parameter query string).
-    Jika URL sama ditemukan, gabungkan keyword-nya.
+    Deduplikasi hasil berdasarkan URL kanonik (hapus param tracking, www, dan trailing slash).
+    Jika URL sama ditemukan, gabungkan keyword-nya dan pertahankan teks terpanjang.
     """
     url_map = {}
     for item in items:
         raw_link = (
-            item.get("link")
+            item.get("resolved_url")
+            or item.get("link")
             or item.get("Link Website")
             or item.get("url")
-            or item.get("resolved_url")
             or ""
         )
         if raw_link is None or (isinstance(raw_link, float) and str(raw_link) == "nan"):
@@ -610,18 +643,20 @@ def dedup_by_link(items: list[dict]) -> list[dict]:
             if link.lower() in ("nan", "none"):
                 link = ""
 
-        if "youtube.com/watch" in link.lower():
-            parsed_u = urlparse(link)
-            qs = parse_qs(parsed_u.query)
-            vid = qs.get("v", [""])[0]
-            key = f"https://www.youtube.com/watch?v={vid}" if vid else link
-        elif "youtu.be/" in link.lower():
-            key = link.split("?")[0].rstrip("/")
-        else:
-            key = link.split("?")[0].rstrip("/") if link else f"__no_link_{id(item)}__"
+        key = _canonical_url(link) if link else ""
+        if not key:
+            key = f"__no_link_{id(item)}__"
         if key not in url_map:
             url_map[key] = dict(item)
         else:
+            if len(str(item.get("text") or "")) > len(str(url_map[key].get("text") or "")):
+                kept_kw = url_map[key].get("keyword") or url_map[key].get("Keywords") or ""
+                kept_src = url_map[key].get("sumber_data")
+                url_map[key] = dict(item)
+                if kept_kw:
+                    url_map[key]["keyword"] = kept_kw
+                if kept_src == "RSS":
+                    url_map[key]["sumber_data"] = "RSS"
             existing_kw = url_map[key].get("keyword") or url_map[key].get("Keywords") or ""
             new_kw = item.get("keyword") or item.get("Keywords") or ""
             merged = merge_keywords(existing_kw, new_kw)

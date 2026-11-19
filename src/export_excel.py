@@ -5,10 +5,13 @@ Penyusunan dataset ke DataFrame dan penyimpanan ke file Excel (.xlsx) beserta fo
 
 import os
 import re
+import sys
 import time
 import pandas as pd
 from openpyxl.styles import Alignment, Font, PatternFill  # type: ignore
 from openpyxl.utils import get_column_letter  # type: ignore
+
+from src.stable import canonical_url as _canonical_url
 
 BERITA_COLUMNS = [
     "Tanggal",
@@ -16,6 +19,8 @@ BERITA_COLUMNS = [
     "Link Website",
     "Media Name",
     "Tone",
+    "Isu",
+    "Alasan Tone",
     "Spokesperson 1",
     "Spokesperson 2",
     "Unit Eselon",
@@ -119,12 +124,14 @@ def save_to_excel(
     records: list[dict],
     output_path: str,
     merge_existing: bool = False,
-    negative_summaries: list[dict] | None = None
+    negative_summaries: list[dict] | None = None,
+    extra_columns: list[str] | None = None,
 ):
     """
     Menyimpan hasil scraping dan NLP ke file Excel dengan styling:
     - Kolom wajib: Tanggal, Isu, Title, Link Website, Media Name, Tone, Spokesperson 1, Spokesperson 2, Unit Eselon, Terkait Kemenperin, Keywords, Sumber Data
     - Mendukung merge_existing=True untuk menggabungkan dengan file yang sudah ada (dedup URL dan judul)
+    - Mendukung extra_columns opsional yang ditempatkan hanya di akhir (misal 'Sumber Run')
     - Header bold dan lebar kolom auto-fit
     - Kolom Link Website berupa hyperlink aktif
     - Kolom Tanggal diformat sebagai tanggal Excel (datetime tanpa timezone)
@@ -138,32 +145,20 @@ def save_to_excel(
         try:
             existing_df = pd.read_excel(output_path)
             if not existing_df.empty:
-                from fetch_news import dedup_by_link, dedup_by_title
+                from src.fetch_news import dedup_by_link, dedup_by_title
                 combined_raw = existing_df.to_dict(orient="records") + final_input_records
                 link_deduped = dedup_by_link(combined_raw)
                 final_input_records = dedup_by_title(link_deduped, threshold=85)
         except Exception as e:
             print(f"  [WARNING] Gagal merge dengan file yang ada ({output_path}): {e}")
 
-    columns = [
-        "Tanggal",
-        "Title",
-        "Link Website",
-        "Media Name",
-        "Tone",
-        "Spokesperson 1",
-        "Spokesperson 2",
-        "Unit Eselon",
-        "Terkait Kemenperin",
-        "Status Review",
-        "Keywords",
-        "Sumber Data",
-    ]
+    columns = list(BERITA_COLUMNS)
     df = pd.DataFrame(final_input_records)
     if not df.empty:
         # 1. Normalisasi nama kolom dari berbagai variasi key dictionary pipeline
         mappings = {
             "Isu": ["Isu", "isu", "issue", "topik_isu"],
+            "Alasan Tone": ["Alasan Tone", "alasan_tone", "tone_alasan"],
             "Sub Sektor": ["Sub Sektor", "sub_sektor", "subsektor", "Sub-Sektor"],
             "Status Review": ["Status Review", "status_review"],
             "Title": ["Title", "title", "judul"],
@@ -177,6 +172,7 @@ def save_to_excel(
             "Terkait Kemenperin": ["Terkait Kemenperin", "terkait_kemenperin"],
             "Keywords": ["Keywords", "keywords", "Keyword", "keyword"],
             "Sumber Data": ["Sumber Data", "sumber_data", "source_data"],
+            "Sumber Run": ["Sumber Run", "sumber_run", "source_run"],
         }
 
         for target_col, alt_keys in mappings.items():
@@ -215,28 +211,30 @@ def save_to_excel(
         df["Sumber Data"] = df["Sumber Data"].replace("", "RSS").fillna("RSS")
 
         # Filter proteksi: singkirkan seluruh dokumen PDF (sesuai instruksi user)
-        from relevance_filter import is_pdf_document
+        from src.relevance_filter import is_pdf_document
         is_pdf_mask = (
             pd.Series(df["Sumber Data"]).astype(str).str.upper().eq("PDF") |
             df.apply(lambda r: is_pdf_document(url=str(r.get("Link Website", "")), title=str(r.get("Title", "")), sumber_data=str(r.get("Sumber Data", ""))), axis=1)
         )
         df = pd.DataFrame(df.loc[~is_pdf_mask]).reset_index(drop=True)
 
-        # 1.5 Filter eksklusif Ditjen Industri Agro: buang status 'buang'/'review' & baris 'Perlu Dicek Manual'
+        # 1.5 Filter eksklusif Ditjen Industri Agro: buang HANYA status 'buang'; pertahankan 'review' agar ditandai kuning
         for stat_col in ["status", "Status", "status_ai"]:
             if stat_col in df.columns:
-                mask = ~pd.Series(df[stat_col]).astype(str).str.strip().str.lower().isin(["buang", "review"])
+                mask = ~pd.Series(df[stat_col]).astype(str).str.strip().str.lower().isin(["buang"])
                 df = pd.DataFrame(df.loc[mask]).reset_index(drop=True)
 
-        if "Status Review" in df.columns:
-            sr_series = pd.Series(df["Status Review"]).fillna("").astype(str).str.strip().str.lower()
-            sr_keep = (
-                sr_series.isin(["", "nan", "none", "-"])
-                | (~sr_series.str.contains("perlu|ai tidak dijalankan", regex=True))
-            )
-            df = pd.DataFrame(df.loc[sr_keep]).reset_index(drop=True)
-
-        df["Status Review"] = ""
+        if "Status Review" not in df.columns:
+            df["Status Review"] = ""
+        df["Status Review"] = df["Status Review"].replace(["nan", "None"], "").fillna("").astype(str).str.strip()
+        for stat_col in ["status", "Status", "status_ai"]:
+            if stat_col in df.columns:
+                rev_mask = (
+                    pd.Series(df[stat_col]).astype(str).str.strip().str.lower().eq("review")
+                    & (df["Status Review"] == "")
+                )
+                if rev_mask.any():
+                    df.loc[rev_mask, "Status Review"] = "PERLU CEK MANUAL"
 
         def _format_sub_sektor(row):
             raw_sub = row.get("Sub Sektor")
@@ -257,13 +255,15 @@ def save_to_excel(
             df[col] = df[col].astype("object")
 
         # 2. Auto-enrichment NLP & Deteksi Ketat Kemenperin
-        from entity_mapper import find_spokespersons
-        from relevance_filter import is_kemenperin_related
-        from sentiment import classify_tone
+        from src.entity_mapper import find_spokespersons
+        from src.relevance_filter import is_kemenperin_related
+        from src.tone_classifier import _classify_tone_fallback_detail
 
         for idx in range(len(df)):
             t = str(df.at[idx, "Title"] or "")
             txt = str(df.at[idx, "text"] or "") if "text" in df.columns else ""
+            if not txt and "isi" in df.columns:
+                txt = str(df.at[idx, "isi"] or "")
             kw = str(df.at[idx, "Keywords"] or "")
             sd = str(df.at[idx, "Sumber Data"] or "")
 
@@ -300,9 +300,14 @@ def save_to_excel(
                 if not curr_u or curr_u in ["-", "nan", "None"]:
                     df.at[idx, "Unit Eselon"] = "IA"
 
-            # 3. Tone
-            if pd.isna(df.at[idx, "Tone"]) or str(df.at[idx, "Tone"]).strip() in ["", "nan", "None"]:
-                df.at[idx, "Tone"] = classify_tone(txt, t)
+            # 3. Tone & Alasan Tone
+            curr_tone = str(df.at[idx, "Tone"] or "").strip()
+            curr_alasan = str(df.at[idx, "Alasan Tone"] or "").strip()
+            if pd.isna(df.at[idx, "Tone"]) or curr_tone in ["", "nan", "None"]:
+                fb_det = _classify_tone_fallback_detail(title=t, text=txt, keyword=kw, sumber_data=sd)
+                df.at[idx, "Tone"] = fb_det["tone"]
+                if pd.isna(df.at[idx, "Alasan Tone"]) or curr_alasan in ["", "nan", "None"]:
+                    df.at[idx, "Alasan Tone"] = fb_det["alasan"]
 
             # 4. Normalisasi keyword rokok agar sesuai keyword_data.txt
             curr_kw = str(df.at[idx, "Keywords"] or "").strip()
@@ -312,7 +317,12 @@ def save_to_excel(
     else:
         df = pd.DataFrame(columns=columns)
 
-    return write_styled_excel(df, output_path, df_neg=negative_summaries)
+    return write_styled_excel(
+        df,
+        output_path,
+        df_neg=negative_summaries,
+        extra_columns=extra_columns,
+    )
 
 
 def write_styled_excel(
@@ -320,16 +330,14 @@ def write_styled_excel(
     output_path: str | os.PathLike,
     df_neg: pd.DataFrame | list[dict] | None = None,
     sort_desc: bool = False,
+    extra_columns: list[str] | None = None,
 ) -> str:
     """
     Menulis DataFrame Berita (dan opsional Ringkasan Negatif) ke file Excel (.xlsx)
     dengan styling standar: header bold, freeze_panes A2, auto-fit lebar kolom,
     format tanggal WIB, highlight kuning review, dan hyperlink aktif berwarna biru.
     """
-    try:
-        from src.config import parse_to_wib as _parse_date
-    except ImportError:
-        from config import parse_to_wib as _parse_date
+    from src.config import parse_to_wib as _parse_date
 
     output_str = str(output_path)
     out_dir = os.path.dirname(output_str)
@@ -338,12 +346,19 @@ def write_styled_excel(
 
     columns = list(BERITA_COLUMNS)
     df = df_berita.copy() if not df_berita.empty else pd.DataFrame(columns=columns)
+
+    trailing_cols: list[str] = []
+    for ec in (extra_columns or []):
+        if ec and ec not in columns and ec not in trailing_cols:
+            trailing_cols.append(ec)
+    if "Sumber Run" not in columns and "Sumber Run" not in trailing_cols and "Sumber Run" in df.columns:
+        has_sr = df["Sumber Run"].replace(["nan", "None"], "").fillna("").astype(str).str.strip().ne("").any()
+        if has_sr:
+            trailing_cols.append("Sumber Run")
+    columns.extend(trailing_cols)
     if not df.empty:
-        # Proteksi eksklusif Ditjen Industri Agro: singkirkan dokumen PDF & baris review/perlu cek manual
-        try:
-            from src.relevance_filter import is_pdf_document as _is_pdf
-        except ImportError:
-            from relevance_filter import is_pdf_document as _is_pdf
+        # Proteksi eksklusif Ditjen Industri Agro: singkirkan dokumen PDF & status 'buang'; pertahankan baris 'review' untuk tanda kuning
+        from src.relevance_filter import is_pdf_document as _is_pdf
         if "Sumber Data" in df.columns:
             pdf_m = (
                 pd.Series(df["Sumber Data"]).astype(str).str.upper().eq("PDF")
@@ -352,20 +367,26 @@ def write_styled_excel(
             df = pd.DataFrame(df.loc[~pdf_m]).reset_index(drop=True)
         for stat_col in ("status", "Status", "status_ai"):
             if stat_col in df.columns and not df.empty:
-                m = ~pd.Series(df[stat_col]).astype(str).str.strip().str.lower().isin(["buang", "review"])
+                m = ~pd.Series(df[stat_col]).astype(str).str.strip().str.lower().isin(["buang"])
                 df = pd.DataFrame(df.loc[m]).reset_index(drop=True)
-        if "Status Review" in df.columns and not df.empty:
-            sr_s = pd.Series(df["Status Review"]).fillna("").astype(str).str.strip().str.lower()
-            sr_ok = sr_s.isin(["", "nan", "none", "-"]) | (~sr_s.str.contains("perlu|ai tidak dijalankan", regex=True))
-            df = pd.DataFrame(df.loc[sr_ok]).reset_index(drop=True)
+        if "Status Review" not in df.columns:
             df["Status Review"] = ""
+        df["Status Review"] = df["Status Review"].replace(["nan", "None"], "").fillna("").astype(str).str.strip()
+        for stat_col in ("status", "Status", "status_ai"):
+            if stat_col in df.columns and not df.empty:
+                rev_m = (
+                    pd.Series(df[stat_col]).astype(str).str.strip().str.lower().eq("review")
+                    & (df["Status Review"] == "")
+                )
+                if rev_m.any():
+                    df.loc[rev_m, "Status Review"] = "PERLU CEK MANUAL"
         if "Link Website" in df.columns and not df.empty:
             df["Link Website"] = df["Link Website"].apply(_clean_url_str)
         if "Tone" in df.columns:
             df["Tone"] = df["Tone"].replace(["nan", "None", ""], "Netral").fillna("Netral")
         if "Unit Eselon" in df.columns:
             df["Unit Eselon"] = df["Unit Eselon"].replace(["nan", "None", ""], "-").fillna("-")
-        for c in ("Spokesperson 1", "Spokesperson 2", "Status Review", "Keywords", "Title", "Media Name"):
+        for c in ("Isu", "Alasan Tone", "Spokesperson 1", "Spokesperson 2", "Status Review", "Keywords", "Title", "Media Name"):
             if c in df.columns:
                 df[c] = df[c].replace(["nan", "None"], "").fillna("")
         if "Terkait Kemenperin" in df.columns:
@@ -376,6 +397,8 @@ def write_styled_excel(
     for col in columns:
         if col not in df.columns:
             df[col] = ""
+        elif col in trailing_cols:
+            df[col] = df[col].replace(["nan", "None"], "").fillna("").astype(str)
     df = pd.DataFrame(df[columns])
 
     if "Tanggal" in df.columns and not df.empty:
@@ -395,12 +418,19 @@ def write_styled_excel(
             min_w = 21 if col_name == "Tanggal" else 10
             ws.column_dimensions[get_column_letter(col_idx)].width = min(max(max_len + 4, min_w), 60)
 
-        # Format kolom Tanggal sebagai Date Excel dan rata atas untuk semua sel
+        # Format kolom Tanggal sebagai Date Excel, rata atas untuk semua sel, dan warna kuning untuk baris review
         date_col_idx = columns.index("Tanggal") + 1
+        review_col_idx = columns.index("Status Review") + 1
         top_align = Alignment(vertical="top")
+        yellow_fill = PatternFill(start_color="FFFF00", end_color="FFFF00", fill_type="solid")
         for row_idx in range(2, len(df) + 2):
+            sr_val = str(ws.cell(row=row_idx, column=review_col_idx).value or "").strip()
+            is_review_row = bool(sr_val and sr_val.lower() not in ("nan", "none", "-"))
             for col_idx in range(1, len(columns) + 1):
-                ws.cell(row=row_idx, column=col_idx).alignment = top_align
+                c = ws.cell(row=row_idx, column=col_idx)
+                c.alignment = top_align
+                if is_review_row:
+                    c.fill = yellow_fill
             cell = ws.cell(row=row_idx, column=date_col_idx)
             if cell.value is not None:
                 cell.number_format = "yyyy-mm-dd hh:mm:ss"
@@ -429,21 +459,25 @@ def write_styled_excel(
             if not df_neg_clean.empty and "Link Website" in df_neg_clean.columns:
                 df_neg_clean["Link Website"] = df_neg_clean["Link Website"].apply(_clean_url_str)
                 if not df.empty and "Link Website" in df.columns:
+                    neg_berita_df = (
+                        df[df["Tone"].astype(str).str.strip().str.lower() == "negatif"]
+                        if "Tone" in df.columns
+                        else df
+                    )
                     valid_links = {
-                        str(v).strip().lower().split("?")[0].rstrip("/")
-                        for v in df["Link Website"].dropna()
+                        _canonical_url(str(v))
+                        for v in neg_berita_df["Link Website"].dropna()
                         if str(v).strip()
                     }
                     valid_titles = {
                         str(v).strip().lower()
-                        for v in df["Title"].dropna()
+                        for v in neg_berita_df["Title"].dropna()
                         if str(v).strip()
-                    } if "Title" in df.columns else set()
-                    neg_l = df_neg_clean["Link Website"].fillna("").astype(str).str.strip().str.lower().str.split("?").str[0].str.rstrip("/")
+                    } if "Title" in neg_berita_df.columns else set()
+                    neg_l = df_neg_clean["Link Website"].fillna("").astype(str).apply(_canonical_url)
                     neg_t = df_neg_clean["Title"].fillna("").astype(str).str.strip().str.lower() if "Title" in df_neg_clean.columns else pd.Series([""] * len(df_neg_clean))
                     keep_neg = neg_l.isin(valid_links) | neg_t.isin(valid_titles)
-                    if "Isu Inti" in df_neg_clean.columns:
-                        keep_neg = keep_neg & (~df_neg_clean["Isu Inti"].fillna("").astype(str).str.lower().str.contains("ringkasan gagal dibuat", regex=False))
+                    # PERTAHANKAN baris 'Ringkasan gagal dibuat' / placeholder agar jumlah Ringkasan Negatif == Tone Negatif (Point E)
                     df_neg_clean = pd.DataFrame(df_neg_clean.loc[keep_neg]).reset_index(drop=True)
 
             for col in neg_columns:
@@ -452,6 +486,66 @@ def write_styled_excel(
                 elif col != "Tanggal":
                     df_neg_clean[col] = df_neg_clean[col].replace(["nan", "None"], "").fillna("")
             df_neg_clean = pd.DataFrame(df_neg_clean[neg_columns])
+
+            # Validasi akhir 1:1: jumlah baris Ringkasan Negatif HARUS sama dengan jumlah Berita bertone Negatif
+            if not df.empty and "Tone" in df.columns:
+                neg_berita_rows = df[df["Tone"].astype(str).str.strip().str.lower() == "negatif"]
+                if len(neg_berita_rows) > 0:
+                    pool_records = df_neg_clean.to_dict(orient="records")
+                    matched_flags = [False] * len(pool_records)
+                    added_placeholders = []
+
+                    for _, br in neg_berita_rows.iterrows():
+                        bu = _canonical_url(str(br.get("Link Website") or ""))
+                        bt = str(br.get("Title") or "").strip()
+                        bt_low = bt.lower()
+                        found = False
+                        # Prioritas 1: cocokkan URL kanonik
+                        for i_p, nr in enumerate(pool_records):
+                            if matched_flags[i_p]:
+                                continue
+                            nr_u = _canonical_url(str(nr.get("Link Website") or ""))
+                            if bu and nr_u and bu == nr_u:
+                                matched_flags[i_p] = True
+                                found = True
+                                break
+                        # Prioritas 2: fallback cocokkan judul
+                        if not found and bt_low:
+                            for i_p, nr in enumerate(pool_records):
+                                if matched_flags[i_p]:
+                                    continue
+                                nr_t = str(nr.get("Title") or "").strip().lower()
+                                if nr_t and bt_low == nr_t:
+                                    matched_flags[i_p] = True
+                                    found = True
+                                    break
+                        if not found:
+                            added_placeholders.append({
+                                "Tanggal": br.get("Tanggal"),
+                                "Title": bt,
+                                "Link Website": str(br.get("Link Website") or ""),
+                                "Media Name": str(br.get("Media Name") or ""),
+                                "Terkait Kemenperin": str(br.get("Terkait Kemenperin") or "Tidak"),
+                                "Isu Inti": f"[PLACEHOLDER - RINGKASAN BELUM TERSEDIA] {bt}",
+                                "Alasan Negatif": "Ringkasan AI gagal dibuat / tidak ditemukan (placeholder konsistensi 1:1)",
+                                "What": bt or "Ringkasan belum tersedia",
+                                "Who": "-",
+                                "When": str(br.get("Tanggal") or "-"),
+                                "Where": "-",
+                                "Why": "Placeholder otomatis karena baris negatif belum teringkas",
+                                "How": "-",
+                                "Stakeholder Terkait": "-",
+                                "Catatan": "PLACEHOLDER KONSISTENSI: ditambahkan otomatis saat ekspor Excel",
+                            })
+                    if added_placeholders:
+                        print(
+                            f"[ERROR KONSISTENSI EXCEL] Sheet Ringkasan Negatif kurang {len(added_placeholders)} baris dibanding Berita bertone Negatif ({len(neg_berita_rows)}). "
+                            f"Menulis placeholder eksplisit agar 1:1.",
+                            file=sys.stderr,
+                            flush=True,
+                        )
+                        df_neg_clean = pd.concat([df_neg_clean, pd.DataFrame(added_placeholders)], ignore_index=True)
+                        df_neg_clean = pd.DataFrame(df_neg_clean[neg_columns])
 
             if "Tanggal" in df_neg_clean.columns and not df_neg_clean.empty:
                 df_neg_clean["Tanggal"] = pd.Series(df_neg_clean["Tanggal"]).apply(_parse_date)

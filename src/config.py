@@ -47,17 +47,51 @@ load_env_file()
 # Flag YouTube: dinonaktifkan sementara sesuai instruksi user (default: False)
 ENABLE_YOUTUBE = os.environ.get("ENABLE_YOUTUBE", "false").lower() in ("true", "1", "yes")
 
+# ==============================================================================
+# BATAS ANGGARAN KUOTA PANGGILAN API PENCARIAN (PER RUN)
+# ==============================================================================
+# Dasar kuota: estimasi awal, akan dikalibrasi dari hasil run GHA.
+# - Dalam 1 run penuh (19 batch), pipeline memproses ~200-500 artikel kandidat.
+# - Layer 1 (offline base64 decoder) dan Layer 2 (metadata HTML) menyelesaikan ~90%+ URL secara gratis.
+# - Layer 3 (Search Fallback) hanya aktif saat L1 & L2 gagal (misal rate-limit Google /sorry/index).
+#   Beban normal: ~2-5 fallback per batch (total ~40-80 pencarian per run 19 batch).
+#   Beban badai 429: dapat mencapai ~100-120 pencarian per run.
+# - MAX_SERPER_CALLS_PER_RUN = 150:
+#   Batas perlindungan anggaran (circuit budget) agar pipeline tidak menghabiskan kuota Serper
+#   bila Google News mengalami pemblokiran masif, namun tetap cukup melayani kebutuhan normal 19 batch.
+# - MAX_EXA_CALLS_PER_RUN = 100:
+#   Exa adalah secondary fallback yang hanya dipanggil jika Serper menghasilkan 0 hit organik.
+#   Batas 100 panggilan per run cukup untuk artikel yang benar-benar tidak ditemukan di Google Search.
+# - Catatan: Nilai ini BUKAN kuota total akun pengguna, melainkan batas alokasi per run yang dapat
+#   dikonfigurasi ulang melalui environment variable MAX_SERPER_CALLS_PER_RUN dan MAX_EXA_CALLS_PER_RUN.
+# ==============================================================================
+MAX_SERPER_CALLS_PER_RUN = int(os.environ.get("MAX_SERPER_CALLS_PER_RUN", "150"))
+MAX_EXA_CALLS_PER_RUN = int(os.environ.get("MAX_EXA_CALLS_PER_RUN", "100"))
 
-def get_date_range(target_date: date | datetime | tuple | list | None = None):
+
+def get_date_range(target_date: date | datetime | tuple | list | str | None = None):
     """
     Menghitung rentang tanggal dinamis: persis kemarin (H-1 dari hari eksekusi)
     atau rentang tanggal (start_date, end_date) jika diberikan.
     """
     if target_date is not None:
+        def _parse_item(item):
+            if isinstance(item, str):
+                return datetime.strptime(item.strip(), "%Y-%m-%d").date()
+            if isinstance(item, datetime):
+                return item.date()
+            return item
+
+        if isinstance(target_date, str):
+            target_str = target_date.strip()
+            for sep in (":", "_sd_", "..", " to ", " - "):
+                if sep in target_str:
+                    p1, p2 = target_str.split(sep, 1)
+                    return _parse_item(p1), _parse_item(p2)
+            d = _parse_item(target_str)
+            return d, d
         if isinstance(target_date, (tuple, list)):
-            d1 = target_date[0].date() if isinstance(target_date[0], datetime) else target_date[0]
-            d2 = target_date[1].date() if isinstance(target_date[1], datetime) else target_date[1]
-            return d1, d2
+            return _parse_item(target_date[0]), _parse_item(target_date[1])
         d = target_date.date() if isinstance(target_date, datetime) else target_date
         return d, d
     override = os.environ.get("OVERRIDE_DATE", "").strip()

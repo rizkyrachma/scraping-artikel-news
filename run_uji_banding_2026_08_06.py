@@ -12,7 +12,9 @@ import os
 import sys
 
 # Tambahkan src ke sys.path agar seluruh modul dalam src/ dapat diimpor langsung
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "src")))
+REPO_ROOT = os.path.abspath(os.path.dirname(__file__))
+if REPO_ROOT not in sys.path:
+    sys.path.insert(0, REPO_ROOT)
 import json
 import time
 from datetime import date, datetime

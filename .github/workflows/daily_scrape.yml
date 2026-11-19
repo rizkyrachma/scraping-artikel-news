@@ -55,15 +55,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Ambil data_export terbaru dari branch data (jika ada)
-        run: |
-          if git ls-remote --exit-code --heads origin data >/dev/null 2>&1; then
-            git fetch origin data
-            git checkout origin/data -- data_export 2>/dev/null || true
-            cp -r data_export/files/* web/public/files/ 2>/dev/null || true
-            cp -r data_export/*.json web/public/data/ 2>/dev/null || true
-          fi
-
       - name: Setup Python 3.11
         uses: actions/setup-python@v5
         with:
@@ -75,15 +66,45 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Cache AI Recheck & Ringkasan
+      - name: Cache Pipeline State & AI (Lapis Kedua - dipulihkan sebelum branch data agar cache lama tidak menimpa data terbaru)
         uses: actions/cache@v4
         with:
           path: |
+            hasil_scrapping/cache_decode.json
+            hasil_scrapping/cache_decode_failed.json
+            hasil_scrapping/cache_decisions.json
             hasil_scrapping/cache_ai_recheck.json
             hasil_scrapping/cache_ringkasan.json
-          key: agro-ai-cache-${{ runner.os }}-${{ github.run_id }}
+            hasil_scrapping/isu_registry.json
+            hasil_scrapping/snapshots
+          key: agro-pipeline-cache-${{ runner.os }}-${{ github.run_id }}
           restore-keys: |
-            agro-ai-cache-${{ runner.os }}-
+            agro-pipeline-cache-${{ runner.os }}-
+
+      - name: Ambil data_export dan pipeline_state terbaru dari branch data (Lapis Utama, prioritas di atas cache)
+        run: |
+          mkdir -p hasil_scrapping/snapshots web/public/files web/public/data
+          if git ls-remote --exit-code --heads origin data >/dev/null 2>&1; then
+            git fetch origin data
+            git checkout origin/data -- data_export 2>/dev/null || true
+            git checkout origin/data -- pipeline_state 2>/dev/null || true
+            # Unstage hasil checkout origin/data agar tidak mencemari indeks branch aktif saat commit ke main
+            git reset -q HEAD -- data_export pipeline_state 2>/dev/null || true
+            cp -r data_export/files/* web/public/files/ 2>/dev/null || true
+            cp -r data_export/*.json web/public/data/ 2>/dev/null || true
+            for f in cache_decode.json cache_decode_failed.json cache_decisions.json cache_ai_recheck.json cache_ringkasan.json; do
+              if [ -f "pipeline_state/$f" ]; then
+                cp "pipeline_state/$f" "hasil_scrapping/$f.tmp.$$" && mv -f "hasil_scrapping/$f.tmp.$$" "hasil_scrapping/$f"
+              fi
+            done
+            # Pilih isu_registry.json paling baru; bila timestamp sama/tidak terbaca, branch data (Lapis Utama) selalu menang atas cache
+            python scripts/isu_registry_state.py restore \
+              --branch-reg pipeline_state/isu_registry.json \
+              --cache-reg hasil_scrapping/isu_registry.json
+            cp -r pipeline_state/snapshots/* hasil_scrapping/snapshots/ 2>/dev/null || true
+          else
+            echo "[Registry] Branch data belum ada (run pertama) - memakai fallback actions/cache bila ada atau mulai baru."
+          fi
 
       - name: Tentukan rentang tanggal target (WIB)
         id: target_dates
@@ -192,37 +213,107 @@ jobs:
             --note "$NOTE" \
             --log-url "$LOG_URL"
 
-      - name: Commit & Push pembaruan data ke branch data dan main
-        if: always() && steps.target_dates.outputs.should_skip != 'true'
+      - name: Lewati Commit, Push, dan Persist Pipeline State (Bukan refs/heads/main)
+        if: always() && steps.target_dates.outputs.should_skip != 'true' && github.ref != 'refs/heads/main'
         run: |
+          echo "[Guard] Melewati commit/push ke branch main dan data serta penyimpanan pipeline_state karena github.ref (${{ github.ref }}) != 'refs/heads/main'."
+
+      - name: Commit & Push pembaruan data dan pipeline_state ke branch data dan main
+        if: always() && steps.target_dates.outputs.should_skip != 'true' && github.ref == 'refs/heads/main'
+        run: |
+          if [ "${{ github.ref }}" != "refs/heads/main" ]; then
+            echo "[Guard] Ditolak: hanya refs/heads/main yang boleh menulis ke branch main dan data."
+            exit 0
+          fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          # Simpan perubahan data_export dan web/public ke direktori sementara
-          mkdir -p /tmp/agro_sync/data_export /tmp/agro_sync/web_public
-          cp -r data_export/* /tmp/agro_sync/data_export/
-          cp -r web/public/* /tmp/agro_sync/web_public/
+          # Pangkas snapshot > 30 hari & batasi ukuran cache sebelum disinkronkan
+          python -c "from src.stable import prune_pipeline_caches; print('Prune summary:', prune_pipeline_caches())" || true
+
+          # Simpan perubahan data_export, web/public, dan pipeline_state ke direktori sementara
+          mkdir -p /tmp/agro_sync/data_export /tmp/agro_sync/web_public /tmp/agro_sync/pipeline_state/snapshots
+          cp -r data_export/* /tmp/agro_sync/data_export/ 2>/dev/null || true
+          cp -r web/public/* /tmp/agro_sync/web_public/ 2>/dev/null || true
+          for f in cache_decode.json cache_decode_failed.json cache_decisions.json cache_ai_recheck.json cache_ringkasan.json; do
+            if [ -f "hasil_scrapping/$f" ]; then
+              cp "hasil_scrapping/$f" "/tmp/agro_sync/pipeline_state/$f"
+            fi
+          done
+          cp -r hasil_scrapping/snapshots/* /tmp/agro_sync/pipeline_state/snapshots/ 2>/dev/null || true
+
+          # Simpan hasil_scrapping/isu_registry.json secara atomik + pangkas klaster >14 hari HANYA jika run sukses
+          if [ "${{ steps.run_scraper.outcome }}" = "success" ] && [ -f "hasil_scrapping/isu_registry.json" ]; then
+            python scripts/isu_registry_state.py persist \
+              --src hasil_scrapping/isu_registry.json \
+              --dst /tmp/agro_sync/pipeline_state/isu_registry.json \
+              --end-date "${{ steps.target_dates.outputs.end_date }}"
+          else
+            echo "[Registry] Melewati penyimpanan isu_registry.json (outcome=${{ steps.run_scraper.outcome }}, ada=$([ -f hasil_scrapping/isu_registry.json ] && echo ya || echo tidak))."
+          fi
+
+          # Hapus pipeline_state sementara dari working tree main agar tidak terbawa ke branch main
+          rm -rf pipeline_state 2>/dev/null || true
 
           # 1. Update branch main (agar deployment web dan data_export selalu sinkron)
           git add data_export/ web/public/data/ web/public/files/
           if ! git diff --staged --quiet; then
             git commit -m "chore(data): sinkronisasi data scraping ${{ steps.target_dates.outputs.start_date }} s/d ${{ steps.target_dates.outputs.end_date }}"
-            git push origin HEAD:main || true
+            for attempt in 1 2 3; do
+              if git push origin HEAD:main; then
+                break
+              fi
+              git pull --rebase origin main || true
+            done
           fi
 
-          # 2. Update branch data khusus penyimpanan data terpisah
+          # 2. Update branch data khusus penyimpanan data + pipeline_state terpisah (rebase & retry jika konflik)
           if git ls-remote --exit-code --heads origin data >/dev/null 2>&1; then
             git fetch origin data
             git checkout -B data origin/data
           else
             git checkout -B data
           fi
-          cp -r /tmp/agro_sync/data_export/* data_export/
-          cp -r /tmp/agro_sync/web_public/* web/public/
-          git add data_export/ web/public/data/ web/public/files/
+          mkdir -p data_export web/public pipeline_state/snapshots
+          cp -r /tmp/agro_sync/data_export/* data_export/ 2>/dev/null || true
+          cp -r /tmp/agro_sync/web_public/* web/public/ 2>/dev/null || true
+          for f in /tmp/agro_sync/pipeline_state/*.json; do
+            [ -f "$f" ] || continue
+            b=$(basename "$f")
+            cp "$f" "pipeline_state/${b}.tmp.$$" && mv -f "pipeline_state/${b}.tmp.$$" "pipeline_state/${b}"
+          done
+          rm -rf pipeline_state/snapshots/* 2>/dev/null || true
+          cp -r /tmp/agro_sync/pipeline_state/snapshots/* pipeline_state/snapshots/ 2>/dev/null || true
+          git add data_export/ web/public/data/ web/public/files/ pipeline_state/
           if ! git diff --staged --quiet; then
-            git commit -m "chore(data): update data scraping ${{ steps.target_dates.outputs.start_date }} s/d ${{ steps.target_dates.outputs.end_date }}"
-            git push origin data
+            git commit -m "chore(data): update data & pipeline_state ${{ steps.target_dates.outputs.start_date }} s/d ${{ steps.target_dates.outputs.end_date }}"
+            PUSH_OK=false
+            for attempt in 1 2 3 4; do
+              if git push origin data; then
+                PUSH_OK=true
+                break
+              fi
+              echo "Push branch data konflik (percobaan $attempt), pull --rebase dan coba ulang..."
+              if ! git pull --rebase origin data; then
+                git rebase --abort 2>/dev/null || true
+                git fetch origin data
+                git reset --hard origin/data
+                mkdir -p data_export web/public pipeline_state/snapshots
+                cp -r /tmp/agro_sync/data_export/* data_export/ 2>/dev/null || true
+                cp -r /tmp/agro_sync/web_public/* web/public/ 2>/dev/null || true
+                for f in /tmp/agro_sync/pipeline_state/*.json; do
+                  [ -f "$f" ] || continue
+                  b=$(basename "$f")
+                  cp "$f" "pipeline_state/${b}.tmp.$$" && mv -f "pipeline_state/${b}.tmp.$$" "pipeline_state/${b}"
+                done
+                cp -r /tmp/agro_sync/pipeline_state/snapshots/* pipeline_state/snapshots/ 2>/dev/null || true
+                git add data_export/ web/public/data/ web/public/files/ pipeline_state/
+                git commit -m "chore(data): update data & pipeline_state ${{ steps.target_dates.outputs.start_date }} s/d ${{ steps.target_dates.outputs.end_date }}" || true
+              fi
+            done
+            if [ "$PUSH_OK" != "true" ]; then
+              echo "::warning::Gagal push branch data setelah 4 percobaan"
+            fi
           fi
 
       - name: Evaluasi status akhir job

@@ -114,11 +114,11 @@ def count_effective_positive_signals(text: str) -> int:
 
 def classify_tone(text: str = "", title: str = "") -> str:
     """
-    Mengklasifikasikan tone artikel secara kontekstual (Positif, Netral, Negatif).
-    Menggunakan tone_classifier sistem revisi (perspektif dampak industri agro, negasi & konteks).
+    Mengklasifikasikan tone artikel dengan mendelegasikan ke src.tone_classifier.classify_tone_fallback
+    (berdasarkan Indikator Sentimen Biro Humas Kemenperin).
     """
     try:
-        from tone_classifier import classify_tone_fallback
+        from src.tone_classifier import classify_tone_fallback
         t_res, _, _ = classify_tone_fallback(title=title, text=text)
         return t_res
     except Exception:

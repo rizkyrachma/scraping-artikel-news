@@ -10,8 +10,8 @@ import requests
 from datetime import datetime, date, timedelta
 from urllib.parse import urlparse
 
-from config import get_date_range, is_published_yesterday
-from fetch_news import is_valid_domain
+from src.config import get_date_range, is_published_yesterday
+from src.fetch_news import is_valid_domain
 
 EXA_SEARCH_URL = "https://api.exa.ai/search"
 

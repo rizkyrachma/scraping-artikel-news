@@ -1,0 +1,62 @@
+{
+  "phrase_aliases": {
+    "rokok elektrik": "rokok_elektronik",
+    "rokok elektronik": "rokok_elektronik",
+    "proyek strategis nasional": "psn",
+    "makan bergizi gratis": "mbg",
+    "menu mbg": "mbg",
+    "masuk mbg": "mbg",
+    "seram bagian timur": "sbt",
+    "industri hasil tembakau": "iht",
+    "susu ikan": "susu_ikan",
+    "minyak atsiri": "minyak_atsiri",
+    "rumput laut": "rumput_laut",
+    "pakan ternak": "pakan_ternak",
+    "pet food": "pet_food",
+    "bea keluar": "bea_keluar",
+    "el nino": "el_nino",
+    "tenaga kerja": "pekerja",
+    "nasib pekerja": "pekerja",
+    "jaga pekerja": "lindungi pekerja",
+    "jaga tenaga kerja": "lindungi pekerja",
+    "memohon perlindungan": "minta lindungi",
+    "minta perlindungan": "minta lindungi",
+    "minta pemerintah lindungi": "minta pemerintah lindungi",
+    "pelaku industri": "industri",
+    "pelaku usaha": "industri",
+    "kabar terbaru": "perkembangan",
+    "begini nasib": "perkembangan",
+    "masih pr": "perkembangan",
+    "digadang-gadang": "digadang",
+    "pelarangan": "larangan",
+    "berbasis bukti": "kajian ilmiah"
+  },
+  "token_aliases": {
+    "rel": "rokok_elektronik",
+    "vape": "rokok_elektronik",
+    "vapor": "rokok_elektronik",
+    "perlindungan": "lindungi",
+    "melindungi": "lindungi",
+    "memohon": "minta",
+    "meminta": "minta",
+    "mendesak": "minta",
+    "desak": "minta",
+    "karyawan": "pekerja",
+    "buruh": "pekerja",
+    "kemenperin": "kemenperin",
+    "menperin": "kemenperin"
+  },
+  "stopwords": [
+    "dan", "di", "ke", "dari", "yang", "untuk", "pada", "dengan", "ini", "itu",
+    "atau", "dalam", "oleh", "sebagai", "karena", "agar", "hingga", "sampai",
+    "akan", "sudah", "telah", "masih", "jadi", "menjadi", "para", "terkait",
+    "soal", "tentang", "begini", "dulu", "kini", "saat", "tengah", "atas",
+    "nasional", "indonesia", "ri"
+  ],
+  "generic_topic_tokens": [
+    "sawit", "sagu", "rokok_elektronik", "susu_ikan", "kakao", "karet",
+    "pulp", "tekstil", "gula", "garam", "kelor", "rumput_laut", "pakan_ternak",
+    "mamin", "industri", "pemerintah", "kemenperin", "ekspor", "hilirisasi",
+    "wacana", "ekonomi", "dampak", "berdampak", "disorot"
+  ]
+}

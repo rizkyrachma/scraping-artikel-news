@@ -20,13 +20,18 @@ Orkestrasi pipeline scraping berita industri end-to-end:
 import sys
 import os
 
-# Tambahkan src ke sys.path agar seluruh modul dalam src/ dapat diimpor langsung
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "src")))
+# Pastikan direktori root repo berada di sys.path agar impor src.<modul> konsisten dan tanpa duplikasi
+REPO_ROOT = os.path.abspath(os.path.dirname(__file__))
+if REPO_ROOT not in sys.path:
+    sys.path.insert(0, REPO_ROOT)
 import json
+import inspect
 import time
 import threading
 import argparse
-from datetime import date
+from datetime import date, timedelta
+from urllib.parse import urlparse
+from typing import Any
 import pandas as pd
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
@@ -47,6 +52,14 @@ from src.config import (
     log_granular,
     start_heartbeat,
     format_display_url,
+    parse_to_wib,
+)
+from src.stable import (
+    canonical_url,
+    DateSnapshotStore,
+    merge_runs_from_excel,
+    save_decision_cache,
+    union_articles_by_canonical_url,
 )
 from src.fetch_news import (
     collect_all,
@@ -54,6 +67,7 @@ from src.fetch_news import (
     is_near_duplicate_title,
     dedup_by_link,
     dedup_by_title,
+    merge_keywords,
     GoogleCaptchaBlockedError,
     determine_session_source,
 )
@@ -61,7 +75,17 @@ from src.extract_content import (
     extract_article_text,
     is_suspiciously_short,
     resolve_article_url,
+    resolve_article_with_fallback,
+    get_decode_controller,
+    save_decode_cache,
+    normalize_google_news_url,
+    is_prefiltered_rss_item,
+    get_search_quota_usage,
+    get_search_memo_status,
+    get_sorry_index_count,
+    reset_sorry_index_count,
 )
+from src.verify_reporter import generate_verification_report
 from src.relevance_filter import (
     is_pdf_document,
     is_recipe,
@@ -105,14 +129,24 @@ from src.relevance_filter import (
     has_ditjen_agro_override,
     has_kemenperin_or_agro_override,
     is_agro_relevant_content,
+    classify_non_news_evergreen,
 )
 from src.ai_relevance_classifier import (
     classify_agro_relevance,
     log_ai_rejection,
     classify_articles_in_batches,
 )
-from src.tone_classifier import classify_tone_batch, classify_tone
-from src.negative_summarizer import summarize_negative_articles
+from src.tone_classifier import USE_COMBINED_ISU_TONE, classify_tone_batch, classify_tone_by_issue, classify_tone
+from src.isu_grouping import (
+    DEFAULT_LOG_ISU_PATH,
+    DEFAULT_RILIS_MAX_DAYS_AFTER,
+    DEFAULT_RILIS_MAX_DAYS_BEFORE,
+    IsuRegistry,
+    assign_and_cluster_issues,
+    load_rilis_kemenperin,
+    write_isu_log,
+)
+from src.negative_summarizer import summarize_negative_articles, validate_and_repair_negative_summaries
 from src.config import ENABLE_YOUTUBE
 from src.entity_mapper import find_spokespersons
 from src.export_excel import save_to_excel
@@ -124,6 +158,7 @@ from src.direct_crawl_agro import (
     cocokkan_rilis_resmi,
     integrate_agro_kemenperin_pipeline,
 )
+from src.direct_crawl_kemenperin import crawl_kemenperin_siaran_pers
 
 USE_SERPER_ONLY = os.environ.get("USE_SERPER_ONLY", "false").lower() in ("true", "1", "yes")
 
@@ -136,7 +171,7 @@ _EXTRACTED_CACHE: dict[str, dict] = {}
 def get_cached_article(url: str) -> dict | None:
     if not url:
         return None
-    key = url.strip().split("?")[0].rstrip("/").lower()
+    key = canonical_url(url) or url.strip().split("?")[0].rstrip("/").lower()
     return _EXTRACTED_CACHE.get(key)
 
 
@@ -144,11 +179,11 @@ def cache_article(art: dict) -> None:
     link = (art.get("link") or art.get("Link Website") or art.get("url") or art.get("resolved_url") or "").strip()
     text = str(art.get("text") or "").strip()
     if link and text:
-        key = link.split("?")[0].rstrip("/").lower()
+        key = canonical_url(link) or link.split("?")[0].rstrip("/").lower()
         _EXTRACTED_CACHE[key] = art
         res_url = (art.get("resolved_url") or "").strip()
         if res_url:
-            res_key = res_url.split("?")[0].rstrip("/").lower()
+            res_key = canonical_url(res_url) or res_url.split("?")[0].rstrip("/").lower()
             _EXTRACTED_CACHE[res_key] = art
 
 
@@ -186,8 +221,15 @@ def preload_cache(target_dates: list[str] | None = None) -> None:
         print(f"[Cache Preload] Siap menggunakan cache teks untuk {len(_EXTRACTED_CACHE)} URL.", flush=True)
 
 
-def extract_one_article(item: dict) -> dict:
-    """Helper untuk ekstraksi konten satu artikel secara concurrent (mendukung resolusi URL Google News & direct URL Serper/Exa)."""
+def extract_one_article(
+    item: dict,
+    allow_search_fallback: bool = True,
+    max_retries: int = 2,
+    use_negative_cache: bool = True,
+    allow_circuit_trip: bool = True,
+    bypass_search_memo: bool = False,
+) -> dict:
+    """Helper untuk ekstraksi konten satu artikel secara concurrent (mendukung resolusi URL Google News 4 lapis & direct URL Serper/Exa)."""
     link = item.get("link", "")
     cached = get_cached_article(link)
     if cached and len(str(cached.get("text", "")).strip()) >= 300:
@@ -196,19 +238,62 @@ def extract_one_article(item: dict) -> dict:
         item_copy["resolved_url"] = cached.get("resolved_url") or link
         if item_copy["resolved_url"] and "news.google.com" not in item_copy["resolved_url"]:
             item_copy["link"] = item_copy["resolved_url"]
+        item_copy["decode_method"] = "cache" if "news.google.com" in link else "direct"
+        item_copy["decode_failed"] = False
+        item_copy["skip_retry"] = False
         item_copy["is_suspiciously_short"] = False
         return item_copy
 
+    pre_text = ""
     if "news.google.com" in link:
+        is_pre, pre_reason = is_prefiltered_rss_item(item)
+        if is_pre:
+            src_u = str(item.get("source_url") or "")
+            src_dom = urlparse(src_u if "://" in src_u else f"http://{src_u}").netloc.lower().split(":")[0] if src_u else "-"
+            t_disp = str(item.get("title") or "")[:70]
+            log_granular(f"       [PreFiltered] '{t_disp}' (SourceDomain: {src_dom}, Alasan: {pre_reason})")
+            item_copy = dict(item)
+            item_copy["text"] = str(item.get("text") or "")
+            item_copy["resolved_url"] = link
+            item_copy["decode_method"] = "pre_filtered"
+            item_copy["decode_failed"] = True
+            item_copy["skip_retry"] = True
+            item_copy["is_suspiciously_short"] = False
+            item_copy["prefiltered_reason"] = pre_reason
+            item_copy["prefiltered_domain"] = src_dom
+            return item_copy
+
         try:
-            resolved = resolve_article_url(link)
+            dec_res = resolve_article_with_fallback(
+                item,
+                allow_search_fallback=allow_search_fallback,
+                max_retries=max_retries,
+                use_negative_cache=use_negative_cache,
+                allow_circuit_trip=allow_circuit_trip,
+                bypass_search_memo=bypass_search_memo,
+            )
         except GoogleCaptchaBlockedError:
             raise
         except Exception:
-            resolved = link
+            dec_res = {"url": link, "resolved": False, "method": "failed", "text": ""}
+
+        resolved = str(dec_res.get("url") or link or "").strip()
+        decode_method = str(dec_res.get("method") or "failed")
+        pre_text = str(dec_res.get("text") or "").strip()
+
+        if not dec_res.get("resolved") or (decode_method != "rejected_target" and "news.google.com" in resolved):
+            item_copy = dict(item)
+            item_copy["text"] = str(item.get("text") or "")
+            item_copy["resolved_url"] = resolved if decode_method == "rejected_target" else link
+            item_copy["decode_method"] = decode_method
+            item_copy["decode_failed"] = True
+            item_copy["skip_retry"] = decode_method in ("negative_cache", "rejected_target", "pre_filtered")
+            item_copy["is_suspiciously_short"] = False
+            return item_copy
     else:
         # Tautan langsung dari Serper.dev / Exa tidak membutuhkan resolusi Google decoder
         resolved = link
+        decode_method = "direct"
 
     # Cek cache lagi dengan resolved URL
     if resolved != link:
@@ -218,11 +303,14 @@ def extract_one_article(item: dict) -> dict:
             item_copy["text"] = cached["text"]
             item_copy["resolved_url"] = resolved
             item_copy["link"] = resolved
+            item_copy["decode_method"] = decode_method
+            item_copy["decode_failed"] = False
+            item_copy["skip_retry"] = False
             item_copy["is_suspiciously_short"] = False
             return item_copy
 
     # Jika teks sudah disediakan oleh Exa / YouTube dan memadai (>= 300 char), gunakan langsung
-    text = item.get("text", "")
+    text = pre_text if len(pre_text) >= 300 else str(item.get("text") or "")
     if not text or len(text.strip()) < 300:
         if item.get("sumber_data") != "YouTube":
             try:
@@ -237,12 +325,15 @@ def extract_one_article(item: dict) -> dict:
     item_copy["resolved_url"] = resolved
     if resolved and "news.google.com" not in resolved:
         item_copy["link"] = resolved
+    item_copy["decode_method"] = decode_method
+    item_copy["decode_failed"] = False
+    item_copy["skip_retry"] = False
     item_copy["is_suspiciously_short"] = is_suspiciously_short(text)
     cache_article(item_copy)
     return item_copy
 
 
-def extract_single_article_with_timer(item: dict) -> tuple[dict, str]:
+def extract_single_article_with_timer(item: dict, allow_search_fallback: bool = True) -> tuple[dict, str]:
     """
     Ekstraksi konten satu artikel dengan watchdog timer 10 detik.
     Jika melebihi 10 detik, cetak peringatan [LAMBAT] tanpa memutus proses.
@@ -255,14 +346,240 @@ def extract_single_article_with_timer(item: dict) -> tuple[dict, str]:
     timer.daemon = True
     timer.start()
     try:
-        res = extract_one_article(item)
+        res = extract_one_article(item, allow_search_fallback=allow_search_fallback)
         return res, disp_url
     finally:
         timer.cancel()
 
 
+def _init_decode_stats() -> dict:
+    return {
+        "gnews_total": 0,
+        "cache_hit": 0,
+        "negative_cache_hit": 0,
+        "rejected_target": 0,
+        "pre_filtered": 0,
+        "prefiltered_samples": [],
+        "decode_offline": 0,
+        "decode_local": 0,
+        "decode_ok": 0,
+        "fallback_meta": 0,
+        "fallback_search": 0,
+        "decode_fail": 0,
+        "circuit_skipped": 0,
+        "extract_total": 0,
+        "extract_ok": 0,
+        "extract_short": 0,
+    }
+
+
+def compute_decode_failure_rate(stats: dict) -> tuple[int, int, float]:
+    """
+    Menghitung (numerator_fail, denominator_valid_gnews, fail_pct).
+    Item rejected_target (dan pre_filtered) dikeluarkan dari pembilang maupun penyebut.
+    """
+    g_tot = int(stats.get("gnews_total", 0) or 0)
+    rej = int(stats.get("rejected_target", 0) or 0)
+    pre = int(stats.get("pre_filtered", 0) or 0)
+    num = int(stats.get("decode_fail", 0) or 0)
+    denom = max(0, g_tot - rej - pre)
+    pct = (num / denom * 100.0) if denom > 0 else 0.0
+    return num, denom, pct
+
+
+def _record_decode_stat(stats: dict, raw_item: dict, res_item: dict) -> None:
+    stats["extract_total"] += 1
+    txt_len = len(str(res_item.get("text") or "").strip())
+    if txt_len >= 300:
+        stats["extract_ok"] += 1
+    elif not res_item.get("decode_failed"):
+        stats["extract_short"] += 1
+
+    raw_link = str(raw_item.get("link") or "")
+    if "news.google.com" not in raw_link:
+        return
+    stats["gnews_total"] += 1
+    method = str(res_item.get("decode_method") or "")
+    if res_item.get("decode_failed"):
+        if method == "negative_cache":
+            stats["negative_cache_hit"] += 1
+            return
+        if method == "rejected_target":
+            stats["rejected_target"] += 1
+            return
+        if method == "pre_filtered":
+            stats["pre_filtered"] = stats.get("pre_filtered", 0) + 1
+            samples = stats.setdefault("prefiltered_samples", [])
+            if len(samples) < 20:
+                samples.append({
+                    "title": str(res_item.get("title") or "")[:80],
+                    "domain": str(res_item.get("prefiltered_domain") or "-"),
+                    "reason": str(res_item.get("prefiltered_reason") or ""),
+                })
+            return
+        stats["decode_fail"] += 1
+        if method == "circuit_skipped":
+            stats["circuit_skipped"] += 1
+        return
+    if method == "cache":
+        stats["cache_hit"] += 1
+    elif method == "decode_offline":
+        stats["decode_offline"] += 1
+        stats["decode_ok"] += 1
+    elif method == "decode_local":
+        stats["decode_local"] += 1
+        stats["decode_ok"] += 1
+    elif method == "fallback_meta":
+        stats["fallback_meta"] += 1
+    elif method in ("fallback_serper", "fallback_exa", "fallback_search"):
+        stats["fallback_search"] += 1
+    else:
+        stats["decode_ok"] += 1
+
+
+def _merge_retry_items(existing: list[dict], new_items: list[dict]) -> list[dict]:
+    """Menggabungkan item gagal dekode ke antrean retry secara unik berbasis URL Google News."""
+    by_url: dict[str, dict] = {}
+    for src in (existing or []) + (new_items or []):
+        raw_u = str(src.get("link") or src.get("Link Website") or "").strip()
+        if not raw_u:
+            continue
+        key = normalize_google_news_url(raw_u) if "news.google.com" in raw_u else raw_u.split("?")[0].rstrip("/")
+        if key not in by_url:
+            copy_item = dict(src)
+            copy_item.pop("decode_failed", None)
+            copy_item.pop("decode_method", None)
+            by_url[key] = copy_item
+        else:
+            merged_kw = merge_keywords(str(by_url[key].get("keyword") or ""), str(src.get("keyword") or ""))
+            by_url[key]["keyword"] = merged_kw
+    return list(by_url.values())
+
+
+def drain_retry_queue(
+    retry_items: list[dict],
+    name_map: dict[str, str],
+    min_length: int = 300,
+    skip_ai: bool = False,
+) -> tuple[list[dict], list[dict], dict]:
+    """
+    Layer 4: Menjalankan ulang antrean item gagal dekode di akhir run (concurrency=1 + fallback penuh)
+    lalu menyaring artikel yang berhasil pulih agar masuk ke hasil final.
+    """
+    unique_queue = _merge_retry_items([], retry_items)
+    summary = {
+        "queued": len(unique_queue),
+        "recovered_urls": 0,
+        "valid_articles": 0,
+        "still_failed": 0,
+        "methods": {},
+    }
+    if not unique_queue:
+        return [], [], summary
+
+    print("\n" + "=" * 60, flush=True)
+    print(f"=== LAYER 4 ANTREAN RETRY AKHIR RUN ({len(unique_queue)} artikel) ===", flush=True)
+    print("=" * 60, flush=True)
+
+    ctrl = get_decode_controller()
+    ctrl.reset_for_retry_pass()
+
+    recovered_raw: list[dict] = []
+    still_failed: list[dict] = []
+
+    for idx, item in enumerate(unique_queue, start=1):
+        work_item = dict(item)
+        # Gunakan keyword pertama untuk validasi topik utama saat filter_valid_articles, simpan keyword lengkap
+        full_kw = str(work_item.get("keyword") or "")
+        primary_kw = full_kw.split(",")[0].strip() if "," in full_kw else full_kw
+        work_item["keyword"] = primary_kw
+        work_item["_merged_retry_keywords"] = full_kw
+
+        # Evaluasi status memo Layer 3: L4 hanya mencoba ulang jika NOT_SEARCHED atau TRANSIENT_FAIL
+        s_status = get_search_memo_status(work_item) or str(work_item.get("search_status") or "")
+        allow_search = (s_status != "SEARCHED_EMPTY")
+        bypass_memo = (s_status in ("NOT_SEARCHED", "TRANSIENT_FAIL"))
+
+        try:
+            ext_params = inspect.signature(extract_one_article).parameters
+            call_kw: dict[str, Any] = {"allow_search_fallback": allow_search}
+            if "max_retries" in ext_params:
+                call_kw["max_retries"] = 1
+            if "use_negative_cache" in ext_params:
+                call_kw["use_negative_cache"] = False
+            if "allow_circuit_trip" in ext_params:
+                call_kw["allow_circuit_trip"] = False
+            if "bypass_search_memo" in ext_params:
+                call_kw["bypass_search_memo"] = bypass_memo
+            res = extract_one_article(work_item, **call_kw)
+        except GoogleCaptchaBlockedError as cap_err:
+            print(f"  [Retry Queue CAPTCHA] {cap_err} -> Menghentikan dekode Google, lanjut fallback search sisa item.", flush=True)
+            work_item["decode_failed"] = True
+            res = work_item
+        except Exception:
+            work_item["decode_failed"] = True
+            res = work_item
+
+        m = str(res.get("decode_method") or "failed")
+        summary["methods"][m] = summary["methods"].get(m, 0) + 1
+
+        if res.get("decode_failed") or "news.google.com" in str(res.get("resolved_url") or res.get("link") or ""):
+            still_failed.append(res)
+        else:
+            recovered_raw.append(res)
+            summary["recovered_urls"] += 1
+
+        if idx % 10 == 0 or idx == len(unique_queue):
+            print(
+                f"  [Retry Queue Progress] {idx}/{len(unique_queue)} | Pulih URL: {summary['recovered_urls']} | Masih gagal: {len(still_failed)}",
+                flush=True,
+            )
+
+    save_decode_cache()
+
+    valid_flagged: list[dict] = []
+    if recovered_raw:
+        if skip_ai:
+            try:
+                content_valid, retry_discarded = filter_valid_articles(recovered_raw, min_length=min_length, skip_ai=True)
+            except TypeError:
+                content_valid, retry_discarded = filter_valid_articles(recovered_raw, min_length=min_length)
+        else:
+            content_valid, retry_discarded = filter_valid_articles(recovered_raw, min_length=min_length)
+        discard_reasons: dict[str, int] = {}
+        for d in retry_discarded:
+            dr = str(d.get("discard_reason") or "other")
+            discard_reasons[dr] = discard_reasons.get(dr, 0) + 1
+        summary["discarded_reasons"] = discard_reasons
+        for item in content_valid:
+            merged_kw = item.pop("_merged_retry_keywords", None) or item.get("keyword", "")
+            is_rel, sig_type, sig_det = get_kemenperin_signal(
+                item.get("title", ""), item.get("text", ""), name_map
+            )
+            item_copy = dict(item)
+            item_copy["keyword"] = merged_kw
+            item_copy["terkait_kemenperin"] = "Ya" if is_rel else "Tidak"
+            item_copy["kemenperin_signal_type"] = sig_type
+            item_copy["kemenperin_signal_detail"] = sig_det
+            valid_flagged.append(item_copy)
+
+    summary["valid_articles"] = len(valid_flagged)
+    summary["still_failed"] = len(still_failed)
+
+    print("\n" + "-" * 50, flush=True)
+    print("[LAPORAN ANTREAN RETRY]", flush=True)
+    print(f"Total antrean gagal awal : {summary['queued']}", flush=True)
+    print(f"URL berhasil dipulihkan  : {summary['recovered_urls']}", flush=True)
+    print(f"Artikel lolos filter     : {summary['valid_articles']}", flush=True)
+    print(f"Tetap gagal dekode       : {summary['still_failed']}", flush=True)
+    print(f"Rincian metode retry     : {summary['methods']}", flush=True)
+    print("-" * 50, flush=True)
+
+    return valid_flagged, still_failed, summary
+
+
 def filter_valid_articles(
-    articles: list[dict], min_length: int = 300, default_keyword: str | None = None
+    articles: list[dict], min_length: int = 300, default_keyword: str | None = None, skip_ai: bool = False
 ) -> tuple[list[dict], list[dict]]:
     """
     Menyaring artikel yang valid secara konten:
@@ -306,6 +623,15 @@ def filter_valid_articles(
         if is_non_article_structural_noise(title=title, url=link, text=text):
             item_copy = dict(item)
             item_copy["discard_reason"] = "structural_noise"
+            discarded.append(item_copy)
+            continue
+
+        # 1-evergreen. Filter non-berita / glosarium / profil vendor / edukasi evergreen (satu codepath dengan auto_recheck)
+        is_evergreen, evergreen_reason = classify_non_news_evergreen(title=title, text=text, url=link)
+        if is_evergreen:
+            item_copy = dict(item)
+            item_copy["discard_reason"] = f"non_news_evergreen: {evergreen_reason}"
+            item_copy["ai_reason"] = evergreen_reason
             discarded.append(item_copy)
             continue
 
@@ -576,43 +902,53 @@ def filter_valid_articles(
     # BAGIAN 2: AI Relevance Classifier (Google Gemini API) Mode Batch
     # Mengevaluasi kandidat yang lolos rule-based dalam batch efisien (tanpa terkena RPM limit)
     if candidates_for_ai:
-        for idx, c in enumerate(candidates_for_ai, start=1):
-            c["id"] = idx
-        batch_res = classify_articles_in_batches(candidates_for_ai, batch_size=25, delay_between_batches=1.0)
-        by_id = batch_res.get("by_id", {})
-
-        for c in candidates_for_ai:
-            info = by_id.get(c["id"]) or by_id.get(str(c["id"])) or {}
-            status_ai = info.get("status", "review")
-            is_rel = status_ai in ["relevan", "review"]
-            ai_reason = info.get("alasan", "")
-            sub_sektor = info.get("sub_sektor", "-")
-
-            if is_rel is False:
-                c_copy = dict(c)
-                c_copy["discard_reason"] = "ai_irrelevant"
-                c_copy["ai_reason"] = ai_reason
-                c_copy["status"] = "buang"
-                discarded.append(c_copy)
-                log_ai_rejection(
-                    title=c.get("title", ""),
-                    reason=ai_reason,
-                    published=c.get("published", ""),
-                    keyword=c.get("keyword") or default_keyword or ""
-                )
-            else:
-                c["status"] = status_ai
-                c["status_ai"] = status_ai
-                c["alasan"] = ai_reason
-                c["alasan_ai"] = ai_reason
-                c["sub_sektor"] = sub_sektor
-                if "ai tidak dijalankan" in str(ai_reason).lower():
-                    c["Status Review"] = ai_reason
-                elif status_ai == "review":
-                    c["Status Review"] = f"Perlu Dicek Manual: {ai_reason}" if ai_reason else "Perlu Dicek Manual"
-                else:
-                    c["Status Review"] = ""
+        if skip_ai:
+            for c in candidates_for_ai:
+                c["status"] = "review"
+                c["status_ai"] = "skip_ai_decode_only"
+                c["alasan"] = "AI dilewati (mode decode-only)"
+                c["alasan_ai"] = "AI dilewati (mode decode-only)"
+                c["sub_sektor"] = "-"
+                c["Status Review"] = "PERLU CEK MANUAL (Decode-Only)"
                 valid.append(c)
+        else:
+            for idx, c in enumerate(candidates_for_ai, start=1):
+                c["id"] = idx
+            batch_res = classify_articles_in_batches(candidates_for_ai, batch_size=25, delay_between_batches=1.0)
+            by_id = batch_res.get("by_id", {})
+
+            for c in candidates_for_ai:
+                info = by_id.get(c["id"]) or by_id.get(str(c["id"])) or {}
+                status_ai = info.get("status", "review")
+                is_rel = status_ai in ["relevan", "review"]
+                ai_reason = info.get("alasan", "")
+                sub_sektor = info.get("sub_sektor", "-")
+
+                if is_rel is False:
+                    c_copy = dict(c)
+                    c_copy["discard_reason"] = "ai_irrelevant"
+                    c_copy["ai_reason"] = ai_reason
+                    c_copy["status"] = "buang"
+                    discarded.append(c_copy)
+                    log_ai_rejection(
+                        title=c.get("title", ""),
+                        reason=ai_reason,
+                        published=c.get("published", ""),
+                        keyword=c.get("keyword") or default_keyword or ""
+                    )
+                else:
+                    c["status"] = status_ai
+                    c["status_ai"] = status_ai
+                    c["alasan"] = ai_reason
+                    c["alasan_ai"] = ai_reason
+                    c["sub_sektor"] = sub_sektor
+                    if "ai tidak dijalankan" in str(ai_reason).lower():
+                        c["Status Review"] = ai_reason
+                    elif status_ai == "review":
+                        c["Status Review"] = f"PERLU CEK MANUAL: {ai_reason}" if ai_reason else "PERLU CEK MANUAL"
+                    else:
+                        c["Status Review"] = ""
+                    valid.append(c)
 
     return valid, discarded
 
@@ -624,6 +960,7 @@ def process_single_keyword(
     name_map: dict[str, str] | None = None,
     serper_only: bool = False,
     target_date: date | tuple | list | None = None,
+    decode_only: bool = False,
 ) -> dict:
     """
     Mengambil, mengekstrak, dan menyaring berita untuk satu kata kunci,
@@ -683,28 +1020,67 @@ def process_single_keyword(
 
     # [4/6] Ekstraksi konten
     total_yest = len(yesterday_candidates)
-    log_granular(f"     [4/6] Ekstraksi konten ({total_yest} artikel)...")
+    ctrl = get_decode_controller()
+    rec_workers = ctrl.recommended_workers(max_workers)
+    workers = min(max_workers, 10) if use_serper else min(max_workers, rec_workers)
+    log_granular(f"     [4/6] Ekstraksi konten ({total_yest} artikel, workers={workers})...")
     extracted = []
+    retry_items = []
+    decode_stats = _init_decode_stats()
     if yesterday_candidates:
-        workers = min(max_workers, 10 if use_serper else 6)
         with ThreadPoolExecutor(max_workers=workers) as executor:
-            futures = [executor.submit(extract_single_article_with_timer, item) for item in yesterday_candidates]
+            future_map = {
+                executor.submit(extract_single_article_with_timer, item, True): item
+                for item in yesterday_candidates
+            }
             completed = 0
-            for f in as_completed(futures):
+            for f in as_completed(future_map):
                 completed += 1
+                raw_item = future_map[f]
                 try:
-                    res, disp_url = f.result(timeout=35)
-                    extracted.append(res)
+                    res, disp_url = f.result(timeout=45)
+                    _record_decode_stat(decode_stats, raw_item, res)
+                    if res.get("decode_failed"):
+                        if not res.get("skip_retry"):
+                            q_item = dict(res)
+                            q_item["keyword"] = keyword
+                            retry_items.append(q_item)
+                    else:
+                        extracted.append(res)
                 except GoogleCaptchaBlockedError:
                     raise
                 except Exception:
-                    disp_url = "url"
+                    disp_url = format_display_url(raw_item)
+                    decode_stats["extract_total"] += 1
+                    if "news.google.com" in str(raw_item.get("link") or ""):
+                        decode_stats["gnews_total"] += 1
+                        decode_stats["decode_fail"] += 1
+                        q_item = dict(raw_item)
+                        q_item["keyword"] = keyword
+                        retry_items.append(q_item)
                 log_granular(f"       -> mengekstrak artikel {completed}/{total_yest}: {disp_url}")
+        save_decode_cache()
+        if decode_stats["gnews_total"] > 0 or decode_stats["extract_total"] > 0:
+            cb_snap = ctrl.snapshot()
+            ext_tot = decode_stats["extract_total"]
+            ext_pct = (decode_stats["extract_ok"] / ext_tot * 100.0) if ext_tot else 0.0
+            f_num, f_denom, f_pct = compute_decode_failure_rate(decode_stats)
+            decode_stats["decode_eval_total"] = f_denom
+            decode_stats["decode_fail_pct"] = round(f_pct, 1)
+            log_granular(
+                f"     [Decode] GNews={decode_stats['gnews_total']} | Cache={decode_stats['cache_hit']} "
+                f"| NegCache={decode_stats['negative_cache_hit']} | Offline={decode_stats['decode_offline']} "
+                f"| Lokal={decode_stats['decode_local']} | Meta={decode_stats['fallback_meta']} "
+                f"| Search={decode_stats['fallback_search']} | Rejected={decode_stats['rejected_target']} "
+                f"| PreFiltered={decode_stats.get('pre_filtered', 0)} "
+                f"| Retry={f_num}/{f_denom} ({f_pct:.1f}%) | ExtractOK={decode_stats['extract_ok']}/{ext_tot} ({ext_pct:.0f}%) "
+                f"| CB={cb_snap['state']} (RollingFail={cb_snap['rolling_failure_rate']*100:.0f}%, NextWorkers={cb_snap['recommended_workers']})"
+            )
     else:
         log_granular(f"       -> tidak ada artikel tanggal kemarin untuk diekstrak")
 
     # [5/6] Filter relevansi & dedup
-    content_valid, discarded = filter_valid_articles(extracted, min_length=300, default_keyword=keyword)
+    content_valid, discarded = filter_valid_articles(extracted, min_length=300, default_keyword=keyword, skip_ai=decode_only)
     log_granular(f"     [5/6] Filter relevansi & dedup...          -> {len(content_valid)} lolos")
 
     reasons = {}
@@ -744,25 +1120,79 @@ def process_single_keyword(
         "valid_articles": flagged_articles,
         "discarded_count": len(discarded) + date_dropped_count,
         "discard_reasons": reasons,
+        "retry_items": retry_items,
+        "decode_stats": decode_stats,
     }
 
 
 
-def finalize_and_export(
+def _classify_with_issue_grouping(
     articles: list[dict],
-    name_map: dict[str, str],
-    output_excel: str = os.path.join(OUTPUT_DIR, "hasil_scraping_berita_lengkap.xlsx"),
-):
+    use_ai: bool = True,
+    combined_isu_tone: bool | None = None,
+) -> dict:
     """
-    Deduplikasi lintas keyword, entity mapping, sentiment analysis, dan export ke file Excel.
+    Menjalankan Fase 1 (pencocokan rilis & pengelompokan isu) lalu Fase 2 (satu tone per isu).
+    Mengembalikan dict {id_artikel: tone} dan memperbarui field 'Isu' serta log_isu.jsonl.
     """
-    print("\n" + "=" * 60, flush=True)
-    print("=== TAHAP FINAL: DEDUPLIKASI LINTAS KEYWORD & NLP ===", flush=True)
-    print("=" * 60, flush=True)
-
-    # 0. Direct crawl portal resmi Ditjen Industri Agro (agro.kemenperin.go.id)
+    for idx, art in enumerate(articles, start=1):
+        art["id"] = idx
+    reg = IsuRegistry()
     try:
-        start_date, end_date = get_date_range()
+        s_d, e_d = get_date_range()
+        rilis_window = (
+            s_d - timedelta(days=DEFAULT_RILIS_MAX_DAYS_AFTER),
+            e_d + timedelta(days=DEFAULT_RILIS_MAX_DAYS_BEFORE),
+        )
+        releases = load_rilis_kemenperin(crawl_online=use_ai, target_date_range=rilis_window)
+    except Exception:
+        releases = load_rilis_kemenperin(crawl_online=False)
+    if releases:
+        reg.seed_releases(releases)
+    use_comb = USE_COMBINED_ISU_TONE if combined_isu_tone is None else bool(combined_isu_tone)
+    grouped = assign_and_cluster_issues(
+        articles,
+        registry=reg,
+        method="tfidf",
+        use_ai=use_ai,
+        label_with_llm=(False if use_comb else use_ai),
+        log_path=None,
+    )
+    for orig, g in zip(articles, grouped):
+        orig["isu_id"] = g.get("isu_id", "")
+        orig["isu"] = g.get("isu", orig.get("title", ""))
+        orig["Isu"] = orig["isu"]
+        orig["sumber_isu"] = g.get("sumber_isu", "klaster")
+        orig["skor_isu"] = g.get("skor_isu", 0.0)
+        orig["margin_isu"] = g.get("margin_isu", 0.0)
+    tone_results = classify_tone_by_issue(
+        articles,
+        registry=reg,
+        use_ai=use_ai,
+        combined_isu_tone=use_comb,
+    )
+    res_by_id = {res["id"]: res for res in tone_results if res}
+    for orig in articles:
+        res = res_by_id.get(orig.get("id"))
+        if res:
+            if res.get("isu_id"):
+                orig["isu_id"] = res["isu_id"]
+            if res.get("isu"):
+                orig["isu"] = res["isu"]
+                orig["Isu"] = res["isu"]
+            if res.get("sumber_isu"):
+                orig["sumber_isu"] = res["sumber_isu"]
+            alasan_tone = str(res.get("alasan") or res.get("tone_alasan") or "").strip()
+            if alasan_tone:
+                orig["Alasan Tone"] = alasan_tone
+                orig["alasan_tone"] = alasan_tone
+    write_isu_log(articles, log_path=DEFAULT_LOG_ISU_PATH)
+    return {res["id"]: res.get("tone", "Netral") for res in tone_results if res}
+
+
+def _append_direct_crawl_portals(articles: list[dict], start_date: date, end_date: date) -> None:
+    """Mengambil rilis resmi dari agro.kemenperin.go.id dan www.kemenperin.go.id ke antrean artikel."""
+    try:
         print(f"\n[Direct Crawl Ditjen Agro] Memeriksa portal agro.kemenperin.go.id ({start_date} s.d {end_date})...", flush=True)
         agro_articles = fetch_agro_kemenperin(start_date, end_date, include_content=True)
         if agro_articles:
@@ -776,6 +1206,8 @@ def finalize_and_export(
                     "resolved_url": a.get("Link Website", ""),
                     "published": tgl_str,
                     "media_name": "Kemenperin (agro.kemenperin.go.id)",
+                    "unit_eselon": a.get("Unit Eselon", "IA"),
+                    "terkait_kemenperin": "Ya",
                     "sumber_data": "agro.kemenperin.go.id",
                     "text": a.get("isi", ""),
                     "keyword": "Rilis Resmi Ditjen Agro",
@@ -785,17 +1217,40 @@ def finalize_and_export(
     except Exception as e:
         print(f"  -> Peringatan direct crawl agro.kemenperin.go.id: {e}", flush=True)
 
+    try:
+        print(f"[Direct Crawl Kemenperin] Memeriksa portal www.kemenperin.go.id ({start_date} s.d {end_date})...", flush=True)
+        kem_articles = crawl_kemenperin_siaran_pers(target_date=(start_date, end_date), max_pages=3)
+        if kem_articles:
+            print(f"  -> Ditemukan {len(kem_articles)} siaran pers www.kemenperin.go.id. Menggabungkan ke antrean...", flush=True)
+            articles.extend(kem_articles)
+        else:
+            print("  -> Tidak ada siaran pers baru di www.kemenperin.go.id pada rentang tanggal tersebut.", flush=True)
+    except Exception as e:
+        print(f"  -> Peringatan direct crawl www.kemenperin.go.id: {e}", flush=True)
+
+
+def finalize_and_export(
+    articles: list[dict],
+    name_map: dict[str, str],
+    output_excel: str = os.path.join(OUTPUT_DIR, "hasil_scraping_berita_lengkap.xlsx"),
+    crawl_direct: bool = True,
+):
+    """
+    Deduplikasi lintas keyword, entity mapping, sentiment analysis, dan export ke file Excel.
+    """
+    print("\n" + "=" * 60, flush=True)
+    print("=== TAHAP FINAL: DEDUPLIKASI LINTAS KEYWORD & NLP ===", flush=True)
+    print("=" * 60, flush=True)
+
+    # 0. Direct crawl portal resmi Ditjen Industri Agro & portal utama Kemenperin
+    if crawl_direct:
+        start_date, end_date = get_date_range()
+        _append_direct_crawl_portals(articles, start_date, end_date)
+
     total_before = len(articles)
 
-    # 1. Dedup lintas keyword berdasarkan URL dasar
-    seen_urls = set()
-    cross_deduped = []
-    for art in articles:
-        url_to_check = art.get("resolved_url") or art.get("link", "")
-        clean_url = url_to_check.split("?")[0].rstrip("/")
-        if clean_url not in seen_urls:
-            seen_urls.add(clean_url)
-            cross_deduped.append(art)
+    # 1. Dedup lintas keyword berdasarkan URL kanonik (stabil across param tracking & http/www)
+    cross_deduped = union_articles_by_canonical_url([], articles)
 
     # 2. Dedup lintas keyword berdasarkan kemiripan judul (rapidfuzz >= 85)
     final_unique = dedup_by_title(cross_deduped, threshold=85)
@@ -851,13 +1306,8 @@ def finalize_and_export(
     sp_count = 0
     tone_dist = {"Positif": 0, "Netral": 0, "Negatif": 0}
 
-    # Beri ID untuk batch tone classification
-    for idx, art in enumerate(hilir_articles, start=1):
-        art["id"] = idx
-
-    print(f"Menginspeksi tone dengan Gemini AI API untuk {total_hilir} artikel...", flush=True)
-    tone_batch_results = classify_tone_batch(hilir_articles, use_ai=True)
-    tone_map = {res["id"]: res.get("tone", "Netral") for res in tone_batch_results}
+    print(f"Menginspeksi isu & tone dengan Fase 1+2 untuk {total_hilir} artikel...", flush=True)
+    tone_map = _classify_with_issue_grouping(hilir_articles, use_ai=True)
 
     for idx, art in enumerate(hilir_articles, start=1):
         text = art.get("text", "")
@@ -875,6 +1325,7 @@ def finalize_and_export(
         records.append({
             "Tanggal": art.get("published", ""),
             "Isu": art.get("Isu") or art.get("isu") or art["title"],
+            "Alasan Tone": art.get("Alasan Tone") or art.get("alasan_tone") or "",
             "Title": art["title"],
             "Link Website": art.get("link", ""),
             "Media Name": art.get("media_name") or "",
@@ -905,11 +1356,15 @@ def finalize_and_export(
     neg_summaries = None
     if any(r.get("Tone") == "Negatif" for r in records):
         print(f"\nMenjalankan ringkasan otomatis 5W+1H untuk berita bertone Negatif (khusus artikel hilir tersisa)...", flush=True)
-        txt_map = {
-            str(a.get("link") or "").strip(): str(a.get("text") or "").strip()
-            for a in hilir_articles if a.get("link")
-        }
-        neg_summaries = summarize_negative_articles(records, progress_text_map=txt_map)
+        txt_map = {}
+        for a in hilir_articles:
+            txt_val = str(a.get("text") or "").strip()
+            for u_field in (a.get("link"), a.get("resolved_url")):
+                if u_field:
+                    txt_map[str(u_field).strip()] = txt_val
+                    txt_map[canonical_url(str(u_field))] = txt_val
+        raw_neg_summaries = summarize_negative_articles(records, progress_text_map=txt_map)
+        neg_summaries = validate_and_repair_negative_summaries(records, raw_neg_summaries, progress_text_map=txt_map)
 
     # 5. Simpan ke file Excel
     save_to_excel(records, output_excel, merge_existing=False, negative_summaries=neg_summaries)
@@ -921,6 +1376,8 @@ def finalize_and_export(
             save_to_excel(records, ringkasan_path, merge_existing=False, negative_summaries=neg_summaries)
             print(f"Salinan dengan ringkasan negatif disimpan ke: {ringkasan_path}", flush=True)
 
+    save_decision_cache()
+    save_decode_cache()
     return records, tone_dist
 
 
@@ -992,23 +1449,45 @@ def run_pipeline(
     total_yest = len(yesterday_candidates)
     log_granular(f"Mengekstrak {total_yest} artikel tanggal kemarin...")
     extracted_articles = []
+    retry_items = []
+    run_decode_stats = _init_decode_stats()
     if yesterday_candidates:
-        workers = min(8, 4 if USE_SERPER_ONLY else 2)
+        ctrl = get_decode_controller()
+        workers = min(8, 4) if USE_SERPER_ONLY else min(8, ctrl.recommended_workers(2))
         with ThreadPoolExecutor(max_workers=workers) as executor:
-            futures = [executor.submit(extract_single_article_with_timer, item) for item in yesterday_candidates]
+            future_map = {
+                executor.submit(extract_single_article_with_timer, item, True): item
+                for item in yesterday_candidates
+            }
             completed = 0
-            for f in as_completed(futures):
+            for f in as_completed(future_map):
                 completed += 1
+                raw_item = future_map[f]
                 try:
-                    res, disp_url = f.result(timeout=35)
-                    extracted_articles.append(res)
+                    res, disp_url = f.result(timeout=45)
+                    _record_decode_stat(run_decode_stats, raw_item, res)
+                    if res.get("decode_failed"):
+                        if not res.get("skip_retry"):
+                            retry_items.append(res)
+                    else:
+                        extracted_articles.append(res)
                 except Exception:
-                    disp_url = "url"
+                    disp_url = format_display_url(raw_item)
+                    run_decode_stats["extract_total"] += 1
+                    if "news.google.com" in str(raw_item.get("link") or ""):
+                        run_decode_stats["gnews_total"] += 1
+                        run_decode_stats["decode_fail"] += 1
+                        retry_items.append(raw_item)
                 log_granular(f"  -> mengekstrak artikel {completed}/{total_yest}: {disp_url}")
+        save_decode_cache()
     else:
         log_granular("  -> 0 artikel untuk diekstrak")
 
     content_valid, discarded = filter_valid_articles(extracted_articles, min_length=300)
+    if retry_items:
+        ret_valid, _still_failed, _ret_sum = drain_retry_queue(retry_items, name_map, min_length=300)
+        if ret_valid:
+            content_valid.extend(ret_valid)
     print(f"Artikel lolos filter konten & industri: {len(content_valid)} (Dibuang konten: {len(discarded)})")
 
     # Flagging Institusi: Terkait Kemenperin (Eksplisit atau Implisit) - OPSI B
@@ -1017,10 +1496,13 @@ def run_pipeline(
     spokesperson_empty = 0
     kemenperin_yes_count = 0
 
+    # Pengelompokan isu & klasifikasi tone satu kali per isu (fallback otomatis jika offline/kuota habis)
+    tone_map = _classify_with_issue_grouping(content_valid, use_ai=True)
+
     for item in content_valid:
         text = item["text"]
         sp1, sp2, unit = find_spokespersons(text, name_map)
-        tone = classify_tone(text=text, title=item.get("title", ""))
+        tone = tone_map.get(item.get("id"), "Netral")
         is_rel, sig_type, sig_det = get_kemenperin_signal(
             item.get("title", ""), text, name_map
         )
@@ -1039,6 +1521,8 @@ def run_pipeline(
             "Link Website": item["link"],
             "Media Name": item.get("media_name") or "",
             "Tone": tone,
+            "Isu": item.get("Isu") or item.get("isu") or item["title"],
+            "Alasan Tone": item.get("Alasan Tone") or item.get("alasan_tone") or "",
             "Spokesperson 1": sp1,
             "Spokesperson 2": sp2,
             "Unit Eselon": unit,
@@ -1060,6 +1544,7 @@ def run_batch_pipeline(
     target_batch: int | None = None,
     checkpoint_file: str | None = None,
     output_excel: str | None = None,
+    decode_only: bool = False,
 ):
     """
     Menjalankan scraping per batch (misal 5 keyword per batch),
@@ -1094,11 +1579,12 @@ def run_batch_pipeline(
 
     print(f"Total keyword: {len(keywords)} dibagi menjadi {total_batches} batch (ukuran batch: {batch_size})", flush=True)
 
-    checkpoint = {"batches_done": [], "batch_reports": [], "articles": []}
+    checkpoint: dict[str, Any] = {"batches_done": [], "batch_reports": [], "articles": [], "retry_queue": []}
     if os.path.exists(checkpoint_path):
         try:
             with open(checkpoint_path, "r", encoding="utf-8") as f:
                 checkpoint = json.load(f)
+                checkpoint.setdefault("retry_queue", [])
                 print(f"Checkpoint dimuat: Batch yang sudah selesai: {checkpoint.get('batches_done', [])}", flush=True)
         except Exception as e:
             print(f"Warning membaca checkpoint: {e}", flush=True)
@@ -1115,6 +1601,9 @@ def run_batch_pipeline(
     for b_idx in batches_to_run:
         b_num = b_idx + 1
         current_kws = batches[b_idx]
+        t_b_start = time.time()
+        q_b_start = get_search_quota_usage()
+        sorry_b_start = get_sorry_index_count()
         print("\n" + "=" * 60, flush=True)
         print(f"=== MEMULAI BATCH {b_num}/{total_batches}: {current_kws} ===", flush=True)
         print("=" * 60, flush=True)
@@ -1124,17 +1613,19 @@ def run_batch_pipeline(
         batch_date_dropped = 0
         batch_kemenperin_yes = 0
         batch_final_valid = 0
-        batch_kw_stats = []
+        batch_kw_stats: list[dict[str, Any]] = []
+        batch_retry_items = []
+        batch_decode_stats = _init_decode_stats()
 
         for kw in current_kws:
             try:
-                res = process_single_keyword(kw, name_map=name_map, target_date=(start_date, end_date))
+                res = process_single_keyword(kw, name_map=name_map, target_date=(start_date, end_date), decode_only=decode_only)
             except GoogleCaptchaBlockedError as cap_err:
                 if os.environ.get("SERPER_API_KEY", "").strip():
                     global USE_SERPER_ONLY
                     print(f"  [CAPTCHA FALLBACK] {cap_err} -> Beralih ke Serper.dev untuk sisa sesi.", flush=True)
                     USE_SERPER_ONLY = True
-                    res = process_single_keyword(kw, name_map=name_map, serper_only=True, target_date=(start_date, end_date))
+                    res = process_single_keyword(kw, name_map=name_map, serper_only=True, target_date=(start_date, end_date), decode_only=decode_only)
                 else:
                     raise
             batch_initial += res["initial_candidates"]
@@ -1143,6 +1634,14 @@ def run_batch_pipeline(
             batch_kemenperin_yes += res.get("kemenperin_yes_count", 0)
             batch_final_valid += len(res["valid_articles"])
             checkpoint["articles"].extend(res["valid_articles"])
+            batch_retry_items.extend(res.get("retry_items", []))
+            kw_dec = res.get("decode_stats") or {}
+            for dk, val in kw_dec.items():
+                if dk == "prefiltered_samples":
+                    if isinstance(val, list):
+                        batch_decode_stats.setdefault("prefiltered_samples", []).extend(val)
+                elif dk in batch_decode_stats and isinstance(batch_decode_stats[dk], int):
+                    batch_decode_stats[dk] += int(val or 0)
             batch_kw_stats.append({
                 "keyword": kw,
                 "initial": res["initial_candidates"],
@@ -1152,23 +1651,57 @@ def run_batch_pipeline(
                 "final_valid": len(res["valid_articles"]),
                 "discarded": res["discarded_count"],
                 "reasons": res["discard_reasons"],
+                "decode_stats": kw_dec,
             })
 
-        checkpoint["batches_done"].append(b_idx)
+        checkpoint["retry_queue"] = _merge_retry_items(checkpoint.get("retry_queue", []), batch_retry_items)
+        save_decode_cache()
+        cb_snapshot = get_decode_controller().snapshot()
+        batch_decode_report = dict(batch_decode_stats)
+        batch_decode_report["queued_retry"] = len(batch_retry_items)
+        batch_decode_report["circuit_trips"] = cb_snapshot["circuit_trips"]
+        batch_decode_report["rolling_failure_rate"] = cb_snapshot["rolling_failure_rate"]
+        batch_decode_report["circuit_state"] = cb_snapshot["state"]
+
+        b_duration_sec = round(time.time() - t_b_start, 1)
+        q_b_end = get_search_quota_usage()
+        sorry_b_end = get_sorry_index_count()
+        serp_batch = max(0, q_b_end["serper_calls"] - q_b_start["serper_calls"])
+        exa_batch = max(0, q_b_end["exa_calls"] - q_b_start["exa_calls"])
+        sorry_batch = max(0, sorry_b_end - sorry_b_start)
+
+        if b_idx not in checkpoint["batches_done"]:
+            checkpoint["batches_done"].append(b_idx)
         checkpoint["batch_reports"].append({
             "batch_num": b_num,
             "keywords": current_kws,
+            "duration_sec": b_duration_sec,
+            "serper_calls": serp_batch,
+            "exa_calls": exa_batch,
+            "sorry_index_count": sorry_batch,
+            "circuit_breaker_state": cb_snapshot["state"],
             "total_initial": batch_initial,
             "total_content_valid": batch_content_valid,
             "total_date_dropped": batch_date_dropped,
             "total_kemenperin_yes": batch_kemenperin_yes,
             "total_final_valid": batch_final_valid,
+            "decode_stats": batch_decode_report,
             "details": batch_kw_stats,
         })
 
         with open(checkpoint_path, "w", encoding="utf-8") as f:
             json.dump(checkpoint, f, ensure_ascii=False, indent=2)
 
+        if decode_only:
+            generate_verification_report(checkpoint.get("batch_reports", []), output_dir=date_folder)
+
+        g_tot = batch_decode_report["gnews_total"]
+        f_num, f_denom, fail_pct = compute_decode_failure_rate(batch_decode_report)
+        batch_decode_report["decode_eval_total"] = f_denom
+        batch_decode_report["decode_fail_pct"] = round(fail_pct, 1)
+        ext_tot = batch_decode_report.get("extract_total", 0)
+        ext_ok = batch_decode_report.get("extract_ok", 0)
+        ext_pct = (ext_ok / ext_tot * 100.0) if ext_tot else 0.0
         print("\n" + "-" * 50, flush=True)
         print(f"[LAPORAN SELESAI BATCH {b_num}/{total_batches}]", flush=True)
         print(f"Keywords diproses        : {', '.join(current_kws)}", flush=True)
@@ -1176,6 +1709,32 @@ def run_batch_pipeline(
         print(f"Gugur filter tanggal     : {batch_date_dropped}", flush=True)
         print(f"Total final lolos kemarin: {batch_final_valid}", flush=True)
         print(f"Terkait Kemenperin (Ya)  : {batch_kemenperin_yes} | Tidak: {batch_final_valid - batch_kemenperin_yes}", flush=True)
+        print(
+            f"Metrik Decode GNews      : Total={g_tot} | Cache={batch_decode_report['cache_hit']} "
+            f"| NegCache={batch_decode_report.get('negative_cache_hit', 0)} "
+            f"| DecodeOK={batch_decode_report['decode_ok']} (Offline={batch_decode_report['decode_offline']}, Lokal={batch_decode_report['decode_local']}) "
+            f"| FallbackMeta={batch_decode_report['fallback_meta']} | FallbackSearch={batch_decode_report['fallback_search']} "
+            f"| Rejected={batch_decode_report.get('rejected_target', 0)} "
+            f"| PreFiltered={batch_decode_report.get('pre_filtered', 0)} "
+            f"| Gagal/Retry={f_num}/{f_denom} ({fail_pct:.1f}%) "
+            f"| CircuitTrips={batch_decode_report['circuit_trips']}",
+            flush=True,
+        )
+        pre_samples = batch_decode_report.get("prefiltered_samples") or []
+        if pre_samples:
+            sample_str = "; ".join([f"'{s['title']}' ({s['domain']}: {s['reason']})" for s in pre_samples[:5]])
+            print(f"Sampel PreFiltered       : {sample_str}", flush=True)
+        print(
+            f"Metrik Ekstraksi Teks    : ExtractOK={ext_ok}/{ext_tot} ({ext_pct:.1f}%) (>= 300 char, tidak setara metrik decode-only)",
+            flush=True,
+        )
+        q_usage = get_search_quota_usage()
+        serp_alert = " [LIMIT TERCAPAI!]" if q_usage.get("serper_limit_reached") else ""
+        exa_alert = " [LIMIT TERCAPAI!]" if q_usage.get("exa_limit_reached") else ""
+        print(
+            f"Pemakaian Kuota Search   : Serper={q_usage['serper_calls']}/{q_usage['serper_max']}{serp_alert} | Exa={q_usage['exa_calls']}/{q_usage['exa_max']}{exa_alert}",
+            flush=True,
+        )
         print("Rincian per keyword:", flush=True)
         for s in batch_kw_stats:
             kw_init = int(s.get("initial", 0) or 0)
@@ -1183,46 +1742,82 @@ def run_batch_pipeline(
             kw_final = int(s.get("final_valid", 0) or 0)
             kw_kem_yes = int(s.get("kemenperin_yes", 0) or 0)
             kw_kem_no = kw_final - kw_kem_yes
+            kw_ds = s.get("decode_stats")
+            kw_ds_dict: dict[str, Any] = kw_ds if isinstance(kw_ds, dict) else {}
+            kw_rej = int(kw_ds_dict.get("rejected_target", 0) or 0)
             print(
                 f"  - '{s.get('keyword', '')}': Awal={kw_init} -> LolosKemarin={kw_init - kw_dropped} -> "
-                f"FINAL={kw_final} (Kemenperin: Ya={kw_kem_yes} / Tidak={kw_kem_no})",
+                f"FINAL={kw_final} (Kemenperin: Ya={kw_kem_yes} / Tidak={kw_kem_no} | Rejected={kw_rej})",
                 flush=True,
             )
         print(f"Checkpoint tersimpan ke: {checkpoint_path}", flush=True)
         print("-" * 50, flush=True)
 
+    # Layer 4: proses antrean retry item gagal dekode sebelum finalisasi (baik --all maupun --batch)
+    if checkpoint.get("retry_queue") and (len(checkpoint["batches_done"]) == total_batches or target_batch is not None):
+        ret_valid, ret_still_failed, ret_summary = drain_retry_queue(checkpoint["retry_queue"], name_map, min_length=300, skip_ai=decode_only)
+        if ret_valid:
+            checkpoint["articles"].extend(ret_valid)
+        checkpoint["retry_queue"] = []
+        checkpoint["retry_report"] = ret_summary
+        if ret_still_failed:
+            checkpoint.setdefault("decode_failed_items", []).extend(
+                {
+                    "title": x.get("title", ""),
+                    "link": x.get("link", ""),
+                    "keyword": x.get("keyword", ""),
+                    "media_name": x.get("media_name", ""),
+                    "decode_method": x.get("decode_method", "failed"),
+                }
+                for x in ret_still_failed
+            )
+        with open(checkpoint_path, "w", encoding="utf-8") as f:
+            json.dump(checkpoint, f, ensure_ascii=False, indent=2)
+
+        if decode_only:
+            generate_verification_report(checkpoint.get("batch_reports", []), output_dir=date_folder)
+
     if len(checkpoint["batches_done"]) == total_batches:
         print("\nSeluruh batch telah selesai! Melanjutkan ke finalisasi...", flush=True)
-        try:
-            from direct_crawl_kemenperin import crawl_kemenperin_siaran_pers
-            from direct_crawl_agro import fetch_agro_kemenperin
-            c_items = crawl_kemenperin_siaran_pers(target_date=(start_date, end_date), max_pages=3)
-            if c_items:
-                print(f"[Direct Crawl] Ditemukan {len(c_items)} siaran pers kemenperin.go.id", flush=True)
-                for a in c_items:
-                    checkpoint["articles"].append(a)
-            a_items = fetch_agro_kemenperin(date_from=start_date, date_to=end_date, include_content=True)
-            if a_items:
-                print(f"[Direct Crawl] Ditemukan {len(a_items)} rilis resmi Ditjen Agro", flush=True)
-                for a in a_items:
-                    checkpoint["articles"].append({
-                        "title": a.get("Title", ""),
-                        "link": a.get("Link Website", ""),
-                        "published": a.get("Tanggal"),
-                        "media_name": a.get("Media Name", "Kemenperin (agro.kemenperin.go.id)"),
-                        "unit_eselon": a.get("Unit Eselon", "IA"),
-                        "terkait_kemenperin": "Ya",
-                        "keyword": "agro_kemenperin_resmi",
-                        "sumber_data": "agro.kemenperin.go.id",
-                        "text": a.get("isi", ""),
-                    })
-        except Exception as e:
-            print(f"[Direct Crawl Warning] {e}", flush=True)
+        _append_direct_crawl_portals(checkpoint["articles"], start_date, end_date)
 
-        finalize_and_export(checkpoint["articles"], name_map, output_excel=out_excel_path)
+        # Gabungkan dengan snapshot kandidat harian agar run pada jam berbeda tetap >= 95% konsisten
+        try:
+            snap_store = DateSnapshotStore()
+            before_snap = len(checkpoint["articles"])
+            checkpoint["articles"] = snap_store.merge_range_with_snapshots(
+                start_date,
+                end_date,
+                checkpoint["articles"],
+                parse_date_fn=parse_to_wib,
+            )
+            print(
+                f"[Snapshot Union] Kandidat tanggal {start_date} s.d. {end_date}: {before_snap} -> {len(checkpoint['articles'])} artikel",
+                flush=True,
+            )
+        except Exception as e:
+            print(f"[Snapshot Union Warning] {e}", flush=True)
+
+        q_tot = get_search_quota_usage()
+        print(
+            f"\n[Ringkasan Kuota Search Run] Serper: {q_tot['serper_calls']}/{q_tot['serper_max']} | Exa: {q_tot['exa_calls']}/{q_tot['exa_max']}",
+            flush=True,
+        )
+        if decode_only:
+            print("\n" + "=" * 60, flush=True)
+            print("=== MODE VERIFIKASI DECODE-ONLY SELESAI ===", flush=True)
+            print("Melewati tahap klasifikasi AI Gemini & ringkasan negatif.", flush=True)
+            print("=" * 60 + "\n", flush=True)
+            rep = generate_verification_report(checkpoint.get("batch_reports", []), output_dir=date_folder)
+            print(rep["table_md"], flush=True)
+            return
+        finalize_and_export(checkpoint["articles"], name_map, output_excel=out_excel_path, crawl_direct=False)
     elif target_batch is not None:
         batch_out = os.path.join(date_folder, f"checkpoint_batch_{target_batch}.xlsx")
         print(f"\nBatch {target_batch} selesai diproses. Mengekspor hasil batch ke {batch_out}...", flush=True)
+        if decode_only:
+            print("\n[DECODE ONLY] Target batch selesai diproses. Melewati finalize_and_export.", flush=True)
+            return
         finalize_and_export(checkpoint["articles"], name_map, output_excel=batch_out)
         print(f"Jalankan batch berikutnya dengan --batch {target_batch + 1} atau --all.", flush=True)
 
@@ -1239,8 +1834,46 @@ if __name__ == "__main__":
     parser.add_argument("--start-date", type=str, default=None, help="Tanggal awal rentang evaluasi YYYY-MM-DD")
     parser.add_argument("--end-date", type=str, default=None, help="Tanggal akhir rentang evaluasi YYYY-MM-DD")
     parser.add_argument("--recheck", action="store_true", help="Jalankan Auto Cek Ulang pada data yang sudah di-scrape tanpa scrape ulang")
+    parser.add_argument("--merge-from", dest="merge_from", type=str, default=None, help="Path file Excel (.xlsx) dari run lain pada tanggal yang sama untuk digabungkan")
+    parser.add_argument("--overwrite", action="store_true", help="Izinkan menimpa data/file lama saat --merge-from (default: tidak menimpa)")
+    parser.add_argument("--publish", action="store_true", help="Izinkan pembaruan ke data_export/ (branch data); default NONAKTIF selama pengujian")
+    parser.add_argument("--decode-only", action="store_true", help="Mode verifikasi: hanya jalankan fetch, decode L1-L4, dan ekstraksi teks tanpa pemanggilan Gemini AI")
 
     args = parser.parse_args()
+
+    def _run_merge_for_target_date(merge_path: str, overwrite: bool = False, output_override: str | None = None) -> dict:
+        s_d, e_d = get_date_range()
+        d_folder = get_date_folder((s_d, e_d))
+        d_str = s_d.strftime("%Y-%m-%d") if s_d == e_d else f"{s_d.strftime('%Y-%m-%d')}_sd_{e_d.strftime('%Y-%m-%d')}"
+        ringkasan_p = os.path.join(d_folder, f"all_{d_str}_ringkasan.xlsx")
+        plain_p = os.path.join(d_folder, f"all_{d_str}.xlsx")
+        base_p = output_override or (ringkasan_p if os.path.exists(ringkasan_p) else plain_p)
+        res = merge_runs_from_excel(
+            base_p,
+            merge_path,
+            output_path=output_override or base_p,
+            overwrite=overwrite,
+        )
+        print(
+            f"\n[MERGE RUN SELESAI] Base={res['base_count']} | MergeFrom={res['merge_from_count']} "
+            f"| Konflik={res['conflicts']} (DecisionCache={res['cache_resolved']}, DropCache={res['dropped_by_cache']}) "
+            f"| Final={res['final_count']} | Overwrite={res['overwritten']} -> {res['output_path']}",
+            flush=True,
+        )
+        return res
+
+    def _publish_if_requested(publish_flag: bool, duration_sec: int = 1) -> None:
+        if not publish_flag:
+            return
+        from scripts.sync_dashboard_data import sync_after_run
+        s_d, e_d = get_date_range()
+        sync_after_run(
+            start_date=s_d.strftime("%Y-%m-%d"),
+            end_date=e_d.strftime("%Y-%m-%d"),
+            status="Berhasil",
+            duration_sec=max(1, int(duration_sec)),
+            trigger="Manual CLI (--publish)",
+        )
 
     if args.api_key:
         os.environ["SERPER_API_KEY"] = args.api_key.strip()
@@ -1278,6 +1911,12 @@ if __name__ == "__main__":
             print(f"[Error] File sumber checkpoint tidak ditemukan di: {source_chk}", flush=True)
             sys.exit(1)
 
+    t_cli_start = time.time()
+    if args.merge_from and not args.all and args.batch is None and not args.keyword:
+        _run_merge_for_target_date(args.merge_from, overwrite=args.overwrite, output_override=args.output)
+        _publish_if_requested(args.publish, duration_sec=int(time.time() - t_cli_start))
+        sys.exit(0)
+
     USE_SERPER_ONLY, source_msg = determine_session_source(force_serper=args.serper_only)
     print(f"\n[STATUS SUMBER SESI] {source_msg}\n")
 
@@ -1288,8 +1927,13 @@ if __name__ == "__main__":
         out = args.output if args.output else os.path.join(OUTPUT_DIR, f"hasil_scraping_{args.keyword}.xlsx")
         run_pipeline(keywords_or_file=[args.keyword], output_excel=out)
     elif args.batch is not None:
-        run_batch_pipeline(batch_size=5, target_batch=args.batch)
+        run_batch_pipeline(batch_size=5, target_batch=args.batch, decode_only=args.decode_only)
     elif args.all:
-        run_batch_pipeline(batch_size=5)
+        run_batch_pipeline(batch_size=5, decode_only=args.decode_only)
     else:
-        run_batch_pipeline(batch_size=5)
+        run_batch_pipeline(batch_size=5, decode_only=args.decode_only)
+
+    if args.merge_from:
+        _run_merge_for_target_date(args.merge_from, overwrite=args.overwrite, output_override=args.output)
+
+    _publish_if_requested(args.publish, duration_sec=int(time.time() - t_cli_start))

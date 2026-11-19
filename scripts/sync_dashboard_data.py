@@ -133,6 +133,13 @@ def check_unscraped_dates(start_str: str, end_str: str, skip_existing: bool) -> 
     return dates
 
 
+def _clean_cell_str(val) -> str:
+    if val is None or pd.isna(val):
+        return ""
+    s = str(val).strip()
+    return "" if s.lower() in ("nan", "none") else s
+
+
 def read_excel_articles(excel_path: Path, fallback_date: str) -> list[dict]:
     """Membaca baris artikel dari file Excel hasil main.py ke struktur articles_all.json."""
     if not excel_path.exists():
@@ -168,12 +175,17 @@ def read_excel_articles(excel_path: Path, fallback_date: str) -> list[dict]:
         if tone not in ("Positif", "Netral", "Negatif"):
             tone = "Netral"
 
-        sp1 = "" if pd.isna(row.get("Spokesperson 1")) else str(row.get("Spokesperson 1")).strip()
-        unit = "-" if pd.isna(row.get("Unit Eselon")) else str(row.get("Unit Eselon")).strip()
-        kw = "" if pd.isna(row.get("Keywords")) else str(row.get("Keywords")).strip()
-        rev = "" if pd.isna(row.get("Status Review")) else str(row.get("Status Review")).strip()
+        sp1 = _clean_cell_str(row.get("Spokesperson 1"))
+        unit = _clean_cell_str(row.get("Unit Eselon")) or "-"
+        kw = _clean_cell_str(row.get("Keywords"))
+        rev = _clean_cell_str(row.get("Status Review"))
+        isu_val = _clean_cell_str(row.get("Isu"))
+        alasan_tone_val = _clean_cell_str(row.get("Alasan Tone"))
+        sumber_isu_val = _clean_cell_str(
+            row.get("Sumber Isu") if "Sumber Isu" in row.index else row.get("sumber_isu")
+        )
 
-        records.append({
+        rec: dict[str, object] = {
             "id": 0,
             "title": title,
             "link": link,
@@ -184,11 +196,16 @@ def read_excel_articles(excel_path: Path, fallback_date: str) -> list[dict]:
             "time": time_str,
             "date_display": format_date_indo(d_str, full_month=True),
             "spokesperson": sp1,
-            "unit": unit or "-",
+            "unit": unit,
             "commodity": map_keyword_to_commodity(kw, title),
             "has_review": bool(rev),
             "review_text": rev,
-        })
+            "isu": isu_val,
+            "alasan_tone": alasan_tone_val,
+        }
+        if sumber_isu_val:
+            rec["sumber_isu"] = sumber_isu_val
+        records.append(rec)
     return records
 
 

@@ -1,11 +1,12 @@
 """
 direct_crawl_kemenperin.py
-Modul direct crawl siaran pers langsung dari portal resmi Kementerian Perindustrian (https://kemenperin.go.id/siaran-pers).
+Modul direct crawl siaran pers langsung dari portal resmi Kementerian Perindustrian (https://www.kemenperin.go.id/siaran-pers).
 Sebagai sumber primer / fallback independen dari Google News RSS.
 """
 
 import os
 import re
+from urllib.parse import urljoin
 import requests
 from datetime import date, datetime
 from bs4 import BeautifulSoup
@@ -13,7 +14,13 @@ import urllib3
 
 urllib3.disable_warnings()
 
-KEMENPERIN_SIARAN_PERS_URL = "https://kemenperin.go.id/siaran-pers"
+try:
+    from direct_crawl_agro import fetch_with_retry as _agro_fetch_with_retry
+except ImportError:
+    from src.direct_crawl_agro import fetch_with_retry as _agro_fetch_with_retry
+
+KEMENPERIN_BASE_URL = "https://www.kemenperin.go.id"
+KEMENPERIN_SIARAN_PERS_URL = f"{KEMENPERIN_BASE_URL}/siaran-pers"
 
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36",
@@ -40,57 +47,67 @@ def parse_kemenperin_date(date_str: str) -> date | None:
 
 def crawl_kemenperin_siaran_pers(target_date: date | tuple | list | None = None, max_pages: int = 2) -> list[dict]:
     """
-    Mengambil daftar siaran pers dari https://kemenperin.go.id/siaran-pers.
+    Mengambil daftar siaran pers dari https://www.kemenperin.go.id/siaran-pers.
     Jika target_date diberikan, hanya mengambil rilis yang tanggal terbitnya cocok dengan target_date.
     Mengembalikan list dictionary dengan format standar:
     [{'title': ..., 'link': ..., 'published': ..., 'text': ..., 'media_name': 'kemenperin.go.id', 'sumber_data': 'Direct Crawl'}]
     """
     results = []
 
+    start_d: date | None = None
+    end_d: date | None = None
+    override = os.environ.get("OVERRIDE_DATE", "").strip()
+    if target_date is not None or override:
+        from src.config import get_date_range
+        start_d, end_d = get_date_range(target_date)
+
     current_url = KEMENPERIN_SIARAN_PERS_URL
     seen_urls = set()
+    seen_item_urls = set()
 
     for page in range(1, max_pages + 1):
         if not current_url or current_url in seen_urls:
             break
         seen_urls.add(current_url)
         try:
-            resp = requests.get(current_url, headers=HEADERS, verify=False, timeout=25)
-            if resp.status_code != 200:
-                print(f"[Direct Crawl] Gagal mengakses {current_url} (HTTP {resp.status_code})")
+            html_page = _agro_fetch_with_retry(current_url, max_retries=4, timeout=25)
+            if not html_page:
+                print(f"[Direct Crawl] Gagal mengakses {current_url} setelah retry")
                 break
 
-            soup = BeautifulSoup(resp.text, "html.parser")
+            soup = BeautifulSoup(html_page, "html.parser")
             article_links = soup.find_all("a", href=True)
 
-            found_on_page = 0
+            page_dates: list[date] = []
             for a in article_links:
                 href = str(a.get("href") or "")
                 if "/artikel/" in href:
-                    title = a.get_text(strip=True)
-                    if not title or len(title) < 10:
+                    title = a.get_text(" ", strip=True)
+                    if not title or len(title) < 10 or title.upper().startswith("PENGUMUMAN "):
                         continue
 
                     # Ambil elemen parent/container untuk mencari tanggal publikasi
                     parent = a.find_parent()
                     parent_text = parent.get_text(separator=" ", strip=True) if parent else ""
                     pub_date = parse_kemenperin_date(parent_text)
+                    if pub_date is not None:
+                        page_dates.append(pub_date)
 
-                    full_url = href if href.startswith("http") else f"https://kemenperin.go.id{href}"
+                    full_url = urljoin(f"{KEMENPERIN_BASE_URL}/", href)
+                    if full_url in seen_item_urls:
+                        continue
+                    seen_item_urls.add(full_url)
 
-                    override = os.environ.get("OVERRIDE_DATE", "").strip()
-                    if target_date is not None or override:
-                        from config import get_date_range
-                        start_d, end_d = get_date_range(target_date)
+                    if start_d is not None and end_d is not None:
                         if pub_date is None or not (start_d <= pub_date <= end_d):
                             continue
 
-                    # Ekstraksi isi artikel penuh
+                    # Ekstraksi isi artikel penuh dengan retry DNS/timeout
                     article_text = title
                     try:
-                        art_resp = requests.get(full_url, headers=HEADERS, verify=False, timeout=20)
-                        if art_resp.status_code == 200:
-                            art_soup = BeautifulSoup(art_resp.text, "html.parser")
+                        art_html = _agro_fetch_with_retry(full_url, max_retries=4, timeout=20)
+                        if art_html:
+                            art_soup = BeautifulSoup(art_html, "html.parser")
                             content_div = art_soup.find("div", class_=re.compile(r"content|artikel|isi|detail", re.I))
                             if content_div:
                                 article_text = content_div.get_text(separator="\n", strip=True)
@@ -114,17 +131,20 @@ def crawl_kemenperin_siaran_pers(target_date: date | tuple | list | None = None,
                         "keyword": "kemenperin_institusi",
                         "terkait_kemenperin": "Ya",
                         "kemenperin_signal_type": "EKSPLISIT",
-                        "kemenperin_signal_detail": "kemenperin.go.id (Portal Resmi)",
+                        "kemenperin_signal_detail": "www.kemenperin.go.id (Portal Resmi)",
                     })
-                    found_on_page += 1
+
+            if start_d is not None and page_dates and max(page_dates) < start_d:
+                break
 
             active_li = soup.find("li", class_="active")
             next_li = active_li.find_next_sibling("li") if active_li else None
             next_a = next_li.find("a") if next_li else None
             if next_a:
                 next_href = str(next_a.get("href") or "")
-                if next_href and next_href != "#" and next_href not in seen_urls:
-                    current_url = f"https://kemenperin.go.id{next_href}"
+                next_full = urljoin(f"{KEMENPERIN_BASE_URL}/", next_href) if next_href and next_href != "#" else ""
+                if next_full and next_full not in seen_urls:
+                    current_url = next_full
                 else:
                     current_url = None
             else:

@@ -18,25 +18,20 @@ from datetime import datetime
 from rapidfuzz import fuzz
 
 try:
-    from config import load_env_file
+    from src.config import load_env_file
     load_env_file()
 except Exception:
     pass
 
 try:
-    from extract_content import extract_article_text
+    from src.extract_content import extract_article_text
 except Exception:
     extract_article_text = None
 
-CANDIDATE_MODELS = [
-    "gemini-flash-lite-latest",
-    "gemini-flash-latest",
-    "gemini-3.8-flash",
-    "gemini-3.5-flash",
-    "gemini-3-flash-preview",
-]
-_current_model_idx = 0
-_model_instance = None
+from src.gemini_pool import CANDIDATE_MODELS, GeminiModelPool
+from src.stable import canonical_url
+
+_MODEL_POOL = GeminiModelPool("NEGATIVE SUMMARIZER")
 gemini_quota_exhausted = False
 TOTAL_API_CALLS = 0
 
@@ -63,40 +58,11 @@ def _safe_int(val, default: int = 0) -> int:
 
 
 def _get_gemini_model(force_next: bool = False):
-    """Inisialisasi model Generative AI Gemini secara lazy dengan fallback model dinamis."""
-    global _model_instance, _current_model_idx, gemini_quota_exhausted
-
-    if gemini_quota_exhausted:
-        return None
-
-    if _model_instance is not None and not force_next:
-        return _model_instance
-
-    api_key = os.getenv("GEMINI_API_KEY", "").strip()
-    if not api_key:
-        return None
-
-    if force_next:
-        _current_model_idx += 1
-
-    try:
-        import google.generativeai as genai  # type: ignore
-        genai.configure(api_key=api_key, transport="rest")  # type: ignore
-
-        while _current_model_idx < len(CANDIDATE_MODELS):
-            m_name = CANDIDATE_MODELS[_current_model_idx]
-            try:
-                m = genai.GenerativeModel(m_name)  # type: ignore
-                _model_instance = m
-                return _model_instance
-            except Exception:
-                _current_model_idx += 1
-                continue
-
-        gemini_quota_exhausted = True
-        return None
-    except Exception:
-        return None
+    """Kompatibilitas wrapper yang mendelegasikan rotasi model ke shared GeminiModelPool."""
+    global gemini_quota_exhausted
+    model, _name = _MODEL_POOL.get_model(force_next=force_next, mark_exhausted=force_next)
+    gemini_quota_exhausted = _MODEL_POOL.quota_exhausted
+    return model
 
 
 SYSTEM_PROMPT = """Kamu analis media monitoring Direktorat Jenderal Industri Agro, Kemenperin. Untuk setiap berita bertone Negatif, baca judul dan isi lengkap, lalu hasilkan:
@@ -248,87 +214,86 @@ def group_negative_articles(articles: list[dict], threshold: float = 85.0) -> li
     return groups
 
 
-def _call_gemini_summary_batch(chunk: list[dict]) -> dict[int, dict]:
+def _parse_summary_json(resp_text: str) -> dict[int, dict]:
+    clean_json = re.sub(r"^```(?:json)?\s*", "", resp_text or "", flags=re.MULTILINE)
+    clean_json = re.sub(r"\s*```$", "", clean_json, flags=re.MULTILINE).strip()
+    m = re.search(r"\{[\s\S]*\}", clean_json)
+    if m:
+        clean_json = m.group(0)
+    clean_json = re.sub(r"[\x00-\x08\x0b\x0c\x0e-\x1f]", " ", clean_json)
+    data = json.loads(clean_json, strict=False)
+    hasil_list = data.get("hasil", []) if isinstance(data, dict) else (data if isinstance(data, list) else [])
+    res_by_id: dict[int, dict] = {}
+    for item in hasil_list:
+        if not isinstance(item, dict):
+            continue
+        it_id = item.get("id")
+        try:
+            res_by_id[int(it_id)] = item
+        except Exception:
+            res_by_id[it_id] = item
+    return res_by_id
+
+
+def _call_gemini_summary_batch(chunk: list[dict], _allow_single_retry: bool = True) -> dict[int, dict]:
     """
-    Memanggil Gemini API untuk 1 batch (maksimal 3 artikel).
-    Mendukung backoff untuk error 429 dan fallback model.
+    Memanggil Gemini API untuk 1 batch (maksimal 3 artikel) dengan shared GeminiModelPool
+    (temperature=0, tahan 404/429/timeout) + retry per item jika ada ID terlewat.
     """
     global gemini_quota_exhausted, TOTAL_API_CALLS
 
-    if gemini_quota_exhausted:
+    if gemini_quota_exhausted or not chunk:
+        return {}
+    if not os.getenv("GEMINI_API_KEY", "").strip():
         return {}
 
-    model = _get_gemini_model()
-    if model is None:
-        return {}
-
-    payload = []
-    for a in chunk:
-        payload.append({
+    payload = [
+        {
             "id": a["id"],
             "judul": str(a.get("title", "")).strip(),
             "tanggal_terbit": str(a.get("published", "")).strip(),
-            "isi_teks": str(a.get("text", ""))[:6000].strip()
-        })
+            "isi_teks": str(a.get("text", ""))[:6000].strip(),
+        }
+        for a in chunk
+    ]
 
     user_msg = f"Berikut artikel bertone Negatif untuk diringkas (total: {len(payload)}):\n{json.dumps(payload, ensure_ascii=False, indent=2)}"
     full_prompt = f"{SYSTEM_PROMPT}\n\n{user_msg}"
 
-    max_retries = 3
-    for attempt in range(max_retries):
-        if model is None:
+    res_by_id: dict[int, dict] = {}
+    for parse_attempt in range(2):
+        TOTAL_API_CALLS += 1
+        resp_text, _used_model, err_msg = _MODEL_POOL.generate_deterministic(
+            full_prompt,
+            timeout=60,
+            max_attempts=6,
+        )
+        gemini_quota_exhausted = _MODEL_POOL.quota_exhausted
+        if not resp_text:
+            print(f"[GEMINI ERROR] Gagal ringkasan negatif batch: {err_msg}", flush=True)
             break
         try:
-            TOTAL_API_CALLS += 1
-            resp = model.generate_content(full_prompt, request_options={"timeout": 60})
-            resp_text = (resp.text or "").strip()
-
-            clean_json = re.sub(r"^```(?:json)?\s*", "", resp_text, flags=re.MULTILINE)
-            clean_json = re.sub(r"\s*```$", "", clean_json, flags=re.MULTILINE).strip()
-            m = re.search(r"\{[\s\S]*\}", clean_json)
-            if m:
-                clean_json = m.group(0)
-
-            data = json.loads(clean_json, strict=False)
-            hasil_list = data.get("hasil", [])
-            res_by_id = {}
-            for item in hasil_list:
-                it_id = item.get("id")
-                try:
-                    res_by_id[int(it_id)] = item
-                except Exception:
-                    res_by_id[it_id] = item
-
-            # Cek apakah seluruh ID chunk kembali
-            missing = [a["id"] for a in chunk if a["id"] not in res_by_id and str(a["id"]) not in res_by_id]
+            res_by_id = _parse_summary_json(resp_text)
+            missing = [a for a in chunk if a["id"] not in res_by_id and str(a["id"]) not in res_by_id]
             if not missing:
                 return res_by_id
-            if attempt == max_retries - 1:
-                return res_by_id
-            print(f"  [GEMINI RETRY] ID hilang: {missing}. Melakukan retry...", flush=True)
-
+            print(f"  [GEMINI RETRY] ID hilang pada batch ringkasan: {[m['id'] for m in missing]}", flush=True)
+            break
         except Exception as e:
-            err_s = str(e).lower()
-            if "429" in err_s or "quota" in err_s or "resourceexhausted" in err_s:
-                if "perday" in err_s or "daily" in err_s:
-                    print(f"[GEMINI] Batas harian tercapai. Beralih model...", flush=True)
-                    model = _get_gemini_model(force_next=True)
-                    if model is None:
-                        gemini_quota_exhausted = True
-                        return {}
-                else:
-                    wait_sec = 6.0 * (attempt + 1)
-                    print(f"[GEMINI 429] Rate limit tercapai, jeda {wait_sec}s...", flush=True)
-                    time.sleep(wait_sec)
-            else:
-                print(f"[GEMINI ERROR] {e}. Beralih model / retry {attempt+1}/{max_retries}...", flush=True)
-                model = _get_gemini_model(force_next=True)
-                if model is None:
-                    gemini_quota_exhausted = True
-                    return {}
-                time.sleep(2.0)
+            print(f"  [GEMINI PARSE ERROR] Ringkasan negatif parse gagal (percobaan {parse_attempt + 1}/2): {e}", flush=True)
 
-    return {}
+    # Retry per item bila batch gagal atau melewatkan sebagian ID (mis. kayonews.co.id)
+    if _allow_single_retry and not gemini_quota_exhausted:
+        for single in chunk:
+            sid = single["id"]
+            if sid in res_by_id or str(sid) in res_by_id:
+                continue
+            print(f"  [SINGLE ITEM RETRY] Mengulang ringkasan khusus untuk ID={sid} ('{str(single.get('title', ''))[:50]}...')", flush=True)
+            single_res = _call_gemini_summary_batch([single], _allow_single_retry=False)
+            if single_res:
+                res_by_id.update(single_res)
+
+    return res_by_id
 
 
 def summarize_negative_articles(
@@ -375,7 +340,13 @@ def summarize_negative_articles(
         for a in grp:
             u = str(a.get("Link Website") or a.get("link") or "").strip()
             clean_u = u.split("?")[0].rstrip("/")
-            txt = progress_text_map.get(u) or progress_text_map.get(clean_u) or str(a.get("text") or a.get("content") or "")
+            can_u = canonical_url(u)
+            txt = (
+                progress_text_map.get(u)
+                or progress_text_map.get(can_u)
+                or progress_text_map.get(clean_u)
+                or str(a.get("text") or a.get("content") or "")
+            )
             if len(txt) > len(best_text):
                 best_text = txt
                 best_art = a
@@ -416,7 +387,10 @@ def summarize_negative_articles(
     for rep in group_representatives:
         u = str(rep.get("url", ""))
         clean_u = u.split("?")[0].rstrip("/")
-        cached_val = cache.get(u) or cache.get(clean_u)
+        can_u = canonical_url(u)
+        cached_val = cache.get(can_u) or cache.get(u) or cache.get(clean_u)
+        if cached_val and str(cached_val.get("status", "")).lower() != "success":
+            cached_val = None
         rep_gid = _safe_int(rep.get("group_id", 0))
         rep_title = str(rep.get("title", ""))
         members = rep.get("group_members", [])
@@ -480,8 +454,11 @@ def summarize_negative_articles(
                     "status": "success",
                     "metode": "AI"
                 }
-                # Simpan ke cache
+                # Simpan ke cache (beserta canonical_url agar deterministik)
                 if rep_url:
+                    can_u = canonical_url(rep_url)
+                    if can_u:
+                        cache[can_u] = group_summaries[gid]
                     cache[rep_url] = group_summaries[gid]
                     clean_u = rep_url.split("?")[0].rstrip("/")
                     cache[clean_u] = group_summaries[gid]
@@ -549,17 +526,21 @@ def summarize_negative_articles(
         rep_title = str(rep.get("title", ""))
 
         if status_summ == "quota_exhausted":
-            isu_inti = "Belum diringkas (kuota habis)"
-            alasan_neg = "Belum diringkas (kuota habis)"
-            what = who = when = where = why = how = "Belum diringkas (kuota habis)"
+            print(f"[ERROR RINGKASAN NEGATIF] Kuota habis untuk '{rep_title}' -> menulis placeholder jelas agar 1:1 dengan Berita.", file=sys.stderr, flush=True)
+            isu_inti = f"[PLACEHOLDER - KUOTA HABIS] {rep_title}"
+            alasan_neg = "Belum diringkas (kuota Gemini habis setelah fallback model)"
+            what = rep_title or "Belum diringkas (kuota habis)"
+            who = when = where = why = how = "Belum diringkas (kuota habis)"
             stakeholders_str = "-"
-            catatan_str = "Belum diringkas (kuota habis)"
+            catatan_str = "PLACEHOLDER: Ringkasan ditunda karena kuota API habis"
         elif status_summ == "failed" or not raw:
-            isu_inti = "Ringkasan gagal dibuat"
-            alasan_neg = "Ringkasan gagal dibuat"
-            what = who = when = where = why = how = "Ringkasan gagal dibuat"
+            print(f"[ERROR RINGKASAN NEGATIF] Ringkasan AI gagal dibuat untuk '{rep_title}' setelah retry per item -> menulis placeholder jelas.", file=sys.stderr, flush=True)
+            isu_inti = f"[PLACEHOLDER - RINGKASAN GAGAL DIBUAT] {rep_title}"
+            alasan_neg = "Ringkasan AI gagal dibuat setelah retry per item (butuh tinjauan manual)"
+            what = rep_title or "Ringkasan gagal dibuat"
+            who = when = where = why = how = "Ringkasan gagal dibuat (perlu tinjauan manual)"
             stakeholders_str = "-"
-            catatan_str = "Ringkasan gagal dibuat"
+            catatan_str = "PLACEHOLDER: Ringkasan gagal dibuat otomatis setelah retry per item"
         else:
             # Sukses didapatkan dari AI / cache -> validasi grounding
             val_item, dropped_sh, need_num = validate_grounding(raw, rep_txt, rep_title)
@@ -650,3 +631,103 @@ def summarize_negative_articles(
         print(f"  - {ti['title']}: {ti['catatan_tone']}")
 
     return final_output_rows
+
+
+def _build_negative_placeholder_row(rec: dict, reason: str = "Regenerasi gagal / placeholder konsistensi 1:1") -> dict:
+    title = str(rec.get("Title") or rec.get("title") or "").strip()
+    return {
+        "Tanggal": rec.get("Tanggal") or rec.get("published") or "",
+        "Title": title,
+        "Link Website": rec.get("Link Website") or rec.get("link") or "",
+        "Media Name": rec.get("Media Name") or rec.get("media_name") or "",
+        "Terkait Kemenperin": rec.get("Terkait Kemenperin") or rec.get("terkait_kemenperin") or "Tidak",
+        "Isu Inti": f"[PLACEHOLDER - RINGKASAN BELUM TERSEDIA] {title}",
+        "Alasan Negatif": reason,
+        "What": title or reason,
+        "Who": "-",
+        "When": str(rec.get("Tanggal") or rec.get("published") or "-"),
+        "Where": "-",
+        "Why": reason,
+        "How": "-",
+        "Stakeholder Terkait": "-",
+        "Catatan": f"PLACEHOLDER KONISTENSI: {reason}",
+    }
+
+
+def validate_and_repair_negative_summaries(
+    records: list[dict],
+    neg_rows: list[dict] | None,
+    progress_text_map: dict[str, str] | None = None,
+) -> list[dict]:
+    """
+    Memvalidasi konsistensi 1:1 antara berita bertone Negatif dengan baris Sheet 'Ringkasan Negatif'.
+    Jika ada item Negatif yang hilang, log error jelas, lakukan regenerasi per item,
+    dan bila tetap gagal tulis placeholder jelas agar jumlah baris selalu sama persis 1:1.
+    """
+    neg_records = [
+        r for r in (records or [])
+        if str(r.get("Tone") or r.get("tone") or "").strip().lower() == "negatif"
+        and str(r.get("status") or r.get("Status") or r.get("status_ai") or "relevan").strip().lower() != "buang"
+    ]
+    existing_rows = list(neg_rows or [])
+    if not neg_records:
+        return []
+
+    def _rec_key(row: dict) -> tuple[str, str]:
+        url = str(row.get("Link Website") or row.get("link") or "").strip()
+        can = canonical_url(url) if url else ""
+        t_low = str(row.get("Title") or row.get("title") or "").strip().lower()
+        return (can, t_low)
+
+    matched_rows: list[dict] = []
+    remaining_pool = list(existing_rows)
+    missing_records: list[dict] = []
+
+    for rec in neg_records:
+        rec_can, rec_t = _rec_key(rec)
+        found_idx = -1
+        for idx, nr in enumerate(remaining_pool):
+            nr_can, nr_t = _rec_key(nr)
+            if (rec_can and nr_can and rec_can == nr_can) or (rec_t and nr_t and rec_t == nr_t):
+                found_idx = idx
+                break
+        if found_idx != -1:
+            matched_rows.append(remaining_pool.pop(found_idx))
+        else:
+            missing_records.append(rec)
+
+    if missing_records:
+        print(
+            f"[ERROR KONSISTENSI RINGKASAN NEGATIF] Ditemukan {len(neg_records)} berita bertone Negatif, "
+            f"tetapi hanya {len(matched_rows)} yang ada di Ringkasan Negatif ({len(missing_records)} kurang). "
+            f"Menjalankan regenerasi untuk item yang kurang...",
+            file=sys.stderr,
+            flush=True,
+        )
+        regen_rows = summarize_negative_articles(
+            missing_records,
+            progress_text_map=progress_text_map or {},
+            delay_between_batches=0.5,
+        )
+        for rec in missing_records:
+            rec_can, rec_t = _rec_key(rec)
+            picked = None
+            for idx, rr in enumerate(regen_rows):
+                rr_can, rr_t = _rec_key(rr)
+                if (rec_can and rr_can and rec_can == rr_can) or (rec_t and rr_t and rec_t == rr_t):
+                    picked = regen_rows.pop(idx)
+                    break
+            if picked is not None:
+                matched_rows.append(picked)
+            else:
+                print(
+                    f"[ERROR KONSISTENSI RINGKASAN NEGATIF] Regenerasi gagal untuk '{rec.get('Title', '')}' -> menulis placeholder.",
+                    file=sys.stderr,
+                    flush=True,
+                )
+                matched_rows.append(_build_negative_placeholder_row(rec))
+
+    assert len(matched_rows) == len(neg_records), (
+        f"Inkonsistensi fatal Ringkasan Negatif: {len(matched_rows)} != {len(neg_records)}"
+    )
+    return matched_rows
