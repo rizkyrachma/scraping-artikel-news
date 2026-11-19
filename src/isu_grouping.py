@@ -46,8 +46,23 @@ DEFAULT_GRAY_ZONE_LOW = 0.36
 DEFAULT_MARGIN_THRESHOLD = 0.06
 DEFAULT_CLUSTER_SIM_THRESHOLD = 0.42
 DEFAULT_REEVAL_MEMBER_DELTA = 3
+# Ambang terpisah gerbang cuplikan isi -> zona abu-abu (HANYA ke MATCH_ISU_PROMPT, tidak auto-merge)
+DEFAULT_BODY_GRAY_ZONE_TFIDF = 0.45
+DEFAULT_BODY_GRAY_ZONE_MIN_ENTITIES = 2
+DEFAULT_BODY_GRAY_ZONE_ENTITY_TFIDF = 0.25
+DEFAULT_MAX_GRAY_ZONE_LLM_CALLS = 20
 
 _ISU_MODEL_POOL = GeminiModelPool("ISU GROUPING")
+_GRAY_ZONE_LLM_CALLS = 0
+
+
+def get_gray_zone_llm_call_count() -> int:
+    return _GRAY_ZONE_LLM_CALLS
+
+
+def reset_gray_zone_llm_call_count() -> None:
+    global _GRAY_ZONE_LLM_CALLS
+    _GRAY_ZONE_LLM_CALLS = 0
 
 MATCH_ISU_PROMPT = """Kamu menerima satu berita media dan beberapa kandidat isu (judul rilis resmi Kemenperin atau isu hasil pengelompokan). Tentukan apakah berita itu meliput peristiwa, pernyataan, atau data yang SAMA dengan salah satu kandidat. Topik yang hanya mirip TIDAK cukup. Jika ragu, jawab tidak ada.
 Balas HANYA JSON: {"cocok": <id kandidat atau null>, "alasan": "<satu kalimat>"}"""
@@ -237,6 +252,155 @@ def extract_entities(norm_text: str) -> dict[str, set[str]]:
     }
 
 
+_BODY_BOILERPLATE_ACRS = {
+    "WIB", "WITA", "WIT", "RI", "PT", "TBK", "CV", "RP", "USD", "IDR",
+    "UU", "PP", "NO", "ID", "CO", "COM", "TV", "DR", "SH", "MH", "PJ",
+    "SE", "MM", "II", "III", "IV", "VI", "AKBP", "KOMBES",
+    "REL", "CPO", "UMKM", "SDM", "BUMN", "PDB", "KBLI", "DPR", "MPR", "BPS", "BI", "OJK",
+    "JAKARTA", "SURABAYA", "BANDUNG", "MEDAN", "AMBON", "SEMARANG", "BADUNG", "BALI", "SUMUT", "ACEH",
+    "ANTARA", "KOMPAS", "DETIK", "CNBC", "CNN", "TRIBUNNEWS", "KONTAN",
+    "PROHABA", "SINDO", "JENDELASERAM", "RADARBANJARMASIN", "SUMUTPOS",
+}
+
+_BODY_ORG_RE = re.compile(
+    r"\b(?:Asosiasi|Perkumpulan|Gabungan|Himpunan|Federasi|Ikatan|Direktorat(?:\s+Jenderal)?|Mahkamah|Majelis|Badan)\s+"
+    r"(?:[A-Z][A-Za-z0-9.-]+(?:\s+(?:dan|of|untuk)?\s*[A-Z][A-Za-z0-9.-]+){0,4})"
+)
+
+_BODY_PLACE_RE = re.compile(
+    r"\b(?:Kabupaten|Kota|Provinsi|Wilayah|Kawasan)\s+([A-Z][A-Za-z]+(?:\s+[A-Z][A-Za-z]+){0,2})"
+)
+
+_BODY_PLACE_TOKENS = {
+    "sbt", "maluku", "sumut", "aceh", "meranti", "riau", "ntb", "surabaya",
+    "semarang", "kendal", "bali", "badung", "sumsel", "bandung", "medan", "ambon",
+}
+
+_BODY_SPEC_NUM_RE = re.compile(
+    r"\b(?:rp\s*\d+(?:[.,]\d+)?\s*(?:juta|miliar|triliun)|usd\s*\d+(?:[.,]\d+)?\s*(?:juta|miliar|triliun)"
+    r"|\d+(?:[.,]\d+)?\s*(?:juta|miliar|triliun|persen|ton|gw|mw|ribu|orang|pekerja)"
+    r"|nomor\s+\d+(?:/[a-z0-9-]+)*)\b",
+    re.IGNORECASE,
+)
+
+
+def _extract_body_snippet(item: dict[str, Any], max_chars: int = 1200) -> str:
+    raw = str(item.get("text") or item.get("isi") or "").strip()
+    if not raw:
+        snips = item.get("sample_snippets")
+        if isinstance(snips, list) and snips:
+            raw = " ".join(str(s) for s in snips if s).strip()
+    if not raw:
+        return ""
+    txt = re.sub(r"\s+", " ", html.unescape(raw)).strip()
+    title = str(item.get("title") or item.get("Title") or item.get("judul") or item.get("isu") or "").strip()
+    if title and txt.lower().startswith(title.lower()):
+        txt = txt[len(title):].strip(" -–—:|")
+    return txt[:max_chars]
+
+
+def extract_body_entities(raw_body: str) -> dict[str, set[str]]:
+    """Ekstrak entitas spesifik dari cuplikan isi: singkatan organisasi, asosiasi, angka, nama tempat."""
+    if not raw_body:
+        return {"acronyms": set(), "orgs": set(), "places": set(), "numbers": set()}
+    acrs = {
+        m.group(0)
+        for m in re.finditer(r"\b[A-Z]{2,10}\b", raw_body)
+        if m.group(0) not in _BODY_BOILERPLATE_ACRS
+    }
+    orgs = {
+        re.sub(r"\s+", " ", m.group(0).strip().lower())
+        for m in _BODY_ORG_RE.finditer(raw_body)
+    }
+    places = {
+        re.sub(r"\s+", " ", m.group(1).strip().lower())
+        for m in _BODY_PLACE_RE.finditer(raw_body)
+        if m.group(1).strip().lower() not in {"jakarta", "indonesia"}
+    }
+    low_toks = set(re.findall(r"[a-z]+", raw_body.lower()))
+    places.update(low_toks.intersection(_BODY_PLACE_TOKENS))
+    nums = {
+        re.sub(r"\s+", " ", m.group(0).strip().lower())
+        for m in _BODY_SPEC_NUM_RE.finditer(raw_body)
+    }
+    return {"acronyms": acrs, "orgs": orgs, "places": places, "numbers": nums}
+
+
+def _has_structural_event_conflict(norm_a: str, norm_b: str, cfg: dict[str, Any]) -> bool:
+    all_a = extract_tokens(norm_a, cfg, exclude_generic=False)
+    all_b = extract_tokens(norm_b, cfg, exclude_generic=False)
+    # Sidang MK dan berita non-sidang MK adalah peristiwa berbeda meski menyebut asosiasi sama
+    if bool({"sidang", "mk"}.intersection(all_a)) != bool({"sidang", "mk"}.intersection(all_b)):
+        return True
+    return False
+
+
+def compute_body_gate_signals(
+    item_a: dict[str, Any],
+    item_b: dict[str, Any],
+    alias_config: dict[str, Any] | None = None,
+    body_idf: dict[str, float] | None = None,
+) -> dict[str, Any]:
+    """
+    Membandingkan cuplikan isi dua berita (TF-IDF token spesifik + overlap entitas) untuk gerbang zona abu-abu.
+    Tidak pernah menggabung langsung; hanya menandai eligible untuk dikirim ke MATCH_ISU_PROMPT.
+    """
+    cfg = alias_config or load_alias_config()
+    empty = {
+        "has_body": False,
+        "body_tfidf": 0.0,
+        "shared_acronyms": set(),
+        "shared_orgs": set(),
+        "shared_places": set(),
+        "shared_numbers": set(),
+        "shared_entity_count": 0,
+        "eligible": False,
+    }
+    raw_a = item_a.get("_body_raw") if "_body_raw" in item_a else _extract_body_snippet(item_a)
+    raw_b = item_b.get("_body_raw") if "_body_raw" in item_b else _extract_body_snippet(item_b)
+    if len(raw_a) < 40 or len(raw_b) < 40:
+        return empty
+
+    norm_a = item_a.get("_body_norm") if "_body_norm" in item_a else normalize_isu_text(raw_a, cfg)
+    norm_b = item_b.get("_body_norm") if "_body_norm" in item_b else normalize_isu_text(raw_b, cfg)
+    toks_a = extract_tokens(norm_a, cfg, exclude_generic=True)
+    toks_b = extract_tokens(norm_b, cfg, exclude_generic=True)
+    if len(toks_a) >= 5 and len(toks_b) >= 5:
+        vec_a = {t: (body_idf.get(t, 1.0) if body_idf else 1.0) for t in toks_a}
+        vec_b = {t: (body_idf.get(t, 1.0) if body_idf else 1.0) for t in toks_b}
+        body_tfidf = float(_cosine_dict(vec_a, vec_b))
+    else:
+        body_tfidf = 0.0
+
+    ent_a = item_a.get("_body_ents") if "_body_ents" in item_a else extract_body_entities(raw_a)
+    ent_b = item_b.get("_body_ents") if "_body_ents" in item_b else extract_body_entities(raw_b)
+    sh_acr = ent_a["acronyms"].intersection(ent_b["acronyms"])
+    sh_org = ent_a["orgs"].intersection(ent_b["orgs"])
+    sh_plc = ent_a["places"].intersection(ent_b["places"])
+    sh_num = ent_a["numbers"].intersection(ent_b["numbers"])
+    # Hindari hitung ganda antara akronim dan kepanjangan organisasi dalam kurung (mis. GAPKI + Gabungan...)
+    distinct_org_hits = max(len(sh_acr), len(sh_org))
+    shared_entity_count = distinct_org_hits + len(sh_plc) + len(sh_num)
+
+    eligible = (
+        body_tfidf >= DEFAULT_BODY_GRAY_ZONE_TFIDF
+        or (
+            shared_entity_count >= DEFAULT_BODY_GRAY_ZONE_MIN_ENTITIES
+            and body_tfidf >= DEFAULT_BODY_GRAY_ZONE_ENTITY_TFIDF
+        )
+    )
+    return {
+        "has_body": True,
+        "body_tfidf": round(body_tfidf, 4),
+        "shared_acronyms": sh_acr,
+        "shared_orgs": sh_org,
+        "shared_places": sh_plc,
+        "shared_numbers": sh_num,
+        "shared_entity_count": shared_entity_count,
+        "eligible": eligible,
+    }
+
+
 def parse_article_date(val: Any) -> date | None:
     if val is None:
         return None
@@ -299,10 +463,14 @@ def compute_pair_similarity(
     method: str = "tfidf",
     alias_config: dict[str, Any] | None = None,
     idf_map: dict[str, float] | None = None,
+    body_idf: dict[str, float] | None = None,
 ) -> float:
     """
     Menghitung skor kemiripan [0.0 .. 1.0] antara dua artikel/isu.
     PENTING: Kolom Keywords, Spokesperson, dan Unit Eselon TIDAK pernah dipakai.
+    Bila skor judul rendah tetapi cuplikan isi tersedia dan lolos gerbang isi+entitas,
+    skor dibatasi ketat di zona abu-abu [DEFAULT_GRAY_ZONE_LOW, DEFAULT_CLUSTER_SIM_THRESHOLD - 0.01]
+    agar masuk MATCH_ISU_PROMPT dan TIDAK pernah auto-merge langsung.
     """
     cfg = alias_config or load_alias_config()
     title_a = str(item_a.get("title") or item_a.get("Title") or item_a.get("judul") or item_a.get("isu") or "")
@@ -319,6 +487,25 @@ def compute_pair_similarity(
     if method == "rapidfuzz":
         return fuzz.token_set_ratio(norm_a, norm_b) / 100.0
 
+    # Veto konflik peristiwa struktural (mis. Sidang MK vs non-sidang MK) berlaku sebelum gerbang isi
+    if _has_structural_event_conflict(norm_a, norm_b, cfg):
+        return 0.12
+
+    def _apply_body_gray_zone_gate(low_title_score: float) -> float:
+        if low_title_score >= DEFAULT_GRAY_ZONE_LOW:
+            return low_title_score
+        d_a = item_a.get("_pub_date") or parse_article_date(item_a.get("published") or item_a.get("Tanggal") or item_a.get("tanggal_terakhir"))
+        d_b = item_b.get("_pub_date") or parse_article_date(item_b.get("published") or item_b.get("Tanggal") or item_b.get("tanggal_terakhir"))
+        if d_a is not None and d_b is not None and abs((d_a - d_b).days) > DEFAULT_CLUSTER_EXPIRY_DAYS:
+            return low_title_score
+        sig = compute_body_gate_signals(item_a, item_b, alias_config=cfg, body_idf=body_idf)
+        if not sig["eligible"]:
+            return low_title_score
+        # Kembalikan skor ketat di zona abu-abu [0.36, 0.41] (< ambang klaster 0.42 & match 0.48)
+        gz_cap = DEFAULT_CLUSTER_SIM_THRESHOLD - 0.01
+        gz_score = min(gz_cap, DEFAULT_GRAY_ZONE_LOW + 0.05 * sig["body_tfidf"])
+        return float(round(max(DEFAULT_GRAY_ZONE_LOW, gz_score), 4))
+
     all_tok_a = extract_tokens(norm_a, cfg, exclude_generic=False)
     all_tok_b = extract_tokens(norm_b, cfg, exclude_generic=False)
     spec_tok_a = extract_tokens(norm_a, cfg, exclude_generic=True)
@@ -332,10 +519,9 @@ def compute_pair_similarity(
     shared_nums = ent_a["numbers"].intersection(ent_b["numbers"])
     shared_acrs = ent_a["acronyms"].intersection(ent_b["acronyms"])
 
-    # Guard kemurnian isu: jika tidak berbagi satupun kata spesifik (di luar topik umum)
-    # dan tidak berbagi angka/akronim spesifik, batasi skor agar topik umum tidak menyatu
+    # Guard kemurnian isu pada judul: bila tidak berbagi kata/entitas spesifik, cek gerbang cuplikan isi ke zona abu-abu
     if not shared_spec and not shared_nums and not shared_acrs:
-        return min(0.18, len(shared_all) * 0.05)
+        return _apply_body_gray_zone_gate(min(0.18, len(shared_all) * 0.05))
 
     # Penalti jika hanya berbagi 1 kata spesifik umum tetapi angka spesifiknya bertabrakan
     if (
@@ -344,13 +530,7 @@ def compute_pair_similarity(
         and not shared_nums
         and len(shared_spec) <= 1
     ):
-        return 0.15
-
-    # Penalti khusus jika salah satu adalah berita "sidang ... mk" dan yang lain bukan sidang/mk
-    sidang_mk_a = bool({"sidang", "mk"}.intersection(all_tok_a))
-    sidang_mk_b = bool({"sidang", "mk"}.intersection(all_tok_b))
-    if sidang_mk_a != sidang_mk_b:
-        return 0.12
+        return _apply_body_gray_zone_gate(0.15)
 
     # 1. Word TF-IDF Cosine
     vec_w_a: dict[str, float] = {}
@@ -409,7 +589,8 @@ def compute_pair_similarity(
             elif diff_d > 7:
                 score -= 0.03
 
-    return float(min(1.0, max(0.0, score)))
+    clamped = float(min(1.0, max(0.0, score)))
+    return _apply_body_gray_zone_gate(clamped)
 
 
 def _build_idf_map(texts: list[str], alias_config: dict[str, Any] | None = None) -> dict[str, float]:
@@ -757,20 +938,25 @@ def _verify_gray_zone_match_with_llm(
     article: dict[str, Any],
     candidates: list[tuple[float, dict[str, Any]]],
 ) -> str | None:
+    global _GRAY_ZONE_LLM_CALLS
     api_key = os.getenv("GEMINI_API_KEY", "").strip()
     if not api_key or not candidates:
         return None
-    cand_payload = [
-        {
-            "id": c[1]["isu_id"],
-            "isu": c[1]["isu"],
-            "sumber_isu": c[1].get("sumber_isu", "klaster"),
-            "tanggal": c[1].get("tanggal_terakhir") or c[1].get("tanggal_awal") or "",
+    cand_payload = []
+    for c in candidates[:3]:
+        c_dict = c[1]
+        entry = {
+            "id": c_dict["isu_id"],
+            "isu": c_dict["isu"],
+            "sumber_isu": c_dict.get("sumber_isu", "klaster"),
+            "tanggal": c_dict.get("tanggal_terakhir") or c_dict.get("tanggal_awal") or "",
         }
-        for c in candidates[:3]
-    ]
+        c_snip = _extract_body_snippet(c_dict, max_chars=800)
+        if c_snip:
+            entry["cuplikan"] = c_snip
+        cand_payload.append(entry)
     art_title = clean_display_title(str(article.get("title") or article.get("Title") or ""))
-    art_snippet = str(article.get("text") or "")[:300].strip()
+    art_snippet = _extract_body_snippet(article, max_chars=800)
     user_msg = json.dumps(
         {
             "berita": {"judul": art_title, "cuplikan": art_snippet},
@@ -778,6 +964,7 @@ def _verify_gray_zone_match_with_llm(
         },
         ensure_ascii=False,
     )
+    _GRAY_ZONE_LLM_CALLS += 1
     resp_text, _used_model, _err = _ISU_MODEL_POOL.generate_deterministic(
         f"{MATCH_ISU_PROMPT}\n\n{user_msg}",
         timeout=45,
@@ -924,7 +1111,7 @@ def _upsert_issue_member(issue: dict[str, Any], item: dict[str, Any], score: flo
     if dedup_key and dedup_key in existing_keys:
         return False
 
-    snippet = str(item.get("text") or item.get("isi") or "").strip()[:400]
+    snippet = str(item.get("text") or item.get("isi") or "").strip()[:1200]
     matched_list.append({
         "id": item.get("_internal_id") or item.get("id"),
         "title": title,
@@ -999,7 +1186,7 @@ def assign_and_cluster_issues(
     cfg = load_alias_config()
     reg = registry if registry is not None else IsuRegistry()
 
-    # Siapkan salinan kerja dengan _internal_id dan normalisasi
+    # Siapkan salinan kerja dengan _internal_id, normalisasi judul, dan fitur cuplikan isi
     work_items: list[dict[str, Any]] = []
     for idx, art in enumerate(articles):
         item = dict(art)
@@ -1009,16 +1196,34 @@ def assign_and_cluster_issues(
         item["_clean_title"] = clean_display_title(raw_t)
         item["_norm_title"] = normalize_isu_text(raw_t, cfg)
         item["_pub_date"] = parse_article_date(item.get("published") or item.get("Tanggal"))
+        b_raw = _extract_body_snippet(item)
+        item["_body_raw"] = b_raw
+        item["_body_norm"] = normalize_isu_text(b_raw, cfg) if len(b_raw) >= 40 else ""
+        item["_body_ents"] = extract_body_entities(b_raw) if len(b_raw) >= 40 else {
+            "acronyms": set(), "orgs": set(), "places": set(), "numbers": set()
+        }
         work_items.append(item)
 
-    # Bangun kamus IDF gabungan dari artikel + isu registri
+    # Bangun kamus IDF gabungan dari artikel + isu registri (judul & cuplikan isi)
     all_norm_texts = [w["_norm_title"] for w in work_items if w["_norm_title"]]
+    all_body_norms = [w["_body_norm"] for w in work_items if w["_body_norm"]]
+    reg_body_meta: dict[str, dict[str, Any]] = {}
     for iss in reg.issues.values():
         nt = iss.get("_norm_title") or normalize_isu_text(str(iss.get("isu") or ""), cfg)
         iss["_norm_title"] = nt
         if nt:
             all_norm_texts.append(nt)
+        rb = _extract_body_snippet(iss)
+        if len(rb) >= 40:
+            rb_norm = normalize_isu_text(rb, cfg)
+            all_body_norms.append(rb_norm)
+            reg_body_meta[str(iss.get("isu_id") or "")] = {
+                "_body_raw": rb,
+                "_body_norm": rb_norm,
+                "_body_ents": extract_body_entities(rb),
+            }
     idf_map = _build_idf_map(all_norm_texts, cfg)
+    body_idf = _build_idf_map(all_body_norms, cfg) if all_body_norms else None
 
     # Urutkan secara kanonik terlebih dahulu agar 100% deterministik terlepas dari urutan input
     sorted_items = sorted(
@@ -1033,6 +1238,7 @@ def assign_and_cluster_issues(
 
     matched_results: dict[int, dict[str, Any]] = {}
     unmatched_items: list[dict[str, Any]] = []
+    gz_calls_this_run = 0
 
     # Snapshot isu aktif sebelum batch klaster baru dibuat
     active_issues_list = sorted(reg.issues.values(), key=lambda x: str(x.get("isu_id") or ""))
@@ -1043,8 +1249,12 @@ def assign_and_cluster_issues(
         for iss in active_issues_list:
             if not reg.is_within_date_window(art_date, iss):
                 continue
-            sim = compute_pair_similarity(item, iss, method=method, alias_config=cfg, idf_map=idf_map)
-            # Syarat tambahan pencocokan rilis: wajib berbagi minimal 2 token spesifik (non-generik) atau 1 angka/akronim + 1 token spesifik
+            iss_id_key = str(iss.get("isu_id") or "")
+            iss_eval = {**iss, **reg_body_meta[iss_id_key]} if iss_id_key in reg_body_meta else iss
+            sim = compute_pair_similarity(
+                item, iss_eval, method=method, alias_config=cfg, idf_map=idf_map, body_idf=body_idf
+            )
+            # Syarat tambahan pencocokan rilis/judul: bila tidak ada rescue gerbang isi, tahan di <= 0.30
             spec_item = extract_tokens(item["_norm_title"], cfg, exclude_generic=True)
             spec_iss = extract_tokens(iss["_norm_title"], cfg, exclude_generic=True)
             shared_spec = spec_item.intersection(spec_iss)
@@ -1052,7 +1262,12 @@ def assign_and_cluster_issues(
             ent_iss = extract_entities(iss["_norm_title"])
             shared_ent = ent_item["numbers"].intersection(ent_iss["numbers"]) | ent_item["acronyms"].intersection(ent_iss["acronyms"])
             if len(shared_spec) < 2 and not (len(shared_spec) >= 1 and len(shared_ent) >= 1):
-                sim = min(sim, 0.30)
+                body_rescued = (
+                    not _has_structural_event_conflict(item["_norm_title"], iss["_norm_title"], cfg)
+                    and compute_body_gate_signals(item, iss_eval, alias_config=cfg, body_idf=body_idf)["eligible"]
+                )
+                if not body_rescued:
+                    sim = min(sim, 0.30)
             scored_cands.append((sim, iss))
 
         scored_cands.sort(key=lambda pair: (-pair[0], str(pair[1].get("isu_id") or "")))
@@ -1063,7 +1278,13 @@ def assign_and_cluster_issues(
         chosen_issue: dict[str, Any] | None = None
         if scored_cands and top1_score >= match_threshold and (len(scored_cands) == 1 or margin >= margin_threshold):
             chosen_issue = scored_cands[0][1]
-        elif use_ai and scored_cands and gray_zone_low <= top1_score < match_threshold:
+        elif (
+            use_ai
+            and scored_cands
+            and gray_zone_low <= top1_score < match_threshold
+            and gz_calls_this_run < DEFAULT_MAX_GRAY_ZONE_LLM_CALLS
+        ):
+            gz_calls_this_run += 1
             chosen_id = _verify_gray_zone_match_with_llm(item, scored_cands)
             if chosen_id and chosen_id in reg.issues:
                 chosen_issue = reg.issues[chosen_id]
@@ -1143,6 +1364,7 @@ def assign_and_cluster_issues(
                     method="rapidfuzz" if method == "rapidfuzz" else "tfidf",
                     alias_config=cfg,
                     idf_map=idf_map,
+                    body_idf=body_idf,
                 )
                 if method == "embedding_pure" and emb_mat is not None:
                     s_val = float(emb_mat[i, j])
@@ -1186,6 +1408,56 @@ def assign_and_cluster_issues(
                         break
                 if merged_flag:
                     break
+
+        # Verifikasi zona abu-abu (MATCH_ISU_PROMPT) untuk klaster tunggal yang lolos gerbang judul/isi [gray_zone_low, cluster_sim_threshold)
+        # shortcut: batas maksimal DEFAULT_MAX_GRAY_ZONE_LLM_CALLS (20) panggilan per run agar kuota tidak jebol; naikkan bila volume harian melonjak
+        if use_ai and len(cluster_groups) > 1 and gz_calls_this_run < DEFAULT_MAX_GRAY_ZONE_LLM_CALLS:
+            singleton_keys = [k for k in sorted(cluster_groups.keys()) if len(cluster_groups[k]) == 1]
+            for src_key in singleton_keys:
+                if src_key not in cluster_groups or len(cluster_groups[src_key]) != 1:
+                    continue
+                if gz_calls_this_run >= DEFAULT_MAX_GRAY_ZONE_LLM_CALLS:
+                    break
+                src_i = cluster_groups[src_key][0]
+                src_item = unmatched_items[src_i]
+                gz_cands: list[tuple[float, dict[str, Any]]] = []
+                for dst_key in sorted(cluster_groups.keys()):
+                    if dst_key == src_key:
+                        continue
+                    dst_indices = cluster_groups[dst_key]
+                    # Hindari cek dua arah pada pasangan singleton (hanya bandingkan ke klaster multi-berita atau singleton lebih awal)
+                    if len(dst_indices) == 1 and dst_key > src_key:
+                        continue
+                    pair_max = max(float(sim_mat[src_i, j]) for j in dst_indices)
+                    if gray_zone_low <= pair_max < cluster_sim_threshold:
+                        dst_members = [unmatched_items[j] for j in dst_indices]
+                        dst_sub = sim_mat[np.ix_(dst_indices, dst_indices)]
+                        rep_title = _select_representative_title(dst_members, dst_sub)
+                        rep_snips = [m["_body_raw"] for m in dst_members if m.get("_body_raw")][:1]
+                        dst_dates = [m["_pub_date"] for m in dst_members if m.get("_pub_date")]
+                        gz_cands.append((
+                            pair_max,
+                            {
+                                "isu_id": f"cand_{dst_key}",
+                                "_dst_key": dst_key,
+                                "_dst_size": len(dst_indices),
+                                "isu": rep_title,
+                                "sumber_isu": "klaster",
+                                "tanggal_terakhir": max(dst_dates).strftime("%Y-%m-%d") if dst_dates else "",
+                                "sample_snippets": rep_snips,
+                            },
+                        ))
+                if not gz_cands:
+                    continue
+                # Prioritaskan klaster multi-berita & skor tertinggi secara deterministik
+                gz_cands.sort(key=lambda pair: (-(1 if pair[1]["_dst_size"] >= 2 else 0), -pair[0], pair[1]["_dst_key"]))
+                gz_calls_this_run += 1
+                chosen_cid = _verify_gray_zone_match_with_llm(src_item, gz_cands)
+                if chosen_cid:
+                    matched_dst = next((c[1]["_dst_key"] for c in gz_cands[:3] if c[1]["isu_id"] == chosen_cid), None)
+                    if matched_dst is not None and matched_dst in cluster_groups:
+                        cluster_groups[matched_dst] = sorted(cluster_groups[matched_dst] + [src_i])
+                        del cluster_groups[src_key]
 
         cluster_Input_list = []
         for c_idx, g_key in enumerate(sorted(cluster_groups.keys()), start=1):

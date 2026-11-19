@@ -930,4 +930,142 @@ def test_isu_registry_local_git_restore_persist_simulation(tmp_path):
     assert after_fail_json == remote_json
 
 
+def test_body_gray_zone_gate_regression_cases(tmp_path, monkeypatch):
+    """
+    Tes regresi gerbang cuplikan isi -> zona abu-abu (MATCH_ISU_PROMPT):
+    (a) Tribunnews masuk zona abu-abu (tidak auto-merge tanpa LLM) dan gabung ke klaster 5 berita bila LLM konfirmasi.
+    (b) Tiga berita sawit berbeda tetap terpisah (tidak gabung & tidak masuk zona abu-abu satu sama lain).
+    (c) Sidang MK tetap terpisah dari konferensi pers asosiasi meski isi menyebut ARVINDO/APVINDO.
+    (d) Berita bertopik sama tetapi peristiwa & cuplikan isi beda tidak menyatu.
+    """
+    import src.isu_grouping as ig
+
+    presscon_body = (
+        "JAKARTA - Seluruh elemen industri rokok elektronik (REL) nasional serentak memohon perlindungan "
+        "kepada pemerintah agar upaya pemberantasan narkotika, perlindungan anak, dan penegakan aturan "
+        "berjalan tepat sasaran tanpa mengorbankan pelaku usaha dan pekerja legal. Aspirasi disampaikan "
+        "dalam Konferensi Pers Industri Rokok Elektronik Nasional yang dihadiri lima asosiasi, yakni "
+        "Asosiasi Personal Vaporizer Indonesia (APVI), Asosiasi Retail Vape Indonesia (ARVINDO), "
+        "Perkumpulan Pengusaha E-liquid Indonesia (PPEI), Asosiasi Pekerja Vape Indonesia (APVINDO), "
+        "dan Asosiasi Konsumen Vape Indonesia (AKVINDO)."
+    )
+    tribun_body = (
+        "Ringkasan Berita: Lima asosiasi industri rokok elektrik meminta pemerintah melindungi pelaku usaha "
+        "dan pekerja legal di tengah wacana pelarangan total. TRIBUNNEWS.COM, JAKARTA - Seluruh elemen "
+        "industri rokok elektronik (REL) nasional serentak memohon perlindungan kepada pemerintah agar "
+        "pemberantasan narkotika tepat sasaran tanpa mengorbankan pelaku usaha dan pekerja legal. "
+        "Aspirasi disampaikan dalam Konferensi Pers Industri Rokok Elektronik Nasional yang dihadiri "
+        "Asosiasi Personal Vaporizer Indonesia (APVI), Asosiasi Retail Vape Indonesia (ARVINDO), "
+        "Perkumpulan Pengusaha E-liquid Indonesia (PPEI), dan Asosiasi Pekerja Vape Indonesia (APVINDO)."
+    )
+    sidang_mk_body = (
+        "JAKARTA - Mahkamah Konstitusi (MK) akan mendengarkan keterangan asosiasi pengusaha vape, BNN, "
+        "dan MUI dalam sidang lanjutan pengujian UU Nomor 17 Tahun 2023 tentang Kesehatan Perkara Nomor "
+        "363/PUU-XXIV/2026 pada Rabu 25 November 2026. Ketua MK Suhartoyo menyebut pihak terkait meliputi "
+        "Asosiasi Retail Vape Indonesia (ARVINDO) dan Asosiasi Pekerja Vape Indonesia (APVINDO)."
+    )
+    vape_beda_event_body = (
+        "BANDUNG - Dinas Kesehatan Jawa Barat meluncurkan kampanye edukasi bahaya asap nikotin bagi "
+        "pelajar SMA di 12 sekolah negeri dengan membagikan modul kesehatan paru-paru dan membuka "
+        "layanan konseling berhenti merokok di puskesmas kecamatan sepanjang bulan November."
+    )
+
+    presscon_5 = [dict(a, text=presscon_body) for a in ROKOK_ELEKTRONIK_PRESSCON_5]
+    tribun = {
+        "id": "tribun_1",
+        "title": "Wacana Larangan Rokok Elektrik, Pelaku Usaha Khawatir Lapangan Kerja Terancam",
+        "published": "2026-11-17 16:30:00",
+        "media_name": "Tribunnews.com",
+        "text": tribun_body,
+    }
+    sidang_mk = {
+        "id": "mk_1",
+        "title": "Sidang Larangan Vape Digelar 25 November, MK Akan Dengar Pengusaha, BNN, dan MUI",
+        "published": "2026-11-17 18:00:00",
+        "media_name": "Radar Banjarmasin",
+        "text": sidang_mk_body,
+    }
+    vape_beda_event = {
+        "id": "vape_edu_1",
+        "title": "Wacana Pembatasan Vape, Sekolah di Bandung Gelar Edukasi Kesehatan Pelajar",
+        "published": "2026-11-17 14:00:00",
+        "media_name": "Pikiran Rakyat",
+        "text": vape_beda_event_body,
+    }
+    sawit_3 = [
+        dict(
+            SAWIT_3_BERBEDA[0],
+            text="Ketua Umum Gabungan Pengusaha Kelapa Sawit Indonesia (GAPKI) Eddy Martono memperkirakan produksi minyak sawit turun menjadi 56,6 juta ton pada 2027 akibat kekeringan El Nino dan kebutuhan biodiesel B50.",
+        ),
+        dict(
+            SAWIT_3_BERBEDA[1],
+            text="Menko Perekonomian Airlangga Hartarto menegaskan sertifikasi Indonesia Sustainable Palm Oil (ISPO) memperkuat tata kelola keberlanjutan kebun rakyat dan daya saing ekspor Eropa.",
+        ),
+        dict(
+            SAWIT_3_BERBEDA[2],
+            text="Kantor Wilayah Bea Cukai Sumatera Utara mencatat penerimaan bea keluar CPO dan turunannya di Medan mencapai Rp3,6 triliun hingga Oktober 2026, melampaui target tahunan Rp3 triliun.",
+        ),
+    ]
+
+    # (a.1) Skor Tribunnews vs anggota klaster 5 masuk zona abu-abu [0.36, 0.42), TIDAK >= ambang klaster 0.42
+    sim_tribun = ig.compute_pair_similarity(tribun, presscon_5[0])
+    assert ig.DEFAULT_GRAY_ZONE_LOW <= sim_tribun < ig.DEFAULT_CLUSTER_SIM_THRESHOLD, (
+        f"Tribunnews harus masuk zona abu-abu [0.36, 0.42), bukan {sim_tribun}"
+    )
+
+    # (c.1) Sidang MK tetap terblokir oleh veto struktural (0.12), tidak masuk zona abu-abu
+    assert ig.compute_pair_similarity(sidang_mk, presscon_5[0]) == 0.12
+
+    # (d.1) Berita vape topik sama tapi peristiwa & isi beda tetap di bawah zona abu-abu
+    assert ig.compute_pair_similarity(vape_beda_event, presscon_5[0]) < ig.DEFAULT_GRAY_ZONE_LOW
+    assert ig.compute_pair_similarity(vape_beda_event, tribun) < ig.DEFAULT_GRAY_ZONE_LOW
+
+    # (b.1) Ketiga berita sawit tetap di bawah zona abu-abu satu sama lain
+    for i in range(len(sawit_3)):
+        for j in range(i + 1, len(sawit_3)):
+            assert ig.compute_pair_similarity(sawit_3[i], sawit_3[j]) < ig.DEFAULT_GRAY_ZONE_LOW
+
+    batch = presscon_5 + [tribun, sidang_mk, vape_beda_event] + sawit_3
+
+    # Tanpa AI (use_ai=False): gerbang isi TIDAK boleh auto-merge Tribunnews
+    reg_no_ai = IsuRegistry(filepath=tmp_path / "reg_no_ai.json")
+    out_no_ai = assign_and_cluster_issues(batch, registry=reg_no_ai, use_ai=False, log_path=None, coverage_path=None)
+    by_id_off = {x["id"]: x["isu_id"] for x in out_no_ai}
+    assert len({by_id_off[a["id"]] for a in presscon_5}) == 1
+    assert by_id_off["tribun_1"] != by_id_off["re_1"], "Tanpa LLM, Tribunnews tidak boleh auto-merge"
+    assert by_id_off["mk_1"] != by_id_off["re_1"]
+    assert by_id_off["vape_edu_1"] != by_id_off["re_1"]
+    assert len({by_id_off["sw_1"], by_id_off["sw_2"], by_id_off["sw_3"]}) == 3
+
+    # Dengan AI (MATCH_ISU_PROMPT dimock): hanya Tribunnews yang dikirim ke LLM dan bergabung bila dikonfirmasi
+    gz_seen = []
+
+    def fake_verify(article, candidates):
+        gz_seen.append((article.get("id"), [c[1]["isu_id"] for c in candidates[:3]]))
+        if article.get("id") == "tribun_1" and candidates:
+            return candidates[0][1]["isu_id"]
+        return None
+
+    monkeypatch.setattr(ig, "_verify_gray_zone_match_with_llm", fake_verify)
+    reg_ai = IsuRegistry(filepath=tmp_path / "reg_ai.json")
+    out_ai = assign_and_cluster_issues(
+        batch, registry=reg_ai, use_ai=True, label_with_llm=False, log_path=None, coverage_path=None
+    )
+    by_id_on = {x["id"]: x["isu_id"] for x in out_ai}
+
+    # (a.2) Tribunnews dikirim ke zona abu-abu dan gabung ke klaster 5 berita setelah dikonfirmasi LLM
+    assert any(aid == "tribun_1" for aid, _ in gz_seen), "Tribunnews harus mencapai MATCH_ISU_PROMPT"
+    assert by_id_on["tribun_1"] == by_id_on["re_1"]
+    assert len({by_id_on[a["id"]] for a in presscon_5} | {by_id_on["tribun_1"]}) == 1
+    # (b.2) Tiga berita sawit tetap terpisah
+    assert len({by_id_on["sw_1"], by_id_on["sw_2"], by_id_on["sw_3"]}) == 3
+    # (c.2) Sidang MK tidak pernah masuk zona abu-abu & tetap terpisah
+    assert not any(aid == "mk_1" for aid, _ in gz_seen)
+    assert by_id_on["mk_1"] != by_id_on["re_1"]
+    # (d.2) Berita vape beda peristiwa tidak menyatu
+    assert by_id_on["vape_edu_1"] != by_id_on["re_1"]
+    assert by_id_on["vape_edu_1"] != by_id_on["tribun_1"]
+
+
+
 
