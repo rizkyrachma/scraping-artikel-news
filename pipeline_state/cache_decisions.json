@@ -1,0 +1,2286 @@
+{
+  "8dce538e1f02807bdd21083e390e15abc8488e64c096353c170e441dfbf27b0f": {
+    "ts": 1795056847.639194,
+    "url": "https://insight.kontan.co.id/news/kenaikan-harga-singkong-bisa-jadi-tantangan-bagi-saham-budi",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 1,
+      "status": "relevan",
+      "sub_sektor": "Mamin",
+      "alasan": "Berita membahas dampak kenaikan harga bahan baku singkong terhadap biaya produksi industri makanan dan minuman."
+    }
+  },
+  "74d0a8e5534c5ca4265a8c3d8089bd046747b8c084dba4e1466a78f1956f692c": {
+    "ts": 1795056875.473133,
+    "url": "https://industry.co.id/read/159466/indonesia-jadi-guru-11-negara-karibia-ajarkan-olah-mangga-dan-sukun-jadi-cuan",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 1,
+      "status": "relevan",
+      "sub_sektor": "Mamin",
+      "alasan": "Berita kegiatan Kementerian Perindustrian terkait program pelatihan pengolahan hasil industri agro."
+    }
+  },
+  "7ed7e278b44c4a81b5e1c32bcfc8819bd8281d469284af5e00b77e69ab07d9e4": {
+    "ts": 1795056935.1744027,
+    "url": "https://sultra.antaranews.com/berita/547107/kementan-perkuat-kemitraan-sawit-hadapi-tantangan-global",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 1,
+      "status": "review",
+      "sub_sektor": "Sawit/CPO",
+      "alasan": "Program kemitraan hulu-hilir perkebunan sawit terkait pasokan bahan baku industri."
+    }
+  },
+  "b27f0c49f209a7ef549502768c44d80bd2c1d28afd23107cf7dd9d7ff6b47c20": {
+    "ts": 1795056935.174428,
+    "url": "https://sulteng.antaranews.com/berita/401191/pengamat-sebut-pengolahan-limbah-sawit-meningkatkan-nilai-tambah",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 2,
+      "status": "relevan",
+      "sub_sektor": "Sawit/CPO",
+      "alasan": "Pengolahan limbah sawit untuk meningkatkan nilai tambah industri agro."
+    }
+  },
+  "c1d1074f0c81f7bbc245228a311afc9775fb1a65986177f518798afc11bc319a": {
+    "ts": 1795056935.1744444,
+    "url": "https://idntimes.com/science/discovery/veined-octopus-c1c2-01-cc8hx-98qjd5",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 3,
+      "status": "buang",
+      "sub_sektor": "-",
+      "alasan": "satwa"
+    }
+  },
+  "f66471af653e17b32ba2d271f2f67cde4f77a066b643d801827dbfb027f5b98c": {
+    "ts": 1795056935.17446,
+    "url": "https://kalbar.antaranews.com/berita/723095/gapki-dorong-produktivitas-sawit-hadapi-transisi-energi-nasional",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 4,
+      "status": "relevan",
+      "sub_sektor": "Sawit/CPO",
+      "alasan": "Strategi GAPKI menjaga pasokan bahan baku biodiesel dan daya saing industri sawit."
+    }
+  },
+  "3509a5aa47cd58a5719e16caf03af69a9d4e74445d380a246cc7717bdcbc13ee": {
+    "ts": 1795056935.1744773,
+    "url": "https://news.republika.co.id/berita/topyix330000/kementan-sebut-kemitraan-sawit-kunci-dongkrak-produktivitas-nasional",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 5,
+      "status": "review",
+      "sub_sektor": "Sawit/CPO",
+      "alasan": "Pernyataan Kementan mengenai kemitraan sawit untuk produktivitas nasional."
+    }
+  },
+  "e4ca62adbd4c86d99b114a0014d23f06ea5264ddc3f1a833ee866ea8849c05b3": {
+    "ts": 1795056935.1744957,
+    "url": "https://jpnn.com/news/minyak-goreng-kelapa-kara-sabet-penghargaan-kepuasan-pelanggan-terbaik",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 6,
+      "status": "buang",
+      "sub_sektor": "-",
+      "alasan": "penghargaan/award merek"
+    }
+  },
+  "31d9b9a04f24c6faf07c6ebf5f8bdfc53d855e2b4453dfba3447791451bac908": {
+    "ts": 1795056935.1745129,
+    "url": "https://sulbarprov.go.id/post/biro-hukum-sulbar-hadiri-harmonisasi-ranpergub-rencana-aksi-daerah-perkebunan-kelapa-sawit-berkelanjutan-20272029",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 7,
+      "status": "review",
+      "sub_sektor": "Sawit/CPO",
+      "alasan": "Rancangan peraturan gubernur mengenai Rencana Aksi Daerah Perkebunan Kelapa Sawit Berkelanjutan."
+    }
+  },
+  "d9bbe84d5ccb9b90cd570380ec0ac945dd4d9e016430f57e5c424062b5755169": {
+    "ts": 1795056935.1745293,
+    "url": "https://berita.cilegon.go.id/baca/Sidak-Harga-Pangan-Jelang-Ramadhan,-Pemkot-Cilegon-Ingin-Pastikan-Stok-Aman-dan-Harga-Terkendali/20261119/Mjk3OTk2",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 8,
+      "status": "buang",
+      "sub_sektor": "-",
+      "alasan": "harga pasar eceran"
+    }
+  },
+  "4b4226421fdb76f90d12d6169668dbf5d65a1e7adb206610cbd77332bbfcc3be": {
+    "ts": 1795056966.9923983,
+    "url": "https://subang.inews.id/read/731257/jelang-nataru-harga-tepung-tapioka-dan-terigu-di-subang-meroket-pedagang-menjerit",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 2,
+      "status": "buang",
+      "sub_sektor": "-",
+      "alasan": "harga pasar eceran"
+    }
+  },
+  "4ffe9646f8d55ab92cab6c7a98d195f90f621d40fd5fa3df362803c657e7789d": {
+    "ts": 1795056998.3484461,
+    "url": "https://regional.kompas.com/read/2026/11/19/053556878/maluku-bakal-punya-pabrik-sagu-pertama-dibangun-di-seram-bagian-timur",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 1,
+      "status": "relevan",
+      "sub_sektor": "Lainnya",
+      "alasan": "Berita pembangunan pabrik pengolahan sagu baru yang mendukung hilirisasi sektor agro."
+    }
+  },
+  "42c67152d70c6205f4aff00d809654e70209e4bae730674d44295aedac5c35c5": {
+    "ts": 1795056998.3484695,
+    "url": "https://ambon.antaranews.com/berita/353887/wali-kota-ambon-tekankan-pentingnya-aksi-nyata-jaga-kerukunan-umat-beragama",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 2,
+      "status": "buang",
+      "sub_sektor": "-",
+      "alasan": "politik praktis"
+    }
+  },
+  "89235313160d0e011827692bee5a922f35e5f9f6445018cd73d72e72989a8de1": {
+    "ts": 1795057026.212057,
+    "url": "https://radarlampung.disway.id/opini/read/730122/anggur-laut-lampung-dari-tradisi-pangan-pesisir-menuju-inovasi-pangan-fungsional",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 1,
+      "status": "review",
+      "sub_sektor": "Rumput Laut/Hasil Laut",
+      "alasan": "Riset kampus dan inovasi produk pangan fungsional berbasis hasil laut (anggur laut)."
+    }
+  },
+  "79e22706720513ce316d6694d9de34e8faea158c87c7f7bb3f246010eb4bd1c0": {
+    "ts": 1795057058.2742772,
+    "url": "https://berita.cilegon.go.id/baca/Kolaborasi-PKK-Pemkot-Cilegon-dan-PLN-UID-Banten-Sosialisasikan-Gaya-Hidup-Ramah-Lingkungan/20261119/MTA4Nw%3D%3D",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 1,
+      "status": "buang",
+      "sub_sektor": "-",
+      "alasan": "sosialisasi ramah lingkungan dan kegiatan PKK pemda di luar sektor industri agro"
+    }
+  },
+  "8f9dcd0e24d213c1350385159a52d39f6fda094c4fabf1890128a52d822b18fd": {
+    "ts": 1795057076.6471806,
+    "url": "https://puskomedia.id/blog/usaha-toko-kelontong-di-desa-peluang-modal-cara-memulai",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 1,
+      "status": "buang",
+      "sub_sektor": "-",
+      "alasan": "tips produk/how-to dan edukasi konsumen"
+    }
+  },
+  "c44980a56a73d021f2561cd09ea11516635f558d23dcc3edd329c5a159999739": {
+    "ts": 1795057155.3552513,
+    "url": "https://pwmu.co/mahasiswa-umjt-madiun-dilatih-bikin-konten-inklusif-dan-aman-dari-risiko-privasi",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 1,
+      "status": "buang",
+      "sub_sektor": "-",
+      "alasan": "pelatihan, sertifikasi profesi, karier, atau kompetensi individu"
+    }
+  },
+  "f1040fd694aeab84b52e4acabd36fb05ddbd1817720a527f84cbcf7158f331fb": {
+    "ts": 1795057155.355274,
+    "url": "https://istanafm.com/sampah-ternate-capai-120-ton-per-hari-waste4change-dorong-pemilahan-dari-rumah",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 2,
+      "status": "buang",
+      "sub_sektor": "-",
+      "alasan": "energi/logistik non-agro atau pengelolaan sampah umum"
+    }
+  },
+  "7e5eadaac49fa0588fae87164217e89bfdbfe3b2ffbb6b55454326c5b89ee163": {
+    "ts": 1795057155.3553076,
+    "url": "https://brin.go.id/news/131576/sengon-dan-akasia-direkayasa-secara-genetik-brin-bidik-industri-pulp-dan-bioenergi",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 4,
+      "status": "review",
+      "sub_sektor": "Pulp & Kertas",
+      "alasan": "Riset kampus/inovasi BRIN terkait pengembangan bahan baku untuk industri pulp."
+    }
+  },
+  "e172ec42f784b8dd0df9d4776c5f2a482ae82c79d65f8c84d061431d2b2e17c2": {
+    "ts": 1795057171.4170594,
+    "url": "https://livi.co.id/produk?category=essentials",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 2,
+      "status": "buang",
+      "sub_sektor": "-",
+      "alasan": "halaman profil perusahaan atau kontak, bukan berita"
+    }
+  },
+  "9078891020bdb09763795f975d7721a9b7c5de762d1a4f2804fe5f8f6914fb92": {
+    "ts": 1795057188.315465,
+    "url": "https://berita.cilegon.go.id/baca/Robinsar-Temui-Langsung-Massa-Aksi,-Tegaskan-Pemkot-Cilegon-Terbuka-Terima-Aspirasi-Mahasiswa/20261119/MjcyNjA2",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 1,
+      "status": "buang",
+      "sub_sektor": "-",
+      "alasan": "politik praktis/pemerintahan daerah"
+    }
+  },
+  "664d34f3a9bea55d0721db0db750fc51087bd240bfd870df51ab67c243a5095b": {
+    "ts": 1795057213.6870232,
+    "url": "https://premierepeau.com/id/pages/glossary-terms/lemon-tea-tree",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 1,
+      "status": "buang",
+      "sub_sektor": "-",
+      "alasan": "tips produk/how-to dan edukasi konsumen"
+    }
+  },
+  "433f17b642ad9391b2e8ec52806bfb632ef0412325ae117a15ed5dcbb7e406dd": {
+    "ts": 1795057231.6286354,
+    "url": "https://batarienergy.com/komponen-plts/mounting",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 1,
+      "status": "buang",
+      "sub_sektor": "-",
+      "alasan": "halaman promosi/jualan produk panel surya dan energi"
+    }
+  },
+  "a75bddc06a1341cf049ab050fe6b16f4ae4e6d3989aa6e533caa5cc8e028b9c1": {
+    "ts": 1795057231.628657,
+    "url": "https://berita.cilegon.go.id/baca/Apresiasi-Lurah-Inovatif,-Helldy-Minta-Fokus-APBD-untuk-Masyarakat/20261119/Njc2",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 2,
+      "status": "buang",
+      "sub_sektor": "-",
+      "alasan": "pemerintahan daerah dan apresiasi lurah non-industri agro"
+    }
+  },
+  "07e8a1d6339263f36271581f832dfabc23fd858faa3bad79a48fca69f1fe9e82": {
+    "ts": 1795057243.633955,
+    "url": "https://jobploy.kr/id/company/corentform-co-ltd",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 1,
+      "status": "buang",
+      "sub_sektor": "-",
+      "alasan": "sumber tidak relevan atau spam"
+    }
+  },
+  "b2dd458399ddaabb3e952d6a93b3db650de15225b0d461059d04601ba1937a4a": {
+    "ts": 1795057243.6339781,
+    "url": "https://kabarjateng.id/jateng-kaltim-catat-kesepakatan-bisnis-rp105-miliar-1-000-domba-tegal-bakal-dipasok-ke-samarinda",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 2,
+      "status": "buang",
+      "sub_sektor": "-",
+      "alasan": "peternakan hulu murni tanpa kaitan industri pengolahan"
+    }
+  },
+  "b400a22dadfc3e36a5d722777e7c8c51a3a9b2429043ff7d535a7b8460dadb4b": {
+    "ts": 1795057243.633994,
+    "url": "https://telusur.co.id/daerah-2/domba-tegal-tembus-pasar-kaltim-kerja-sama-bisnis-jateng-kaltim-capai-rp105-miliar",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 3,
+      "status": "buang",
+      "sub_sektor": "-",
+      "alasan": "peternakan hulu murni tanpa kaitan industri pengolahan"
+    }
+  },
+  "48924bd0cf295de7b72358b467ddcea9302ccb1bdecdaa6c22c18092188f7d9e": {
+    "ts": 1795057257.79275,
+    "url": "https://surabaya.inews.id/read/731261/industri-rokok-tertekan-perusahaan-ini-malah-cetak-penjualan-rp875-triliun",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 1,
+      "status": "relevan",
+      "sub_sektor": "Hasil Tembakau",
+      "alasan": "Berita membahas kinerja penjualan emiten industri hasil tembakau di tengah tekanan industri."
+    }
+  },
+  "369ff97a0597ace6262e1a9e5a33fbe5bb6e961255f6e5ccb204d3601e9ba511": {
+    "ts": 1795057257.7927728,
+    "url": "https://muria.inews.id/read/731223/bea-cukai-semarang-dipusingkan-rokok-ilegal-jutaan-rokok-bodong-senilai-rp-10-miliar-dibakar",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 2,
+      "status": "buang",
+      "sub_sektor": "-",
+      "alasan": "kriminal/penindakan hukum"
+    }
+  },
+  "4f0f827c2acbe3e70efb113e1d61b2fcbe051b4358b7550ac7cb8ff9b8e7fccb": {
+    "ts": 1795057257.7927895,
+    "url": "https://waspada.id/berita/hakim-mk-soroti-karakteristik-rokok-elektronik-legal-dan-kontribusinya-terhadap-perekonomian",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 3,
+      "status": "relevan",
+      "sub_sektor": "Hasil Tembakau",
+      "alasan": "Berita membahas sidang uji materi dan kontribusi ekonomi rokok elektronik/vape."
+    }
+  },
+  "a5c64777e196478cecf2ca33e0bc7f6169bc1f7540ef561481702b4292fcfd32": {
+    "ts": 1795057257.792804,
+    "url": "https://pantau.com/ekonomi/380105/serikat-pekerja-desak-pemerintah-beri-kepastian-hukum-industri-rokok",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 4,
+      "status": "relevan",
+      "sub_sektor": "Hasil Tembakau",
+      "alasan": "Berita memuat desakan serikat pekerja terkait kepastian hukum dan berusaha bagi industri hasil tembakau."
+    }
+  },
+  "9f182ce1fa17feb1ca4ddb229b988ae1e6fd12e90efb590afa95396a39cc0cd8": {
+    "ts": 1795057416.1202679,
+    "url": "https://malang.disway.id/malang-melintang/read/26753/sidang-uu-kesehatan-hakim-mk-soroti-regulasi-dan-ekonomi-vape-ri",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 2,
+      "status": "relevan",
+      "sub_sektor": "Hasil Tembakau",
+      "alasan": ""
+    }
+  },
+  "85e891a795b0bdd7a19b2247b6277cce5a4b9dad1b2356f770e5a50046ea187e": {
+    "ts": 1795057416.1202903,
+    "url": "https://tangerangonline.id/2026/11/19/world-vape-show-dubai-2026-produsen-vape-indonesia-bidik-akses-pasar-global",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 3,
+      "status": "relevan",
+      "sub_sektor": "Hasil Tembakau",
+      "alasan": ""
+    }
+  },
+  "ab1dcd5314bebcdfcf6fb421d2bbf86dee9e5ca7222d7998a1eed68f22979d2d": {
+    "ts": 1795057440.9227118,
+    "url": "https://itb.ac.id/berita/tim-12-ekspedisi-patriot-itb-latih-kader-malaria-di-papua-buat-pengusir-nyamuk-dari-limbah-kulit-kakao/63976",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 1,
+      "status": "review",
+      "sub_sektor": "Kakao",
+      "alasan": "Riset kampus dan inovasi pengabdian masyarakat yang memanfaatkan limbah komoditas agro (kulit kakao)."
+    }
+  },
+  "d282f4cffb8dd8e6129bfc755b7caad6c91bdaf0675ce0cdf0b61c6c1ed796b3": {
+    "ts": 1795057440.9227393,
+    "url": "https://sulbarprov.go.id/post/pertanian-topang-ekonomi-sulbar-bapperida-dorong-pengolahan-dan-peningkatan-nilai-tambah-komoditas",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 2,
+      "status": "review",
+      "sub_sektor": "Lainnya",
+      "alasan": "Program dan dorongan pemerintah daerah terkait peningkatan pengolahan dan nilai tambah komoditas pertanian."
+    }
+  },
+  "4e92bee854e1a52ec5ee644d43198f807c184f510d0700853c5b0ab4c31eb5c9": {
+    "ts": 1795057457.7960563,
+    "url": "https://morinaga.id/id/milestone/bintik-cokelat-di-susu-bubuk-anak",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 1,
+      "status": "buang",
+      "sub_sektor": "-",
+      "alasan": "tips produk dan edukasi konsumen"
+    }
+  },
+  "9f135dd799b24636906fcf3043082fd7790df7e4bba57435fe0ed831d81d9019": {
+    "ts": 1795057457.7960792,
+    "url": "https://megapolitan.kompas.com/read/2026/11/19/07574641/akhirnya-pulang-ini-kondisi-terbaru-parhan-si-kucing-viral-senayan-city",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 2,
+      "status": "buang",
+      "sub_sektor": "-",
+      "alasan": "satwa"
+    }
+  },
+  "4cc02f36a16526ff8b1ff8f9dc474bf0cc5d90c77f5631dda00aa767008054c0": {
+    "ts": 1795057473.5677366,
+    "url": "https://muria.inews.id/amp/731223/bea-cukai-semarang-dipusingkan-rokok-ilegal-jutaan-rokok-bodong-senilai-rp-10-miliar-dibakar",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 1,
+      "status": "buang",
+      "sub_sektor": "-",
+      "alasan": "kriminal/penindakan hukum"
+    }
+  },
+  "7882f2b0d8930208ebae0538e0535a14dad36466e0965f85c714166b87b63566": {
+    "ts": 1795057505.5064106,
+    "url": "https://berita.cilegon.go.id/baca/Pabrik-Dongsuh-Chemical-diresmikan,-Cilegon-Perkuat-Hilirasisasi-Industri-Alumunium/20261119/MjI0NjAz",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 1,
+      "status": "review",
+      "sub_sektor": "ILMATE",
+      "alasan": "Kebijakan Kemenperin Sektor Non-IA (ILMATE)"
+    }
+  },
+  "015d43c361a60bf1fea82b6b63596af9d6b5ae68d7ce918c37ed3778191a5cb7": {
+    "ts": 1795057522.9398217,
+    "url": "https://radartegal.disway.id/lokal/read/731424/bukan-cuma-teh-tegal-punya-6-kecap-legendaris-yang-bertahan-puluhan-tahun",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 1,
+      "status": "buang",
+      "sub_sektor": "-",
+      "alasan": "tips produk/how-to dan edukasi konsumen/kuliner"
+    }
+  },
+  "19b5998a00e8eb435e38622f7cd78487bd2b8930cf9697a364a810ee047b0705": {
+    "ts": 1795057543.1846251,
+    "url": "https://issp.dev.semarangkota.go.id/Info-Harga",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 1,
+      "status": "buang",
+      "sub_sektor": "-",
+      "alasan": "harga pasar eceran"
+    }
+  },
+  "46719e83417e729dbd09f1c6308d23d7db0c512f5a72d138dc80ce7af61df78d": {
+    "ts": 1795057565.161694,
+    "url": "https://koridor.co.id/investor-menilai-dominasi-pasar-saham",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 1,
+      "status": "buang",
+      "sub_sektor": "-",
+      "alasan": "analisis saham murni"
+    }
+  },
+  "f456be651ef36f32e7d9749c25d2352589571a98df940a491b79c0b8aa248248": {
+    "ts": 1795057565.1617155,
+    "url": "https://demokratis.co.id/investor-membaca-pasar-oligopoli",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 2,
+      "status": "buang",
+      "sub_sektor": "-",
+      "alasan": "analisis saham murni"
+    }
+  },
+  "6980e2a89b03b92fbd76064dfe466b601d928241af68fd55ca34ab7886f6e9e0": {
+    "ts": 1795057565.1617327,
+    "url": "https://jubitv.id/peluang-saham-pasar-oligopoli",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 3,
+      "status": "buang",
+      "sub_sektor": "-",
+      "alasan": "analisis saham murni"
+    }
+  },
+  "a4c4902e236b7502b1f39740bec092f693db6c4baf790f02aacb0fa56524d6ba": {
+    "ts": 1795057565.161747,
+    "url": "https://investor.id/money-lab/462541/persaingan-terbatas-sahamnya-lebih-menjanjikan",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 4,
+      "status": "buang",
+      "sub_sektor": "-",
+      "alasan": "analisis saham murni"
+    }
+  },
+  "54879751ff636b994b1a5ee4c2a73056d55f9033d0839b32cdc45f7a30043ee8": {
+    "ts": 1795057705.5244749,
+    "url": "https://berita.cilegon.go.id/baca/Mulai-2024,-PDAM-Cilegon-Mandiri-Bakal-Jual-Air-Minum-Dalam-Kemasan/20261119/Nzcx",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 1,
+      "status": "review",
+      "sub_sektor": "Mamin",
+      "alasan": "Rencana ekspansi bisnis BUMD ke industri pengolahan air minum dalam kemasan (AMDK) yang masuk dalam sektor mamin."
+    }
+  },
+  "ad2f474a737adffffe9fcae5efcc9c7ea3e3a28159e7474ea01ef694f4a2f3ec": {
+    "ts": 1795057751.4134295,
+    "url": "https://kalsel.antaranews.com/berita/545691/kopi-excelsa-tapin-resmi-kantongi-sertifikat-indikasi-geografis",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 1,
+      "status": "review",
+      "sub_sektor": "Kakao",
+      "alasan": "Sertifikasi Indikasi Geografis produk kopi daerah yang berkaitan dengan perlindungan potensi komoditas agro."
+    }
+  },
+  "15ec14ba63ed556d87a5a3f38787dbc2691fa9fc56a16372b13603147e978fd6": {
+    "ts": 1795057751.4134533,
+    "url": "https://goodnewsfromindonesia.id/cerita-dari-kawan/gaya/ketika-kopi-menjadi-gaya-hidup-jangan-lupakan-petaninya",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 2,
+      "status": "buang",
+      "sub_sektor": "-",
+      "alasan": "ritel dan konsumsi"
+    }
+  },
+  "daeacc40e3db1dd1e19d54f33ee7c3960f3958a1433471b648fa5a098a128cf7": {
+    "ts": 1795057751.4134717,
+    "url": "https://distankan.bulelengkab.go.id/informasi/detail/berita/50_peremajaan-kopi-arabika-keg-apbn-thn-2026-droping-bibit-kopi-arabika-di-tempek-yeh-lateng-dan-tempek-tiying-tali-desa-gesing",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 3,
+      "status": "review",
+      "sub_sektor": "Kakao",
+      "alasan": "Program peremajaan dan distribusi bibit kopi oleh pemerintah daerah untuk mendukung produktivitas."
+    }
+  },
+  "f23ceabfcf1d4b29974231dc41dc63e6352fbbd75798dc1efd0efc3e48fc7c30": {
+    "ts": 1795057751.413489,
+    "url": "https://brida.bulelengkab.go.id/informasi/detail/berita/79_monitoring-inovasi-masyarakat-brida-dorong-potensi-lokal-menjadi-produk-bernilai-ekonomi",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 4,
+      "status": "review",
+      "sub_sektor": "Lainnya",
+      "alasan": "Riset kampus/inovasi atau pengabdian masyarakat yang mendorong potensi lokal menjadi produk bernilai ekonomi."
+    }
+  },
+  "2f6e610de47770df1a19030763735432648d8177535e4b40e7aab10cf12541ca": {
+    "ts": 1795057751.4135056,
+    "url": "https://bpsdm.kemenkum.go.id/publikasi/berita-bpsdm/menteri-hukum-luncurkan-gi-tourism-indonesia-dorong-produk-indikasi-geografis-jadi-daya-tarik-wisata",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 6,
+      "status": "buang",
+      "sub_sektor": "-",
+      "alasan": "pariwisata dan promosi produk indikasi geografis"
+    }
+  },
+  "9e84ec9ccb8ea58fc39bab238c98ce14beeb2788a52f28314a542e914dff250f": {
+    "ts": 1795057751.4135208,
+    "url": "https://berita.cilegon.go.id/baca/Operasi-Pasar-Dinilai-Efektif-Tekan-Inflasi-di-Kota-Cilegon%C2%A0/20261119/OTQ3",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 7,
+      "status": "buang",
+      "sub_sektor": "-",
+      "alasan": "harga pasar eceran"
+    }
+  },
+  "4ed0aabe60364fba5ed3253c53d1068897e240e5e6d2901c9af94fcb443f13cb": {
+    "ts": 1795057770.6088858,
+    "url": "https://kalbar.antaranews.com/berita/723119/kementan-tekankan-kemitraan-sawit-tingkatkan-produktivitas-nasional",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 1,
+      "status": "relevan",
+      "sub_sektor": "Sawit/CPO",
+      "alasan": "Berita membahas kemitraan perkebunan sawit dan peningkatan produktivitas untuk mendukung ketahanan industri."
+    }
+  },
+  "6b4c23ec6fd14030eedbe9cf6166fb0771cada481f37b7fa85d4eea3ab3e74b5": {
+    "ts": 1795057770.6089098,
+    "url": "https://sawitindonesia.com/produksi-sawit-ri-januari-september-naik-8-42-ekspor-tembus-us-32-31-miliar",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 2,
+      "status": "relevan",
+      "sub_sektor": "Sawit/CPO",
+      "alasan": "Berita memuat data kinerja produksi dan ekspor industri minyak sawit nasional."
+    }
+  },
+  "fbf705a1c0a28ec124de71721008943466f28481c4cd6690ceefed044f4f0ff1": {
+    "ts": 1795057770.6089296,
+    "url": "https://infosawit.com/2026/11/19/ekspor-sawit-indonesia-naik-926-pada-september-2026-pengiriman-ke-uni-eropa-melonjak-60",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 3,
+      "status": "relevan",
+      "sub_sektor": "Sawit/CPO",
+      "alasan": "Berita membahas kinerja ekspor produk kelapa sawit Indonesia ke berbagai negara termasuk Uni Eropa."
+    }
+  },
+  "0b5f19a53628fbce7cf645e4758a8a00952b57c3ba7fa92a1f92b744b5ca4c8b": {
+    "ts": 1795057770.6089458,
+    "url": "https://benang.id/kinerja-industri-sawit-september-2026-ekspor-meningkat-stok-menurun",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 4,
+      "status": "relevan",
+      "sub_sektor": "Sawit/CPO",
+      "alasan": "Berita melaporkan kinerja operasional dan produksi industri sawit nasional secara bulanan."
+    }
+  },
+  "520d0251ea4e5f74376053ac308d36efa4a0d2d6267811462edb19903810073f": {
+    "ts": 1795057770.6089618,
+    "url": "https://infosawit.com/2026/11/19/harga-cpo-kpbn-inacom-anjlok-pada-rabu-18-11-2026-perdagangan-minyak-sawit-di-bursa-malaysia-ditutup-melemah",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 5,
+      "status": "relevan",
+      "sub_sektor": "Sawit/CPO",
+      "alasan": "Berita mencakup harga acuan resmi CPO KPBN dan perdagangan bursa sebagai indikator kinerja sektor."
+    }
+  },
+  "17ac0c19d7f0cc4166db1c52ff923a3acfe9e890bcf1de36897c78f145a2d85b": {
+    "ts": 1795057793.9159458,
+    "url": "https://kompas.id/artikel/industri-sawit-siapkan-strategi-hadapi-dunia-yang-terfragmentasi",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 4,
+      "status": "relevan",
+      "sub_sektor": "Sawit/CPO",
+      "alasan": "Membahas strategi industri sawit nasional menghadapi tantangan global."
+    }
+  },
+  "a5cd253ca7913204be24387da166654983f2decb729faa5b6bcf9a95ceef3382": {
+    "ts": 1795057793.9159682,
+    "url": "https://antaranews.com/berita/5864067/narasi-menguatkan-optimisme-industri-sawit-indonesia",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 5,
+      "status": "relevan",
+      "sub_sektor": "Sawit/CPO",
+      "alasan": "Berfokus pada penguatan narasi dan kinerja industri sawit Indonesia."
+    }
+  },
+  "eec03e2b4bb8552d6aed13dfea4af811bdba4d5c4acefde012f0f940142a114e": {
+    "ts": 1795057793.9159849,
+    "url": "https://kalbar.antaranews.com/berita/722971/dbh-sawit-lindungi-73744-pekerja-rentan-di-kalbar",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 7,
+      "status": "review",
+      "sub_sektor": "Sawit/CPO",
+      "alasan": "Pemanfaatan DBH sawit untuk perlindungan pekerja perkebunan."
+    }
+  },
+  "e5a6d9701a665634d069428352394f806fe62188a4b20722ccbc85cf47a193bc": {
+    "ts": 1795057793.9160004,
+    "url": "https://news.republika.co.id/berita/topvqm2330000/gapki-dorong-optimalisasi-produktivitas-sawit-lewat-gap-dan-kemitraan-hadapi-era-b50",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 8,
+      "status": "relevan",
+      "sub_sektor": "Biodiesel/B50",
+      "alasan": "Dorongan GAPKI untuk produktivitas dan pasokan bahan baku industri biodiesel."
+    }
+  },
+  "8bf2db46839605277f0a80daaace5809717ebdc0956863cec71f8b5ed61ab692": {
+    "ts": 1795057793.9160166,
+    "url": "https://goodnewsfromindonesia.id/kkn-inspiratif/pertanian/dari-limbah-penggilingan-menjadi-minyak-bernilai-tinggi-peran-agroindustri-dan-petani-padi",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 9,
+      "status": "relevan",
+      "sub_sektor": "Sawit/CPO",
+      "alasan": "Membahas peran agroindustri dalam rantai pasok minyak nabati dan komoditas."
+    }
+  },
+  "4370368e9c46d4aa3dd576aafec8a8ddb018b652c1a2e5ae20ef83c0675b777e": {
+    "ts": 1795057793.916032,
+    "url": "https://riau.antaranews.com/berita/459283/petani-aceh-kagumi-kemitraan-berkelanjutan-ptpn-iv-palmco-di-riau",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 11,
+      "status": "relevan",
+      "sub_sektor": "Sawit/CPO",
+      "alasan": "Membahas kemitraan berkelanjutan korporasi pengolahan sawit dengan petani."
+    }
+  },
+  "cf3442e1704f4ac260b92a2f82aaf2d68bdca8e3b127ab4731dfacfb90a41dec": {
+    "ts": 1795057793.9160466,
+    "url": "https://metrotvnews.com/play/KdZCP0J8-detik-detik-truk-pengangkut-sawit-jatuh-dari-kapal-di-pelabuhan-penyeberangan-roro",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 12,
+      "status": "buang",
+      "sub_sektor": "-",
+      "alasan": "logistik/transportasi umum yang bukan sektor agro"
+    }
+  },
+  "ac6ff87436c2132538f07ff10568be02693e88b8631d4e1a2283af1beb3786f4": {
+    "ts": 1795057793.9160619,
+    "url": "https://itrade.cgsi.co.id/hadapi-transisi-energi-nasional-gapki-dorong-produktivitas-sawit",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 13,
+      "status": "relevan",
+      "sub_sektor": "Biodiesel/B50",
+      "alasan": "Strategi industri sawit menghadapi transisi energi dan pasokan bahan baku biodiesel."
+    }
+  },
+  "cf0225d58cf0a66cfd834663def935fb65820371276ebbdcfc3fce8f7b476f83": {
+    "ts": 1795057806.1384614,
+    "url": "https://kompas.id/artikel/industri-sawit-siapkan-strategi-hadapi-dunia-yang-terfragmentasi?open_from=Section_Terbaru",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 4,
+      "status": "relevan",
+      "sub_sektor": "Sawit/CPO",
+      "alasan": "Berita membahas strategi industri sawit nasional dalam menghadapi tantangan ekonomi global."
+    }
+  },
+  "27ce15ede34ece924d514124c01d0cf19174a37de5406d259a9d86c4853190c8": {
+    "ts": 1795057815.816156,
+    "url": "https://pantau.com/ekonomi/380125/limbah-sawit-berpotensi-jadi-bahan-bakar-pesawat-dan-pengganti-lpg-guru-besar-ipb-soroti-nilai-ekonominya",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 2,
+      "status": "review",
+      "sub_sektor": "Sawit/CPO",
+      "alasan": "Riset kampus dan potensi pemanfaatan limbah sawit untuk energi yang berkaitan dengan hilirisasi agro."
+    }
+  },
+  "89753aa4e64a863cf1b2b8d5f7b625cd73643794b85dcea4f83cbaf1205f88db": {
+    "ts": 1795057841.5516548,
+    "url": "https://kalbar.antaranews.com/amp/berita/723095/gapki-dorong-produktivitas-sawit-hadapi-transisi-energi-nasional",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 2,
+      "status": "relevan",
+      "sub_sektor": "Sawit/CPO",
+      "alasan": "GAPKI mendorong produktivitas sawit untuk pasokan bahan baku industri dan transisi energi."
+    }
+  },
+  "5b08a944dee20d84cc7d3103edfda0bd99b565d8028e6849a62e0e68b9646c1f": {
+    "ts": 1795057841.5516775,
+    "url": "https://beritasatu.com/ekonomi/3042209/shell-perkuat-ekosistem-pelumas-untuk-jaga-performa-alat-berat-b50",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 4,
+      "status": "review",
+      "sub_sektor": "Biodiesel/B50",
+      "alasan": "Berita terkait ekosistem pelumas dan alat berat untuk implementasi B50 lebih condong ke sisi distribusi/energi."
+    }
+  },
+  "1661d570f3c414c72a4bce9418e97aeb1f4de6a3d10480330235cbd8c1ee849c": {
+    "ts": 1795057841.551695,
+    "url": "https://iqplus.info/news/market_news/comd-hadapi-transisi-energi-nasional--gapki-dorong-produktivitas-sawit,32232385.html",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 5,
+      "status": "relevan",
+      "sub_sektor": "Sawit/CPO",
+      "alasan": "Artikel mengenai dorongan peningkatan produktivitas sawit untuk menghadapi transisi energi nasional."
+    }
+  },
+  "d7636b6fbfc13bc9422ed670fc471b803a77d803cacd4467b775af5250fe2441": {
+    "ts": 1795057841.5517113,
+    "url": "https://news.majalahhortus.com/gap-dan-kemitraan-perkuat-produktivitas-dan-keberlanjutan-sawit-nasional",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 6,
+      "status": "relevan",
+      "sub_sektor": "Sawit/CPO",
+      "alasan": "Penguatan GAP dan kemitraan sawit untuk mendukung produktivitas dan keberlanjutan industri sawit nasional."
+    }
+  },
+  "56f480fd7dd32aff57d35146fa7b8958779beae1893d29100b0be2399ce469bf": {
+    "ts": 1795057841.551727,
+    "url": "https://jawapos.com/otomotif/2611180413/shell-siapkan-pelumas-dan-layanan-teknis-hadapi-implementasi-biodiesel-b50",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 8,
+      "status": "review",
+      "sub_sektor": "Biodiesel/B50",
+      "alasan": "Fokus berita adalah kesiapan produk pelumas dan layanan teknis menghadapi implementasi B50."
+    }
+  },
+  "dda4c2322d7dc466cdcab36cf7445ef48b098304bab5db59c1d2314adc78d3ba": {
+    "ts": 1795057956.4439054,
+    "url": "https://radarbangsa.co.id/inovasi-pakan-fermentasi-bawa-tpid-pasuruan-jadi-terbaik-iii-jatim",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 1,
+      "status": "buang",
+      "sub_sektor": "-",
+      "alasan": "penghargaan/award pemerintah daerah"
+    }
+  },
+  "1d7a70ef4f5490fb6601c3ebfed7c95222e7d231344f812a91cdead5c361a4af": {
+    "ts": 1795057967.7716563,
+    "url": "https://lensahukum.co.id/10-jurusan-kuliah-prospek-kerja-ai",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 1,
+      "status": "buang",
+      "sub_sektor": "-",
+      "alasan": "pelatihan, sertifikat profesi, karier, atau kompetensi individu"
+    }
+  },
+  "88ccbb9e309cc1b1d5c5bfb15a856b3529a3a47569a94d67cc4d572e0fcbc00f": {
+    "ts": 1795058323.885957,
+    "url": "https://kompas.id/artikel/industri-sawit-siapkan-strategi-hadapi-dunia-yang-terfragmentasi?open_from=Section_Berita",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 1,
+      "status": "relevan",
+      "sub_sektor": "Sawit/CPO",
+      "alasan": "Berita membahas strategi industri sawit nasional menghadapi tantangan global."
+    }
+  },
+  "9e0ca20c816146a06c09d57cd46b8eeac106ceff1d84ec4e61a09707ab6dc3fb": {
+    "ts": 1795058323.885986,
+    "url": "https://gorontalo.antaranews.com/berita/436811/kementan-tekankan-kemitraan-sawit-tingkatkan-produktivitas-nasional",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 6,
+      "status": "review",
+      "sub_sektor": "Sawit/CPO",
+      "alasan": "Program kemitraan perkebunan Kementan untuk memperkuat ketahanan industri sawit."
+    }
+  },
+  "a1c7d6517ec705782eaa71097b8ed5ab253386eaf336770cf1e9ef56ae27ad01": {
+    "ts": 1795058323.8860035,
+    "url": "https://sawitindonesia.com/gap-dan-produktivitas-kebun-eksisting-jadi-kunci-keberlanjutan-industri-sawit",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 7,
+      "status": "relevan",
+      "sub_sektor": "Sawit/CPO",
+      "alasan": "Strategi produktivitas kebun untuk keberlanjutan industri dan dukungan mandatori biodiesel."
+    }
+  },
+  "3d98424de0ce80e9708e6cfe9f71908b4e4a1bd977e5bc8f7e2e9f22bf03df3d": {
+    "ts": 1795058323.8860183,
+    "url": "https://riauraya.tv/nasional/2026/11/18/industri-sawit-dorong-pertumbuhan-ekonomi-41-persen-dimiliki-rakyat",
+    "stage": "ai_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 8,
+      "status": "review",
+      "sub_sektor": "Sawit/CPO",
+      "alasan": "Workshop jurnalistik GAPKI mengenai kontribusi industri sawit nasional."
+    }
+  },
+  "4c4efa82a724a8ea8e803e6a056f22651a4283211573257fd5576d9ad34aa69e": {
+    "ts": 1795058683.1513991,
+    "url": "https://insight.kontan.co.id/news/kenaikan-harga-singkong-bisa-jadi-tantangan-bagi-saham-budi",
+    "stage": "pass2_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 1,
+      "label": "HILIR",
+      "alasan": "Membahas dampak kenaikan harga bahan baku terhadap biaya produksi industri makanan dan minuman serta respons GAPMMI."
+    }
+  },
+  "c82c7e0867859fdcdf408bb88366d8b51aee1a777601eb85b2f06d19c23a462f": {
+    "ts": 1795058683.151431,
+    "url": "https://industry.co.id/read/159466/indonesia-jadi-guru-11-negara-karibia-ajarkan-olah-mangga-dan-sukun-jadi-cuan",
+    "stage": "pass2_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 2,
+      "label": "HILIR",
+      "alasan": "Berita resmi Kemenperin terkait pengembangan kompetensi SDM dan pendidikan vokasi industri pengolahan."
+    }
+  },
+  "a5f7970491f696781e14f23a8b49e3c988d9a42a6802470951bdc4408a46db01": {
+    "ts": 1795058683.151457,
+    "url": "https://sultra.antaranews.com/berita/547107/kementan-perkuat-kemitraan-sawit-hadapi-tantangan-global",
+    "stage": "pass2_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 3,
+      "label": "BUKAN_HILIR",
+      "alasan": "Fokus pada hulu pertanian/perkebunan (budidaya dan kemitraan di tingkat kebun oleh Kementan)."
+    }
+  },
+  "e18068b93aafd70a0814f8c97a62f1dbdfca6826e46ad501b077184f3e9c030f": {
+    "ts": 1795058683.151778,
+    "url": "https://sulteng.antaranews.com/berita/401191/pengamat-sebut-pengolahan-limbah-sawit-meningkatkan-nilai-tambah",
+    "stage": "pass2_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 4,
+      "label": "BUKAN_HILIR",
+      "alasan": "Rubrik RAGU: opini akademisi/pengamat tanpa respons Kemenperin atau asosiasi industri"
+    }
+  },
+  "65cd627eba5b7011fcc032f505d06bc155327fa6987bd135031531ce42f797a0": {
+    "ts": 1795058683.151802,
+    "url": "https://kalbar.antaranews.com/berita/723095/gapki-dorong-produktivitas-sawit-hadapi-transisi-energi-nasional",
+    "stage": "pass2_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 5,
+      "label": "BUKAN_HILIR",
+      "alasan": "Lebih menekankan praktik budidaya hulu (GAP) di perkebunan sawit oleh GAPKI."
+    }
+  },
+  "70ac65b0ead13b2fb7d6a85e909055789a34a84fc22d0b1ab91540e411939bec": {
+    "ts": 1795058683.1518266,
+    "url": "https://news.republika.co.id/berita/topyix330000/kementan-sebut-kemitraan-sawit-kunci-dongkrak-produktivitas-nasional",
+    "stage": "pass2_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 6,
+      "label": "BUKAN_HILIR",
+      "alasan": "Berita Kementan yang fokus pada peningkatan produktivitas hulu dan kemitraan di tingkat kebun sawit."
+    }
+  },
+  "8e56b3588a4d4e03de99a62781c4278d3a339a6516a21812359fceb4a07a104a": {
+    "ts": 1795058683.151865,
+    "url": "https://sulbarprov.go.id/post/biro-hukum-sulbar-hadiri-harmonisasi-ranpergub-rencana-aksi-daerah-perkebunan-kelapa-sawit-berkelanjutan-20272029",
+    "stage": "pass2_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 7,
+      "label": "BUKAN_HILIR",
+      "alasan": "Membahas regulasi administrasi pemerintahan daerah terkait rencana aksi perkebunan kelapa sawit."
+    }
+  },
+  "d724970a3e5e6a701c7fb88782da9b4dcc488af1c3e6acdd97b0347f3c24e3c1": {
+    "ts": 1795058683.1518917,
+    "url": "https://regional.kompas.com/read/2026/11/19/053556878/maluku-bakal-punya-pabrik-sagu-pertama-dibangun-di-seram-bagian-timur",
+    "stage": "pass2_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 8,
+      "label": "HILIR",
+      "alasan": "Fokus pada investasi dan pembangunan pabrik pengolahan sagu baru di Maluku."
+    }
+  },
+  "e1453d6821862b41e4090a4ba566e13392ca5815964c3ce2cfac0b3e2200e6b5": {
+    "ts": 1795058683.1519182,
+    "url": "https://radarlampung.disway.id/opini/read/730122/anggur-laut-lampung-dari-tradisi-pangan-pesisir-menuju-inovasi-pangan-fungsional",
+    "stage": "pass2_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 9,
+      "label": "BUKAN_HILIR",
+      "alasan": "Merupakan artikel opini akademisi/dosen mengenai potensi pangan lokal secara umum."
+    }
+  },
+  "67a41c76b4bcb8536e25c30caa7e5489138e939b73acfb1d893308462e51ba42": {
+    "ts": 1795058683.1519415,
+    "url": "https://brin.go.id/news/131576/sengon-dan-akasia-direkayasa-secara-genetik-brin-bidik-industri-pulp-dan-bioenergi",
+    "stage": "pass2_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 10,
+      "label": "BUKAN_HILIR",
+      "alasan": "Fokus pada riset bioteknologi hulu dan rekayasa genetika tanaman oleh BRIN."
+    }
+  },
+  "56d5d9e7bdf3ec8eca07f961cb25c0ef6bdb039c2a3a448e5e3e197b2d602271": {
+    "ts": 1795058683.1519654,
+    "url": "https://surabaya.inews.id/read/731261/industri-rokok-tertekan-perusahaan-ini-malah-cetak-penjualan-rp875-triliun",
+    "stage": "pass2_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 11,
+      "label": "HILIR",
+      "alasan": "Membahas kinerja penjualan dan performa finansial emiten industri hasil tembakau (PT HM Sampoerna)."
+    }
+  },
+  "56cf1f451bb3da7071b4dbbb1b7d13eefef4055374a176a2233b6caee6de1a29": {
+    "ts": 1795058683.1519876,
+    "url": "https://waspada.id/berita/hakim-mk-soroti-karakteristik-rokok-elektronik-legal-dan-kontribusinya-terhadap-perekonomian",
+    "stage": "pass2_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 12,
+      "label": "HILIR",
+      "alasan": "Membahas regulasi dan kontribusi ekonomi industri rokok elektronik legal yang berdampak langsung pada sektor manufaktur."
+    }
+  },
+  "50783b21b2dbc61b480c1328c27108edb745aaf559e95f4b4e6017f6dd4290a1": {
+    "ts": 1795058683.15201,
+    "url": "https://pantau.com/ekonomi/380105/serikat-pekerja-desak-pemerintah-beri-kepastian-hukum-industri-rokok",
+    "stage": "pass2_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 13,
+      "label": "HILIR",
+      "alasan": "Tuntutan serikat pekerja industri hasil tembakau (FSP RTMM-SPSI) terkait kepastian hukum bagi keberlangsungan pabrik dan tenaga kerja."
+    }
+  },
+  "7fcfe2a91043c761cd898eee65442fd334acc23d82c0bfdedab0d3c5347711c9": {
+    "ts": 1795058683.1520326,
+    "url": "https://malang.disway.id/malang-melintang/read/26753/sidang-uu-kesehatan-hakim-mk-soroti-regulasi-dan-ekonomi-vape-ri",
+    "stage": "pass2_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 14,
+      "label": "HILIR",
+      "alasan": "Membahas regulasi dan dampak ekonomi dari industri rokok elektronik (vape) di tingkat nasional."
+    }
+  },
+  "263e4de1d51abee4f39a4c4973d0f68c6ee69ad824483fac6b47737d97551a1c": {
+    "ts": 1795058683.1520553,
+    "url": "https://tangerangonline.id/2026/11/19/world-vape-show-dubai-2026-produsen-vape-indonesia-bidik-akses-pasar-global",
+    "stage": "pass2_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 15,
+      "label": "HILIR",
+      "alasan": "Membahas ekspansi ekspor dan keikutsertaan produsen vape Indonesia dalam pameran dagang internasional di Dubai."
+    }
+  },
+  "c152f9ea41d3dea4f92ba222c5fef647ddaf9b3a412cd2d2a020a6941ba48b8f": {
+    "ts": 1795058686.7231374,
+    "url": "https://itb.ac.id/berita/tim-12-ekspedisi-patriot-itb-latih-kader-malaria-di-papua-buat-pengusir-nyamuk-dari-limbah-kulit-kakao/63976",
+    "stage": "pass2_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 16,
+      "label": "BUKAN_HILIR",
+      "alasan": "Berita ini membahas kegiatan pelatihan pemanfaatan limbah oleh akademisi ITB dan kader kesehatan, bukan aktivitas industri pengolahan hilir skala manufaktur."
+    }
+  },
+  "b60f0735d1d6914ef649df4abd98a94d5c306da1190fd6c47366af959f0934e1": {
+    "ts": 1795058686.7231672,
+    "url": "https://sulbarprov.go.id/post/pertanian-topang-ekonomi-sulbar-bapperida-dorong-pengolahan-dan-peningkatan-nilai-tambah-komoditas",
+    "stage": "pass2_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 17,
+      "label": "HILIR",
+      "alasan": "Fokus berita adalah mendorong keterhubungan sektor pertanian dan perkebunan dengan industri pengolahan serta peningkatan nilai tambah."
+    }
+  },
+  "58dd15c2d19eff1423cd2f65ca33ce5275d751495da5bf5904daef9f5cc8d7c4": {
+    "ts": 1795058686.7231917,
+    "url": "https://berita.cilegon.go.id/baca/Pabrik-Dongsuh-Chemical-diresmikan,-Cilegon-Perkuat-Hilirasisasi-Industri-Alumunium/20261119/MjI0NjAz",
+    "stage": "pass2_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 18,
+      "label": "HILIR",
+      "alasan": "Berita ini melaporkan peresmian pabrik baru bahan baku untuk industri peleburan aluminium, yang merupakan bagian dari hilirisasi industri."
+    }
+  },
+  "2c54a378671871b529f5ecd8200ce23b0be7c43cf32510f84582d929bf09cd5a": {
+    "ts": 1795058686.7232158,
+    "url": "https://kalsel.antaranews.com/berita/545691/kopi-excelsa-tapin-resmi-kantongi-sertifikat-indikasi-geografis",
+    "stage": "pass2_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 20,
+      "label": "BUKAN_HILIR",
+      "alasan": "Berita ini tentang perolehan sertifikat Indikasi Geografis komoditas kopi tingkat kabupaten di sisi hulu, bukan aktivitas pabrik pengolahan."
+    }
+  },
+  "57e6a28697a133142d86daf35fa09d2b0ad6b55bd8424a45a496337b002ed85a": {
+    "ts": 1795058686.7232406,
+    "url": "https://distankan.bulelengkab.go.id/informasi/detail/berita/50_peremajaan-kopi-arabika-keg-apbn-thn-2026-droping-bibit-kopi-arabika-di-tempek-yeh-lateng-dan-tempek-tiying-tali-desa-gesing",
+    "stage": "pass2_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 21,
+      "label": "BUKAN_HILIR",
+      "alasan": "Berita ini adalah program dinas pertanian mengenai peremajaan tanaman dan penyaluran benih kopi di tingkat petani (hulu)."
+    }
+  },
+  "0cb4d180fb824206a45b7e548904157378154e654458757ebfa2654bd511e22e": {
+    "ts": 1795058686.7232637,
+    "url": "https://brida.bulelengkab.go.id/informasi/detail/berita/79_monitoring-inovasi-masyarakat-brida-dorong-potensi-lokal-menjadi-produk-bernilai-ekonomi",
+    "stage": "pass2_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 22,
+      "label": "BUKAN_HILIR",
+      "alasan": "Berita ini membahas monitoring inovasi masyarakat secara umum oleh Brida, bukan spesifik pada industri manufaktur menengah-besar."
+    }
+  },
+  "a041a121b8711b31baa3082c2030f5c902bacdf4b795cceec3754e7d58fc9317": {
+    "ts": 1795058686.7232869,
+    "url": "https://kalbar.antaranews.com/berita/723119/kementan-tekankan-kemitraan-sawit-tingkatkan-produktivitas-nasional",
+    "stage": "pass2_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 23,
+      "label": "BUKAN_HILIR",
+      "alasan": "Berita ini berfokus pada kemitraan perkebunan dan praktik budidaya sawit di tingkat hulu oleh Kementerian Pertanian."
+    }
+  },
+  "7c141b484cefa90f97a48d340c669d3155d07d66fe40acd3173afb5177f3a031": {
+    "ts": 1795058686.723308,
+    "url": "https://sawitindonesia.com/produksi-sawit-ri-januari-september-naik-8-42-ekspor-tembus-us-32-31-miliar",
+    "stage": "pass2_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 25,
+      "label": "HILIR",
+      "alasan": "Berita ini memuat data kinerja industri pengolahan sawit nasional, termasuk total produksi CPO/PKO, ekspor, dan konsumsi domestik."
+    }
+  },
+  "20ea66d8d2ac9adf4b307ca05ad251bd77ec721de1df69065431917e7eb5e37f": {
+    "ts": 1795058686.7233322,
+    "url": "https://infosawit.com/2026/11/19/ekspor-sawit-indonesia-naik-926-pada-september-2026-pengiriman-ke-uni-eropa-melonjak-60",
+    "stage": "pass2_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 26,
+      "label": "HILIR",
+      "alasan": "Berita ini melaporkan data kinerja ekspor produk olahan kelapa sawit berdasarkan laporan asosiasi industri GAPKI."
+    }
+  },
+  "848b79b76e1a495b2fb1f21ea26dcb998cc6744f562bb2c9f74cfdfce8f1599d": {
+    "ts": 1795058686.7233543,
+    "url": "https://benang.id/kinerja-industri-sawit-september-2026-ekspor-meningkat-stok-menurun",
+    "stage": "pass2_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 27,
+      "label": "HILIR",
+      "alasan": "Berita ini memuat data resmi produksi bulanan CPO dan PKO sektor industri sawit dari asosiasi GAPKI."
+    }
+  },
+  "2779620683f651d51d88f90ca74e5800dae99ce5060fc9a603e78777b3be1ac5": {
+    "ts": 1795058686.7233775,
+    "url": "https://infosawit.com/2026/11/19/harga-cpo-kpbn-inacom-anjlok-pada-rabu-18-11-2026-perdagangan-minyak-sawit-di-bursa-malaysia-ditutup-melemah",
+    "stage": "pass2_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 28,
+      "label": "HILIR",
+      "alasan": "Berita ini melaporkan fluktuasi harga komoditas olahan utama industri (CPO) di pasar lelang/bursa."
+    }
+  },
+  "afe711fa57fa59b6043a0601ac0c7745caf34b575ae6dbca35bafa6f57fee024": {
+    "ts": 1795058686.7233999,
+    "url": "https://kompas.id/artikel/industri-sawit-siapkan-strategi-hadapi-dunia-yang-terfragmentasi",
+    "stage": "pass2_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 29,
+      "label": "HILIR",
+      "alasan": "Berita ini membahas strategi dan tantangan industri sawit nasional dalam konferensi tingkat tinggi (IPOC) menghadapi pasar global."
+    }
+  },
+  "1c7c365b1ae8884ac73ce848d58acc927ab25d7f87e6b81edf3edc7fc91cb459": {
+    "ts": 1795058686.723421,
+    "url": "https://antaranews.com/berita/5864067/narasi-menguatkan-optimisme-industri-sawit-indonesia",
+    "stage": "pass2_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 30,
+      "label": "HILIR",
+      "alasan": "Berita ini membahas narasi strategis untuk memperkuat posisi industri sawit nasional di kancah internasional berdasarkan hasil konferensi."
+    }
+  },
+  "f71be7beff261651d00d5bee7586b2d7fba5e9d1f38a6012b5d5523d2e515b21": {
+    "ts": 1795058686.723443,
+    "url": "https://kalbar.antaranews.com/berita/722971/dbh-sawit-lindungi-73744-pekerja-rentan-di-kalbar",
+    "stage": "pass2_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 31,
+      "label": "BUKAN_HILIR",
+      "alasan": "Berita ini membahas perlindungan jaminan sosial pekerja rentan di perkebunan sawit menggunakan dana DBH Sawit, bukan aktivitas pabrik pengolahan."
+    }
+  },
+  "94aa58106703ea02543be79544307245324877106f94c018d2145506a921ac5b": {
+    "ts": 1795058686.7234647,
+    "url": "https://news.republika.co.id/berita/topvqm2330000/gapki-dorong-optimalisasi-produktivitas-sawit-lewat-gap-dan-kemitraan-hadapi-era-b50",
+    "stage": "pass2_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 32,
+      "label": "HILIR",
+      "alasan": "Berita ini membahas persiapan pasokan bahan baku industri untuk kebijakan transisi energi mandatori biodiesel (B40/B50) oleh asosiasi industri GAPKI."
+    }
+  },
+  "72da9b38b0836369714556015e08a5315ac2361f03a02a79bfdf355a19bbb5f1": {
+    "ts": 1795058689.7073665,
+    "url": "https://goodnewsfromindonesia.id/kkn-inspiratif/pertanian/dari-limbah-penggilingan-menjadi-minyak-bernilai-tinggi-peran-agroindustri-dan-petani-padi",
+    "stage": "pass2_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 33,
+      "label": "HILIR",
+      "alasan": "Berita membahas pengolahan limbah penggilingan padi (dedak) menjadi minyak bernilai tinggi yang masuk ranah agroindustri."
+    }
+  },
+  "cf6a6bf5024294d22fbdc1f13e84b53c97262b3692905b7adf0fe1b6f97c5dc3": {
+    "ts": 1795058689.7073963,
+    "url": "https://riau.antaranews.com/berita/459283/petani-aceh-kagumi-kemitraan-berkelanjutan-ptpn-iv-palmco-di-riau",
+    "stage": "pass2_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 34,
+      "label": "BUKAN_HILIR",
+      "alasan": "Berita fokus pada kisah kesejahteraan dan produktivitas petani sawit di tingkat hulu perkebunan."
+    }
+  },
+  "a8f7a8e0506a367ee3005d41ac94fbe47fba73557676dcad6a08fa4161964e45": {
+    "ts": 1795058689.7074187,
+    "url": "https://itrade.cgsi.co.id/hadapi-transisi-energi-nasional-gapki-dorong-produktivitas-sawit",
+    "stage": "pass2_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 35,
+      "label": "BUKAN_HILIR",
+      "alasan": "Berita fokus pada praktik budidaya pertanian (Good Agricultural Practices/GAP) dan produktivitas perkebunan di tingkat hulu."
+    }
+  },
+  "11662b1070f6be32488e05c5f2f6ab1ccc87208124b9e19809e8bbfde0daa0d9": {
+    "ts": 1795058689.7074413,
+    "url": "https://pantau.com/ekonomi/380125/limbah-sawit-berpotensi-jadi-bahan-bakar-pesawat-dan-pengganti-lpg-guru-besar-ipb-soroti-nilai-ekonominya",
+    "stage": "pass2_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 37,
+      "label": "HILIR",
+      "alasan": "Berita membahas teknologi pengolahan limbah dan produk samping sawit untuk meningkatkan nilai tambah industri manufaktur."
+    }
+  },
+  "0dffb627cc0d44d9cf575716e6196666062a6953d46eeef3e7c0e8e6804ac8ad": {
+    "ts": 1795058689.7074642,
+    "url": "https://beritasatu.com/ekonomi/3042209/shell-perkuat-ekosistem-pelumas-untuk-jaga-performa-alat-berat-b50",
+    "stage": "pass2_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 38,
+      "label": "HILIR",
+      "alasan": "Berita terkait kesiapan industri pelumas dan mesin menghadapi implementasi biodiesel B50."
+    }
+  },
+  "46a326a9a224e8500778bc75c2aa9efe0b6428fa176560fd5b516b5141ac5c13": {
+    "ts": 1795058689.7074866,
+    "url": "https://news.majalahhortus.com/gap-dan-kemitraan-perkuat-produktivitas-dan-keberlanjutan-sawit-nasional",
+    "stage": "pass2_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 39,
+      "label": "BUKAN_HILIR",
+      "alasan": "Berita menitikberatkan pada praktik budidaya pertanian (GAP) dan produktivitas kebun di tingkat hulu sawit."
+    }
+  },
+  "f51d8c7a7da6b882fc85509e6d28ed6ff9b0daef1dc6b3ebae53346270f0005b": {
+    "ts": 1795058689.7075107,
+    "url": "https://jawapos.com/otomotif/2611180413/shell-siapkan-pelumas-dan-layanan-teknis-hadapi-implementasi-biodiesel-b50",
+    "stage": "pass2_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 40,
+      "label": "HILIR",
+      "alasan": "Berita membahas kesiapan produk pelumas dan layanan industri dalam menghadapi implementasi mandatori biodiesel B50."
+    }
+  },
+  "a42bffafdd64c4feca789f44fb2d8a99675cc92768a1e35231170558934e5930": {
+    "ts": 1795058689.7075343,
+    "url": "https://sawitindonesia.com/gap-dan-produktivitas-kebun-eksisting-jadi-kunci-keberlanjutan-industri-sawit",
+    "stage": "pass2_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 41,
+      "label": "BUKAN_HILIR",
+      "alasan": "Berita fokus pada strategi peningkatan produktivitas kebun eksisting dan penerapan Good Agricultural Practices di hulu."
+    }
+  },
+  "1494df0fdd7306fc492150f9b39063745a1057892f28ef1721126f3d1aa014c6": {
+    "ts": 1795058689.707556,
+    "url": "https://riauraya.tv/nasional/2026/11/18/industri-sawit-dorong-pertumbuhan-ekonomi-41-persen-dimiliki-rakyat",
+    "stage": "pass2_relevance",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 42,
+      "label": "HILIR",
+      "alasan": "Berita membahas kontribusi dan keberlanjutan industri sawit nasional melalui workshop strategis."
+    }
+  },
+  "35a96f2a10a4528887ab699d46bdf2f561669ce8f00c99b7420014f8dafb70d1": {
+    "ts": 1795058693.25813,
+    "url": "https://insight.kontan.co.id/news/kenaikan-harga-singkong-bisa-jadi-tantangan-bagi-saham-budi",
+    "stage": "audit_round_1",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 1,
+      "label": "HILIR",
+      "alasan": "Artikel membahas dampak kenaikan harga bahan baku singkong terhadap biaya produksi produsen makanan dan minuman dengan respons dari GAPMMI."
+    }
+  },
+  "c230b7486a75ba56f211a9511ca1a82724cbea263c51821a1ae5c15fa680652f": {
+    "ts": 1795058693.2581615,
+    "url": "https://industry.co.id/read/159466/indonesia-jadi-guru-11-negara-karibia-ajarkan-olah-mangga-dan-sukun-jadi-cuan",
+    "stage": "audit_round_1",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 2,
+      "label": "HILIR",
+      "alasan": "Berita mengangkat program pengembangan SDM industri pengolahan pangan oleh Kemenperin bagi delegasi internasional."
+    }
+  },
+  "bce506d9b83af4b4d34a0d07a7bd64295c26919cfc3359796da6332693573a29": {
+    "ts": 1795058693.2581892,
+    "url": "https://regional.kompas.com/read/2026/11/19/053556878/maluku-bakal-punya-pabrik-sagu-pertama-dibangun-di-seram-bagian-timur",
+    "stage": "audit_round_1",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 8,
+      "label": "HILIR",
+      "alasan": "Artikel membahas investasi dan rencana pembangunan pabrik pengolahan sagu pertama di Seram Bagian Timur."
+    }
+  },
+  "ee5648ddb4a5520f47dd60f2c22e09dc12a4db9dd253d93789f1fe3ba244bcec": {
+    "ts": 1795058693.258215,
+    "url": "https://surabaya.inews.id/read/731261/industri-rokok-tertekan-perusahaan-ini-malah-cetak-penjualan-rp875-triliun",
+    "stage": "audit_round_1",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 11,
+      "label": "HILIR",
+      "alasan": "Berita menyoroti kinerja penjualan pabrikan rokok PT HM Sampoerna Tbk di tengah tantangan industri hasil tembakau."
+    }
+  },
+  "dfac19e05d765ab20828c7c8a90df02843da1a4652d346df76956ef0692e86ca": {
+    "ts": 1795058693.2582402,
+    "url": "https://waspada.id/berita/hakim-mk-soroti-karakteristik-rokok-elektronik-legal-dan-kontribusinya-terhadap-perekonomian",
+    "stage": "audit_round_1",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 12,
+      "label": "HILIR",
+      "alasan": "Sidang MK membahas karakteristik rokok elektronik legal dan kontribusinya terhadap perekonomian industri dalam negeri."
+    }
+  },
+  "62ab344152560ab9627b28286c6ebeda8598c544486d8f010fef4ce12143ac5b": {
+    "ts": 1795058693.2582638,
+    "url": "https://pantau.com/ekonomi/380105/serikat-pekerja-desak-pemerintah-beri-kepastian-hukum-industri-rokok",
+    "stage": "audit_round_1",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 13,
+      "label": "HILIR",
+      "alasan": "Serikat pekerja industri hasil tembakau mendesak kepastian hukum bagi kelangsungan operasional pabrik dan tenaga kerja."
+    }
+  },
+  "23cf1ca8351e95023ac4fd4ebb3c3970b6c4dc267e6781e30594c8c269fbff72": {
+    "ts": 1795058693.2582865,
+    "url": "https://malang.disway.id/malang-melintang/read/26753/sidang-uu-kesehatan-hakim-mk-soroti-regulasi-dan-ekonomi-vape-ri",
+    "stage": "audit_round_1",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 14,
+      "label": "HILIR",
+      "alasan": "Artikel membahas regulasi dan dampak ekonomi industri rokok elektronik atau vape di Indonesia dalam sidang pengujian UU."
+    }
+  },
+  "d69c78eca864ecf785d1d36f055a51b8e75b7ca849a3e2b0aaa7ccd6379e8fc0": {
+    "ts": 1795058693.2583106,
+    "url": "https://tangerangonline.id/2026/11/19/world-vape-show-dubai-2026-produsen-vape-indonesia-bidik-akses-pasar-global",
+    "stage": "audit_round_1",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 15,
+      "label": "HILIR",
+      "alasan": "Produsen rokok elektrik Indonesia berpartisipasi dalam pameran internasional World Vape Show Dubai untuk memperluas ekspor."
+    }
+  },
+  "97bd3d0d9a0e6a0c6cd45bf59c517a80f9abdfd4ba5e2f8ffc1f2738e02f9d34": {
+    "ts": 1795058693.2583346,
+    "url": "https://sulbarprov.go.id/post/pertanian-topang-ekonomi-sulbar-bapperida-dorong-pengolahan-dan-peningkatan-nilai-tambah-komoditas",
+    "stage": "audit_round_1",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 17,
+      "label": "HILIR",
+      "alasan": "Pemerintah daerah mendorong hilirisasi dan peningkatan nilai tambah komoditas pertanian agar terhubung dengan industri pengolahan."
+    }
+  },
+  "577cc288670bd9011975f2a9d50b8b6f8c6ef5e1727c319fef7fcfba08999979": {
+    "ts": 1795058693.258359,
+    "url": "https://berita.cilegon.go.id/baca/Pabrik-Dongsuh-Chemical-diresmikan,-Cilegon-Perkuat-Hilirasisasi-Industri-Alumunium/20261119/MjI0NjAz",
+    "stage": "audit_round_1",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 18,
+      "label": "BUKAN_HILIR",
+      "alasan": "Peresmian pabrik anoda binder ditujukan khusus untuk industri peleburan alumunium (sektor logam/tambang), bukan industri agro."
+    }
+  },
+  "298413c6da5da7d7cea70db32cf1446eec67f58ad50d64df1695772323bfc0c5": {
+    "ts": 1795058693.258382,
+    "url": "https://sawitindonesia.com/produksi-sawit-ri-januari-september-naik-8-42-ekspor-tembus-us-32-31-miliar",
+    "stage": "audit_round_1",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 25,
+      "label": "HILIR",
+      "alasan": "Artikel mencakup data produksi CPO dan PKO secara nasional serta kinerja ekspor industri sawit Indonesia."
+    }
+  },
+  "0032737b5014f8d7299ca0d2bdc223abc101ad6916485fde85867994a7cace49": {
+    "ts": 1795058693.258405,
+    "url": "https://infosawit.com/2026/11/19/ekspor-sawit-indonesia-naik-926-pada-september-2026-pengiriman-ke-uni-eropa-melonjak-60",
+    "stage": "audit_round_1",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 26,
+      "label": "HILIR",
+      "alasan": "Berita membahas kinerja ekspor produk olahan kelapa sawit Indonesia ke berbagai pasar utama termasuk Uni Eropa."
+    }
+  },
+  "ab94a139732bbd463446ba638727ff92e5a7d0ce72598dc8dc9112a86bb09b4b": {
+    "ts": 1795058693.2584283,
+    "url": "https://benang.id/kinerja-industri-sawit-september-2026-ekspor-meningkat-stok-menurun",
+    "stage": "audit_round_1",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 27,
+      "label": "HILIR",
+      "alasan": "Laporan GAPMMI/GAPKI mengenai data produksi bulanan CPO dan PKO yang mencerminkan aktivitas pabrik pengolahan sawit."
+    }
+  },
+  "1cc6cf8eed05d108e07b8b39cfdeecf834e1275fc8f89de8e7a708a480a88a54": {
+    "ts": 1795058693.2584522,
+    "url": "https://infosawit.com/2026/11/19/harga-cpo-kpbn-inacom-anjlok-pada-rabu-18-11-2026-perdagangan-minyak-sawit-di-bursa-malaysia-ditutup-melemah",
+    "stage": "audit_round_1",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 28,
+      "label": "BUKAN_HILIR",
+      "alasan": "Artikel fokus pada fluktuasi harga komoditas mentah CPO di bursa lelang KPBN dan bursa Malaysia, yang merupakan ranah perdagangan hulu/komoditas."
+    }
+  },
+  "0527e6a3444b6c58d441e56e2a0cce507336314e2f3cd3d3b3c40b67201c359c": {
+    "ts": 1795058693.2584763,
+    "url": "https://kompas.id/artikel/industri-sawit-siapkan-strategi-hadapi-dunia-yang-terfragmentasi",
+    "stage": "audit_round_1",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 29,
+      "label": "HILIR",
+      "alasan": "Konferensi IPOC membahas strategi industri sawit nasional dalam menghadapi tantangan produktivitas dan pasar global."
+    }
+  },
+  "02231b50f518c7cb5ab9b9760acfa172a58639c8e4e536d8b068940ed30eedfb": {
+    "ts": 1795058695.7718205,
+    "url": "https://antaranews.com/berita/5864067/narasi-menguatkan-optimisme-industri-sawit-indonesia",
+    "stage": "audit_round_1",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 30,
+      "label": "BUKAN_HILIR",
+      "alasan": "Artikel ini membahas narasi komunikasi dan luas lahan perkebunan sawit di hulu, bukan aktivitas pengolahan pabrik hilir."
+    }
+  },
+  "9eb3c280ab9df4f04d48d342f15faeaf347131b6b849922e5c563657278e0e01": {
+    "ts": 1795058695.771876,
+    "url": "https://news.republika.co.id/berita/topvqm2330000/gapki-dorong-optimalisasi-produktivitas-sawit-lewat-gap-dan-kemitraan-hadapi-era-b50",
+    "stage": "audit_round_1",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 32,
+      "label": "BUKAN_HILIR",
+      "alasan": "Artikel ini berfokus pada praktik budidaya perkebunan (Good Agricultural Practices) dan petani sawit di tingkat hulu."
+    }
+  },
+  "16b70ccc7448a660b56f0eb576b3b7b53c6398066d01703e3c4d4d8667b1f898": {
+    "ts": 1795058695.7719038,
+    "url": "https://goodnewsfromindonesia.id/kkn-inspiratif/pertanian/dari-limbah-penggilingan-menjadi-minyak-bernilai-tinggi-peran-agroindustri-dan-petani-padi",
+    "stage": "audit_round_1",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 33,
+      "label": "HILIR",
+      "alasan": "Artikel membahas pemanfaatan dedak padi dari fasilitas penggilingan menjadi minyak bernilai tinggi yang melibatkan agroindustri."
+    }
+  },
+  "adcb59c3d805455f4bf7a17e8d44c38e85bbfaf2735bad713c0cbd193329cfc0": {
+    "ts": 1795058695.771929,
+    "url": "https://pantau.com/ekonomi/380125/limbah-sawit-berpotensi-jadi-bahan-bakar-pesawat-dan-pengganti-lpg-guru-besar-ipb-soroti-nilai-ekonominya",
+    "stage": "audit_round_1",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 37,
+      "label": "BUKAN_HILIR",
+      "alasan": "Artikel ini merupakan opini Guru Besar IPB mengenai potensi limbah perkebunan tanpa adanya keterlibatan pabrik hilir atau asosiasi industri."
+    }
+  },
+  "148426b57f316c6bb19f5f6f07c47b73dc6a9a37ef59b6e4a129ab897a0c5e41": {
+    "ts": 1795058695.7719524,
+    "url": "https://beritasatu.com/ekonomi/3042209/shell-perkuat-ekosistem-pelumas-untuk-jaga-performa-alat-berat-b50",
+    "stage": "audit_round_1",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 38,
+      "label": "BUKAN_HILIR",
+      "alasan": "Artikel ini membahas produk pelumas dan perawatan alat berat sektor tambang/konstruksi, bukan industri pengolahan agro."
+    }
+  },
+  "9b12779daa77ad9ed88780168cd6c25667307991c2bab4ef017b9cf785ed35e6": {
+    "ts": 1795058695.7719755,
+    "url": "https://jawapos.com/otomotif/2611180413/shell-siapkan-pelumas-dan-layanan-teknis-hadapi-implementasi-biodiesel-b50",
+    "stage": "audit_round_1",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 40,
+      "label": "BUKAN_HILIR",
+      "alasan": "Artikel ini membahas kesiapan pelumas untuk mesin alat berat sektor ESDM/tambang menghadapi B50, bukan manufaktur industri agro."
+    }
+  },
+  "b681454b4d9662a5841202c95d319b97d32641e406e90ebb0eaacac6165c91a1": {
+    "ts": 1795058695.771997,
+    "url": "https://riauraya.tv/nasional/2026/11/18/industri-sawit-dorong-pertumbuhan-ekonomi-41-persen-dimiliki-rakyat",
+    "stage": "audit_round_1",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 42,
+      "label": "BUKAN_HILIR",
+      "alasan": "Artikel ini membahas laporan umum kepemilikan kebun sawit rakyat dan workshop jurnalistik, bukan operasional pabrik pengolahan."
+    }
+  },
+  "9bab5dcd4bc556b67b5020a88b6a7bb86021617689933b41748a1522cbece667": {
+    "ts": 1795058699.1750221,
+    "url": "https://insight.kontan.co.id/news/kenaikan-harga-singkong-bisa-jadi-tantangan-bagi-saham-budi",
+    "stage": "audit_round_2",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 1,
+      "label": "HILIR",
+      "alasan": "Artikel membahas dampak kenaikan harga bahan baku terhadap biaya produksi industri makanan dan minuman serta melibatkan asosiasi GAPMMI."
+    }
+  },
+  "ac92693b8d24a1e3f74e7374d2669a409a263d5409537f7795fc0b21a2fa907e": {
+    "ts": 1795058699.1750536,
+    "url": "https://industry.co.id/read/159466/indonesia-jadi-guru-11-negara-karibia-ajarkan-olah-mangga-dan-sukun-jadi-cuan",
+    "stage": "audit_round_2",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 2,
+      "label": "HILIR",
+      "alasan": "Artikel memuat program resmi Kemenperin terkait pelatihan vokasi pengolahan hasil agro mangga dan sukun untuk standar industri."
+    }
+  },
+  "c95600eecdf2841bef859c1ef19cacaa84be82000f81652201a91066ae1a2678": {
+    "ts": 1795058699.1750793,
+    "url": "https://regional.kompas.com/read/2026/11/19/053556878/maluku-bakal-punya-pabrik-sagu-pertama-dibangun-di-seram-bagian-timur",
+    "stage": "audit_round_2",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 8,
+      "label": "HILIR",
+      "alasan": "Artikel secara langsung membahas investasi dan rencana pembangunan pabrik pengolahan sagu komersial pertama di Maluku."
+    }
+  },
+  "2ebb711ee2ac353aac49db8d79d3482d1c7e0a77701d7e8709e6937ac4e37254": {
+    "ts": 1795058699.1751032,
+    "url": "https://surabaya.inews.id/read/731261/industri-rokok-tertekan-perusahaan-ini-malah-cetak-penjualan-rp875-triliun",
+    "stage": "audit_round_2",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 11,
+      "label": "HILIR",
+      "alasan": "Artikel membahas kinerja operasional, penjualan, dan strategi bisnis perusahaan manufaktur rokok besar di dalam negeri."
+    }
+  },
+  "49c5b973a36e4038cdbaddcaa4b0af1b5762d91cbfaa34dc15fa9aa129b032a0": {
+    "ts": 1795058699.1751256,
+    "url": "https://waspada.id/berita/hakim-mk-soroti-karakteristik-rokok-elektronik-legal-dan-kontribusinya-terhadap-perekonomian",
+    "stage": "audit_round_2",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 12,
+      "label": "HILIR",
+      "alasan": "Sidang pengujian materiil UU membahas kontribusi ekonomi dan karakteristik industri rokok elektronik legal di Indonesia."
+    }
+  },
+  "44ec9e321301890fa4aad780f928cefe52d989a4fe980dc993448eb7a51ba2a0": {
+    "ts": 1795058699.1751502,
+    "url": "https://pantau.com/ekonomi/380105/serikat-pekerja-desak-pemerintah-beri-kepastian-hukum-industri-rokok",
+    "stage": "audit_round_2",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 13,
+      "label": "HILIR",
+      "alasan": "Serikat pekerja industri rokok dan tembakau menyuarakan kepastian berusaha untuk melindungi kelangsungan pabrik dan tenaga kerja."
+    }
+  },
+  "d7927dd85773a2aeef807ccc4bb8399b908b9c77233833ea275994b1d514334c": {
+    "ts": 1795058699.1751723,
+    "url": "https://malang.disway.id/malang-melintang/read/26753/sidang-uu-kesehatan-hakim-mk-soroti-regulasi-dan-ekonomi-vape-ri",
+    "stage": "audit_round_2",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 14,
+      "label": "HILIR",
+      "alasan": "Pembahasan sidang pengadilan mengenai regulasi mencakup aspek dampak ekonomi dari industri rokok elektrik (vape) di Indonesia."
+    }
+  },
+  "ca28c408730322b170f331d133cdc94d4cba0b19a6833a658f3c1e22acf0108a": {
+    "ts": 1795058699.175195,
+    "url": "https://tangerangonline.id/2026/11/19/world-vape-show-dubai-2026-produsen-vape-indonesia-bidik-akses-pasar-global",
+    "stage": "audit_round_2",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 15,
+      "label": "HILIR",
+      "alasan": "Artikel mengulas partisipasi produsen vape Indonesia dalam pameran internasional untuk memperluas ekspor produk olahan."
+    }
+  },
+  "28f74a6a529dcfb79d76f788d2ec03d4c235b2b9b8d3732c9bd85d7e9b1cd3ab": {
+    "ts": 1795058699.1757364,
+    "url": "https://sulbarprov.go.id/post/pertanian-topang-ekonomi-sulbar-bapperida-dorong-pengolahan-dan-peningkatan-nilai-tambah-komoditas",
+    "stage": "audit_round_2",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 17,
+      "label": "RAGU",
+      "alasan": "Fokus berita masih pada tataran makro ekonomi daerah dan dorongan hilirisasi secara umum tanpa menyebutkan pabrik spesifik."
+    }
+  },
+  "be34844485e30fc2350b9901113d6eca340a8fbf7f6a75853a0dd3e75b6b3e2d": {
+    "ts": 1795058699.1757598,
+    "url": "https://sawitindonesia.com/produksi-sawit-ri-januari-september-naik-8-42-ekspor-tembus-us-32-31-miliar",
+    "stage": "audit_round_2",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 25,
+      "label": "HILIR",
+      "alasan": "Data GAPKI mencakup produksi total CPO, kinerja ekspor, dan konsumsi domestik industri olahan kelapa sawit."
+    }
+  },
+  "05c73716777df003a9a7f1539a53d9b1f937a060c63db7c2c1f23e349c188a6b": {
+    "ts": 1795058699.1757834,
+    "url": "https://infosawit.com/2026/11/19/ekspor-sawit-indonesia-naik-926-pada-september-2026-pengiriman-ke-uni-eropa-melonjak-60",
+    "stage": "audit_round_2",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 26,
+      "label": "HILIR",
+      "alasan": "Laporan GAPKI merinci volume ekspor produk kelapa sawit olahan Indonesia ke berbagai pasar utama internasional."
+    }
+  },
+  "432e8a7495367d18f65ce81ddce1890dbdb17c2581bab325f052dc8f16ee7c7c": {
+    "ts": 1795058699.1758058,
+    "url": "https://benang.id/kinerja-industri-sawit-september-2026-ekspor-meningkat-stok-menurun",
+    "stage": "audit_round_2",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 27,
+      "label": "HILIR",
+      "alasan": "Memuat data resmi asosiasi GAPKI mengenai volume produksi CPO dan PKO bulanan serta pergerakan stok pabrik pengolahan."
+    }
+  },
+  "26d87117788c82e203c79339bf9b343270adb739ee4da6c4414f46f4431a8329": {
+    "ts": 1795058699.175827,
+    "url": "https://kompas.id/artikel/industri-sawit-siapkan-strategi-hadapi-dunia-yang-terfragmentasi",
+    "stage": "audit_round_2",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 29,
+      "label": "HILIR",
+      "alasan": "Konferensi tahunan IPOC membahas tantangan strategis, produktivitas, dan masa depan industri hilir kelapa sawit nasional."
+    }
+  },
+  "cd95dcf566bfcdb4f919020ea0dab5567849ee544f84a9908e116c4152efa0f2": {
+    "ts": 1795058699.1758616,
+    "url": "https://goodnewsfromindonesia.id/kkn-inspiratif/pertanian/dari-limbah-penggilingan-menjadi-minyak-bernilai-tinggi-peran-agroindustri-dan-petani-padi",
+    "stage": "audit_round_2",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 33,
+      "label": "BUKAN_HILIR",
+      "alasan": "Artikel lebih menyoroti potensi pemanfaatan dedak padi dari fasilitas penggilingan skala kecil dan edukasi umum ketimbang operasional industri manufaktur besar."
+    }
+  },
+  "b4d8138b1abcaa4fb43491e11a616a958599abd02753c317c9e130762d0343d2": {
+    "ts": 1795058702.4516833,
+    "url": "https://insight.kontan.co.id/news/kenaikan-harga-singkong-bisa-jadi-tantangan-bagi-saham-budi",
+    "stage": "audit_round_3",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 1,
+      "label": "HILIR",
+      "alasan": "Artikel membahas dampak kenaikan harga bahan baku terhadap biaya produksi industri pengolahan makanan dan minuman serta tanggapan resmi dari GAPMMI."
+    }
+  },
+  "20ce3c2c94f84144c9b6c055df8cfa5e82304b9e11b9d512b42d945d8069a812": {
+    "ts": 1795058702.451714,
+    "url": "https://industry.co.id/read/159466/indonesia-jadi-guru-11-negara-karibia-ajarkan-olah-mangga-dan-sukun-jadi-cuan",
+    "stage": "audit_round_3",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 2,
+      "label": "HILIR",
+      "alasan": "Artikel memuat program resmi Kemenperin terkait pendidikan dan pelatihan vokasi untuk memperkuat kompetensi SDM industri pengolahan agro."
+    }
+  },
+  "cbdda84e6e45f43971c99715d8c795dc978fde0fc2502f219af512c6ebc439d0": {
+    "ts": 1795058702.4517395,
+    "url": "https://regional.kompas.com/read/2026/11/19/053556878/maluku-bakal-punya-pabrik-sagu-pertama-dibangun-di-seram-bagian-timur",
+    "stage": "audit_round_3",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 8,
+      "label": "HILIR",
+      "alasan": "Artikel secara langsung membahas rencana investasi dan pembangunan pabrik pengolahan sagu pertama di Maluku oleh investor swasta."
+    }
+  },
+  "fd04820a1f3d2cf76da9c5f3af411c0c8125c3a777b06cf8543370a6d222e5ec": {
+    "ts": 1795058702.451765,
+    "url": "https://surabaya.inews.id/read/731261/industri-rokok-tertekan-perusahaan-ini-malah-cetak-penjualan-rp875-triliun",
+    "stage": "audit_round_3",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 11,
+      "label": "HILIR",
+      "alasan": "Artikel membahas kinerja operasional, penjualan, dan kondisi finansial perusahaan pabrikan rokok besar di dalam negeri."
+    }
+  },
+  "1a7c1b44e947bbbb0185d97ac83fb0808f1b921d3bf643e717c0c894c2068d3f": {
+    "ts": 1795058702.4517894,
+    "url": "https://waspada.id/berita/hakim-mk-soroti-karakteristik-rokok-elektronik-legal-dan-kontribusinya-terhadap-perekonomian",
+    "stage": "audit_round_3",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 12,
+      "label": "HILIR",
+      "alasan": "Sidang Mahkamah Konstitusi secara spesifik menyoroti karakteristik produk legal serta kontribusi ekonomi dari industri rokok elektronik/vape."
+    }
+  },
+  "2bcbd1ac8c479ad5df057e94587a65d4728393f1bfbb610e3a7bc78982b37f7b": {
+    "ts": 1795058702.4518125,
+    "url": "https://pantau.com/ekonomi/380105/serikat-pekerja-desak-pemerintah-beri-kepastian-hukum-industri-rokok",
+    "stage": "audit_round_3",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 13,
+      "label": "HILIR",
+      "alasan": "Serikat pekerja industri hasil tembakau menyampaikan aspirasi terkait kepastian berusaha bagi pabrik dan tenaga kerja sektor padat karya."
+    }
+  },
+  "335ed6d6e55de35228edeb394c4b862d1902f3af23361404cd50cfdd4cbd341e": {
+    "ts": 1795058702.4518504,
+    "url": "https://malang.disway.id/malang-melintang/read/26753/sidang-uu-kesehatan-hakim-mk-soroti-regulasi-dan-ekonomi-vape-ri",
+    "stage": "audit_round_3",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 14,
+      "label": "HILIR",
+      "alasan": "Artikel membahas materi persidangan di MK yang mendalami regulasi serta dampak ekonomi dari keberadaan industri rokok elektronik."
+    }
+  },
+  "eb465ffbc88b191f8c1f3eefc81084c051df196121dce3a818e88aef6027f76f": {
+    "ts": 1795058702.4518743,
+    "url": "https://tangerangonline.id/2026/11/19/world-vape-show-dubai-2026-produsen-vape-indonesia-bidik-akses-pasar-global",
+    "stage": "audit_round_3",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 15,
+      "label": "HILIR",
+      "alasan": "Artikel meliput partisipasi dan perluasan pasar ekspor produsen rokok elektrik/vape asal Indonesia dalam ajang pameran dagang internasional."
+    }
+  },
+  "541402f516d6639c5d017860c1bfc4e277888acec4f497a8faee118db017f0a9": {
+    "ts": 1795058702.451897,
+    "url": "https://sulbarprov.go.id/post/pertanian-topang-ekonomi-sulbar-bapperida-dorong-pengolahan-dan-peningkatan-nilai-tambah-komoditas",
+    "stage": "audit_round_3",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 17,
+      "label": "HILIR",
+      "alasan": "Kebijakan pemerintah daerah mendorong hilirisasi dan peningkatan nilai tambah komoditas pertanian agar terhubung langsung dengan industri pengolahan."
+    }
+  },
+  "3906cb611534b85ee1822887953f84a67747152fbee2619f889fbf4c2ec9e9c5": {
+    "ts": 1795058702.4519196,
+    "url": "https://sawitindonesia.com/produksi-sawit-ri-januari-september-naik-8-42-ekspor-tembus-us-32-31-miliar",
+    "stage": "audit_round_3",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 25,
+      "label": "HILIR",
+      "alasan": "Artikel memuat data resmi GAPKI mengenai volume produksi CPO, kinerja ekspor, serta konsumsi domestik industri pengolahan sawit."
+    }
+  },
+  "3c755362311219a08787fc11ebd61a5e897614adf2a468a7414960c8b47dd9ae": {
+    "ts": 1795058702.4519439,
+    "url": "https://infosawit.com/2026/11/19/ekspor-sawit-indonesia-naik-926-pada-september-2026-pengiriman-ke-uni-eropa-melonjak-60",
+    "stage": "audit_round_3",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 26,
+      "label": "HILIR",
+      "alasan": "Laporan GAPKI mencatat perkembangan volume ekspor produk olahan kelapa sawit Indonesia ke berbagai pasar utama internasional."
+    }
+  },
+  "18bbadd6353d1ee4b8f9476549c89a5f40b5b6d0fb858b9bb9c6c1450814f53e": {
+    "ts": 1795058702.4519658,
+    "url": "https://benang.id/kinerja-industri-sawit-september-2026-ekspor-meningkat-stok-menurun",
+    "stage": "audit_round_3",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 27,
+      "label": "HILIR",
+      "alasan": "Artikel menyajikan data rinci bulanan dari GAPKI terkait produksi CPO dan PKO nasional serta dinamika stok industri."
+    }
+  },
+  "9f01a72cb10cbeeebeba170d1235dea11f0a1c4372c525b994695e571f457083": {
+    "ts": 1795058702.4519868,
+    "url": "https://kompas.id/artikel/industri-sawit-siapkan-strategi-hadapi-dunia-yang-terfragmentasi",
+    "stage": "audit_round_3",
+    "prompt_version": "v2026-11-12-b",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 29,
+      "label": "HILIR",
+      "alasan": "Konferensi sawit nasional (IPOC) membahas strategi strategis rantai pasok dan tantangan global bagi keberlangsungan industri sawit hilir."
+    }
+  },
+  "97d537f8cec4c50c2f309ebe3e48e521645f900b042b9dc582980d2a36abb454": {
+    "ts": 1795058751.8717678,
+    "url": "https://insight.kontan.co.id/news/kenaikan-harga-singkong-bisa-jadi-tantangan-bagi-saham-budi",
+    "stage": "tone",
+    "prompt_version": "v2026-11-18-d",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 1,
+      "hubungan": "K4",
+      "arah": "tidak ada",
+      "alasan": "Berita mengenai kenaikan harga singkong dan dampaknya pada emiten tidak menyebut maupun berkaitan langsung dengan Kemenperin, sehingga dinilai netral (K4).",
+      "dasar": "isi",
+      "keyakinan": "tinggi",
+      "asumsi_sementara": [
+        "ASUMSI_K4_NETRAL"
+      ],
+      "tone": "Netral",
+      "metode": "AI"
+    }
+  },
+  "2274fc0aa254ad174ea8a7503d5f16975ede4a4c98a26a2c9148d1fcb9eb2cde": {
+    "ts": 1795058751.875384,
+    "url": "https://regional.kompas.com/read/2026/11/19/053556878/maluku-bakal-punya-pabrik-sagu-pertama-dibangun-di-seram-bagian-timur",
+    "stage": "tone",
+    "prompt_version": "v2026-11-18-d",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 3,
+      "hubungan": "K4",
+      "arah": "tidak ada",
+      "alasan": "Berita membahas rencana pembangunan pabrik sagu oleh Pemkab SBT dan investor swasta tanpa melibatkan atau menyebut Kemenperin, sehingga dikategorikan netral (K4).",
+      "dasar": "isi",
+      "keyakinan": "tinggi",
+      "asumsi_sementara": [
+        "ASUMSI_K4_NETRAL"
+      ],
+      "tone": "Netral",
+      "metode": "AI"
+    }
+  },
+  "63e7a04d6bf5ae25885e32cd4f01109649edfed1abb416a2a7801132442ba57b": {
+    "ts": 1795058751.8778214,
+    "url": "https://surabaya.inews.id/read/731261/industri-rokok-tertekan-perusahaan-ini-malah-cetak-penjualan-rp875-triliun",
+    "stage": "tone",
+    "prompt_version": "v2026-11-18-d",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 4,
+      "hubungan": "K3",
+      "arah": "mendukung",
+      "alasan": "Asosiasi/perusahaan mengapresiasi kebijakan pemerintah terkait cukai yang mendukung iklim industri, sehingga masuk kategori K3 mendukung (P2).",
+      "dasar": "isi",
+      "keyakinan": "tinggi",
+      "asumsi_sementara": [
+        "ASUMSI_A1_KONDISI_INDUSTRI_NETRAL",
+        "ASUMSI_A4_KATA_NEGATIF_BUKAN_PEMICU"
+      ],
+      "tone": "Positif",
+      "metode": "AI"
+    }
+  },
+  "54abb449eff4f2a01f03ecc8e8422eee7c312e85721bddfbcf5d5765e93833c5": {
+    "ts": 1795058751.8843377,
+    "url": "https://sawitindonesia.com/produksi-sawit-ri-januari-september-naik-8-42-ekspor-tembus-us-32-31-miliar",
+    "stage": "tone",
+    "prompt_version": "v2026-11-18-d",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 10,
+      "hubungan": "K4",
+      "arah": "tidak ada",
+      "alasan": "Berita memuat data produksi dan ekspor sawit oleh GAPKI tanpa menyebut Kemenperin, sehingga dikategorikan netral berdasarkan aturan A3 dan A1.",
+      "dasar": "isi",
+      "keyakinan": "tinggi",
+      "asumsi_sementara": [
+        "ASUMSI_K4_NETRAL",
+        "ASUMSI_A1_KONDISI_INDUSTRI_NETRAL"
+      ],
+      "tone": "Netral",
+      "metode": "AI"
+    }
+  },
+  "574575ca955da77d0a3971c8d0e58e02de0e254040cf294b426ed1fa5943c5f5": {
+    "ts": 1795058751.8859835,
+    "url": "https://kompas.id/artikel/industri-sawit-siapkan-strategi-hadapi-dunia-yang-terfragmentasi",
+    "stage": "tone",
+    "prompt_version": "v2026-11-18-d",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 13,
+      "hubungan": "K3",
+      "arah": "tidak ada",
+      "alasan": "Berita mengulas tantangan global industri sawit secara umum tanpa menyebut institusi Kemenperin, sehingga dikategorikan netral (Ne2 + A1).",
+      "dasar": "isi",
+      "keyakinan": "tinggi",
+      "asumsi_sementara": [],
+      "tone": "Netral",
+      "metode": "AI"
+    }
+  },
+  "1cace43a1cef1108384ff8b20b8608afe9ed48941abda528bc6e65ea9acdcaf8": {
+    "ts": 1795058755.647962,
+    "url": "https://sulbarprov.go.id/post/pertanian-topang-ekonomi-sulbar-bapperida-dorong-pengolahan-dan-peningkatan-nilai-tambah-komoditas",
+    "stage": "tone",
+    "prompt_version": "v2026-11-18-d",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 9,
+      "hubungan": "K4",
+      "arah": "tidak ada",
+      "alasan": "Berita membahas pertumbuhan ekonomi dan sektor pertanian Sulawesi Barat oleh Bapperida tanpa mengaitkan Kemenperin, sehingga dinilai Netral.",
+      "dasar": "isi",
+      "keyakinan": "tinggi",
+      "asumsi_sementara": [
+        "ASUMSI_K4_NETRAL"
+      ],
+      "tone": "Netral",
+      "metode": "AI"
+    }
+  },
+  "7c39f099f2309b81da6cad95446e6f99ed12993e43d140e1511eb55fbbdcf7d3": {
+    "ts": 1795058755.6516626,
+    "url": "https://tangerangonline.id/2026/11/19/world-vape-show-dubai-2026-produsen-vape-indonesia-bidik-akses-pasar-global",
+    "stage": "tone",
+    "prompt_version": "v2026-11-18-d",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 8,
+      "hubungan": "K3",
+      "arah": "tidak ada",
+      "alasan": "Berita bersumber dari asosiasi industri vape yang mengutip data ekspor Kemenperin untuk mendukung eksistensi industri, masuk indikator P2.",
+      "dasar": "isi",
+      "keyakinan": "tinggi",
+      "asumsi_sementara": [],
+      "tone": "Positif",
+      "metode": "AI"
+    }
+  },
+  "7fb7b45b1bef1d601b1877fc1848fb151355ac0ccad12d0e45e87c87b580b2f7": {
+    "ts": 1795058755.6568246,
+    "url": "https://pantau.com/ekonomi/380105/serikat-pekerja-desak-pemerintah-beri-kepastian-hukum-industri-rokok",
+    "stage": "tone",
+    "prompt_version": "v2026-11-18-d",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 6,
+      "hubungan": "K3",
+      "arah": "tidak ada",
+      "alasan": "Serikat pekerja mendesak pemerintah secara umum terkait industri rokok tanpa menyerang Kemenperin secara langsung, masuk indikator Ne2 + A2.",
+      "dasar": "isi",
+      "keyakinan": "tinggi",
+      "asumsi_sementara": [
+        "ASUMSI_A2_DESAKAN_UMUM_PEMERINTAH_NETRAL"
+      ],
+      "tone": "Netral",
+      "metode": "AI"
+    }
+  },
+  "229cb8a5992eb207f2b1d659ec240967ae414eff6e4453a7fb0a96f840ed41f7": {
+    "ts": 1795058755.6590333,
+    "url": "https://industry.co.id/read/159466/indonesia-jadi-guru-11-negara-karibia-ajarkan-olah-mangga-dan-sukun-jadi-cuan",
+    "stage": "tone",
+    "prompt_version": "v2026-11-18-d",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "id": 2,
+      "hubungan": "K1",
+      "arah": "tidak ada",
+      "alasan": "Kemenperin menjadi pelaku utama melalui program pelatihan vokasi internasional dan pernyataan Menperin, masuk indikator P1.",
+      "dasar": "isi",
+      "keyakinan": "tinggi",
+      "asumsi_sementara": [],
+      "tone": "Positif",
+      "metode": "AI"
+    }
+  },
+  "2b9e83c674ae91218c038e5476ba09b7d509278a5e7d84881b0a56bb8b205ec3": {
+    "ts": 1795058756.6196027,
+    "url": "https://isu-cache.local/bf76b852b2194ce719c092a4d6ae67f596c4c8b015eb03623cf65fe931a2c2d8",
+    "stage": "combined_isu_tone",
+    "prompt_version": "v2026-11-18-d",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "tone": "Netral",
+      "hubungan": "K4",
+      "arah": "tidak ada",
+      "alasan": "Berita membahas sidang Mahkamah Konstitusi terkait UU Kesehatan dan rokok elektronik tanpa menyebut Kemenperin maupun kebijakan utamanya.",
+      "outlier_ids": [],
+      "outlier_sigs": [],
+      "keyakinan": "tinggi",
+      "metode": "AI-isu",
+      "from_combined": true,
+      "isu": "Mahkamah Konstitusi menggelar sidang pengujian materiil Undang-Undang Nomor 17 Tahun 2023 tentang Kesehatan dengan menyoroti regulasi dan ekonomi rokok elektronik"
+    }
+  },
+  "61050087cc5311c8d392b9e024e5b58a47be38ee6a8e9a2187be6ab85834e985": {
+    "ts": 1795058756.619651,
+    "url": "https://isu-cache.local/04cc552fc75423231ef47646781bd47b3559c09383751207a7a7df2c095ead79",
+    "stage": "combined_isu_tone",
+    "prompt_version": "v2026-11-18-d",
+    "model": "gemini-flash-lite-latest",
+    "value": {
+      "tone": "Netral",
+      "hubungan": "K4",
+      "arah": "tidak ada",
+      "alasan": "Berita membahas data kinerja produksi dan ekspor sawit oleh GAPKI tanpa menyebut Kemenperin atau kebijakannya secara langsung.",
+      "outlier_ids": [],
+      "outlier_sigs": [],
+      "keyakinan": "tinggi",
+      "metode": "AI-isu",
+      "from_combined": true,
+      "isu": "Gabungan Pengusaha Kelapa Sawit Indonesia mencatat kenaikan produksi dan ekspor CPO pada bulan September 2026"
+    }
+  }
+}

@@ -1,0 +1,995 @@
+{
+  "updated_at": "2026-11-19 10:25:59",
+  "issues": [
+    {
+      "isu_id": "rilis_74a1d93a45",
+      "isu": "Kemenperin Unjuk Kompetensi SDM Industri, 11 Negara Karibia Belajar Olah Pangan Tropis",
+      "sumber_isu": "rilis",
+      "tanggal_awal": "2026-11-18",
+      "tanggal_terakhir": "2026-11-19",
+      "nama_acara": "Siaran Pers Kemenperin",
+      "url": "https://www.kemenperin.go.id/artikel/72483143/Kemenperin-Unjuk-Kompetensi-SDM-Industri,-11-Negara-Karibia-Belajar-Olah-Pangan-Tropis",
+      "_norm_title": "kemenperin unjuk kompetensi sdm industri 11 negara karibia belajar olah pangan tropis",
+      "tone": "Positif",
+      "tone_alasan": "Kemenperin menjadi pelaku utama melalui program pelatihan vokasi internasional dan pernyataan Menperin, masuk indikator P1.",
+      "tone_keyakinan": "tinggi",
+      "evaluated_at": "2026-11-19 10:25:55",
+      "member_count_at_eval": 1,
+      "member_count": 1,
+      "sample_titles": [
+        "Kemenperin Unjuk Kompetensi SDM Industri, 11 Negara Karibia Belajar Olah Pangan Tropis",
+        "Indonesia Jadi Guru 11 Negara Karibia, Ajarkan Olah Mangga dan Sukun Jadi Cuan"
+      ],
+      "matched_articles": [
+        {
+          "id": "2",
+          "title": "Indonesia Jadi Guru 11 Negara Karibia, Ajarkan Olah Mangga dan Sukun Jadi Cuan",
+          "link": "https://www.industry.co.id/read/159466/indonesia-jadi-guru-11-negara-karibia-ajarkan-olah-mangga-dan-sukun-jadi-cuan",
+          "canonical_url": "https://industry.co.id/read/159466/indonesia-jadi-guru-11-negara-karibia-ajarkan-olah-mangga-dan-sukun-jadi-cuan",
+          "media_name": "Industry.co.id",
+          "tanggal": "Thu, 19 Nov 2026 00:15:00 GMT",
+          "skor": 0.5195
+        }
+      ],
+      "sample_snippets": [
+        "INDUSTRY.co.id - JAKARTA, Kementerian Perindustrian (Kemenperin) terus memperkuat kompetensi dan daya saing sumber daya manusia (SDM) industri melalui pendidikan dan pelatihan vokasi yang berorientasi pada kebutuhan dunia industri. Upaya ini tidak hanya ditujukan untuk memenuhi kebutuhan tenaga kerja nasional, tetapi juga memperluas kontribusi Indonesia dalam pengembangan SDM industri di tingkat internasional.\nMenteri Perindustrian Muhammad Sarmuji menegaskan bahwa pendidikan vokasi Kemenperin menjadi salah satu praktik terbaik (best practice) pendidikan vokasi nasional karena dikembangkan selaras dengan kebutuhan dunia usaha dan dunia industri. Melalui 11 politeknik dan dua akademi komunitas dengan spesialisasi di berbagai sektor industri, Kemenperin menyiapkan SDM yang kompeten, berdaya saing, dan adaptif terhadap perkembangan teknologi.\nSalah satu wujud pengakuan terhadap kompetensi SDM industri Indonesia adalah kerja sama pengembangan kapasitas dengan negara-negara kawasan Karibia melalui pelatihan diversifikasi produk pangan olahan.\nPlt. Kepala Badan Pengembangan Sumber Daya Manusia Industri (BPSDMI) Adie Rochmanto Pandiangan menyampaikan, negara-negara Karibia merupakan mitra"
+      ],
+      "tone_hubungan": "K1",
+      "tone_arah": "tidak ada"
+    },
+    {
+      "isu_id": "rilis_e17432520d",
+      "isu": "Kemenperin Gandeng HIPPINDO dan MR.DIY, Perluas Pasar Produk IKM Nasional",
+      "sumber_isu": "rilis",
+      "tanggal_awal": "2026-11-17",
+      "tanggal_terakhir": "2026-11-17",
+      "nama_acara": "Siaran Pers Kemenperin",
+      "url": "https://www.kemenperin.go.id/artikel/72483142/Kemenperin-Gandeng-HIPPINDO-dan-MR.DIY,-Perluas-Pasar-Produk-IKM-Nasional",
+      "_norm_title": "kemenperin gandeng hippindo dan mr diy perluas pasar produk ikm nasional",
+      "tone": null,
+      "tone_alasan": "",
+      "tone_keyakinan": "",
+      "evaluated_at": null,
+      "member_count_at_eval": 0,
+      "member_count": 0,
+      "sample_titles": [
+        "Kemenperin Gandeng HIPPINDO dan MR.DIY, Perluas Pasar Produk IKM Nasional"
+      ],
+      "matched_articles": []
+    },
+    {
+      "isu_id": "rilis_e4642a3c2b",
+      "isu": "Menperin Sarmuji Paparkan Usulan Pemerintah: Satu Kadin, AD/ART Ditetapkan Keppres",
+      "sumber_isu": "rilis",
+      "tanggal_awal": "2026-11-16",
+      "tanggal_terakhir": "2026-11-16",
+      "nama_acara": "Siaran Pers Kemenperin",
+      "url": "https://www.kemenperin.go.id/artikel/72483138/Menperin-Sarmuji-Paparkan-Usulan-Pemerintah:-Satu-Kadin,-ADART-Ditetapkan-Keppres",
+      "_norm_title": "kemenperin sarmuji paparkan usulan pemerintah satu kadin ad art ditetapkan keppres",
+      "tone": null,
+      "tone_alasan": "",
+      "tone_keyakinan": "",
+      "evaluated_at": null,
+      "member_count_at_eval": 0,
+      "member_count": 0,
+      "sample_titles": [
+        "Menperin Sarmuji Paparkan Usulan Pemerintah: Satu Kadin, AD/ART Ditetapkan Keppres"
+      ],
+      "matched_articles": []
+    },
+    {
+      "isu_id": "rilis_467ffc0638",
+      "isu": "Kemenperin Fasilitasi Sertifikasi Halal bagi Industri Kecil Pangan Terdampak Bencana di Aceh Timur",
+      "sumber_isu": "rilis",
+      "tanggal_awal": "2026-11-16",
+      "tanggal_terakhir": "2026-11-16",
+      "nama_acara": "Siaran Pers Kemenperin",
+      "url": "https://www.kemenperin.go.id/artikel/72483136/Kemenperin-Fasilitasi-Sertifikasi-Halal-bagi-Industri-Kecil-Pangan-Terdampak-Bencana-di-Aceh-Timur",
+      "_norm_title": "kemenperin fasilitasi sertifikasi halal bagi industri kecil pangan terdampak bencana di aceh timur",
+      "tone": null,
+      "tone_alasan": "",
+      "tone_keyakinan": "",
+      "evaluated_at": null,
+      "member_count_at_eval": 0,
+      "member_count": 0,
+      "sample_titles": [
+        "Kemenperin Fasilitasi Sertifikasi Halal bagi Industri Kecil Pangan Terdampak Bencana di Aceh Timur"
+      ],
+      "matched_articles": []
+    },
+    {
+      "isu_id": "rilis_9afb8bc165",
+      "isu": "Kemenperin Optimalkan Fasilitas bagi Pelaku Usaha di Kawasan Industri",
+      "sumber_isu": "rilis",
+      "tanggal_awal": "2026-11-15",
+      "tanggal_terakhir": "2026-11-15",
+      "nama_acara": "Siaran Pers Kemenperin",
+      "url": "https://www.kemenperin.go.id/artikel/72483135/Kemenperin-Optimalkan-Fasilitas-bagi-Pelaku-Usaha-di-Kawasan-Industri",
+      "_norm_title": "kemenperin optimalkan fasilitas bagi industri di kawasan industri",
+      "tone": null,
+      "tone_alasan": "",
+      "tone_keyakinan": "",
+      "evaluated_at": null,
+      "member_count_at_eval": 0,
+      "member_count": 0,
+      "sample_titles": [
+        "Kemenperin Optimalkan Fasilitas bagi Pelaku Usaha di Kawasan Industri"
+      ],
+      "matched_articles": []
+    },
+    {
+      "isu_id": "rilis_e71bafbdf0",
+      "isu": "Menperin Sarmuji Ingin Sarung Jadi Tren Fesyen Anak Muda",
+      "sumber_isu": "rilis",
+      "tanggal_awal": "2026-11-15",
+      "tanggal_terakhir": "2026-11-15",
+      "nama_acara": "Siaran Pers Kemenperin",
+      "url": "https://www.kemenperin.go.id/artikel/72483134/Menperin-Sarmuji-Ingin-Sarung-Jadi-Tren-Fesyen-Anak-Muda",
+      "_norm_title": "kemenperin sarmuji ingin sarung jadi tren fesyen anak muda",
+      "tone": null,
+      "tone_alasan": "",
+      "tone_keyakinan": "",
+      "evaluated_at": null,
+      "member_count_at_eval": 0,
+      "member_count": 0,
+      "sample_titles": [
+        "Menperin Sarmuji Ingin Sarung Jadi Tren Fesyen Anak Muda"
+      ],
+      "matched_articles": []
+    },
+    {
+      "isu_id": "rilis_1776f46aea",
+      "isu": "Kemenperin Perkuat Ekosistem Industri Pangan Nasional Bersama Pelaku Industri",
+      "sumber_isu": "rilis",
+      "tanggal_awal": "2026-11-14",
+      "tanggal_terakhir": "2026-11-14",
+      "nama_acara": "Siaran Pers Kemenperin",
+      "url": "https://www.kemenperin.go.id/artikel/72483132/Kemenperin-Perkuat-Ekosistem-Industri-Pangan-Nasional-Bersama-Pelaku-Industri",
+      "_norm_title": "kemenperin perkuat ekosistem industri pangan nasional bersama industri",
+      "tone": null,
+      "tone_alasan": "",
+      "tone_keyakinan": "",
+      "evaluated_at": null,
+      "member_count_at_eval": 0,
+      "member_count": 0,
+      "sample_titles": [
+        "Kemenperin Perkuat Ekosistem Industri Pangan Nasional Bersama Pelaku Industri"
+      ],
+      "matched_articles": []
+    },
+    {
+      "isu_id": "rilis_cdc0738156",
+      "isu": "Menperin Sarmuji Minta Tambahan Pekerja Lokal BYD Disertai Alih Teknologi",
+      "sumber_isu": "rilis",
+      "tanggal_awal": "2026-11-13",
+      "tanggal_terakhir": "2026-11-13",
+      "nama_acara": "Siaran Pers Kemenperin",
+      "url": "https://www.kemenperin.go.id/artikel/72483131/Menperin-Sarmuji-Minta-Tambahan-Pekerja-Lokal-BYD-Disertai-Alih-Teknologi",
+      "_norm_title": "kemenperin sarmuji minta tambahan pekerja lokal byd disertai alih teknologi",
+      "tone": null,
+      "tone_alasan": "",
+      "tone_keyakinan": "",
+      "evaluated_at": null,
+      "member_count_at_eval": 0,
+      "member_count": 0,
+      "sample_titles": [
+        "Menperin Sarmuji Minta Tambahan Pekerja Lokal BYD Disertai Alih Teknologi"
+      ],
+      "matched_articles": []
+    },
+    {
+      "isu_id": "rilis_112cbfccce",
+      "isu": "Sektor IKFT Tumbuh 8 Persen, Kemenperin Sambut Investasi Industri Kosmetik dan Produk Pembersih",
+      "sumber_isu": "rilis",
+      "tanggal_awal": "2026-11-12",
+      "tanggal_terakhir": "2026-11-12",
+      "nama_acara": "Siaran Pers Kemenperin",
+      "url": "https://www.kemenperin.go.id/artikel/72483127/Sektor-IKFT-Tumbuh-8-Persen,-Kemenperin-Sambut-Investasi-Industri-Kosmetik-dan-Produk-Pembersih",
+      "_norm_title": "sektor ikft tumbuh 8 persen kemenperin sambut investasi industri kosmetik dan produk pembersih",
+      "tone": null,
+      "tone_alasan": "",
+      "tone_keyakinan": "",
+      "evaluated_at": null,
+      "member_count_at_eval": 0,
+      "member_count": 0,
+      "sample_titles": [
+        "Sektor IKFT Tumbuh 8 Persen, Kemenperin Sambut Investasi Industri Kosmetik dan Produk Pembersih"
+      ],
+      "matched_articles": []
+    },
+    {
+      "isu_id": "rilis_b1c97ed98e",
+      "isu": "Menperin Sarmuji: Lulusan Vokasi Bukan Sekadar Pengisi Lowongan Kerja",
+      "sumber_isu": "rilis",
+      "tanggal_awal": "2026-11-12",
+      "tanggal_terakhir": "2026-11-12",
+      "nama_acara": "Siaran Pers Kemenperin",
+      "url": "https://www.kemenperin.go.id/artikel/72483126/Menperin-Sarmuji:-Lulusan-Vokasi-Bukan-Sekadar-Pengisi-Lowongan-Kerja",
+      "_norm_title": "kemenperin sarmuji lulusan vokasi bukan sekadar pengisi lowongan kerja",
+      "tone": null,
+      "tone_alasan": "",
+      "tone_keyakinan": "",
+      "evaluated_at": null,
+      "member_count_at_eval": 0,
+      "member_count": 0,
+      "sample_titles": [
+        "Menperin Sarmuji: Lulusan Vokasi Bukan Sekadar Pengisi Lowongan Kerja"
+      ],
+      "matched_articles": []
+    },
+    {
+      "isu_id": "rilis_6d739ef0c9",
+      "isu": "Menguatkan Industri Lokal, Membuka Peluang di Timur Indonesia",
+      "sumber_isu": "rilis",
+      "tanggal_awal": "2026-11-12",
+      "tanggal_terakhir": "2026-11-12",
+      "nama_acara": "Siaran Pers Kemenperin",
+      "url": "https://www.kemenperin.go.id/artikel/72483124/Menguatkan-Industri-Lokal,-Membuka-Peluang-di-Timur-Indonesia",
+      "_norm_title": "menguatkan industri lokal membuka peluang di timur indonesia",
+      "tone": null,
+      "tone_alasan": "",
+      "tone_keyakinan": "",
+      "evaluated_at": null,
+      "member_count_at_eval": 0,
+      "member_count": 0,
+      "sample_titles": [
+        "Menguatkan Industri Lokal, Membuka Peluang di Timur Indonesia"
+      ],
+      "matched_articles": []
+    },
+    {
+      "isu_id": "rilis_77b1ebfdb0",
+      "isu": "Permohonan Informasi Dijawab Rata-rata 1,48 Hari, Menperin Sarmuji: Keterbukaan Bukan Sekadar Kewajiban",
+      "sumber_isu": "rilis",
+      "tanggal_awal": "2026-11-12",
+      "tanggal_terakhir": "2026-11-12",
+      "nama_acara": "Siaran Pers Kemenperin",
+      "url": "https://www.kemenperin.go.id/artikel/72483122/Permohonan-Informasi-Dijawab-Rata-rata-1,48-Hari,-Menperin-Sarmuji:-Keterbukaan-Bukan-Sekadar-Kewajiban",
+      "_norm_title": "permohonan informasi dijawab rata rata 1 48 hari kemenperin sarmuji keterbukaan bukan sekadar kewajiban",
+      "tone": null,
+      "tone_alasan": "",
+      "tone_keyakinan": "",
+      "evaluated_at": null,
+      "member_count_at_eval": 0,
+      "member_count": 0,
+      "sample_titles": [
+        "Permohonan Informasi Dijawab Rata-rata 1,48 Hari, Menperin Sarmuji: Keterbukaan Bukan Sekadar Kewajiban"
+      ],
+      "matched_articles": []
+    },
+    {
+      "isu_id": "rilis_caa3d1ed35",
+      "isu": "Wamenperin Petakan Kebutuhan Listrik Hingga SDM Industri Data Center",
+      "sumber_isu": "rilis",
+      "tanggal_awal": "2026-11-11",
+      "tanggal_terakhir": "2026-11-11",
+      "nama_acara": "Siaran Pers Kemenperin",
+      "url": "https://www.kemenperin.go.id/artikel/72483119/Wamenperin-Petakan-Kebutuhan-Listrik-Hingga-SDM-Industri-Data-Center",
+      "_norm_title": "wamenperin petakan kebutuhan listrik hingga sdm industri data center",
+      "tone": null,
+      "tone_alasan": "",
+      "tone_keyakinan": "",
+      "evaluated_at": null,
+      "member_count_at_eval": 0,
+      "member_count": 0,
+      "sample_titles": [
+        "Wamenperin Petakan Kebutuhan Listrik Hingga SDM Industri Data Center"
+      ],
+      "matched_articles": []
+    },
+    {
+      "isu_id": "rilis_ad9471037f",
+      "isu": "Hari Pahlawan, Menperin Sarmuji Ajak Warga Jadi \"Pahlawan\" Lewat Belanja Produk Indonesia",
+      "sumber_isu": "rilis",
+      "tanggal_awal": "2026-11-10",
+      "tanggal_terakhir": "2026-11-10",
+      "nama_acara": "Siaran Pers Kemenperin",
+      "url": "https://www.kemenperin.go.id/artikel/72483118/Hari-Pahlawan,-Menperin-Sarmuji-Ajak-Warga-Jadi-\"Pahlawan\"-Lewat-Belanja-Produk-Indonesia",
+      "_norm_title": "hari pahlawan kemenperin sarmuji ajak warga jadi pahlawan lewat belanja produk indonesia",
+      "tone": null,
+      "tone_alasan": "",
+      "tone_keyakinan": "",
+      "evaluated_at": null,
+      "member_count_at_eval": 0,
+      "member_count": 0,
+      "sample_titles": [
+        "Hari Pahlawan, Menperin Sarmuji Ajak Warga Jadi \"Pahlawan\" Lewat Belanja Produk Indonesia"
+      ],
+      "matched_articles": []
+    },
+    {
+      "isu_id": "rilis_2e2ce48928",
+      "isu": "Kemenperin Katrol Daya Saing IKM Fesyen dan Kriya melalui Klinik SiniBisa",
+      "sumber_isu": "rilis",
+      "tanggal_awal": "2026-11-10",
+      "tanggal_terakhir": "2026-11-10",
+      "nama_acara": "Siaran Pers Kemenperin",
+      "url": "https://www.kemenperin.go.id/artikel/72483117/Kemenperin-Katrol-Daya-Saing-IKM-Fesyen-dan-Kriya-melalui-Klinik-SiniBisa",
+      "_norm_title": "kemenperin katrol daya saing ikm fesyen dan kriya melalui klinik sinibisa",
+      "tone": null,
+      "tone_alasan": "",
+      "tone_keyakinan": "",
+      "evaluated_at": null,
+      "member_count_at_eval": 0,
+      "member_count": 0,
+      "sample_titles": [
+        "Kemenperin Katrol Daya Saing IKM Fesyen dan Kriya melalui Klinik SiniBisa"
+      ],
+      "matched_articles": []
+    },
+    {
+      "isu_id": "rilis_54ddaff2ca",
+      "isu": "RI-Tiongkok Perkuat Kerja Sama SDM Industri, Lebih dari 100 Institusi Bergabung",
+      "sumber_isu": "rilis",
+      "tanggal_awal": "2026-11-10",
+      "tanggal_terakhir": "2026-11-10",
+      "nama_acara": "Siaran Pers Kemenperin",
+      "url": "https://www.kemenperin.go.id/artikel/72483116/RI-Tiongkok-Perkuat-Kerja-Sama-SDM-Industri,-Lebih-dari-100-Institusi-Bergabung",
+      "_norm_title": "ri tiongkok perkuat kerja sama sdm industri lebih dari 100 institusi bergabung",
+      "tone": null,
+      "tone_alasan": "",
+      "tone_keyakinan": "",
+      "evaluated_at": null,
+      "member_count_at_eval": 0,
+      "member_count": 0,
+      "sample_titles": [
+        "RI-Tiongkok Perkuat Kerja Sama SDM Industri, Lebih dari 100 Institusi Bergabung"
+      ],
+      "matched_articles": []
+    },
+    {
+      "isu_id": "rilis_d547e61719",
+      "isu": "Menperin Sarmuji: Industri Harapkan Mobil Rendah Emisi Bebas Ganjil-Genap di Jakarta",
+      "sumber_isu": "rilis",
+      "tanggal_awal": "2026-11-10",
+      "tanggal_terakhir": "2026-11-10",
+      "nama_acara": "Siaran Pers Kemenperin",
+      "url": "https://www.kemenperin.go.id/artikel/72483115/Menperin-Sarmuji:-Industri-Harapkan-Mobil-Rendah-Emisi-Bebas-Ganjil-Genap-di-Jakarta",
+      "_norm_title": "kemenperin sarmuji industri harapkan mobil rendah emisi bebas ganjil genap di jakarta",
+      "tone": null,
+      "tone_alasan": "",
+      "tone_keyakinan": "",
+      "evaluated_at": null,
+      "member_count_at_eval": 0,
+      "member_count": 0,
+      "sample_titles": [
+        "Menperin Sarmuji: Industri Harapkan Mobil Rendah Emisi Bebas Ganjil-Genap di Jakarta"
+      ],
+      "matched_articles": []
+    },
+    {
+      "isu_id": "rilis_c862cfe2c6",
+      "isu": "Bertemu Apindo, Menperin Sarmuji: Jangan Sampai Obatnya Lebih Berbahaya dari Penyakitnya",
+      "sumber_isu": "rilis",
+      "tanggal_awal": "2026-11-09",
+      "tanggal_terakhir": "2026-11-09",
+      "nama_acara": "Siaran Pers Kemenperin",
+      "url": "https://www.kemenperin.go.id/artikel/72483112/Bertemu-Apindo,-Menperin-Sarmuji:-Jangan-Sampai-Obatnya-Lebih-Berbahaya-dari-Penyakitnya",
+      "_norm_title": "bertemu apindo kemenperin sarmuji jangan sampai obatnya lebih berbahaya dari penyakitnya",
+      "tone": null,
+      "tone_alasan": "",
+      "tone_keyakinan": "",
+      "evaluated_at": null,
+      "member_count_at_eval": 0,
+      "member_count": 0,
+      "sample_titles": [
+        "Bertemu Apindo, Menperin Sarmuji: Jangan Sampai Obatnya Lebih Berbahaya dari Penyakitnya"
+      ],
+      "matched_articles": []
+    },
+    {
+      "isu_id": "rilis_45a96f7ddf",
+      "isu": "Dukung Industri Dalam Negeri, Kemenperin Gelar Pameran Beli Produk IKM 2026",
+      "sumber_isu": "rilis",
+      "tanggal_awal": "2026-11-09",
+      "tanggal_terakhir": "2026-11-09",
+      "nama_acara": "Siaran Pers Kemenperin",
+      "url": "https://www.kemenperin.go.id/artikel/72483111/Dukung-Industri-Dalam-Negeri,-Kemenperin-Gelar-Pameran-Beli-Produk-IKM-2026",
+      "_norm_title": "dukung industri dalam negeri kemenperin gelar pameran beli produk ikm 2026",
+      "tone": null,
+      "tone_alasan": "",
+      "tone_keyakinan": "",
+      "evaluated_at": null,
+      "member_count_at_eval": 0,
+      "member_count": 0,
+      "sample_titles": [
+        "Dukung Industri Dalam Negeri, Kemenperin Gelar Pameran Beli Produk IKM 2026"
+      ],
+      "matched_articles": []
+    },
+    {
+      "isu_id": "rilis_fdc7ee96fc",
+      "isu": "Kemenperin Perkuat Kemudahan Perizinan Berusaha di Kawasan Industri",
+      "sumber_isu": "rilis",
+      "tanggal_awal": "2026-11-09",
+      "tanggal_terakhir": "2026-11-09",
+      "nama_acara": "Siaran Pers Kemenperin",
+      "url": "https://www.kemenperin.go.id/artikel/72483110/Kemenperin-Perkuat-Kemudahan-Perizinan-Berusaha-di-Kawasan-Industri",
+      "_norm_title": "kemenperin perkuat kemudahan perizinan berusaha di kawasan industri",
+      "tone": null,
+      "tone_alasan": "",
+      "tone_keyakinan": "",
+      "evaluated_at": null,
+      "member_count_at_eval": 0,
+      "member_count": 0,
+      "sample_titles": [
+        "Kemenperin Perkuat Kemudahan Perizinan Berusaha di Kawasan Industri"
+      ],
+      "matched_articles": []
+    },
+    {
+      "isu_id": "rilis_cad25b890c",
+      "isu": "Menperin Sarmuji: 38 IKM Genteng Bersertifikat SNI, 2,4 Juta Keping Mulai Dikirim",
+      "sumber_isu": "rilis",
+      "tanggal_awal": "2026-11-08",
+      "tanggal_terakhir": "2026-11-08",
+      "nama_acara": "Siaran Pers Kemenperin",
+      "url": "https://www.kemenperin.go.id/artikel/72483091/Menperin-Sarmuji:-38-IKM-Genteng-Bersertifikat-SNI,-2,4-Juta-Keping-Mulai-Dikirim",
+      "_norm_title": "kemenperin sarmuji 38 ikm genteng bersertifikat sni 2 4 juta keping mulai dikirim",
+      "tone": null,
+      "tone_alasan": "",
+      "tone_keyakinan": "",
+      "evaluated_at": null,
+      "member_count_at_eval": 0,
+      "member_count": 0,
+      "sample_titles": [
+        "Menperin Sarmuji: 38 IKM Genteng Bersertifikat SNI, 2,4 Juta Keping Mulai Dikirim"
+      ],
+      "matched_articles": []
+    },
+    {
+      "isu_id": "rilis_99ba4b02c4",
+      "isu": "Kemenperin Raih Anugerah Reksa Bandha 2026 Kategori Indeks Pengelolaan Aset",
+      "sumber_isu": "rilis",
+      "tanggal_awal": "2026-11-07",
+      "tanggal_terakhir": "2026-11-07",
+      "nama_acara": "Siaran Pers Kemenperin",
+      "url": "https://www.kemenperin.go.id/artikel/72483092/Kemenperin-Raih-Anugerah-Reksa-Bandha-2026-Kategori-Indeks-Pengelolaan-Aset",
+      "_norm_title": "kemenperin raih anugerah reksa bandha 2026 kategori indeks pengelolaan aset",
+      "tone": null,
+      "tone_alasan": "",
+      "tone_keyakinan": "",
+      "evaluated_at": null,
+      "member_count_at_eval": 0,
+      "member_count": 0,
+      "sample_titles": [
+        "Kemenperin Raih Anugerah Reksa Bandha 2026 Kategori Indeks Pengelolaan Aset"
+      ],
+      "matched_articles": []
+    },
+    {
+      "isu_id": "rilis_d82e02e189",
+      "isu": "Kemenperin Bidik Ekspor Minyak Atsiri Tembus USD 500 Juta pada 2029",
+      "sumber_isu": "rilis",
+      "tanggal_awal": "2026-11-06",
+      "tanggal_terakhir": "2026-11-06",
+      "nama_acara": "Siaran Pers Kemenperin",
+      "url": "https://www.kemenperin.go.id/artikel/72483093/Kemenperin-Bidik-Ekspor-Minyak-Atsiri-Tembus-USD-500-Juta-pada-2029",
+      "_norm_title": "kemenperin bidik ekspor minyak_atsiri tembus usd 500 juta pada 2029",
+      "tone": null,
+      "tone_alasan": "",
+      "tone_keyakinan": "",
+      "evaluated_at": null,
+      "member_count_at_eval": 0,
+      "member_count": 0,
+      "sample_titles": [
+        "Kemenperin Bidik Ekspor Minyak Atsiri Tembus USD 500 Juta pada 2029"
+      ],
+      "matched_articles": []
+    },
+    {
+      "isu_id": "rilis_d20bbe9f1e",
+      "isu": "Industri Manufaktur Tumbuh 5,88 Persen, Menperin Sarmuji: Oktober, Tiga Indikator Penting Kompak Naik",
+      "sumber_isu": "rilis",
+      "tanggal_awal": "2026-11-05",
+      "tanggal_terakhir": "2026-11-05",
+      "nama_acara": "Siaran Pers Kemenperin",
+      "url": "https://www.kemenperin.go.id/artikel/72483109/Industri-Manufaktur-Tumbuh-5,88-Persen,-Menperin-Sarmuji:-Oktober,-Tiga-Indikator-Penting-Kompak-Naik",
+      "_norm_title": "industri manufaktur tumbuh 5 88 persen kemenperin sarmuji oktober tiga indikator penting kompak naik",
+      "tone": null,
+      "tone_alasan": "",
+      "tone_keyakinan": "",
+      "evaluated_at": null,
+      "member_count_at_eval": 0,
+      "member_count": 0,
+      "sample_titles": [
+        "Industri Manufaktur Tumbuh 5,88 Persen, Menperin Sarmuji: Oktober, Tiga Indikator Penting Kompak Naik"
+      ],
+      "matched_articles": []
+    },
+    {
+      "isu_id": "rilis_4c60a1e6da",
+      "isu": "Cicipi Mi Singkong-Tempe, Menperin Sarmuji: Strateginya Bukan Sekadar Jual Komoditas",
+      "sumber_isu": "rilis",
+      "tanggal_awal": "2026-11-04",
+      "tanggal_terakhir": "2026-11-04",
+      "nama_acara": "Siaran Pers Kemenperin",
+      "url": "https://www.kemenperin.go.id/artikel/72483108/Cicipi-Mi-Singkong-Tempe,-Menperin-Sarmuji:-Strateginya-Bukan-Sekadar-Jual-Komoditas",
+      "_norm_title": "cicipi mi singkong tempe kemenperin sarmuji strateginya bukan sekadar jual komoditas",
+      "tone": null,
+      "tone_alasan": "",
+      "tone_keyakinan": "",
+      "evaluated_at": null,
+      "member_count_at_eval": 0,
+      "member_count": 0,
+      "sample_titles": [
+        "Cicipi Mi Singkong-Tempe, Menperin Sarmuji: Strateginya Bukan Sekadar Jual Komoditas"
+      ],
+      "matched_articles": []
+    },
+    {
+      "isu_id": "rilis_7d1cf5c9f4",
+      "isu": "RI Eksportir Pulp Terbesar Keempat Dunia, Menperin Sarmuji Dorong Hilirisasi hingga Tekstil Rayon",
+      "sumber_isu": "rilis",
+      "tanggal_awal": "2026-11-03",
+      "tanggal_terakhir": "2026-11-03",
+      "nama_acara": "Siaran Pers Kemenperin",
+      "url": "https://www.kemenperin.go.id/artikel/72483107/RI-Eksportir-Pulp-Terbesar-Keempat-Dunia,-Menperin-Sarmuji-Dorong-Hilirisasi-hingga-Tekstil-Rayon",
+      "_norm_title": "ri eksportir pulp terbesar keempat dunia kemenperin sarmuji dorong hilirisasi hingga tekstil rayon",
+      "tone": null,
+      "tone_alasan": "",
+      "tone_keyakinan": "",
+      "evaluated_at": null,
+      "member_count_at_eval": 0,
+      "member_count": 0,
+      "sample_titles": [
+        "RI Eksportir Pulp Terbesar Keempat Dunia, Menperin Sarmuji Dorong Hilirisasi hingga Tekstil Rayon"
+      ],
+      "matched_articles": []
+    },
+    {
+      "isu_id": "rilis_d6331f75fe",
+      "isu": "PMI Tertinggi Sejak Maret 2024, Pengamat: Momentum Perlu Dijaga dengan Kepastian Kebijakan",
+      "sumber_isu": "rilis",
+      "tanggal_awal": "2026-11-03",
+      "tanggal_terakhir": "2026-11-03",
+      "nama_acara": "Siaran Pers Kemenperin",
+      "url": "https://www.kemenperin.go.id/artikel/72483106/PMI-Tertinggi-Sejak-Maret-2024,-Pengamat:-Momentum-Perlu-Dijaga-dengan-Kepastian-Kebijakan",
+      "_norm_title": "pmi tertinggi sejak maret 2024 pengamat momentum perlu dijaga dengan kepastian kebijakan",
+      "tone": null,
+      "tone_alasan": "",
+      "tone_keyakinan": "",
+      "evaluated_at": null,
+      "member_count_at_eval": 0,
+      "member_count": 0,
+      "sample_titles": [
+        "PMI Tertinggi Sejak Maret 2024, Pengamat: Momentum Perlu Dijaga dengan Kepastian Kebijakan"
+      ],
+      "matched_articles": []
+    },
+    {
+      "isu_id": "rilis_f1ba094ce0",
+      "isu": "PMI Tertinggi Sejak Maret 2024, Ekonom UI: Indikasi Daya Saing Manufaktur RI Menguat",
+      "sumber_isu": "rilis",
+      "tanggal_awal": "2026-11-03",
+      "tanggal_terakhir": "2026-11-03",
+      "nama_acara": "Siaran Pers Kemenperin",
+      "url": "https://www.kemenperin.go.id/artikel/72483105/PMI-Tertinggi-Sejak-Maret-2024,-Ekonom-UI:-Indikasi-Daya-Saing-Manufaktur-RI-Menguat",
+      "_norm_title": "pmi tertinggi sejak maret 2024 ekonom ui indikasi daya saing manufaktur ri menguat",
+      "tone": null,
+      "tone_alasan": "",
+      "tone_keyakinan": "",
+      "evaluated_at": null,
+      "member_count_at_eval": 0,
+      "member_count": 0,
+      "sample_titles": [
+        "PMI Tertinggi Sejak Maret 2024, Ekonom UI: Indikasi Daya Saing Manufaktur RI Menguat"
+      ],
+      "matched_articles": []
+    },
+    {
+      "isu_id": "rilis_f6db4746a3",
+      "isu": "Terima Ketum Kadin, Menperin Sarmuji: Prospek Industri Sedang Baik, Saatnya Momentum Dimanfaatkan",
+      "sumber_isu": "rilis",
+      "tanggal_awal": "2026-11-02",
+      "tanggal_terakhir": "2026-11-02",
+      "nama_acara": "Siaran Pers Kemenperin",
+      "url": "https://www.kemenperin.go.id/artikel/72483104/Terima-Ketum-Kadin,-Menperin-Sarmuji:-Prospek-Industri-Sedang-Baik,-Saatnya-Momentum-Dimanfaatkan",
+      "_norm_title": "terima ketum kadin kemenperin sarmuji prospek industri sedang baik saatnya momentum dimanfaatkan",
+      "tone": null,
+      "tone_alasan": "",
+      "tone_keyakinan": "",
+      "evaluated_at": null,
+      "member_count_at_eval": 0,
+      "member_count": 0,
+      "sample_titles": [
+        "Terima Ketum Kadin, Menperin Sarmuji: Prospek Industri Sedang Baik, Saatnya Momentum Dimanfaatkan"
+      ],
+      "matched_articles": []
+    },
+    {
+      "isu_id": "rilis_f25670c8a8",
+      "isu": "PMI Manufaktur Tertinggi dalam 31 Bulan, Menperin Sarmuji: Industri RI Bergerak ke Arah Lebih Baik",
+      "sumber_isu": "rilis",
+      "tanggal_awal": "2026-11-02",
+      "tanggal_terakhir": "2026-11-02",
+      "nama_acara": "Siaran Pers Kemenperin",
+      "url": "https://www.kemenperin.go.id/artikel/72483103/PMI-Manufaktur-Tertinggi-dalam-31-Bulan,-Menperin-Sarmuji:-Industri-RI-Bergerak-ke-Arah-Lebih-Baik",
+      "_norm_title": "pmi manufaktur tertinggi dalam 31 bulan kemenperin sarmuji industri ri bergerak ke arah lebih baik",
+      "tone": null,
+      "tone_alasan": "",
+      "tone_keyakinan": "",
+      "evaluated_at": null,
+      "member_count_at_eval": 0,
+      "member_count": 0,
+      "sample_titles": [
+        "PMI Manufaktur Tertinggi dalam 31 Bulan, Menperin Sarmuji: Industri RI Bergerak ke Arah Lebih Baik"
+      ],
+      "matched_articles": []
+    },
+    {
+      "isu_id": "rilis_12612dd44d",
+      "isu": "Kemenperin Pacu Ekspor Olahan Kakao di Tengah Tren Positif Grinding",
+      "sumber_isu": "rilis",
+      "tanggal_awal": "2026-11-02",
+      "tanggal_terakhir": "2026-11-02",
+      "nama_acara": "Siaran Pers Kemenperin",
+      "url": "https://www.kemenperin.go.id/artikel/72483102/Kemenperin-Pacu-Ekspor-Olahan-Kakao-di-Tengah-Tren-Positif-Grinding",
+      "_norm_title": "kemenperin pacu ekspor olahan kakao di tengah tren positif grinding",
+      "tone": null,
+      "tone_alasan": "",
+      "tone_keyakinan": "",
+      "evaluated_at": null,
+      "member_count_at_eval": 0,
+      "member_count": 0,
+      "sample_titles": [
+        "Kemenperin Pacu Ekspor Olahan Kakao di Tengah Tren Positif Grinding"
+      ],
+      "matched_articles": []
+    },
+    {
+      "isu_id": "klaster_c7ecaa11db",
+      "isu": "Gabungan Pengusaha Kelapa Sawit Indonesia mencatat kenaikan produksi dan ekspor CPO pada bulan September 2026",
+      "sumber_isu": "klaster",
+      "tanggal_awal": "2026-11-19",
+      "tanggal_terakhir": "2026-11-19",
+      "_norm_title": "gabungan pengusaha kelapa sawit indonesia mencatat kenaikan produksi dan ekspor cpo pada bulan september 2026",
+      "tone": "Netral",
+      "tone_alasan": "Berita membahas data kinerja produksi dan ekspor sawit oleh GAPKI tanpa menyebut Kemenperin atau kebijakannya secara langsung.",
+      "tone_keyakinan": "tinggi",
+      "evaluated_at": "2026-11-19 10:25:56",
+      "member_count_at_eval": 2,
+      "member_count": 2,
+      "sample_titles": [
+        "Ekspor Sawit Indonesia Naik 9,26% pada September 2026, Pengiriman ke Uni Eropa Melonjak 60%",
+        "Kinerja Industri Sawit September 2026: Ekspor Meningkat, Stok Menurun"
+      ],
+      "sample_snippets": [
+        "InfoSAWIT, JAKARTA – Ekspor produk kelapa sawit Indonesia kembali menguat pada September 2026. Gabungan Pengusaha Kelapa Sawit Indonesia (GAPKI) mencatat volume ekspor mencapai 3,92 juta ton, meningkat 9,26% dibandingkan Agustus 2026 yang sebesar 3,588 juta ton. Kenaikan tersebut ditopang oleh pertumbuhan pengiriman ke sejumlah pasar utama, termasuk China, India, dan Uni Eropa.\nDalam laporan kinerja industri minyak sawit Indonesia hingga September 2026, GAPKI mencatat ekspor ke Uni Eropa-27 meningkat 60% secara bulanan menjadi 124 ribu ton. Pengiriman ke China naik 48% menjadi 309 ribu ton, sementara ekspor ke India bertambah 39% menjadi 163 ribu ton.\n“Kenaikan juga tercatat pada pasar Afrika. Pengiriman ke kawasan tersebut mencapai 131 ribu ton, tumbuh 32% dibandingkan bulan sebelumnya,”catat Direktur Eksekutif GAPKI, Mukti Sardjono, dalam keterangan resmi diterima InfoSAWIT, Rabu (18/11/2026).\nNamun, tren positif itu tidak terjadi di seluruh negara tujuan. Ekspor ke Pakistan turun 39% menjadi 192 ribu ton, sedangkan pengiriman ke Rusia merosot 72% menjadi 79 ribu ton. Penurunan juga terjadi pada ekspor ke Bangladesh sebesar 33% menjadi 67 ribu ton, Malaysia 23% menjadi 43 ribu to",
+        "Jakarta, benang.id — Gabungan Pengusaha Kelapa Sawit Indonesia (Gapki) mencatat produksi CPO bulan September 2026 mencapai 5.467 ribu ton, naik 12,03% dari bulan sebelumnya 4.880 ribu ton. Produksi PKO bulan September juga naik menjadi 519 ribu ton dari 464 ribu ton di bulan Agustus sehingga total produksi CPO+PKO bulan September 2026 mencapai 5.986 ribu ton atau naik 12,03% dari bulan sebelumnya 5.343 ribu ton.\n“Secara kumulatif Januari–September 2026, total produksi CPO+PKO mencapai 46.984 ribu ton, lebih tinggi 8,42% dibandingkan periode yang sama tahun 2025 sebesar 43.335 ribu ton,” ujar Direktur Eksekutif Gapki Mukti Sardjono, dalam keterangannya, Rabu (18/11/2026).\n“Total konsumsi dalam negeri pada September 2026 mencapai 2.277 ribu ton, relatif stabil dibandingkan Agustus yang tercatat sebesar 2.304 ribu ton,” imbuhnya.\nIa menguraikan, konsumsi biodiesel tercatat sebesar 1.323 ribu ton, dibandingkan 1.350 ribu ton pada Agustus. Konsumsi pangan mencapai 764 ribu ton, dibandingkan 775 ribu ton pada Agustus. Sementara itu, konsumsi oleokimia meningkat dari 180 ribu ton menjadi 190 ribu ton. Secara kumulatif, total konsumsi dalam negeri pada Januari–September 2026 mencapai 19.80"
+      ],
+      "matched_articles": [
+        {
+          "id": "11",
+          "title": "Ekspor Sawit Indonesia Naik 9,26% pada September 2026, Pengiriman ke Uni Eropa Melonjak 60%",
+          "link": "https://www.infosawit.com/2026/11/19/ekspor-sawit-indonesia-naik-926-pada-september-2026-pengiriman-ke-uni-eropa-melonjak-60/",
+          "canonical_url": "https://infosawit.com/2026/11/19/ekspor-sawit-indonesia-naik-926-pada-september-2026-pengiriman-ke-uni-eropa-melonjak-60",
+          "media_name": "InfoSAWIT",
+          "tanggal": "Thu, 19 Nov 2026 01:25:00 GMT",
+          "skor": 0.4223
+        },
+        {
+          "id": "12",
+          "title": "Kinerja Industri Sawit September 2026: Ekspor Meningkat, Stok Menurun",
+          "link": "https://benang.id/kinerja-industri-sawit-september-2026-ekspor-meningkat-stok-menurun/",
+          "canonical_url": "https://benang.id/kinerja-industri-sawit-september-2026-ekspor-meningkat-stok-menurun",
+          "media_name": "https://benang.id/",
+          "tanggal": "Wed, 18 Nov 2026 18:09:26 GMT",
+          "skor": 0.4223
+        }
+      ],
+      "tone_hubungan": "K4",
+      "tone_arah": "tidak ada",
+      "tone_metode": "AI-isu"
+    },
+    {
+      "isu_id": "klaster_db7dc51cf3",
+      "isu": "World Vape Show Dubai 2026: Produsen Vape Indonesia Bidik Akses Pasar Global",
+      "sumber_isu": "klaster",
+      "tanggal_awal": "2026-11-19",
+      "tanggal_terakhir": "2026-11-19",
+      "_norm_title": "world rokok_elektronik show dubai 2026 produsen rokok_elektronik indonesia bidik akses pasar global",
+      "tone": "Positif",
+      "tone_alasan": "Berita bersumber dari asosiasi industri vape yang mengutip data ekspor Kemenperin untuk mendukung eksistensi industri, masuk indikator P2.",
+      "tone_keyakinan": "tinggi",
+      "evaluated_at": "2026-11-19 10:25:55",
+      "member_count_at_eval": 1,
+      "member_count": 1,
+      "sample_titles": [
+        "World Vape Show Dubai 2026: Produsen Vape Indonesia Bidik Akses Pasar Global"
+      ],
+      "sample_snippets": [
+        "Pertumbuhan ekspor rokok elektrik Indonesia dalam beberapa tahun terakhir mulai menarik perhatian pelaku industri global.\nMomentum tersebut terlihat dalam ajang World Vape Show Dubai 2026 yang berlangsung pada 10-12 November 2026 di Dubai World Trade Centre, Uni Emirat Arab.\nForum industri internasional yang digelar Quartz Business Media Limited itu menjadi ruang bagi pelaku industri dari berbagai negara untuk membahas perkembangan pasar, regulasi, hingga tantangan perdagangan produk nikotin alternatif.\nIndonesia turut mengambil bagian melalui kehadiran Perkumpulan Pengusaha Elektronik Vaporizers Indonesia (PPEI).\nDalam rangkaian acara tersebut, Anggota Dewan Pembina PPEI sekaligus Co-Founder dan CEO FOOM LAB GLOBAL, Teguh B. Ariwibowo, tampil sebagai panelis dalam sesi Future Nicotine Forum (FNF).\nIa membawa perspektif produsen Indonesia yang tengah berupaya memperluas akses ke pasar internasional di tengah perubahan regulasi global.\nEkspor Tumbuh Tiga Kali Lipat\nMenurut Teguh, pertumbuhan industri rokok elektrik nasional tercermin dari lonjakan nilai ekspor dalam beberapa tahun terakhir.\n“Keikutsertaan kami dalam World Vape Show Dubai 2026, khususnya Future Nicotine Forum sangat "
+      ],
+      "matched_articles": [
+        {
+          "id": "8",
+          "title": "World Vape Show Dubai 2026: Produsen Vape Indonesia Bidik Akses Pasar Global",
+          "link": "https://tangerangonline.id/2026/11/19/world-vape-show-dubai-2026-produsen-vape-indonesia-bidik-akses-pasar-global/",
+          "canonical_url": "https://tangerangonline.id/2026/11/19/world-vape-show-dubai-2026-produsen-vape-indonesia-bidik-akses-pasar-global",
+          "media_name": "Tangerang Online",
+          "tanggal": "Thu, 19 Nov 2026 01:37:50 GMT",
+          "skor": 1.0
+        }
+      ],
+      "tone_hubungan": "K3",
+      "tone_arah": "tidak ada"
+    },
+    {
+      "isu_id": "klaster_5ec83bebb1",
+      "isu": "Produksi Sawit RI Januari-September Naik 8,42%, Ekspor Tembus USD32,31 Miliar",
+      "sumber_isu": "klaster",
+      "tanggal_awal": "2026-11-19",
+      "tanggal_terakhir": "2026-11-19",
+      "_norm_title": "produksi sawit ri januari september naik 8 42 ekspor tembus usd32 31 miliar",
+      "tone": "Netral",
+      "tone_alasan": "Berita memuat data produksi dan ekspor sawit oleh GAPKI tanpa menyebut Kemenperin, sehingga dikategorikan netral berdasarkan aturan A3 dan A1.",
+      "tone_keyakinan": "tinggi",
+      "evaluated_at": "2026-11-19 10:25:55",
+      "member_count_at_eval": 1,
+      "member_count": 1,
+      "sample_titles": [
+        "Produksi Sawit RI Januari-September Naik 8,42%, Ekspor Tembus USD32,31 Miliar"
+      ],
+      "sample_snippets": [
+        "Jakarta, SAWIT INDONESIA — Produksi minyak sawit Indonesia terus meningkat sepanjang 2026. Gabungan Pengusaha Kelapa Sawit Indonesia (GAPKI) mencatat total produksi minyak sawit mentah atau crude palm oil (CPO) dan minyak inti sawit (palm kernel oil/PKO) mencapai 46,98 juta ton sepanjang Januari–September 2026.\nJumlah tersebut meningkat 8,42% dibandingkan periode yang sama tahun lalu sebesar 43,33 juta ton. Kenaikan produksi juga diikuti pertumbuhan ekspor dan konsumsi domestik, sehingga aktivitas industri sawit nasional tetap menunjukkan tren positif.\nDirektur Eksekutif GAPKI Mukti Sardjono mengatakan peningkatan produksi tersebut menjadi salah satu faktor yang menopang kinerja industri sawit nasional sepanjang tahun ini.\n“Produksi CPO dan PKO hingga September 2026 mencapai 46,98 juta ton atau tumbuh 8,42% dibandingkan periode yang sama tahun lalu. Kenaikan ini menunjukkan kinerja produksi industri sawit masih terjaga,” kata Mukti dalam keterangan tertulis.\nSecara bulanan, produksi CPO pada September 2026 mencapai 5,47 juta ton, naik 12,03% dibandingkan Agustus 2026 sebesar 4,88 juta ton. Produksi PKO juga meningkat dari 464.000 ton menjadi 519.000 ton.\nDengan demikian, total prod"
+      ],
+      "matched_articles": [
+        {
+          "id": "10",
+          "title": "Produksi Sawit RI Januari-September Naik 8,42%, Ekspor Tembus USD32,31 Miliar",
+          "link": "https://sawitindonesia.com/produksi-sawit-ri-januari-september-naik-8-42-ekspor-tembus-us-32-31-miliar",
+          "canonical_url": "https://sawitindonesia.com/produksi-sawit-ri-januari-september-naik-8-42-ekspor-tembus-us-32-31-miliar",
+          "media_name": "Sawit Indonesia",
+          "tanggal": "Wed, 18 Nov 2026 22:32:12 GMT",
+          "skor": 1.0
+        }
+      ],
+      "tone_hubungan": "K4",
+      "tone_arah": "tidak ada"
+    },
+    {
+      "isu_id": "klaster_4d53be91b8",
+      "isu": "Industri Rokok Tertekan, Perusahaan Ini Malah Cetak Penjualan Rp87,5 Triliun",
+      "sumber_isu": "klaster",
+      "tanggal_awal": "2026-11-19",
+      "tanggal_terakhir": "2026-11-19",
+      "_norm_title": "industri rokok tertekan perusahaan ini malah cetak penjualan rp 87_5 triliun",
+      "tone": "Positif",
+      "tone_alasan": "Asosiasi/perusahaan mengapresiasi kebijakan pemerintah terkait cukai yang mendukung iklim industri, sehingga masuk kategori K3 mendukung (P2).",
+      "tone_keyakinan": "tinggi",
+      "evaluated_at": "2026-11-19 10:25:55",
+      "member_count_at_eval": 1,
+      "member_count": 1,
+      "sample_titles": [
+        "Industri Rokok Tertekan, Perusahaan Ini Malah Cetak Penjualan Rp87,5 Triliun"
+      ],
+      "sample_snippets": [
+        "SURABAYA, iNewsSurabaya.id – Industri hasil tembakau masih menghadapi tekanan akibat perubahan pola konsumsi masyarakat, pergeseran permintaan ke produk berharga lebih murah, hingga maraknya peredaran rokok ilegal. Di tengah kondisi tersebut, PT HM Sampoerna Tbk mencatat penjualan bersih sebesar Rp87,5 triliun hingga kuartal III 2026.\nNilai penjualan tersebut meningkat 4,5 persen dibandingkan periode yang sama tahun sebelumnya. Sementara volume penjualan selama Januari hingga September 2026 mencapai 60,4 miliar batang atau tumbuh 1,6 persen secara tahunan.\nPresiden Direktur PT HM Sampoerna Tbk, Ivan Cahyadi, menyebut perusahaan masih mampu mempertahankan kinerja di tengah dinamika pasar hasil tembakau. Menurutnya, kondisi kebijakan cukai dan penindakan terhadap rokok ilegal menjadi sejumlah faktor yang turut memengaruhi perkembangan industri.\n“Kami ingin menyampaikan apresiasi kepada pemerintah atas keputusan untuk tidak menaikkan tarif cukai hasil tembakau pada 2026, serta upaya penindakan rokok ilegal. Kebijakan ini, didukung efektivitas strategi portofolio yang kami jalankan secara konsisten, membantu kami menjaga kinerja bisnis perseroan,” ujar Ivan dalam paparan publik di Sura"
+      ],
+      "matched_articles": [
+        {
+          "id": "4",
+          "title": "Industri Rokok Tertekan, Perusahaan Ini Malah Cetak Penjualan Rp87,5 Triliun",
+          "link": "https://surabaya.inews.id/read/731261/industri-rokok-tertekan-perusahaan-ini-malah-cetak-penjualan-rp875-triliun",
+          "canonical_url": "https://surabaya.inews.id/read/731261/industri-rokok-tertekan-perusahaan-ini-malah-cetak-penjualan-rp875-triliun",
+          "media_name": "iNews.ID",
+          "tanggal": "Thu, 19 Nov 2026 01:11:19 GMT",
+          "skor": 1.0
+        }
+      ],
+      "tone_hubungan": "K3",
+      "tone_arah": "mendukung"
+    },
+    {
+      "isu_id": "klaster_f0c1cb3760",
+      "isu": "Serikat Pekerja Desak Pemerintah Beri Kepastian Hukum Industri Rokok",
+      "sumber_isu": "klaster",
+      "tanggal_awal": "2026-11-19",
+      "tanggal_terakhir": "2026-11-19",
+      "_norm_title": "serikat pekerja minta pemerintah beri kepastian hukum industri rokok",
+      "tone": "Netral",
+      "tone_alasan": "Serikat pekerja mendesak pemerintah secara umum terkait industri rokok tanpa menyerang Kemenperin secara langsung, masuk indikator Ne2 + A2.",
+      "tone_keyakinan": "tinggi",
+      "evaluated_at": "2026-11-19 10:25:55",
+      "member_count_at_eval": 1,
+      "member_count": 1,
+      "sample_titles": [
+        "Serikat Pekerja Desak Pemerintah Beri Kepastian Hukum Industri Rokok"
+      ],
+      "sample_snippets": [
+        "Pantau - Forum Serikat Pekerja Rokok Tembakau Makanan dan Minuman Serikat Pekerja Seluruh Indonesia (FSP RTMM-SPSI) meminta pemerintah memberikan kepastian hukum dan kepastian berusaha bagi industri hasil tembakau (IHT) di tengah tekanan regulasi, kebijakan fiskal, serta meningkatnya peredaran rokok ilegal.\nKetua Umum FSP RTMM-SPSI Hendry Wardana mengatakan tekanan terhadap perusahaan rokok legal berpotensi mengancam keberlangsungan industri dan pekerjaan sekitar 500.000 tenaga kerja yang terlibat langsung dalam sektor manufaktur rokok.\nPernyataan tersebut disampaikan Hendry melalui keterangan tertulis di Jakarta, Kamis (19/11/2026).\nMenurutnya, perusahaan rokok legal menghadapi kewajiban cukai dan berbagai ketentuan pemerintah, sementara produk rokok ilegal beredar tanpa memenuhi kewajiban yang sama.\n“Jika perusahaan rokok legal akhirnya menyerah karena ketidakadilan yang terus terjadi, dampaknya akan sangat besar,” ujar Hendry.\nIa menilai pemerintah perlu memperhatikan keberlangsungan industri legal sekaligus perlindungan tenaga kerja dalam merumuskan kebijakan sektor tembakau.\nSerikat Pekerja Khawatir Nasib 500 Ribu Pekerja Industri Rokok\nHendry menjelaskan bahwa sektor manufakt"
+      ],
+      "matched_articles": [
+        {
+          "id": "6",
+          "title": "Serikat Pekerja Desak Pemerintah Beri Kepastian Hukum Industri Rokok",
+          "link": "https://www.pantau.com/ekonomi/380105/serikat-pekerja-desak-pemerintah-beri-kepastian-hukum-industri-rokok",
+          "canonical_url": "https://pantau.com/ekonomi/380105/serikat-pekerja-desak-pemerintah-beri-kepastian-hukum-industri-rokok",
+          "media_name": "pantau.com",
+          "tanggal": "Thu, 19 Nov 2026 02:03:00 GMT",
+          "skor": 1.0
+        }
+      ],
+      "tone_hubungan": "K3",
+      "tone_arah": "tidak ada"
+    },
+    {
+      "isu_id": "klaster_636d820056",
+      "isu": "Mahkamah Konstitusi menggelar sidang pengujian materiil Undang-Undang Nomor 17 Tahun 2023 tentang Kesehatan dengan menyoroti regulasi dan ekonomi rokok elektronik",
+      "sumber_isu": "klaster",
+      "tanggal_awal": "2026-11-19",
+      "tanggal_terakhir": "2026-11-19",
+      "_norm_title": "mahkamah konstitusi menggelar sidang pengujian materiil undang undang nomor 17 tahun 2023 tentang kesehatan dengan menyoroti regulasi dan ekonomi rokok_elektronik",
+      "tone": "Netral",
+      "tone_alasan": "Berita membahas sidang Mahkamah Konstitusi terkait UU Kesehatan dan rokok elektronik tanpa menyebut Kemenperin maupun kebijakan utamanya.",
+      "tone_keyakinan": "tinggi",
+      "evaluated_at": "2026-11-19 10:25:56",
+      "member_count_at_eval": 2,
+      "member_count": 2,
+      "sample_titles": [
+        "Hakim MK Soroti Karakteristik Rokok Elektronik Legal dan Kontribusinya Terhadap Perekonomian",
+        "Sidang UU Kesehatan, Hakim MK Soroti Regulasi dan Ekonomi Vape RI"
+      ],
+      "sample_snippets": [
+        "JAKARTA (Waspada.id): Mahkamah Konstitusi (MK) menggelar sidang lanjutan pengujiaan materiil Undang Undang Nomor 17 Tahun 2023 tentang Kesehatan pada Selasa (17/11). Dalam agenda sidang yang mendengarkan keterangan dari pihak pemerintah yang diwakili oleh Kementerian Kesehatan, para hakim MK menanggapi paparan pemerintah dengan menekankan pada karakteristik rokok elektronik legal dan kontribusinya terhadap perekonomian. \nHakim anggota Liliek P. Adi meminta pemerintah memberi penjelasan secara khusus dengan memisahkan penggunaan rokok elektronik legal dari penyalahgunaannya untuk konsumsi zat terlarang. \n“Kami ingin mendapatkan penjelasan di luar fenomena bahwa vape dapat disalahgunakan sebagai media penyalahgunaan narkotika. Jadi, khusus vapenya saja, tanpa ada penyalahgunaan narkotika,” ujarnya.\nSementara itu, Hakim anggota Arsul Sani menanyakan mengenai kerangka regulasi yang telah berlaku. Ia menyoroti bahwa rokok elektronik sejatinya telah termasuk dalam pengaturan zat adiktif dalam UU Kesehatan, yang kemudian dijabarkan lebih lanjut melalui PP Nomor 28 Tahun 2024. Hal tersebut menjadi perhatian Mahkamah untuk menelusuri kembali landasan dan konsistensi kebijakan pemerintah ter",
+        "Sidang UU Kesehatan, Hakim MK Soroti Regulasi dan Ekonomi Vape RI\nJAKARTA, DISWAYMALANG.ID - Regulasi rokok elektronik atau vape kembali menjadi perhatian Mahkamah Konstitusi (MK). Dalam sidang pengujian materiil Undang-Undang Nomor 17 Tahun 2023 tentang Kesehatan, para hakim mendalami karakteristik vape legal, dasar pengaturannya, hingga dampak ekonomi industri tersebut.\nSidang yang berlangsung Selasa (17/11/2026) itu menghadirkan keterangan pemerintah melalui Kementerian Kesehatan. Perkara Nomor 363/PUU-XXIV/2026 tersebut menguji ketentuan Pasal 149, Pasal 150 ayat (1), dan Pasal 152 ayat (2) UU Kesehatan.\nHakim anggota Liliek P. Adi meminta pemerintah menjelaskan rokok elektronik secara khusus. Ia ingin pembahasan mengenai produk legal dibedakan dari penyalahgunaan perangkat vape sebagai sarana konsumsi narkotika atau zat terlarang.\nPermintaan itu penting agar Mahkamah memperoleh gambaran utuh mengenai karakteristik produk, risiko penggunaannya, serta persoalan yang muncul akibat penyalahgunaan.\nHakim Dalami Kerangka Regulasi Vape\nHakim anggota Arsul Sani menyoroti dasar hukum yang selama ini mengatur rokok elektronik. Ia mengingatkan bahwa pengaturan zat adiktif telah tercantum"
+      ],
+      "matched_articles": [
+        {
+          "id": "5",
+          "title": "Hakim MK Soroti Karakteristik Rokok Elektronik Legal dan Kontribusinya Terhadap Perekonomian",
+          "link": "https://www.waspada.id/berita/hakim-mk-soroti-karakteristik-rokok-elektronik-legal-dan-kontribusinya-terhadap-perekonomian",
+          "canonical_url": "https://waspada.id/berita/hakim-mk-soroti-karakteristik-rokok-elektronik-legal-dan-kontribusinya-terhadap-perekonomian",
+          "media_name": "Waspada.id",
+          "tanggal": "Thu, 19 Nov 2026 01:41:17 GMT",
+          "skor": 0.6737
+        },
+        {
+          "id": "7",
+          "title": "Sidang UU Kesehatan, Hakim MK Soroti Regulasi dan Ekonomi Vape RI",
+          "link": "https://malang.disway.id/malang-melintang/read/26753/sidang-uu-kesehatan-hakim-mk-soroti-regulasi-dan-ekonomi-vape-ri",
+          "canonical_url": "https://malang.disway.id/malang-melintang/read/26753/sidang-uu-kesehatan-hakim-mk-soroti-regulasi-dan-ekonomi-vape-ri",
+          "media_name": "Disway Malang",
+          "tanggal": "Thu, 19 Nov 2026 01:00:00 GMT",
+          "skor": 0.6737
+        }
+      ],
+      "tone_hubungan": "K4",
+      "tone_arah": "tidak ada",
+      "tone_metode": "AI-isu"
+    },
+    {
+      "isu_id": "klaster_a2880182f8",
+      "isu": "Industri Sawit Siapkan Strategi Hadapi Dunia yang Terfragmentasi",
+      "sumber_isu": "klaster",
+      "tanggal_awal": "2026-11-19",
+      "tanggal_terakhir": "2026-11-19",
+      "_norm_title": "industri sawit siapkan strategi hadapi dunia yang terfragmentasi",
+      "tone": "Netral",
+      "tone_alasan": "Berita mengulas tantangan global industri sawit secara umum tanpa menyebut institusi Kemenperin, sehingga dikategorikan netral (Ne2 + A1).",
+      "tone_keyakinan": "tinggi",
+      "evaluated_at": "2026-11-19 10:25:55",
+      "member_count_at_eval": 1,
+      "member_count": 1,
+      "sample_titles": [
+        "Industri Sawit Siapkan Strategi Hadapi Dunia yang Terfragmentasi"
+      ],
+      "sample_snippets": [
+        "Indonesian Palm Oil Conference (IPOC) 2026 mengambil tema yang menggelitik, ”Minyak Sawit dalam Dunia yang Terfragmentasi”. Lalu, bagaimana menghadapinya?\n19 Nov 2026 07:00 WIB · Ekonomi & Bisnis\nIndustri sawit nasional akan menghadapi berbagai tantangan pada 2027. Bukan hanya soal produktivitas yang diproyeksikan menurun, melainkan juga soal berbagai tuntutan dan kepentingan banyak negara pembeli sawit RI.\nIndonesian Palm Oil Conference (IPOC) 2026 yang berlangsung di Bali, 11-13 November 2026, mengambil tema yang menggelitik, ”Minyak Sawit dalam Dunia yang Terfragmentasi”. Tema itu mengajak pelaku industri sawit melihat perubahan lanskap global, bukan hanya dari sisi harga minyak kelapa sawit mentah (CPO) dan permintaan pasar. Saat ini, industri sawit tidak lagi beroperasi dalam lingkungan perdagangan global yang relatif terbuka, terintegrasi, dan memiliki aturan main yang sama.\nDunia kini dipengaruhi kepentingan nasional setiap negara, persaingan kekuatan ekonomi, proteksionisme, dan perbedaan standar perdagangan, terutama keberlanjutan. Perdagangan bebas pun menjadi lebih kompleks.\nPenulis:\nDionisius Reynaldo Triwibowo\nEditor:\nMaria Susy Berindra\nPenyelaras Bahasa:\nHibar Himawa"
+      ],
+      "matched_articles": [
+        {
+          "id": "13",
+          "title": "Industri Sawit Siapkan Strategi Hadapi Dunia yang Terfragmentasi",
+          "link": "https://www.kompas.id/artikel/industri-sawit-siapkan-strategi-hadapi-dunia-yang-terfragmentasi",
+          "canonical_url": "https://kompas.id/artikel/industri-sawit-siapkan-strategi-hadapi-dunia-yang-terfragmentasi",
+          "media_name": "Kompas.id",
+          "tanggal": "Thu, 19 Nov 2026 00:00:12 GMT",
+          "skor": 1.0
+        }
+      ],
+      "tone_hubungan": "K3",
+      "tone_arah": "tidak ada"
+    },
+    {
+      "isu_id": "klaster_1267cd58e7",
+      "isu": "Kenaikan Harga Singkong Bisa Jadi Tantangan Bagi Saham BUDI",
+      "sumber_isu": "klaster",
+      "tanggal_awal": "2026-11-19",
+      "tanggal_terakhir": "2026-11-19",
+      "_norm_title": "kenaikan harga singkong bisa jadi tantangan bagi saham budi",
+      "tone": "Netral",
+      "tone_alasan": "Berita mengenai kenaikan harga singkong dan dampaknya pada emiten tidak menyebut maupun berkaitan langsung dengan Kemenperin, sehingga dinilai netral (K4).",
+      "tone_keyakinan": "tinggi",
+      "evaluated_at": "2026-11-19 10:25:55",
+      "member_count_at_eval": 1,
+      "member_count": 1,
+      "sample_titles": [
+        "Kenaikan Harga Singkong Bisa Jadi Tantangan Bagi Saham BUDI"
+      ],
+      "sample_snippets": [
+        "KONTAN.CO.ID - JAKARTA. Kenaikan harga singkong mulai membuat produsen makanan dan minuman ketar ketir, pasalnya kenaikan yang terjadi belakangan ini bikin biaya produksi mengalami kenaikan. Gabungan Pengusaha Makanan dan Minuman Seluruh Indonesia (GAPMMI) menyebut harga singkong dan tepung tapioka sudah mengalami kenaikan hingga dua kali lipat dari kondisi normal.\nHal ini ditengarai karena kondisi cuaca yang membuat pasokan singkong seret dan harga terkerek naik. Kenaikan ini tentu juga membuat emiten yang mengandalkan produksinya dari singkong ikut susah. Sebut saja PT Budi Starch and Sweetener Tbk (BUDI) yang memproduksi tepung tapioka, glukosa, fruktosa dan maltodekstrin yang berasal dari singkong."
+      ],
+      "matched_articles": [
+        {
+          "id": "1",
+          "title": "Kenaikan Harga Singkong Bisa Jadi Tantangan Bagi Saham BUDI",
+          "link": "https://insight.kontan.co.id/news/kenaikan-harga-singkong-bisa-jadi-tantangan-bagi-saham-budi",
+          "canonical_url": "https://insight.kontan.co.id/news/kenaikan-harga-singkong-bisa-jadi-tantangan-bagi-saham-budi",
+          "media_name": "KONTAN",
+          "tanggal": "Wed, 18 Nov 2026 22:38:02 GMT",
+          "skor": 1.0
+        }
+      ],
+      "tone_hubungan": "K4",
+      "tone_arah": "tidak ada"
+    },
+    {
+      "isu_id": "klaster_23f6485f24",
+      "isu": "Maluku Bakal Punya Pabrik Sagu Pertama, Dibangun di Seram Bagian Timur",
+      "sumber_isu": "klaster",
+      "tanggal_awal": "2026-11-19",
+      "tanggal_terakhir": "2026-11-19",
+      "_norm_title": "maluku bakal punya pabrik sagu pertama dibangun di sbt",
+      "tone": "Netral",
+      "tone_alasan": "Berita membahas rencana pembangunan pabrik sagu oleh Pemkab SBT dan investor swasta tanpa melibatkan atau menyebut Kemenperin, sehingga dikategorikan netral (K4).",
+      "tone_keyakinan": "tinggi",
+      "evaluated_at": "2026-11-19 10:25:55",
+      "member_count_at_eval": 1,
+      "member_count": 1,
+      "sample_titles": [
+        "Maluku Bakal Punya Pabrik Sagu Pertama, Dibangun di Seram Bagian Timur"
+      ],
+      "sample_snippets": [
+        "AMBON, KOMPAS.com – Kabupaten Seram Bagian Timur (SBT), Maluku, direncanakan menjadi lokasi pembangunan pabrik pengolahan sagu pertama di provinsi tersebut. Pembangunan pabrik yang melibatkan investor swasta itu ditargetkan dimulai pada kuartal I 2027.\nPemerintah Kabupaten (Pemkab) SBT telah bertemu dengan calon investor di Pangkal Pinang, Kepulauan Bangka Belitung, pada 6 November 2026. Pertemuan tersebut membahas rencana investasi dan persiapan pembangunan pabrik pengolahan sagu di SBT.\nJuru Bicara Pemkab SBT Ahmad Mony mengatakan, pertemuan tersebut menjadi langkah awal untuk membuka peluang investasi sekaligus mendorong calon investor merealisasikan rencana pembangunan pabrik.\nBaca juga: 45 Guru di Ambon Diduga Gunakan SK Kenaikan Pangkat Palsu, Pemkot Tunggu Hasil Penyidikan\nAhmad menjelaskan, setelah mengunjungi pabrik pengolahan tepung sagu, Pemkab SBT dan calon investor berdiskusi mengenai persiapan ekspansi pembangunan pabrik sagu ke Kabupaten Seram Bagian Timur.\nSaat ini, PT Bangka Asindi Agri tengah menyiapkan studi awal, dokumen studi kelayakan, serta mengurus koordinasi perizinan dengan BKPM RI.\nJika tidak ada kendala, peletakan batu pertama atau groundbreaking pabrik "
+      ],
+      "matched_articles": [
+        {
+          "id": "3",
+          "title": "Maluku Bakal Punya Pabrik Sagu Pertama, Dibangun di Seram Bagian Timur",
+          "link": "https://regional.kompas.com/read/2026/11/19/053556878/maluku-bakal-punya-pabrik-sagu-pertama-dibangun-di-seram-bagian-timur",
+          "canonical_url": "https://regional.kompas.com/read/2026/11/19/053556878/maluku-bakal-punya-pabrik-sagu-pertama-dibangun-di-seram-bagian-timur",
+          "media_name": "Kompas.com",
+          "tanggal": "Wed, 18 Nov 2026 22:35:00 GMT",
+          "skor": 1.0
+        }
+      ],
+      "tone_hubungan": "K4",
+      "tone_arah": "tidak ada"
+    },
+    {
+      "isu_id": "klaster_c0c694ab40",
+      "isu": "Pertanian Topang Ekonomi Sulbar, Bapperida Dorong Pengolahan dan Peningkatan Nilai Tambah Komoditas",
+      "sumber_isu": "klaster",
+      "tanggal_awal": "2026-11-19",
+      "tanggal_terakhir": "2026-11-19",
+      "_norm_title": "pertanian topang ekonomi sulbar bapperida dorong pengolahan dan peningkatan nilai tambah komoditas",
+      "tone": "Netral",
+      "tone_alasan": "Berita membahas pertumbuhan ekonomi dan sektor pertanian Sulawesi Barat oleh Bapperida tanpa mengaitkan Kemenperin, sehingga dinilai Netral.",
+      "tone_keyakinan": "tinggi",
+      "evaluated_at": "2026-11-19 10:25:55",
+      "member_count_at_eval": 1,
+      "member_count": 1,
+      "sample_titles": [
+        "Pertanian Topang Ekonomi Sulbar, Bapperida Dorong Pengolahan dan Peningkatan Nilai Tambah Komoditas"
+      ],
+      "sample_snippets": [
+        "MAJENE – Pertumbuhan ekonomi Sulawesi Barat perlu diarahkan agar tidak berhenti pada peningkatan produksi dan angka Produk Domestik Regional Bruto (PDRB), tetapi juga mampu menciptakan lapangan kerja, meningkatkan pendapatan masyarakat, serta memperbesar nilai tambah komoditas yang dihasilkan daerah. Untuk mencapai tujuan tersebut, pengembangan sektor pertanian, perkebunan, dan perikanan harus terhubung dengan industri pengolahan, investasi, infrastruktur, dan akses pasar.\nArah tersebut ditekankan Kepala Bapperida Provinsi Sulawesi Barat, Amujib, saat memberikan pemaparan dalam Forum Optimalisasi Komoditas Unggulan Daerah bersama jajaran Bapperida kabupaten se-Sulawesi Barat di Aula Vila Andata, Kabupaten Majene, Selasa (17/11/2026).\nAmujib mengingatkan bahwa kualitas pertumbuhan ekonomi perlu menjadi perhatian dalam penyusunan kebijakan pembangunan daerah. Kenaikan PDRB memang menunjukkan bertambahnya aktivitas ekonomi, tetapi pemerintah tetap harus memastikan bahwa pertumbuhan tersebut membuka peluang usaha, memperluas kesempatan kerja, dan memberikan manfaat yang lebih besar bagi masyarakat.\nData Badan Pusat Statistik (BPS) yang dirilis pada 5 November 2026 menunjukkan ekonomi S"
+      ],
+      "matched_articles": [
+        {
+          "id": "9",
+          "title": "Pertanian Topang Ekonomi Sulbar, Bapperida Dorong Pengolahan dan Peningkatan Nilai Tambah Komoditas",
+          "link": "https://sulbarprov.go.id/post/pertanian-topang-ekonomi-sulbar-bapperida-dorong-pengolahan-dan-peningkatan-nilai-tambah-komoditas",
+          "canonical_url": "https://sulbarprov.go.id/post/pertanian-topang-ekonomi-sulbar-bapperida-dorong-pengolahan-dan-peningkatan-nilai-tambah-komoditas",
+          "media_name": "Pemprov Sulbar",
+          "tanggal": "Wed, 18 Nov 2026 23:08:31 GMT",
+          "skor": 1.0
+        }
+      ],
+      "tone_hubungan": "K4",
+      "tone_arah": "tidak ada"
+    }
+  ]
+}
