@@ -9,3 +9,5 @@ torch
 pandas
 openpyxl
 google-generativeai
+numpy
+scipy

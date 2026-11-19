@@ -24,8 +24,6 @@ from typing import Any
 
 import numpy as np
 from rapidfuzz import fuzz
-from scipy.cluster.hierarchy import fcluster, linkage
-from scipy.spatial.distance import squareform
 
 from src.gemini_pool import GeminiModelPool
 from src.stable import canonical_url
@@ -1375,7 +1373,10 @@ def assign_and_cluster_issues(
                 sim_mat[i, j] = s_val
                 sim_mat[j, i] = s_val
 
-        # Konversi ke jarak untuk Agglomerative Clustering
+        # Konversi ke jarak untuk Agglomerative Clustering (impor malas scipy)
+        from scipy.cluster.hierarchy import fcluster, linkage
+        from scipy.spatial.distance import squareform
+
         dist_mat = np.clip(1.0 - sim_mat, 0.0, 1.0)
         np.fill_diagonal(dist_mat, 0.0)
         condensed = squareform(dist_mat, checks=False)
