@@ -235,22 +235,30 @@ def rebuild_summary(articles: list[dict]) -> dict:
 
     calendar_counts = {d: len(by_date[d]) for d in sorted_dates}
 
+    daily_tones = {}
     recent_days = []
-    for d_str in sorted_dates[:14]:
+    for d_str in sorted_dates:
         arts = by_date[d_str]
         pos = sum(1 for a in arts if a.get("tone") == "Positif")
         neg = sum(1 for a in arts if a.get("tone") == "Negatif")
         net = len(arts) - pos - neg
-        recent_days.append({
-            "fileDate": d_str,
-            "tglDisplay": format_date_indo(d_str, full_month=False),
-            "isNew": d_str == latest_date,
+        daily_tones[d_str] = {
             "count": len(arts),
-            "countStr": f"{len(arts)} berita",
             "pos": pos,
             "net": net,
             "neg": neg,
-        })
+        }
+        if len(recent_days) < 14:
+            recent_days.append({
+                "fileDate": d_str,
+                "tglDisplay": format_date_indo(d_str, full_month=False),
+                "isNew": d_str == latest_date,
+                "count": len(arts),
+                "countStr": f"{len(arts)} berita",
+                "pos": pos,
+                "net": net,
+                "neg": neg,
+            })
 
     commodities = [
         {"name": name, "count": cnt}
@@ -269,6 +277,7 @@ def rebuild_summary(articles: list[dict]) -> dict:
             "total_articles": len(articles),
             "tone_summary": tone_summary,
             "calendar_counts": calendar_counts,
+            "daily_tones": daily_tones,
         },
         "commodities": commodities,
         "spokespersons": spokespersons,

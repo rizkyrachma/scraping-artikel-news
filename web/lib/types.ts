@@ -32,6 +32,7 @@ export interface SummaryData {
       Negatif: number;
     };
     calendar_counts: Record<string, number>;
+    daily_tones?: Record<string, { count: number; pos: number; net: number; neg: number }>;
   };
   commodities: Array<{ name: string; count: number }>;
   spokespersons: Array<any>;

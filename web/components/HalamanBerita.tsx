@@ -24,6 +24,12 @@ import { formatNumberIndo, normalizeTitle, normalizeMedia, formatShortDate } fro
 
 interface HalamanBeritaProps {
   summaryData: SummaryData | null;
+  selectedDate?: string;
+  onSelectDate?: (date: string) => void;
+  selectedTone?: string;
+  onSelectTone?: (tone: string) => void;
+  cachedArticles?: Article[];
+  onArticlesLoaded?: (articles: Article[]) => void;
 }
 
 const ITEMS_PER_PAGE = 24;
@@ -69,19 +75,27 @@ function resolveGroupTone(items: Article[]): { tone: Article["tone"]; isMixed: b
   return { tone: best, isMixed: distinct.length > 1 };
 }
 
-export default function HalamanBerita({ summaryData }: HalamanBeritaProps) {
+export default function HalamanBerita({
+  summaryData,
+  selectedDate: propSelectedDate,
+  onSelectDate,
+  selectedTone: propSelectedTone,
+  onSelectTone,
+  cachedArticles,
+  onArticlesLoaded,
+}: HalamanBeritaProps) {
   // State data artikel
-  const [articles, setArticles] = useState<Article[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [articles, setArticles] = useState<Article[]>(() => cachedArticles || []);
+  const [isLoading, setIsLoading] = useState(!cachedArticles || cachedArticles.length === 0);
   const [isError, setIsError] = useState(false);
 
   // State filter
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
-  const [selectedTone, setSelectedTone] = useState<string>("Semua");
+  const [selectedTone, setSelectedTone] = useState<string>(propSelectedTone || "Semua");
   const [selectedCommodity, setSelectedCommodity] = useState<string>("Semua");
   const [selectedSpokesperson, setSelectedSpokesperson] = useState<string>("Semua");
-  const [selectedDate, setSelectedDate] = useState<string>("Semua");
+  const [selectedDate, setSelectedDate] = useState<string>(propSelectedDate || "Semua");
   const [sortBy, setSortBy] = useState<"terbaru" | "terlama" | "media">("terbaru");
   const [groupByIsu, setGroupByIsu] = useState<boolean>(false);
 
@@ -89,6 +103,24 @@ export default function HalamanBerita({ summaryData }: HalamanBeritaProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({});
   const [groupPages, setGroupPages] = useState<Record<string, number>>({});
+
+  // Sinkronisasi tanggal dari prop luar (misal klik dari kalender/ringkasan)
+  useEffect(() => {
+    if (propSelectedDate !== undefined && propSelectedDate !== selectedDate) {
+      setSelectedDate(propSelectedDate || "Semua");
+      setCurrentPage(1);
+      setGroupPages({});
+    }
+  }, [propSelectedDate, selectedDate]);
+
+  // Sinkronisasi tone dari prop luar (misal klik legend Pos/Net/Neg di ringkasan)
+  useEffect(() => {
+    if (propSelectedTone !== undefined && propSelectedTone !== selectedTone) {
+      setSelectedTone(propSelectedTone || "Semua");
+      setCurrentPage(1);
+      setGroupPages({});
+    }
+  }, [propSelectedTone, selectedTone]);
 
   // Debounce search 300ms
   useEffect(() => {
@@ -102,6 +134,11 @@ export default function HalamanBerita({ summaryData }: HalamanBeritaProps) {
 
   // Muat data artikel lengkap (articles_all.json via /api/data untuk sinkronisasi live)
   useEffect(() => {
+    if (cachedArticles && cachedArticles.length > 0) {
+      setArticles(cachedArticles);
+      setIsLoading(false);
+      return;
+    }
     setIsLoading(true);
     fetch(`/api/data/articles_all.json?t=${Date.now()}`, { cache: "no-store" })
       .then((res) => {
@@ -110,6 +147,7 @@ export default function HalamanBerita({ summaryData }: HalamanBeritaProps) {
       })
       .then((data: Article[]) => {
         setArticles(data);
+        onArticlesLoaded?.(data);
         setIsLoading(false);
       })
       .catch((err) => {
@@ -121,7 +159,7 @@ export default function HalamanBerita({ summaryData }: HalamanBeritaProps) {
         }
         setIsLoading(false);
       });
-  }, [summaryData]);
+  }, [summaryData, cachedArticles, onArticlesLoaded]);
 
   // Reset page saat filter berubah
   const handleFilterChange = (setter: (val: string) => void, val: string) => {
@@ -130,13 +168,29 @@ export default function HalamanBerita({ summaryData }: HalamanBeritaProps) {
     setGroupPages({});
   };
 
+  const handleToneChange = (val: string) => {
+    setSelectedTone(val);
+    onSelectTone?.(val);
+    setCurrentPage(1);
+    setGroupPages({});
+  };
+
+  const handleDateChange = (val: string) => {
+    setSelectedDate(val);
+    onSelectDate?.(val);
+    setCurrentPage(1);
+    setGroupPages({});
+  };
+
   const handleResetFilters = () => {
     setSearchQuery("");
     setDebouncedSearch("");
     setSelectedTone("Semua");
+    onSelectTone?.("Semua");
     setSelectedCommodity("Semua");
     setSelectedSpokesperson("Semua");
     setSelectedDate("Semua");
+    onSelectDate?.("Semua");
     setSortBy("terbaru");
     setCurrentPage(1);
     setGroupPages({});
@@ -429,7 +483,11 @@ export default function HalamanBerita({ summaryData }: HalamanBeritaProps) {
       {/* 1. Header Kartu Halaman Berita */}
       <PageHeaderCard
         title="Arsip Berita Industri Agro"
-        description={`Pencarian, pemfilteran komoditas, dan pemantauan sentimen dari ${formatNumberIndo(articles.length || summaryData?.metadata?.total_articles || 0)} berita sektor agro terverifikasi.`}
+        description={
+          selectedDate && selectedDate !== "Semua"
+            ? `Menampilkan arsip berita tanggal ${formatShortDate(selectedDate)} (${formatNumberIndo(filteredArticles.length)} berita terpilih dari total ${formatNumberIndo(articles.length || summaryData?.metadata?.total_articles || 0)} berita sektor agro terverifikasi).`
+            : `Pencarian, pemfilteran komoditas, dan pemantauan sentimen dari ${formatNumberIndo(articles.length || summaryData?.metadata?.total_articles || 0)} berita sektor agro terverifikasi.`
+        }
       />
 
       {/* 2. Kartu Utama Halaman Berita */}
@@ -466,7 +524,7 @@ export default function HalamanBerita({ summaryData }: HalamanBeritaProps) {
                 <button
                   key={t}
                   type="button"
-                  onClick={() => handleFilterChange(setSelectedTone, t)}
+                  onClick={() => handleToneChange(t)}
                   className={`tone-chip ${selectedTone === t ? "active" : ""} tone-chip-${t.toLowerCase()}`}
                 >
                   {t}
@@ -504,7 +562,7 @@ export default function HalamanBerita({ summaryData }: HalamanBeritaProps) {
             {/* Dropdown Tanggal */}
             <CustomSelect
               value={selectedDate}
-              onChange={(val) => handleFilterChange(setSelectedDate, val)}
+              onChange={(val) => handleDateChange(val)}
               options={customDateOptions}
               icon={<Calendar size={13} />}
               ariaLabel="Filter Tanggal Berita"
@@ -567,7 +625,7 @@ export default function HalamanBerita({ summaryData }: HalamanBeritaProps) {
             {selectedTone !== "Semua" && (
               <span className="active-chip">
                 Tone: {selectedTone}
-                <button type="button" onClick={() => setSelectedTone("Semua")}>✕</button>
+                <button type="button" onClick={() => handleToneChange("Semua")}>✕</button>
               </span>
             )}
             {selectedCommodity !== "Semua" && (
@@ -585,7 +643,7 @@ export default function HalamanBerita({ summaryData }: HalamanBeritaProps) {
             {selectedDate !== "Semua" && (
               <span className="active-chip">
                 Tanggal: {formatShortDate(selectedDate)}
-                <button type="button" onClick={() => setSelectedDate("Semua")}>✕</button>
+                <button type="button" onClick={() => handleDateChange("Semua")}>✕</button>
               </span>
             )}
             {hasActiveFilters && (

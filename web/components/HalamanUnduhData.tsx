@@ -46,6 +46,8 @@ function buildDayListFromSummary(data: SummaryData): DayDownloadItem[] {
   const existingMap = new Map<string, NonNullable<SummaryData["recent_days"]>[number]>();
   recentDays.forEach((d) => existingMap.set(d.fileDate, d));
 
+  const dailyTones = data.metadata?.daily_tones || {};
+
   return Object.keys(calendarCounts)
     .sort()
     .reverse()
@@ -60,6 +62,7 @@ function buildDayListFromSummary(data: SummaryData): DayDownloadItem[] {
         };
       }
 
+      const toneInfo = dailyTones[dStr];
       const count = calendarCounts[dStr] || 0;
       let display = dStr;
       try {
@@ -72,15 +75,19 @@ function buildDayListFromSummary(data: SummaryData): DayDownloadItem[] {
         // fallback
       }
 
+      const pos = toneInfo ? toneInfo.pos : Math.round(count * 0.52);
+      const net = toneInfo ? toneInfo.net : Math.round(count * 0.35);
+      const neg = toneInfo ? toneInfo.neg : Math.max(0, count - pos - net);
+
       return {
         fileDate: dStr,
         tglDisplay: display,
         isNew: dStr === latestDate,
         count,
         countStr: `${formatNumberIndo(count)} berita`,
-        pos: Math.round(count * 0.52),
-        net: Math.round(count * 0.35),
-        neg: Math.max(0, count - Math.round(count * 0.52) - Math.round(count * 0.35)),
+        pos,
+        net,
+        neg,
         fileSizeStr: formatSize(count),
         hasFile: count > 0,
       };

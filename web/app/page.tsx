@@ -14,7 +14,7 @@ import ModalUnduh from "@/components/ModalUnduh";
 import HalamanBerita from "@/components/HalamanBerita";
 import HalamanRiwayatRun from "@/components/HalamanRiwayatRun";
 import HalamanUnduhData from "@/components/HalamanUnduhData";
-import { DownloadPresetMode, SummaryData, RunHistoryItem } from "@/lib/types";
+import { DownloadPresetMode, SummaryData, RunHistoryItem, Article } from "@/lib/types";
 
 const MONTHS_SHORT_ID = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agt", "Sep", "Okt", "Nov", "Des"];
 
@@ -35,6 +35,8 @@ export default function DashboardPage() {
   const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
   const [downloadModalMode, setDownloadModalMode] = useState<DownloadPresetMode>("daily");
   const [selectedDate, setSelectedDate] = useState("");
+  const [selectedTone, setSelectedTone] = useState("Semua");
+  const [cachedArticles, setCachedArticles] = useState<Article[]>([]);
 
   const openDownloadModal = (mode: DownloadPresetMode = "daily") => {
     setDownloadModalMode(mode);
@@ -201,13 +203,14 @@ export default function DashboardPage() {
 
   const effectiveDate = selectedDate || latestDateIso;
   const selectedDay = summaryData?.recent_days?.find((d) => d.fileDate === effectiveDate);
+  const dayStats = summaryData?.metadata?.daily_tones?.[effectiveDate] || selectedDay;
   const ringkasanDateStr = formatShortDateId(effectiveDate, targetDateStr);
   const ringkasanCount =
-    selectedDay?.count ??
+    dayStats?.count ??
     (effectiveDate ? summaryData?.metadata?.calendar_counts?.[effectiveDate] ?? 0 : 0);
-  const ringkasanPos = selectedDay?.pos ?? 0;
-  const ringkasanNet = selectedDay?.net ?? 0;
-  const ringkasanNeg = selectedDay?.neg ?? 0;
+  const ringkasanPos = dayStats?.pos ?? 0;
+  const ringkasanNet = dayStats?.net ?? 0;
+  const ringkasanNeg = dayStats?.neg ?? 0;
   const isViewingLatest = !effectiveDate || effectiveDate === latestDateIso;
   const runStats = isViewingLatest ? latestRun?.stats : undefined;
 
@@ -271,13 +274,21 @@ export default function DashboardPage() {
                 toneCadanganPct={runStats?.tone_cadangan_pct ?? null}
                 perluReviewCount={runStats?.perlu_review ?? null}
                 noSpokespersonCount={runStats?.tanpa_spokesperson ?? null}
+                onViewNews={(tone) => {
+                  setSelectedDate(effectiveDate);
+                  if (tone) setSelectedTone(tone);
+                  setActiveTab("berita");
+                }}
               />
 
               <KalenderKompakCard
                 summaryData={summaryData}
                 selectedDate={effectiveDate}
                 onSelectDate={(date) => setSelectedDate(date)}
-                onViewNewsTab={() => setActiveTab("berita")}
+                onViewNewsTab={() => {
+                  setSelectedDate(effectiveDate);
+                  setActiveTab("berita");
+                }}
               />
             </aside>
           </>
@@ -285,7 +296,15 @@ export default function DashboardPage() {
 
         {/* Tampilan Tab Berita */}
         {activeTab === "berita" && (
-          <HalamanBerita summaryData={summaryData} />
+          <HalamanBerita
+            summaryData={summaryData}
+            selectedDate={selectedDate || "Semua"}
+            onSelectDate={(d) => setSelectedDate(d === "Semua" ? "" : d)}
+            selectedTone={selectedTone}
+            onSelectTone={setSelectedTone}
+            cachedArticles={cachedArticles}
+            onArticlesLoaded={setCachedArticles}
+          />
         )}
 
         {/* Tampilan Tab Riwayat Run Lengkap */}

@@ -15,6 +15,7 @@ interface RingkasanCardProps {
   toneCadanganPct?: number | null;
   perluReviewCount?: number | null;
   noSpokespersonCount?: number | null;
+  onViewNews?: (tone?: string) => void;
 }
 
 export default function RingkasanCard({
@@ -29,6 +30,7 @@ export default function RingkasanCard({
   toneCadanganPct = null,
   perluReviewCount = null,
   noSpokespersonCount = null,
+  onViewNews,
 }: RingkasanCardProps) {
   const tot = posCount + netCount + negCount;
   const pctPos = tot > 0 ? Math.round((posCount / tot) * 100) : 0;
@@ -48,7 +50,19 @@ export default function RingkasanCard({
     <>
       {/* 1. Ringkasan Hari Ini (Panel Primer) */}
       <div className="card-box card-ringkasan panel-primary">
-        <h3 className="card-title">Ringkasan Berita {dateStr}</h3>
+        <div className="card-header-row">
+          <h3 className="card-title">Ringkasan Berita {dateStr}</h3>
+          {onViewNews && count > 0 && (
+            <button
+              type="button"
+              onClick={() => onViewNews()}
+              className="btn-link-action"
+              title="Lihat seluruh berita tanggal ini di Arsip Berita"
+            >
+              Lihat di Berita →
+            </button>
+          )}
+        </div>
 
         {isRunning && (
           <div className="banner-running-notice">
@@ -71,18 +85,33 @@ export default function RingkasanCard({
 
         {/* Tone Legend Row */}
         <div className="tone-legend-large">
-          <div className="tone-leg-item text-pos">
+          <button
+            type="button"
+            onClick={() => onViewNews?.("Positif")}
+            className="tone-leg-item text-pos hover:opacity-80 transition-opacity"
+            title="Klik untuk memfilter berita Positif di tab Berita"
+          >
             <span className="dot dot-pos" />
             <span>Pos {posCount} ({pctPos}%)</span>
-          </div>
-          <div className="tone-leg-item text-net">
+          </button>
+          <button
+            type="button"
+            onClick={() => onViewNews?.("Netral")}
+            className="tone-leg-item text-net hover:opacity-80 transition-opacity"
+            title="Klik untuk memfilter berita Netral di tab Berita"
+          >
             <span className="dot dot-net" />
             <span>Net {netCount} ({pctNet}%)</span>
-          </div>
-          <div className="tone-leg-item text-neg">
+          </button>
+          <button
+            type="button"
+            onClick={() => onViewNews?.("Negatif")}
+            className="tone-leg-item text-neg hover:opacity-80 transition-opacity"
+            title="Klik untuk memfilter berita Negatif di tab Berita"
+          >
             <span className="dot dot-neg" />
             <span>Neg {negCount} ({pctNeg}%)</span>
-          </div>
+          </button>
         </div>
       </div>
 
