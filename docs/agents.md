@@ -9,7 +9,7 @@ Baca `DOKUMEN_TEKNIS_PIPELINE_SCRAPING_BERITA.md` dulu sebelum mulai coding. Dok
 ## Aturan Kerja untuk Agent
 
 1. Jangan gunakan Google Custom Search JSON API sebagai sumber utama. API itu sudah ditutup untuk pelanggan baru dan akan berhenti total 1 Januari 2027. Gunakan Google News RSS (`feedparser`) sebagai sumber utama, dan crawling langsung ke domain `.go.id` sebagai pelengkap.
-2. Implementasi harus modular sesuai struktur folder di dokumen teknis (`config.py`, `query_builder.py`, `fetch_news.py`, `extract_content.py`, `entity_mapper.py`, `sentiment.py`, `export_excel.py`, `main.py`). Jangan menggabungkan semua logika ke satu file besar.
+2. Implementasi harus modular sesuai struktur folder di dokumen teknis (`config.py`, `query_builder.py`, `fetch_news.py`, `extract_content.py`, `entity_mapper.py`, `tone_classifier.py`, `export_excel.py`, `main.py`). Jangan menggabungkan semua logika ke satu file besar.
 3. Setiap fungsi yang melakukan HTTP request harus punya delay/backoff, jangan spam request ke situs media secara paralel tanpa batas.
 4. Filter domain harus dilakukan dua kali: sekali di query (Google dork), sekali lagi di kode Python setelah hasil didapat (post-filter dengan `urlparse`). Jangan hanya mengandalkan salah satu.
 5. Kolom Excel wajib persis: `Tanggal`, `Title`, `Link Website`, `Media Name`, `Tone`, `Spokesperson 1`, `Spokesperson 2`, `Unit Eselon`, `Terkait Kemenperin`, `Keywords`. Urutan kolom harus konsisten dengan urutan ini.
@@ -21,7 +21,7 @@ Baca `DOKUMEN_TEKNIS_PIPELINE_SCRAPING_BERITA.md` dulu sebelum mulai coding. Dok
 ## Cara Menjalankan
 
 ```bash
-pip install feedparser trafilatura newspaper3k rapidfuzz transformers torch pandas openpyxl
+pip install -r requirements.txt
 
 # Eksekusi untuk 1 keyword (contoh: gula):
 python main.py gula
@@ -43,7 +43,7 @@ Catatan: `openpyxl` dipakai dua arah, sebagai engine baca `keyword/keyword_nama.
 - Perbaikan bug substring matching: seluruh pencocokan kata/nama di `relevance_filter.py`, `entity_mapper.py`, dan domain checking di `fetch_news.py` beralih ke regex word boundary (`\b...\b`) dan exact/subdomain match untuk mencegah false match (misal kata 'gula' mencocokkan 'regulasi', nama 'agus' mencocokkan 'bagus').
 - Perluasan filter di `relevance_filter.py` dan `main.py` dengan deteksi `is_recipe` (membuang konten resep kuliner berformat takaran bahan) dan `is_promotional` (membuang materi iklan/promo ritel supermarket).
 - Penambahan filter wajib content-level `contains_keyword_in_content(text, keyword)` di `relevance_filter.py` dan `main.py` menggunakan regex word boundary `\b...\b` untuk membuang artikel hasil ekstraksi yang sama sekali tidak memuat kata kunci topik (misal halaman portal umum / noise .go.id).
-- Pembaruan klasifikasi tone di `sentiment.py` menjadi 3 kelas asli IndoBERT (`Positif`, `Netral`, `Negatif`) tanpa pemaksaan mapping netral ke biner, selaras dengan skema data monitoring manual.
+- Pembaruan klasifikasi tone di `tone_classifier.py` (menggantikan `sentiment.py` legacy) menjadi 3 kelas (`Positif`, `Netral`, `Negatif`) selaras dengan skema data monitoring manual.
 - Penambahan deduplikasi berbasis kemiripan judul (`is_near_duplicate_title` threshold >= 85, `rapidfuzz.fuzz.ratio`) di `fetch_news.py` dan `main.py` untuk mengeliminasi artikel ganda/sindikasi dengan menyimpan versi yang isi teksnya lebih lengkap/panjang.
 - Peningkatan filter konten menjadi filter frekuensi topik utama (`is_keyword_primary_topic` di `relevance_filter.py` dan `main.py`): artikel lolos hanya jika keyword muncul di judul ATAU muncul minimal 2 kali di isi teks artikel, membuang artikel yang hanya menyebut keyword 1 kali (misal daftar sembako/bantuan sosial).
 - Penambahan filter topik industri/kebijakan vs kesehatan/nutrisi pribadi (`is_industry_policy_topic()` di `relevance_filter.py` dan `main.py`) berbasis perbandingan kemunculan `INDUSTRY_POLICY_SIGNALS` vs `HEALTH_PERSONAL_SIGNALS` untuk membuang artikel nutrisi, diet, dan penyakit personal.
@@ -66,7 +66,7 @@ Catatan: `openpyxl` dipakai dua arah, sebagai engine baca `keyword/keyword_nama.
   - Batch 1–6 (29 keyword) dan 5 keyword besar telah tersimpan aman dengan total 171 baris berita bersih di `hasil_scrapping/hasil_scraping_semua_keyword_clean.xlsx`.
   - Monitoring polling otomatis tiap 10 menit dihentikan sepenuhnya agar IP kantor benar-benar istirahat dari traffic Google dan tidak memperpanjang masa blokir.
 - **Pembaruan Deduplikasi Lintas Keyword (`dedup_across_keywords`)**:
-  - Penambahan fungsi `merge_keywords()` dan `dedup_across_keywords()` di `fetch_news.py` dan `run_all_batches.py`.
+  - Penambahan fungsi `merge_keywords()` dan `dedup_across_keywords()` di `fetch_news.py` dan `main.py`.
   - Sebelumnya, jika artikel yang sama muncul pada beberapa keyword yang berbeda (baik lewat kemiripan URL maupun skor judul `rapidfuzz` >= 85), sistem hanya menyimpan keyword yang pertama kali ditemukan dan membuang keyword berikutnya.
   - Logika baru secara otomatis menggabungkan (*merge*) seluruh keyword yang cocok untuk artikel yang sama menjadi format daftar unik dipisahkan koma (contoh: `"gula, kelapa"`, `"cokelat, kakao"`, `"cpo, minyak sawit"`).
 - **Integrasi Exa Search sebagai Sumber Pelengkap Permanen (`exa_search.py`)**:
