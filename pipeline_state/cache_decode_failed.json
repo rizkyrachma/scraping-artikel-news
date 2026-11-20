@@ -23,5 +23,25 @@
     "ts": 1795058134.9531164,
     "reason": "rejected_target",
     "validator_version": "v1"
+  },
+  "https://news.google.com/articles/CBMiVkFVX3lxTE4zb0dPUWhCV25sSFAtaHIzbDV4UTItS3U2SFhYVURtT3VfUFVNQTY1YVNLakVlc2V3WldiOTVIcEtUU0ZHb1pwb1UxR2xhcEhKREh2Q053::val_v1": {
+    "ts": 1795206149.235191,
+    "reason": "rejected_target",
+    "validator_version": "v1"
+  },
+  "https://news.google.com/articles/CBMiSEFVX3lxTFBGVWFrOG13WmQ5dnJiakJxbndCLWRfUUg4c0F6XzVVNkZ0LVV3cXFJZmVGbDhiekFhaXhzRzNIRGpyRHFTNGVGUg::val_v1": {
+    "ts": 1795206585.3435361,
+    "reason": "rejected_target",
+    "validator_version": "v1"
+  },
+  "https://news.google.com/articles/CBMiT0FVX3lxTE41SnR0dkczc1JIamxtVjdvcUtfcUtkU1FaNDlmemM2Yk82UGlUa2FycHF0SnJpZGk3QmNWQVFVems3Q2twZFFyOEM1amlVVnM::val_v1": {
+    "ts": 1795207230.7902157,
+    "reason": "rejected_target",
+    "validator_version": "v1"
+  },
+  "https://news.google.com/articles/CBMiZkFVX3lxTE5fT0FIME5XWVdxVF9NN3BvUDR4UkpNa3lFNEdoUWhfV2dJZUU4enFoY0o2R0J2cW84eWVjT2lSTmtCRndsTmtncHdDTVIxNEhmeTJYSDUtdjhYSEFLXzdRcS11cnZDZw::val_v1": {
+    "ts": 1795207247.6150868,
+    "reason": "rejected_target",
+    "validator_version": "v1"
   }
 }
