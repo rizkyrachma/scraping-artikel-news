@@ -4,8 +4,6 @@ newspaper3k
 googlenewsdecoder>=0.1.7
 requests
 rapidfuzz
-transformers
-torch
 pandas
 openpyxl
 google-generativeai
