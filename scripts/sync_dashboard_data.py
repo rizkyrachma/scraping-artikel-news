@@ -290,12 +290,24 @@ def _norm_link(link: str) -> str:
     return (link or "").strip().rstrip("/").lower()
 
 
+def _article_composite_key(art: dict) -> tuple[str, str]:
+    """Menghasilkan composite key (tanggal, link/title) agar URL yang sama di tanggal berbeda tetap terjaga."""
+    d = (art.get("date") or "")[:10]
+    link = _norm_link(art.get("link", ""))
+    if link:
+        return (d, link)
+    title = (art.get("title") or "").strip().lower()
+    return (d, title)
+
+
 def merge_articles(new_articles: list[dict], existing_articles: list[dict]) -> list[dict]:
-    """Menggabungkan artikel baru ke arsip lama tanpa menghapus data historis."""
-    new_links = {_norm_link(a.get("link", "")) for a in new_articles if _norm_link(a.get("link", ""))}
+    """Menggabungkan artikel baru ke arsip lama dengan composite key (tanggal, link).
+    Menjamin artikel dengan URL sama di hari berbeda dihitung di kedua hari (sesuai Excel harian).
+    """
+    new_keys = {_article_composite_key(a) for a in new_articles}
     preserved = [
         a for a in existing_articles
-        if _norm_link(a.get("link", "")) not in new_links
+        if _article_composite_key(a) not in new_keys
     ]
     merged = list(new_articles) + preserved
     merged.sort(key=lambda x: (x.get("date", ""), x.get("time", "")), reverse=True)
@@ -305,7 +317,9 @@ def merge_articles(new_articles: list[dict], existing_articles: list[dict]) -> l
 
 
 def merge_all_data_excel(src_xlsx: Path, dest_xlsx: Path) -> None:
-    """Menggabungkan sheet Berita & Ringkasan Negatif ke Media_Monitoring_Agro_Semua_Data.xlsx tanpa menimpa arsip."""
+    """Menggabungkan sheet Berita & Ringkasan Negatif ke Media_Monitoring_Agro_Semua_Data.xlsx
+    dengan composite key (Tanggal, Link Website) agar data historis multi-hari tidak hilang.
+    """
     if not src_xlsx.exists():
         return
     if not dest_xlsx.exists():
@@ -324,10 +338,14 @@ def merge_all_data_excel(src_xlsx: Path, dest_xlsx: Path) -> None:
             continue
         combined = pd.concat([df_new, df_old], ignore_index=True)
         if "Link Website" in combined.columns:
-            norm_keys = combined["Link Website"].fillna("").astype(str).map(_norm_link)
-            has_key = norm_keys != ""
-            # Pertahankan baris tanpa link + dedup baris ber-link dengan menyimpan versi terbaru (first)
-            keep_mask = (~has_key) | (~norm_keys.duplicated(keep="first"))
+            norm_links = combined["Link Website"].fillna("").astype(str).map(_norm_link)
+            has_key = norm_links != ""
+            if "Tanggal" in combined.columns:
+                norm_dates = combined["Tanggal"].fillna("").astype(str).str.slice(0, 10)
+                composite_keys = norm_dates + "::" + norm_links
+                keep_mask = (~has_key) | (~composite_keys.duplicated(keep="first"))
+            else:
+                keep_mask = (~has_key) | (~norm_links.duplicated(keep="first"))
             combined = combined[keep_mask].reset_index(drop=True)
         merged_sheets[name] = combined
 
@@ -338,6 +356,28 @@ def merge_all_data_excel(src_xlsx: Path, dest_xlsx: Path) -> None:
     df_neg = merged_sheets.get("Ringkasan Negatif", pd.DataFrame())
     write_styled_excel(df_berita, tmp_xlsx, df_neg=df_neg, sort_desc=True)
     shutil.move(str(tmp_xlsx), str(dest_xlsx))
+
+
+def rebuild_all_data_from_excels(files_dir: Path) -> tuple[list[dict], dict]:
+    """Membaca seluruh file Excel harian di files_dir dan menyusun ulang articles_all dan summary.
+    Setiap baris Excel harian dijamin menjadi 1 rekaman mandiri dengan ID unik integer.
+    """
+    daily_files = sorted([
+        f for f in files_dir.glob("Media_Monitoring_Agro_*.xlsx")
+        if f.name != "Media_Monitoring_Agro_Semua_Data.xlsx" and not f.name.endswith(".tmp.xlsx")
+    ])
+    all_articles: list[dict] = []
+    for f in daily_files:
+        d_str = f.name.replace("Media_Monitoring_Agro_", "").replace(".xlsx", "")
+        arts = read_excel_articles(f, fallback_date=d_str)
+        all_articles.extend(arts)
+
+    all_articles.sort(key=lambda x: (x.get("date", ""), x.get("time", "")), reverse=True)
+    for idx, art in enumerate(all_articles, start=1):
+        art["id"] = idx
+
+    summary_data = rebuild_summary(all_articles)
+    return all_articles, summary_data
 
 
 def build_run_stats(new_articles: list[dict], folder: Path) -> dict | None:
@@ -514,20 +554,34 @@ def run_self_check():
     merged = merge_articles(baru, existing)
     assert len(merged) == 4, f"Harusnya 4 artikel terjaga, dapat {len(merged)}"
 
-    # Verifikasi merge_all_data_excel tidak menimpa data lama
+    # Verifikasi URL sama di tanggal berbeda dihitung di kedua tanggal (composite key date + link)
+    baru_lintas_hari = [{"title": "B-hari-lain", "link": "https://site.id/news?id=2", "date": "2026-11-05", "time": "11:00"}]
+    merged_lintas = merge_articles(baru_lintas_hari, existing)
+    assert len(merged_lintas) == 4, f"Harusnya 4 artikel (id=2 di 3 Nov, 4 Nov, dan 5 Nov), dapat {len(merged_lintas)}"
+    # Verifikasi ID berurutan dan unik
+    ids = [a["id"] for a in merged_lintas]
+    assert len(ids) == len(set(ids)) == 4, "Setiap artikel harus punya ID unik"
+
+    # Verifikasi URL sama di tanggal yang sama diperbarui (idempotent)
+    baru_update_sama = [{"title": "B-re-scrape", "link": "https://site.id/news?id=2", "date": "2026-11-04", "time": "09:30"}]
+    merged_update = merge_articles(baru_update_sama, existing)
+    assert len(merged_update) == 3, f"Harusnya tetap 3 artikel (11-04 diperbarui, 11-03 terjaga), dapat {len(merged_update)}"
+    assert any(a["title"] == "B-re-scrape" for a in merged_update)
+
+    # Verifikasi merge_all_data_excel tidak menimpa data lama & menjaga URL multi-hari jika tanggal berbeda
     with tempfile.TemporaryDirectory() as tmpd:
         p_old = Path(tmpd) / "old.xlsx"
         p_new = Path(tmpd) / "new.xlsx"
         pd.DataFrame([
-            {"Title": "Lama 1", "Link Website": "https://a.id/1"},
-            {"Title": "Lama 2", "Link Website": "https://a.id/2"},
+            {"Tanggal": "2026-11-03", "Title": "Lama 1", "Link Website": "https://a.id/1"},
+            {"Tanggal": "2026-11-04", "Title": "Lama 2", "Link Website": "https://a.id/2"},
         ]).to_excel(p_old, sheet_name="Berita", index=False)
         pd.DataFrame([
-            {"Title": "Baru 1", "Link Website": "https://a.id/3"},
+            {"Tanggal": "2026-11-05", "Title": "Baru 1 (URL sama hari beda)", "Link Website": "https://a.id/2"},
         ]).to_excel(p_new, sheet_name="Berita", index=False)
         merge_all_data_excel(p_new, p_old)
         df_res = pd.read_excel(p_old, sheet_name="Berita")
-        assert len(df_res) == 3, f"Harusnya 3 baris Excel, dapat {len(df_res)}"
+        assert len(df_res) == 3, f"Harusnya 3 baris Excel (URL https://a.id/2 ada di 4 Nov dan 5 Nov), dapat {len(df_res)}"
         import openpyxl
         wb_chk = openpyxl.load_workbook(p_old)
         ws_chk = wb_chk["Berita"]
@@ -563,6 +617,8 @@ def run_self_check():
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Sinkronisasi data hasil scraping ke dashboard")
     parser.add_argument("--self-check", action="store_true", help="Jalankan self-check tanpa ubah file")
+    parser.add_argument("--rebuild-all", action="store_true", help="Susun ulang data dari seluruh Excel harian")
+    parser.add_argument("--output-dir", type=str, default="", help="Direktori output khusus untuk --rebuild-all (misal sandbox)")
     parser.add_argument("--check-dates", action="store_true", help="Cetak rentang tanggal yang perlu di-scrape")
     parser.add_argument("--start-date", type=str, default="", help="YYYY-MM-DD")
     parser.add_argument("--end-date", type=str, default="", help="YYYY-MM-DD")
@@ -577,6 +633,18 @@ if __name__ == "__main__":
 
     if args.self_check:
         run_self_check()
+        sys.exit(0)
+
+    if args.rebuild_all:
+        target_dir = Path(args.output_dir) if args.output_dir else DATA_EXPORT_DIR
+        target_files_dir = target_dir / "files" if (target_dir / "files").exists() else FILES_EXPORT_DIR
+        articles, summary = rebuild_all_data_from_excels(target_files_dir)
+        target_dir.mkdir(parents=True, exist_ok=True)
+        with open(target_dir / "articles_all.json", "w", encoding="utf-8") as f:
+            json.dump(articles, f, ensure_ascii=False)
+        with open(target_dir / "summary.json", "w", encoding="utf-8") as f:
+            json.dump(summary, f, ensure_ascii=False, indent=2)
+        print(f"[Rebuild] Berhasil menyusun ulang {len(articles)} artikel ke {target_dir}")
         sys.exit(0)
 
     wib = datetime.timezone(datetime.timedelta(hours=7))

@@ -15,6 +15,7 @@ import HalamanBerita from "@/components/HalamanBerita";
 import HalamanRiwayatRun from "@/components/HalamanRiwayatRun";
 import HalamanUnduhData from "@/components/HalamanUnduhData";
 import { DownloadPresetMode, SummaryData, RunHistoryItem, Article } from "@/lib/types";
+import { mapRunStatusToNotice, StatusNotice } from "@/lib/statusNotice";
 
 const MONTHS_SHORT_ID = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agt", "Sep", "Okt", "Nov", "Des"];
 
@@ -31,6 +32,7 @@ export default function DashboardPage() {
   const [isRunning, setIsRunning] = useState(false);
   const [activeRunInfo, setActiveRunInfo] = useState<{ id: number; currentStepName?: string | null } | null>(null);
   const [runningStepLabel, setRunningStepLabel] = useState<string | null>(null);
+  const [actionNotice, setActionNotice] = useState<StatusNotice | null>(null);
   const [isScrapeModalOpen, setIsScrapeModalOpen] = useState(false);
   const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
   const [downloadModalMode, setDownloadModalMode] = useState<DownloadPresetMode>("daily");
@@ -102,11 +104,15 @@ export default function DashboardPage() {
               ? { id: data.activeRun.id, currentStepName: data.activeRun.currentStepName }
               : null
           );
-          setRunningStepLabel(
-            data.activeRun?.currentStepName
-              ? `Sedang berjalan: ${data.activeRun.currentStepName}`
-              : "Sedang berjalan: Menunggu runner GitHub Actions"
-          );
+          const stepText = data.activeRun?.currentStepName
+            ? `Sedang berjalan: ${data.activeRun.currentStepName}`
+            : "Sedang berjalan: Menunggu runner GitHub Actions";
+          setRunningStepLabel(stepText);
+          setActionNotice({
+            type: "info",
+            message: stepText,
+            url: data.activeRun?.htmlUrl,
+          });
           prevRunningRef.current = true;
         } else if (inGrace) {
           prevRunningRef.current = true;
@@ -118,6 +124,15 @@ export default function DashboardPage() {
           prevRunningRef.current = false;
           if (wasRunning) {
             loadSummary(true);
+            const notice = mapRunStatusToNotice({
+              isRunning: false,
+              activeRun: null,
+              latestRun: data.latestRun,
+              wasRunning: true,
+            });
+            if (notice) {
+              setActionNotice(notice);
+            }
           }
         }
       } catch {
@@ -140,10 +155,12 @@ export default function DashboardPage() {
     startDate?: string,
     endDate?: string
   ) => {
-    dispatchGraceUntilRef.current = Date.now() + 12000;
+    dispatchGraceUntilRef.current = Date.now() + 35000;
     prevRunningRef.current = true;
     setIsRunning(true);
-    setRunningStepLabel("Memicu workflow di GitHub Actions...");
+    const startMsg = "Memicu workflow di GitHub Actions...";
+    setRunningStepLabel(startMsg);
+    setActionNotice({ type: "info", message: startMsg });
     try {
       const res = await fetch("/api/trigger", {
         method: "POST",
@@ -156,12 +173,24 @@ export default function DashboardPage() {
         prevRunningRef.current = false;
         setIsRunning(false);
         setRunningStepLabel(null);
+        const errMsg =
+          data.error ||
+          data.detail ||
+          `Gagal memicu scraping di GitHub Actions (${res.status})`;
+        setActionNotice({
+          type: "error",
+          message: errMsg,
+        });
       }
-    } catch {
+    } catch (err) {
       dispatchGraceUntilRef.current = 0;
       prevRunningRef.current = false;
       setIsRunning(false);
       setRunningStepLabel(null);
+      setActionNotice({
+        type: "error",
+        message: err instanceof Error ? err.message : "Terjadi kesalahan jaringan saat memicu workflow",
+      });
     }
   };
 
@@ -172,6 +201,10 @@ export default function DashboardPage() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ action: "cancel", runId: activeRunInfo.id }),
+        });
+        setActionNotice({
+          type: "warning",
+          message: "Permintaan pembatalan workflow telah dikirim ke GitHub Actions.",
         });
       } catch {
         // Abaikan jika gagal membatalkan
@@ -235,6 +268,8 @@ export default function DashboardPage() {
                 targetDateStr={targetDateStr}
                 runCountStr={runCountStr}
                 totalArchiveStr={totalArchiveStr}
+                actionNotice={actionNotice}
+                onDismissNotice={() => setActionNotice(null)}
               />
 
               {/* Hero Visual Pipeline 8 Tahap */}
