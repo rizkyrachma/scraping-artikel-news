@@ -126,7 +126,7 @@ news_pipeline/
 ├── fetch_news.py
 ├── extract_content.py
 ├── entity_mapper.py
-├── sentiment.py
+├── tone_classifier.py
 ├── export_excel.py
 └── main.py
 ```
@@ -321,7 +321,7 @@ def find_spokespersons(text: str, name_map: dict[str, str], threshold: int = 85)
     return spokesperson_1, spokesperson_2, unit_eselon
 ```
 
-### 6.6 `sentiment.py`
+### 6.6 `tone_classifier.py` (Arsitektur Klasifikasi Tone)
 
 ```python
 # sentiment.py
@@ -402,7 +402,7 @@ from config import load_keywords, load_spokesperson_map
 from fetch_news import collect_all
 from extract_content import extract_article_text
 from entity_mapper import find_spokespersons
-from sentiment import classify_tone
+from tone_classifier import classify_tone_by_issue
 from export_excel import save_to_excel
 
 

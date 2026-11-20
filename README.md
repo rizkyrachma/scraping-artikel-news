@@ -25,21 +25,16 @@ data_scrapping/
 │   ├── relevance_filter.py # Filter multi-layer non-industri, promosi ritel, dan kuliner
 │   ├── ai_relevance_classifier.py # Filter lapis akhir Ditjen IA via Gemini API
 │   ├── entity_mapper.py    # Ekstraksi dan pemetaan pejabat Kemenperin
-│   ├── sentiment.py        # Klasifikasi tone (Positif, Netral, Negatif)
+│   ├── tone_classifier.py  # Klasifikasi tone Humas dan isu (Gemini + fallback rule-based)
 │   ├── export_excel.py     # Ekspor data ke Excel dengan styling & hyperlink aktif
 │   ├── serper_search.py    # Mesin pencari Serper.dev
 │   ├── exa_search.py       # Mesin pencari Exa.ai
 │   ├── youtube_search.py   # Modul pencarian YouTube
 │   ├── direct_crawl_kemenperin.py # Direct crawl portal resmi kemenperin.go.id
-│   ├── extract_content.py  # Ekstraksi konten artikel (trafilatura / newspaper3k)
-│   ├── pdf_search.py       # Modul pencarian dokumen PDF lokal
-│   └── pdf_ocr.py          # Modul ekstraksi OCR PDF
+│   └── extract_content.py  # Ekstraksi konten artikel (trafilatura / newspaper3k)
 ├── hasil_scrapping/        # Output dataset Excel terorganisir per bulan (Agustus/, September/, Oktober/) & per tanggal
-├── pdf_input/              # Berkas dokumen PDF input
-├── scratch/                # Workspace pengujian sementara & archive/
+├── scratch/                # Workspace pengujian sementara
 ├── main.py                 # Pipeline runner utama (CLI)
-├── run_all_batches.py      # Runner eksekusi batch 46 komoditas Ditjen IA
-├── run_uji_banding_2026_08_06.py # Runner komparasi khusus periode uji banding
 └── requirements.txt        # Dependensi Python
 ```
 
@@ -58,7 +53,7 @@ pip install -r requirements.txt
 python main.py gula
 
 # Scraping batch seluruh 46 kata kunci komoditas Ditjen IA:
-python run_all_batches.py
+python main.py --all
 ```
 
 ---
