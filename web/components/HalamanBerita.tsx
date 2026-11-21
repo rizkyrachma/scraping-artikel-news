@@ -327,10 +327,20 @@ export default function HalamanBerita({
   // Pengurutan (Sorting)
   const sortedArticles = useMemo(() => {
     const list = [...filteredArticles];
+    const getSortKey = (a: Article) => a.datetime || `${a.date || ""}T${a.time || "00:00"}`;
+
     if (sortBy === "terbaru") {
-      list.sort((a, b) => (b.date || "").localeCompare(a.date || "") || (b.time || "").localeCompare(a.time || "") || String(b.id).localeCompare(String(a.id)));
+      list.sort(
+        (a, b) =>
+          getSortKey(b).localeCompare(getSortKey(a)) ||
+          String(b.id).localeCompare(String(a.id))
+      );
     } else if (sortBy === "terlama") {
-      list.sort((a, b) => (a.date || "").localeCompare(b.date || "") || (a.time || "").localeCompare(b.time || "") || String(a.id).localeCompare(String(b.id)));
+      list.sort(
+        (a, b) =>
+          getSortKey(a).localeCompare(getSortKey(b)) ||
+          String(a.id).localeCompare(String(b.id))
+      );
     } else if (sortBy === "media") {
       list.sort((a, b) => a.media.localeCompare(b.media));
     }

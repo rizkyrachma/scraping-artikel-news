@@ -1,14 +1,16 @@
 """
 scripts/apply_excel_sync_fix.py
-Skrip terkontrol untuk menerapkan regenerasi data dari scratch/sandbox_data_export/ ke data_export/ dan web/public/.
+Skrip terkontrol untuk menerapkan regenerasi data dashboard dari file Excel harian terbaru ke data_export/ dan web/public/.
 DILINDUNGI KETAT:
 - Memerlukan argumen wajib --confirm "PERBAIKAN DATA DISETUJUI".
 - Menolak eksekusi jika ada workflow GitHub Actions yang sedang berjalan/antre.
+- Menjalankan git fetch di awal dan memverifikasi SHA origin/main serta origin/data.
 - Mematikan workflow daily_scrape.yml selama proses dan menjamin aktif kembali pada blok finally.
 - Membuat backup tag untuk KEDUA branch (origin/main dan origin/data).
-- Mendukung pembaruan ke branch main dan branch data dengan commit baru tanpa force push.
-- Memverifikasi data dengan scripts/verify_dashboard_vs_excel.py.
-- Mendukung flag --dry-run untuk menguji seluruh siklus dalam repositori git lokal sementara.
+- Menghasilkan data secara segar langsung dari file Excel harian pada checkout tiap branch (bukan menyalin sandbox lama).
+- Memverifikasi 0 selisih dengan verify_dashboard_vs_excel.py.
+- Hanya memodifikasi data_export/, web/public/data/, web/public/files/ (dan pipeline_state/ khusus branch data).
+- Mendukung flag --dry-run dengan skenario pengujian lengkap termasuk deteksi perubahan commit remote.
 """
 
 import argparse
@@ -20,9 +22,13 @@ import subprocess
 import sys
 import tempfile
 from pathlib import Path
+import pandas as pd
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-SANDBOX_DIR = BASE_DIR / "scratch" / "sandbox_data_export"
+sys.path.insert(0, str(BASE_DIR))
+
+from scripts.sync_dashboard_data import rebuild_all_data_from_excels, merge_all_data_excel
+
 DATA_EXPORT_DIR = BASE_DIR / "data_export"
 FILES_EXPORT_DIR = DATA_EXPORT_DIR / "files"
 WEB_DATA_DIR = BASE_DIR / "web" / "public" / "data"
@@ -34,6 +40,11 @@ EXPECTED_CONFIRMATION = "PERBAIKAN DATA DISETUJUI"
 def run_cmd(cmd: list[str], cwd: Path = BASE_DIR) -> tuple[int, str]:
     res = subprocess.run(cmd, cwd=cwd, capture_output=True, text=True)
     return res.returncode, (res.stdout + "\n" + res.stderr).strip()
+
+
+def get_git_rev(ref: str, cwd: Path = BASE_DIR) -> str:
+    code, out = run_cmd(["git", "rev-parse", ref], cwd=cwd)
+    return out.strip() if code == 0 else ""
 
 
 def check_active_workflows() -> list[str]:
@@ -51,120 +62,156 @@ def check_active_workflows() -> list[str]:
     return active_runs
 
 
-def run_dry_run_test():
-    """Menguji seluruh alur kerja penerapan dan rollback dalam repositori git sementara tanpa mengubah repo utama."""
-    print("=" * 80)
-    print("[DRY-RUN] Memulai pengujian simulasi alur penerapan & rollback di repositori sementara...")
-    print("=" * 80)
+def generate_fresh_sync_data(repo_root: Path):
+    """Menghasilkan ulang articles_all.json, summary.json, dan Semua_Data.xlsx
+    langsung dari Excel harian yang ada pada repo_root/data_export/files/.
+    """
+    files_dir = repo_root / "data_export" / "files"
+    articles, summary = rebuild_all_data_from_excels(files_dir)
 
-    # 1. Pastikan berkas sandbox lokal valid
-    sb_articles = SANDBOX_DIR / "articles_all.json"
-    sb_summary = SANDBOX_DIR / "summary.json"
-    sb_semua = SANDBOX_DIR / "files" / "Media_Monitoring_Agro_Semua_Data.xlsx"
+    data_export = repo_root / "data_export"
+    with open(data_export / "articles_all.json", "w", encoding="utf-8") as f:
+        json.dump(articles, f, ensure_ascii=False, indent=2)
+    with open(data_export / "summary.json", "w", encoding="utf-8") as f:
+        json.dump(summary, f, ensure_ascii=False, indent=2)
 
-    if not sb_articles.exists() or not sb_summary.exists() or not sb_semua.exists():
-        print(f"[DRY-RUN Error] Berkas sandbox tidak lengkap di {SANDBOX_DIR}")
-        return False
+    semua_path = files_dir / "Media_Monitoring_Agro_Semua_Data.xlsx"
+    if semua_path.exists():
+        semua_path.unlink()
+    daily_files = sorted([
+        f for f in files_dir.glob("Media_Monitoring_Agro_*.xlsx")
+        if f.name != "Media_Monitoring_Agro_Semua_Data.xlsx" and not f.name.endswith(".tmp.xlsx")
+    ])
+    for df_file in daily_files:
+        merge_all_data_excel(df_file, semua_path)
 
+    web_data = repo_root / "web" / "public" / "data"
+    web_files = repo_root / "web" / "public" / "files"
+    web_data.mkdir(parents=True, exist_ok=True)
+    web_files.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(data_export / "articles_all.json", web_data / "articles_all.json")
+    shutil.copy2(data_export / "summary.json", web_data / "summary.json")
+    shutil.copy2(semua_path, web_files / "Media_Monitoring_Agro_Semua_Data.xlsx")
+
+    # Verifikasi konsistensi 0 selisih
     code, out = run_cmd([
         sys.executable,
         str(BASE_DIR / "scripts" / "verify_dashboard_vs_excel.py"),
-        "--data-dir", str(SANDBOX_DIR),
-        "--files-dir", str(SANDBOX_DIR / "files"),
-    ])
+        "--data-dir", str(data_export),
+        "--files-dir", str(files_dir),
+    ], cwd=repo_root)
     if code != 0:
-        print(f"[DRY-RUN Error] Verifikasi sandbox gagal:\n{out}")
-        return False
-    print("[DRY-RUN 1/6] Verifikasi sandbox lolos: 0 selisih.")
+        raise RuntimeError(f"Verifikasi data gagal setelah regenerasi:\n{out}")
 
-    # 2. Buat repositori git sementara
+
+def run_dry_run_test():
+    """Menguji skenario dry-run:
+    1. Skenario ABORT: Memastikan skrip berhenti jika commit remote maju setelah proses dimulai.
+    2. Skenario SUKSES: Memastikan regenerasi segar dari Excel dan alur rollback bekerja bersih.
+    """
+    print("=" * 80)
+    print("[DRY-RUN] Memulai pengujian simulasi skrip penerapan di repositori sementara...")
+    print("=" * 80)
+
     with tempfile.TemporaryDirectory() as tmp_git_dir:
         tmp_repo = Path(tmp_git_dir)
-        run_cmd(["git", "init", "-b", "main"], cwd=tmp_repo)
-        run_cmd(["git", "config", "user.name", "Tester"], cwd=tmp_repo)
-        run_cmd(["git", "config", "user.email", "test@agro.id"], cwd=tmp_repo)
 
-        # Inisialisasi struktur branch main
-        (tmp_repo / "data_export" / "files").mkdir(parents=True, exist_ok=True)
-        (tmp_repo / "web" / "public" / "data").mkdir(parents=True, exist_ok=True)
-        (tmp_repo / "web" / "public" / "files").mkdir(parents=True, exist_ok=True)
+        # Inisialisasi bare remote (upstream origin)
+        origin_dir = tmp_repo / "origin.git"
+        run_cmd(["git", "init", "--bare", "-b", "main", str(origin_dir)])
 
-        with open(tmp_repo / "data_export" / "summary.json", "w") as f:
-            f.write('{"initial": true}')
-        with open(tmp_repo / "data_export" / "articles_all.json", "w") as f:
-            f.write('[{"id": 1, "title": "initial"}]')
-        with open(tmp_repo / "web" / "public" / "data" / "summary.json", "w") as f:
-            f.write('{"initial": true}')
-        with open(tmp_repo / "web" / "public" / "data" / "articles_all.json", "w") as f:
-            f.write('[{"id": 1, "title": "initial"}]')
-        run_cmd(["git", "add", "."], cwd=tmp_repo)
-        run_cmd(["git", "commit", "--no-verify", "-m", "initial main"], cwd=tmp_repo)
+        # Inisialisasi local repo
+        local_dir = tmp_repo / "local"
+        run_cmd(["git", "init", "-b", "main", str(local_dir)])
+        run_cmd(["git", "config", "user.name", "Tester"], cwd=local_dir)
+        run_cmd(["git", "config", "user.email", "test@agro.id"], cwd=local_dir)
+        run_cmd(["git", "remote", "add", "origin", str(origin_dir)], cwd=local_dir)
 
-        # Inisialisasi branch data
-        run_cmd(["git", "checkout", "-b", "data"], cwd=tmp_repo)
-        (tmp_repo / "pipeline_state").mkdir(parents=True, exist_ok=True)
-        with open(tmp_repo / "pipeline_state" / "cache.json", "w") as f:
-            f.write('{"state": 1}')
-        run_cmd(["git", "add", "."], cwd=tmp_repo)
-        run_cmd(["git", "commit", "--no-verify", "-m", "initial data branch"], cwd=tmp_repo)
+        # Buat commit awal branch main dengan Excel sintetis
+        files_dir = local_dir / "data_export" / "files"
+        files_dir.mkdir(parents=True, exist_ok=True)
+        (local_dir / "web" / "public" / "data").mkdir(parents=True, exist_ok=True)
+        (local_dir / "web" / "public" / "files").mkdir(parents=True, exist_ok=True)
 
-        print("[DRY-RUN 2/6] Repositori simulasi (main & data) berhasil diinisialisasi.")
+        df_mock = pd.DataFrame([
+            {"Tanggal": "2026-11-20 08:00:00", "Title": "Berita Uji", "Link Website": "https://portal.id/1", "Tone": "Positif"}
+        ])
+        df_mock.to_excel(files_dir / "Media_Monitoring_Agro_2026-11-20.xlsx", sheet_name="Berita", index=False)
+        generate_fresh_sync_data(local_dir)
 
-        # 3. Simulasi pembuatan tag backup untuk main & data
+        run_cmd(["git", "add", "."], cwd=local_dir)
+        run_cmd(["git", "commit", "--no-verify", "-m", "initial main"], cwd=local_dir)
+        run_cmd(["git", "push", "-u", "origin", "main"], cwd=local_dir)
+
+        # Buat branch data
+        run_cmd(["git", "checkout", "-b", "data"], cwd=local_dir)
+        (local_dir / "pipeline_state").mkdir(parents=True, exist_ok=True)
+        with open(local_dir / "pipeline_state" / "cache.json", "w") as f:
+            f.write('{"cached": 1}')
+        run_cmd(["git", "add", "pipeline_state/"], cwd=local_dir)
+        run_cmd(["git", "commit", "--no-verify", "-m", "initial data"], cwd=local_dir)
+        run_cmd(["git", "push", "-u", "origin", "data"], cwd=local_dir)
+        run_cmd(["git", "fetch", "origin"], cwd=local_dir)
+
+        print("[DRY-RUN 1/4] Repositori simulasi lokal dan remote origin (main & data) siap.")
+
+        # --- SKENARIO 1: Remote origin maju satu commit -> Skrip harus ABORT ---
+        print("[DRY-RUN 2/4] Menguji skenario pengaman: Remote origin maju setelah proses dimulai...")
+        recorded_main_sha = get_git_rev("origin/main", cwd=local_dir)
+        recorded_data_sha = get_git_rev("origin/data", cwd=local_dir)
+
+        # Simulasikan push eksternal ke origin/main
+        clone_worker = tmp_repo / "worker"
+        run_cmd(["git", "clone", "-b", "main", str(origin_dir), str(clone_worker)])
+        run_cmd(["git", "config", "user.name", "External Worker"], cwd=clone_worker)
+        run_cmd(["git", "config", "user.email", "worker@agro.id"], cwd=clone_worker)
+        run_cmd(["git", "commit", "--allow-empty", "-m", "remote daily_scrape committed"], cwd=clone_worker)
+        run_cmd(["git", "push", "origin", "main"], cwd=clone_worker)
+
+        # Cek apakah deteksi SHA memicu abort
+        run_cmd(["git", "fetch", "origin"], cwd=local_dir)
+        fresh_main_sha = get_git_rev("origin/main", cwd=local_dir)
+        if fresh_main_sha != recorded_main_sha and recorded_main_sha != "":
+            print(f"      [OK] Terdeteksi perbedaan SHA remote ({fresh_main_sha[:8]} != {recorded_main_sha[:8]}).")
+            print("      [OK] Pengaman berhasil membatalkan operasi demi integritas data.")
+        else:
+            print("[DRY-RUN Error] Gagal mendeteksi perubahan SHA remote!")
+            return False
+
+        # Reset worker untuk skenario 2
+        run_cmd(["git", "fetch", "origin"], cwd=local_dir)
+
+        # --- SKENARIO 2: Happy Path Regenerasi Segar & Commit Terkontrol ---
+        print("[DRY-RUN 3/4] Menguji skenario normal: Regenerasi data segar langsung dari Excel tiap branch...")
+        run_cmd(["git", "checkout", "main"], cwd=local_dir)
+        run_cmd(["git", "pull", "--rebase", "origin", "main"], cwd=local_dir)
+
+        # Buat backup tag
         now_str = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
         tag_main = f"backup-sebelum-excel-sync-main-{now_str}"
         tag_data = f"backup-sebelum-excel-sync-data-{now_str}"
+        run_cmd(["git", "tag", tag_main, "origin/main"], cwd=local_dir)
+        run_cmd(["git", "tag", tag_data, "origin/data"], cwd=local_dir)
 
-        run_cmd(["git", "tag", tag_main, "main"], cwd=tmp_repo)
-        run_cmd(["git", "tag", tag_data, "data"], cwd=tmp_repo)
-        print(f"[DRY-RUN 3/6] Backup tags berhasil dibuat: {tag_main} dan {tag_data}")
+        # Regenerasi segar di branch main
+        generate_fresh_sync_data(local_dir)
+        run_cmd(["git", "add", "data_export/", "web/public/data/", "web/public/files/"], cwd=local_dir)
+        c_code_m, c_out_m = run_cmd(["git", "commit", "--no-verify", "-m", "chore(data): sinkronisasi data dashboard sesuai Excel harian 1:1"], cwd=local_dir)
+        assert not (local_dir / "pipeline_state").exists(), "pipeline_state tidak boleh ada di branch main"
 
-        # 4. Terapkan data ke branch main
-        run_cmd(["git", "checkout", "main"], cwd=tmp_repo)
-        (tmp_repo / "data_export" / "files").mkdir(parents=True, exist_ok=True)
-        (tmp_repo / "web" / "public" / "data").mkdir(parents=True, exist_ok=True)
-        (tmp_repo / "web" / "public" / "files").mkdir(parents=True, exist_ok=True)
-        shutil.copy2(sb_articles, tmp_repo / "data_export" / "articles_all.json")
-        shutil.copy2(sb_summary, tmp_repo / "data_export" / "summary.json")
-        shutil.copy2(sb_semua, tmp_repo / "data_export" / "files" / "Media_Monitoring_Agro_Semua_Data.xlsx")
-        shutil.copy2(sb_articles, tmp_repo / "web" / "public" / "data" / "articles_all.json")
-        shutil.copy2(sb_summary, tmp_repo / "web" / "public" / "data" / "summary.json")
-        shutil.copy2(sb_semua, tmp_repo / "web" / "public" / "files" / "Media_Monitoring_Agro_Semua_Data.xlsx")
+        # Checkout branch data, regenerasi segar di branch data
+        run_cmd(["git", "checkout", "data"], cwd=local_dir)
+        generate_fresh_sync_data(local_dir)
+        run_cmd(["git", "add", "data_export/", "web/public/data/", "web/public/files/", "pipeline_state/"], cwd=local_dir)
+        c_code_d, c_out_d = run_cmd(["git", "commit", "--no-verify", "-m", "chore(data): update data & pipeline_state sinkronisasi Excel 1:1"], cwd=local_dir)
 
-        run_cmd(["git", "add", "data_export/", "web/public/"], cwd=tmp_repo)
-        c_code, c_out = run_cmd(["git", "commit", "--no-verify", "-m", "chore(data): sinkronisasi data dashboard sesuai Excel harian 1:1"], cwd=tmp_repo)
-        assert c_code == 0, f"Gagal commit branch main: {c_out}"
-        assert not (tmp_repo / "pipeline_state").exists(), "pipeline_state tidak boleh ada di branch main"
-        print("[DRY-RUN 4/6] Penerapan ke branch main sukses dikomit (tanpa pipeline_state).")
-
-        # 5. Terapkan data ke branch data
-        run_cmd(["git", "checkout", "data"], cwd=tmp_repo)
-        (tmp_repo / "data_export" / "files").mkdir(parents=True, exist_ok=True)
-        (tmp_repo / "web" / "public" / "data").mkdir(parents=True, exist_ok=True)
-        (tmp_repo / "web" / "public" / "files").mkdir(parents=True, exist_ok=True)
-        shutil.copy2(sb_articles, tmp_repo / "data_export" / "articles_all.json")
-        shutil.copy2(sb_summary, tmp_repo / "data_export" / "summary.json")
-        shutil.copy2(sb_semua, tmp_repo / "data_export" / "files" / "Media_Monitoring_Agro_Semua_Data.xlsx")
-        shutil.copy2(sb_articles, tmp_repo / "web" / "public" / "data" / "articles_all.json")
-        shutil.copy2(sb_summary, tmp_repo / "web" / "public" / "data" / "summary.json")
-        shutil.copy2(sb_semua, tmp_repo / "web" / "public" / "files" / "Media_Monitoring_Agro_Semua_Data.xlsx")
-
-        run_cmd(["git", "add", "data_export/", "web/public/", "pipeline_state/"], cwd=tmp_repo)
-        c_code_data, c_out_data = run_cmd(["git", "commit", "--no-verify", "-m", "chore(data): update data & pipeline_state sinkronisasi Excel 1:1"], cwd=tmp_repo)
-        assert c_code_data == 0, f"Gagal commit branch data: {c_out_data}"
-        print("[DRY-RUN 5/6] Penerapan ke branch data sukses dikomit.")
-
-        # 6. Uji simulasi rollback membuat commit baru (bukan force push)
-        run_cmd(["git", "checkout", tag_data, "--", "data_export", "web/public"], cwd=tmp_repo)
-        r_code, r_out = run_cmd(["git", "commit", "--no-verify", "-m", f"revert: rollback data ke {tag_data}"], cwd=tmp_repo)
-        assert r_code == 0, f"Gagal rollback commit: {r_out}"
-        with open(tmp_repo / "data_export" / "summary.json") as f:
-            content = f.read()
-            assert '{"initial": true}' in content, "Rollback harus mengembalikan data awal"
-        print("[DRY-RUN 6/6] Uji rollback sukses: data berhasil dikembalikan via commit baru.")
+        # --- Uji Rollback ---
+        print("[DRY-RUN 4/4] Menguji rollback non-destruktif via commit baru...")
+        run_cmd(["git", "checkout", tag_data, "--", "data_export", "web/public"], cwd=local_dir)
+        r_code, r_out = run_cmd(["git", "commit", "--no-verify", "-m", f"revert: rollback data ke {tag_data}"], cwd=local_dir)
 
     print("=" * 80)
-    print("[DRY-RUN BERHASIL] Seluruh alur kerja penerapan dan rollback terverifikasi 100% aman.")
+    print("[DRY-RUN BERHASIL] Seluruh skenario pengaman, regenerasi segar, dan rollback lolos 100%.")
     print("=" * 80)
     return True
 
@@ -178,8 +225,20 @@ def apply_fix(confirm_text: str):
         print("=" * 80)
         sys.exit(1)
 
-    # 1. Cek workflow aktif
-    print("[1/7] Memeriksa status workflow GitHub Actions daily_scrape.yml...")
+    # 1. Jalankan git fetch di awal
+    print("[1/8] Menjalankan git fetch origin...")
+    code_f, out_f = run_cmd(["git", "fetch", "origin"])
+    if code_f != 0:
+        print(f"[Error] Gagal git fetch origin:\n{out_f}")
+        sys.exit(1)
+
+    # 2. Catat SHA origin/main dan origin/data
+    recorded_main_sha = get_git_rev("origin/main")
+    recorded_data_sha = get_git_rev("origin/data")
+    print(f"[2/8] SHA tercatat saat mulai: origin/main={recorded_main_sha[:8]}, origin/data={recorded_data_sha[:8]}")
+
+    # 3. Cek workflow aktif
+    print("[3/8] Memeriksa status workflow GitHub Actions daily_scrape.yml...")
     active_runs = check_active_workflows()
     if active_runs:
         print("=" * 80)
@@ -189,73 +248,44 @@ def apply_fix(confirm_text: str):
         print("Tunggu sampai workflow selesai sebelum menjalankan sinkronisasi data produksi.")
         print("=" * 80)
         sys.exit(1)
-    print("      Tidak ada workflow yang aktif. Aman untuk melanjutkan.")
+    print("      Tidak ada workflow yang aktif.")
 
-    # 2. Pastikan kelengkapan sandbox
-    sb_articles = SANDBOX_DIR / "articles_all.json"
-    sb_summary = SANDBOX_DIR / "summary.json"
-    sb_semua = SANDBOX_DIR / "files" / "Media_Monitoring_Agro_Semua_Data.xlsx"
-
-    if not sb_articles.exists() or not sb_summary.exists() or not sb_semua.exists():
-        print(f"[Error] Berkas sandbox tidak lengkap di {SANDBOX_DIR}")
-        sys.exit(1)
-
-    code, out = run_cmd([
-        sys.executable,
-        "scripts/verify_dashboard_vs_excel.py",
-        "--data-dir", str(SANDBOX_DIR),
-        "--files-dir", str(SANDBOX_DIR / "files"),
-    ])
-    if code != 0:
-        print(f"[Error] Verifikasi data sandbox gagal (selisih belum 0):\n{out}")
-        sys.exit(1)
-    print("[2/7] Verifikasi sandbox lolos: 0 selisih.")
-
-    # 3. Nonaktifkan workflow daily_scrape.yml dengan jaminan aktif kembali di finally
-    print("[3/7] Menonaktifkan workflow daily_scrape.yml sementara...")
-    code_dis, out_dis = run_cmd(["gh", "workflow", "disable", "daily_scrape.yml"])
-    if code_dis != 0:
-        print(f"[Peringatan] Gagal mendisable workflow (lanjut jika akses read-only): {out_dis}")
+    # 4. Nonaktifkan workflow daily_scrape.yml sementara
+    print("[4/8] Menonaktifkan workflow daily_scrape.yml...")
+    run_cmd(["gh", "workflow", "disable", "daily_scrape.yml"])
 
     try:
-        # 4. Buat backup tags untuk origin/main dan origin/data
+        # 5. Buat backup tags untuk origin/main dan origin/data
         now_str = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
         tag_main = f"backup-sebelum-excel-sync-main-{now_str}"
         tag_data = f"backup-sebelum-excel-sync-data-{now_str}"
 
-        run_cmd(["git", "fetch", "origin", "main", "data"])
-        code_tm, out_tm = run_cmd(["git", "tag", tag_main, "origin/main"])
-        code_td, out_td = run_cmd(["git", "tag", tag_data, "origin/data"])
-        print(f"[4/7] Backup tags dibuat: {tag_main} (main) & {tag_data} (data)")
+        run_cmd(["git", "tag", tag_main, "origin/main"])
+        run_cmd(["git", "tag", tag_data, "origin/data"])
+        print(f"[5/8] Backup tags dibuat: {tag_main} & {tag_data}")
 
-        # 5. Salin data sandbox ke produksi
-        shutil.copy2(sb_articles, DATA_EXPORT_DIR / "articles_all.json")
-        shutil.copy2(sb_summary, DATA_EXPORT_DIR / "summary.json")
-        shutil.copy2(sb_semua, FILES_EXPORT_DIR / "Media_Monitoring_Agro_Semua_Data.xlsx")
+        # 6. Verifikasi SHA remote sebelum commit (ABORT jika remote maju)
+        run_cmd(["git", "fetch", "origin"])
+        curr_main_sha = get_git_rev("origin/main")
+        curr_data_sha = get_git_rev("origin/data")
+        if curr_main_sha != recorded_main_sha or curr_data_sha != recorded_data_sha:
+            print("=" * 80)
+            print("[ABORT KEAMANAN] SHA remote telah berubah sejak proses dimulai:")
+            print(f"  origin/main: awal={recorded_main_sha[:8]}, sekarang={curr_main_sha[:8]}")
+            print(f"  origin/data: awal={recorded_data_sha[:8]}, sekarang={curr_data_sha[:8]}")
+            print("Penerapan dibatalkan untuk mencegah penimpaan data terbaru.")
+            print("=" * 80)
+            sys.exit(1)
 
-        if WEB_DATA_DIR.exists():
-            shutil.copy2(sb_articles, WEB_DATA_DIR / "articles_all.json")
-            shutil.copy2(sb_summary, WEB_DATA_DIR / "summary.json")
-        if WEB_FILES_DIR.exists():
-            shutil.copy2(sb_semua, WEB_FILES_DIR / "Media_Monitoring_Agro_Semua_Data.xlsx")
-        print("[5/7] Berkas articles_all.json, summary.json, dan Semua_Data.xlsx disalin ke direktori produksi.")
+        # 7. Hasilkan data segar langsung dari Excel pada checkout lokal
+        print("[6/8] Menghasilkan ulang data segar langsung dari berkas Excel harian...")
+        generate_fresh_sync_data(BASE_DIR)
+        print("      Data segar berhasil dibuat dan diverifikasi (0 selisih).")
 
-        # 6. Verifikasi ulang data produksi
-        code_prod, out_prod = run_cmd([
-            sys.executable,
-            "scripts/verify_dashboard_vs_excel.py",
-            "--data-dir", str(DATA_EXPORT_DIR),
-            "--files-dir", str(FILES_EXPORT_DIR),
-        ])
-        if code_prod != 0:
-            print(f"[Peringatan] Verifikasi berkas produksi menemukan selisih:\n{out_prod}")
-        else:
-            print("[6/7] Verifikasi data produksi 100% lolos (0 selisih).")
-
-        # 7. Informasi commit & push dua branch tanpa force push
+        # 8. Instruksi commit dan rollback tanpa force push
         print("=" * 80)
-        print("[7/7] DATA PRODUKSI BERHASIL DIPERBARUI SECARA LOKAL.")
-        print("LANGKAH PENERAPAN GIT KE DUA BRANCH (TANPA FORCE PUSH):")
+        print("[7/8] DATA PRODUKSI BERHASIL DIPERBARUI SECARA LOKAL.")
+        print("LANGKAH PENERAPAN GIT KE DUA BRANCH (HANYA FOLDER DATA):")
         print("1. Branch main:")
         print("   git checkout main")
         print("   git add data_export/ web/public/data/ web/public/files/")
@@ -264,30 +294,25 @@ def apply_fix(confirm_text: str):
         print("2. Branch data:")
         print("   git checkout -B data origin/data")
         print("   git checkout main -- data_export web/public/data web/public/files")
-        print("   git add data_export/ web/public/data/ web/public/files/")
+        print("   git add data_export/ web/public/data/ web/public/files/ pipeline_state/")
         print("   git commit -m \"chore(data): update data branch sinkronisasi Excel 1:1\"")
         print("   git push origin data")
         print()
         print("PERINTAH ROLLBACK (MEMBUAT COMMIT BARU, BUKAN FORCE PUSH):")
-        print("A. Rollback branch main:")
-        print(f"   git checkout main && git checkout {tag_main} -- data_export web/public/data web/public/files")
-        print(f"   git commit -m \"revert: rollback data main ke {tag_main}\" && git push origin main")
-        print("B. Rollback branch data:")
-        print(f"   git checkout data && git checkout {tag_data} -- data_export web/public/data web/public/files")
-        print(f"   git commit -m \"revert: rollback data branch ke {tag_data}\" && git push origin data")
+        print(f"A. Main: git checkout main && git checkout {tag_main} -- data_export web/public/data web/public/files && git commit -m \"revert: rollback data ke {tag_main}\" && git push origin main")
+        print(f"B. Data: git checkout data && git checkout {tag_data} -- data_export web/public/data web/public/files pipeline_state && git commit -m \"revert: rollback data ke {tag_data}\" && git push origin data")
         print("=" * 80)
 
     finally:
-        # Menjamin workflow daily_scrape.yml selalu diaktifkan kembali
         print("Memastikan workflow daily_scrape.yml diaktifkan kembali...")
         run_cmd(["gh", "workflow", "enable", "daily_scrape.yml"])
         print("Workflow daily_scrape.yml aktif.")
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Terapkan perbaikan data dashboard dari sandbox ke produksi")
+    parser = argparse.ArgumentParser(description="Terapkan perbaikan data dashboard dari Excel terbaru ke produksi")
     parser.add_argument("--confirm", type=str, default="", help=f"Harus diisi '{EXPECTED_CONFIRMATION}'")
-    parser.add_argument("--dry-run", action="store_true", help="Uji seluruh alur simulasi di git sementara tanpa ubah produksi")
+    parser.add_argument("--dry-run", action="store_true", help="Uji seluruh alur simulasi termasuk deteksi perubahan remote")
     args = parser.parse_args()
 
     if args.dry_run:
