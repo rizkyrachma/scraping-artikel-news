@@ -1,15 +1,16 @@
 {
   "metadata": {
-    "last_updated": "2026-11-20",
-    "last_updated_display": "Jumat, 20 November 2026",
+    "last_updated": "2026-11-21",
+    "last_updated_display": "Sabtu, 21 November 2026",
     "earliest_date": "2026-08-06",
-    "total_articles": 1738,
+    "total_articles": 1766,
     "tone_summary": {
-      "Positif": 1188,
-      "Netral": 234,
+      "Positif": 1196,
+      "Netral": 254,
       "Negatif": 316
     },
     "calendar_counts": {
+      "2026-11-21": 28,
       "2026-11-20": 56,
       "2026-11-19": 13,
       "2026-11-18": 27,
@@ -72,6 +73,12 @@
       "2026-08-06": 9
     },
     "daily_tones": {
+      "2026-11-21": {
+        "count": 28,
+        "pos": 8,
+        "net": 20,
+        "neg": 0
+      },
       "2026-11-20": {
         "count": 56,
         "pos": 13,
@@ -437,19 +444,19 @@
   "commodities": [
     {
       "name": "Kelapa Sawit & CPO",
-      "count": 413
+      "count": 423
     },
     {
       "name": "Hasil Tembakau",
-      "count": 332
+      "count": 338
     },
     {
       "name": "Makanan & Minuman",
-      "count": 255
+      "count": 260
     },
     {
       "name": "Lainnya",
-      "count": 135
+      "count": 138
     },
     {
       "name": "Tepung, Sagu & Pati",
@@ -469,27 +476,27 @@
     },
     {
       "name": "Biodiesel & Bioenergi",
-      "count": 56
+      "count": 57
+    },
+    {
+      "name": "Rumput Laut",
+      "count": 51
     },
     {
       "name": "Pulp & Kertas",
       "count": 50
     },
     {
-      "name": "Rumput Laut",
-      "count": 50
+      "name": "Kopi & Teh",
+      "count": 44
     },
     {
       "name": "Kayu & Furnitur",
       "count": 44
     },
     {
-      "name": "Kopi & Teh",
-      "count": 43
-    },
-    {
       "name": "Karet & Olahan",
-      "count": 22
+      "count": 23
     },
     {
       "name": "Susu & Olahan",
@@ -503,7 +510,7 @@
   "spokespersons": [
     {
       "name": "Muhammad Sarmuji",
-      "count": 355
+      "count": 361
     },
     {
       "name": "Faisol Riza",
@@ -533,6 +540,510 @@
   "recent_articles": [
     {
       "id": 1,
+      "title": "Isi IEU-CEPA: Investasi Masuk, Biaya Produksi Industri Bisa Turun",
+      "link": "https://www.liputan6.com/bisnis/read/8339933/isi-ieu-cepa-investasi-masuk-biaya-produksi-industri-bisa-turun",
+      "media": "Liputan6.com",
+      "tone": "Netral",
+      "date": "2026-11-21",
+      "datetime": "2026-11-21T23:54:02",
+      "time": "23:54",
+      "date_display": "Sabtu, 21 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Kelapa Sawit & CPO",
+      "has_review": false,
+      "review_text": "",
+      "isu": "Menteri Perdagangan menandatangani naskah perjanjian IEU-CEPA di Brussels untuk membuka pasar ekspor Eropa.",
+      "alasan_tone": "Berita membahas perjanjian perdagangan IEU-CEPA yang melibatkan Kementerian Perdagangan tanpa menyebut atau melibatkan Kemenperin secara langsung."
+    },
+    {
+      "id": 2,
+      "title": "Mendag Busan Optimistis Pasar Uni Eropa Makin Terbuka Setelah EU CEPA Ditandatangani",
+      "link": "https://www.niaga.asia/mendag-busan-optimistis-pasar-uni-eropa-makin-terbuka-setelah-eu-cepa-ditandatangani/",
+      "media": "Niaga.Asia",
+      "tone": "Netral",
+      "date": "2026-11-21",
+      "datetime": "2026-11-21T23:41:15",
+      "time": "23:41",
+      "date_display": "Sabtu, 21 November 2026",
+      "spokesperson": "Muhammad Sarmuji",
+      "unit": "MENTERI",
+      "commodity": "Karet & Olahan",
+      "has_review": false,
+      "review_text": "",
+      "isu": "Menteri Perdagangan menandatangani naskah perjanjian IEU-CEPA di Brussels untuk membuka pasar ekspor Eropa.",
+      "alasan_tone": "Berita membahas perjanjian perdagangan IEU-CEPA yang melibatkan Kementerian Perdagangan tanpa menyebut atau melibatkan Kemenperin secara langsung."
+    },
+    {
+      "id": 3,
+      "title": "Indonesia dan Uni Eropa Sepakati Tarif Impor Nol Persen",
+      "link": "https://cwibc.co.id/indonesia-uni-eropa-sepakati-tarif-nol-persen",
+      "media": "cwibc.co.id",
+      "tone": "Netral",
+      "date": "2026-11-21",
+      "datetime": "2026-11-21T23:17:52",
+      "time": "23:17",
+      "date_display": "Sabtu, 21 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Hasil Tembakau",
+      "has_review": false,
+      "review_text": "",
+      "isu": "Menteri Perdagangan menandatangani naskah perjanjian IEU-CEPA di Brussels untuk membuka pasar ekspor Eropa.",
+      "alasan_tone": "Berita membahas perjanjian perdagangan IEU-CEPA yang melibatkan Kementerian Perdagangan tanpa menyebut atau melibatkan Kemenperin secara langsung."
+    },
+    {
+      "id": 4,
+      "title": "IEU-CEPA Resmi Diteken, 90,4% Produk RI Bebas Tarif Masuk Pasar Eropa",
+      "link": "https://investortrust.id/macro/123296/ieu-cepa-resmi-diteken-90-4-produk-ri-bebas-tarif-masuk-pasar-eropa",
+      "media": "InvestorTrust",
+      "tone": "Netral",
+      "date": "2026-11-21",
+      "datetime": "2026-11-21T23:12:00",
+      "time": "23:12",
+      "date_display": "Sabtu, 21 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Kelapa Sawit & CPO",
+      "has_review": false,
+      "review_text": "",
+      "isu": "Menteri Perdagangan menandatangani naskah perjanjian IEU-CEPA di Brussels untuk membuka pasar ekspor Eropa.",
+      "alasan_tone": "Berita membahas perjanjian perdagangan IEU-CEPA yang melibatkan Kementerian Perdagangan tanpa menyebut atau melibatkan Kemenperin secara langsung."
+    },
+    {
+      "id": 5,
+      "title": "Indonesia dan Uni Eropa Teken Perjanjian IEU CEPA",
+      "link": "https://cwibc.co.id/indonesia-dan-uni-eropa-teken-perjanjian-ieu-cepa",
+      "media": "cwibc.co.id",
+      "tone": "Netral",
+      "date": "2026-11-21",
+      "datetime": "2026-11-21T23:01:06",
+      "time": "23:01",
+      "date_display": "Sabtu, 21 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Kelapa Sawit & CPO",
+      "has_review": false,
+      "review_text": "",
+      "isu": "Indonesia dan Uni Eropa menandatangani perjanjian IEU CEPA untuk memperluas akses pasar ekspor unggulan.",
+      "alasan_tone": "Berita mengenai penandatanganan IEU CEPA oleh Kementerian Perdagangan dan Uni Eropa tanpa keterlibatan langsung institusi Kemenperin."
+    },
+    {
+      "id": 6,
+      "title": "Mendag: Penandatanganan IEU CEPA perluas ekspor sawit hingga karet",
+      "link": "https://www.antaranews.com/berita/5870175/mendag-penandatanganan-ieu-cepa-perluas-ekspor-sawit-hingga-karet",
+      "media": "ANTARA News",
+      "tone": "Netral",
+      "date": "2026-11-21",
+      "datetime": "2026-11-21T22:38:06",
+      "time": "22:38",
+      "date_display": "Sabtu, 21 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Kelapa Sawit & CPO",
+      "has_review": false,
+      "review_text": "",
+      "isu": "Indonesia dan Uni Eropa menandatangani perjanjian IEU CEPA untuk memperluas akses pasar ekspor unggulan.",
+      "alasan_tone": "Berita mengenai penandatanganan IEU CEPA oleh Kementerian Perdagangan dan Uni Eropa tanpa keterlibatan langsung institusi Kemenperin."
+    },
+    {
+      "id": 7,
+      "title": "IEU-CEPA Resmi Berlaku, Ini Komoditas yang Dapat Bebas Tarif ke Eropa",
+      "link": "https://www.cnbcindonesia.com/news/20261121220834-4-787236/ieu-cepa-resmi-berlaku-ini-komoditas-yang-dapat-bebas-tarif-ke-eropa",
+      "media": "CNBC Indonesia",
+      "tone": "Netral",
+      "date": "2026-11-21",
+      "datetime": "2026-11-21T22:20:07",
+      "time": "22:20",
+      "date_display": "Sabtu, 21 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Kelapa Sawit & CPO",
+      "has_review": false,
+      "review_text": "",
+      "isu": "Menteri Perdagangan menandatangani naskah perjanjian IEU-CEPA di Brussels untuk membuka pasar ekspor Eropa.",
+      "alasan_tone": "Berita membahas perjanjian perdagangan IEU-CEPA yang melibatkan Kementerian Perdagangan tanpa menyebut atau melibatkan Kemenperin secara langsung."
+    },
+    {
+      "id": 8,
+      "title": "Indonesia dan Uni Eropa Teken Perjanjian IEU-CEPA",
+      "link": "https://cwibc.co.id/indonesia-uni-eropa-teken-ieu-cepa",
+      "media": "cwibc.co.id",
+      "tone": "Netral",
+      "date": "2026-11-21",
+      "datetime": "2026-11-21T22:02:54",
+      "time": "22:02",
+      "date_display": "Sabtu, 21 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Kelapa Sawit & CPO",
+      "has_review": false,
+      "review_text": "",
+      "isu": "Indonesia dan Uni Eropa menandatangani perjanjian IEU CEPA untuk memperluas akses pasar ekspor unggulan.",
+      "alasan_tone": "Berita mengenai penandatanganan IEU CEPA oleh Kementerian Perdagangan dan Uni Eropa tanpa keterlibatan langsung institusi Kemenperin."
+    },
+    {
+      "id": 9,
+      "title": "Kemenperin Dorong Penguatan Struktur Industri Halal Nasional",
+      "link": "https://lensahukum.co.id/penguatan-struktur-industri-halal",
+      "media": "Lensa Hukum",
+      "tone": "Positif",
+      "date": "2026-11-21",
+      "datetime": "2026-11-21T18:30:47",
+      "time": "18:30",
+      "date_display": "Sabtu, 21 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Makanan & Minuman",
+      "has_review": false,
+      "review_text": "",
+      "isu": "Kementerian Perindustrian mendorong penguatan struktur dan pertumbuhan industri halal nasional melalui inovasi dan teknologi.",
+      "alasan_tone": "Kemenperin menjadi pelaku dan narasumber utama yang mendorong pengembangan serta penguatan struktur industri halal nasional."
+    },
+    {
+      "id": 10,
+      "title": "Kemenperin Dorong Industri Halal Jadi Penggerak Pertumbuhan Manufaktur",
+      "link": "https://www.kabarbursa.com/syariah/kemenperin-dorong-industri-halal-jadi-penggerak-pertumbuhan-manufaktur",
+      "media": "KabarBursa.com",
+      "tone": "Positif",
+      "date": "2026-11-21",
+      "datetime": "2026-11-21T18:21:00",
+      "time": "18:21",
+      "date_display": "Sabtu, 21 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Makanan & Minuman",
+      "has_review": false,
+      "review_text": "",
+      "isu": "Kementerian Perindustrian mendorong penguatan struktur dan pertumbuhan industri halal nasional melalui inovasi dan teknologi.",
+      "alasan_tone": "Kemenperin menjadi pelaku dan narasumber utama yang mendorong pengembangan serta penguatan struktur industri halal nasional."
+    },
+    {
+      "id": 11,
+      "title": "Djarum Black Matcha Shiro dan Kuro: Dua Warna, Dua Karakter dalam Inovasi Kretek Mesin",
+      "link": "https://komunitaskretek.or.id/ragam/2026/11/djarum-black-matcha-shiro-dan-kuro-dua-warna-dua-karakter-dalam-inovasi-kretek-mesin/",
+      "media": "Komunitas Kretek",
+      "tone": "Netral",
+      "date": "2026-11-21",
+      "datetime": "2026-11-21T17:25:23",
+      "time": "17:25",
+      "date_display": "Sabtu, 21 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Hasil Tembakau",
+      "has_review": false,
+      "review_text": "",
+      "isu": "Djarum Black Matcha Shiro dan Kuro: Dua Warna, Dua Karakter dalam Inovasi Kretek Mesin",
+      "alasan_tone": "Berita mengulas peluncuran inovasi produk industri hasil tembakau komersial tanpa menyebut Kemenperin, sesuai indikator Ne2 sehingga dinilai Netral."
+    },
+    {
+      "id": 12,
+      "title": "Serikat Pekerja Desak Moratorium Kenaikan Cukai Rokok",
+      "link": "https://www.suaralandak.co.id/serikat-pekerja-moratorium-cukai-rokok",
+      "media": "www.suaralandak.co.id",
+      "tone": "Netral",
+      "date": "2026-11-21",
+      "datetime": "2026-11-21T15:56:06",
+      "time": "15:56",
+      "date_display": "Sabtu, 21 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Hasil Tembakau",
+      "has_review": false,
+      "review_text": "",
+      "isu": "Serikat pekerja dan pengusaha meminta pemerintah mengawasi rokok ilegal serta memberikan kepastian hukum bagi industri hasil tembakau",
+      "alasan_tone": "Permintaan ditujukan kepada pemerintah secara umum tanpa menyebut atau menyerang kebijakan spesifik Kemenperin."
+    },
+    {
+      "id": 13,
+      "title": "Cukai dan Pendapatan Negara Ditopang Oleh Produksi Rokok",
+      "link": "https://komunitaskretek.or.id/editorial/2026/11/setoran-cukai-cuma-tumbuh-09-pertumbuhan-produksi-rokok-masih-jadi-tulang-punggung/",
+      "media": "Komunitas Kretek",
+      "tone": "Netral",
+      "date": "2026-11-21",
+      "datetime": "2026-11-21T15:15:23",
+      "time": "15:15",
+      "date_display": "Sabtu, 21 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Hasil Tembakau",
+      "has_review": false,
+      "review_text": "",
+      "isu": "Cukai dan Pendapatan Negara Ditopang Oleh Produksi Rokok",
+      "alasan_tone": "Berita membahas dinamika produksi dan cukai industri hasil tembakau tanpa menyebut Kemenperin, masuk kategori Ne2 sehingga dinilai Netral."
+    },
+    {
+      "id": 14,
+      "title": "Sampoerna Catat Penjualan Bersih Rp 87,5 Triliun",
+      "link": "https://lensahukum.co.id/sampoerna-penjualan-bersih-2026",
+      "media": "Lensa Hukum",
+      "tone": "Netral",
+      "date": "2026-11-21",
+      "datetime": "2026-11-21T15:06:12",
+      "time": "15:06",
+      "date_display": "Sabtu, 21 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Hasil Tembakau",
+      "has_review": false,
+      "review_text": "",
+      "isu": "PT HM Sampoerna Tbk mencatatkan penjualan bersih Rp87,5 triliun dan mempertahankan pangsa pasar 30%.",
+      "alasan_tone": "Berita membahas kinerja keuangan dan penjualan perusahaan rokok yang berkaitan dengan sektor industri binaan tanpa menyebut Kemenperin."
+    },
+    {
+      "id": 15,
+      "title": "Kopi, Gula Aren, dan Boga Bahari Indonesia Diminati Gastronomi Eropa",
+      "link": "https://www.niaga.asia/kopi-gula-aren-dan-boga-bahari-indonesia-diminati-gastronomi-eropa/",
+      "media": "Niaga.Asia",
+      "tone": "Netral",
+      "date": "2026-11-21",
+      "datetime": "2026-11-21T15:02:55",
+      "time": "15:02",
+      "date_display": "Sabtu, 21 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Kopi & Teh",
+      "has_review": false,
+      "review_text": "",
+      "isu": "Kopi hingga gula aren RI diminati Eropa dengan potensi Rp233 miliar",
+      "alasan_tone": "Berita membahas ekspor pangan dan pameran gastronomi yang diinisiasi oleh Kemendag tanpa melibatkan Kemenperin sehingga dikategorikan K4 dan Netral."
+    },
+    {
+      "id": 16,
+      "title": "Teladan Prima Agro Pertahankan Penghargaan Zero Accident di Seluruh Pabrik Kelapa Sawit",
+      "link": "http://www.agrofarm.co.id/2026/11/teladan-prima-agro-pertahankan-penghargaan-zero-accident-di-seluruh-pabrik-kelapa-sawit/",
+      "media": "www.agrofarm.co.id",
+      "tone": "Netral",
+      "date": "2026-11-21",
+      "datetime": "2026-11-21T14:46:55",
+      "time": "14:46",
+      "date_display": "Sabtu, 21 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Kelapa Sawit & CPO",
+      "has_review": true,
+      "review_text": "PERLU CEK MANUAL: Artikel membahas penghargaan K3 di pabrik pengolahan kelapa sawit dalam negeri yang merupakan bagian operasional industri hilir.",
+      "isu": "Teladan Prima Agro Pertahankan Penghargaan Zero Accident di Seluruh Pabrik Kelapa Sawit",
+      "alasan_tone": "Berita membahas penghargaan K3 dari Disnakertrans Kaltim kepada entitas perkebunan sawit tanpa keterkaitan dengan program Kemenperin sehingga dikategorikan K4 dengan tone Netral."
+    },
+    {
+      "id": 17,
+      "title": "Menperin Dorong Maharum Hilirisasi Bahan Baku Parfum",
+      "link": "https://mediaindonesia.com/ekonomi/958823/menperin-dorong-maharum-hilirisasi-bahan-baku-parfum",
+      "media": "Media Indonesia",
+      "tone": "Positif",
+      "date": "2026-11-21",
+      "datetime": "2026-11-21T14:33:35",
+      "time": "14:33",
+      "date_display": "Sabtu, 21 November 2026",
+      "spokesperson": "Muhammad Sarmuji",
+      "unit": "MENTERI",
+      "commodity": "Rumput Laut",
+      "has_review": false,
+      "review_text": "",
+      "isu": "Menperin Mendorong Penguatan Hilirisasi Bahan Wewangian dan Industri Parfum Nasional",
+      "alasan_tone": "Menperin menjadi narasumber dan pelaku utama yang mendorong penguatan hilirisasi bahan baku wewangian dan industri parfum nasional."
+    },
+    {
+      "id": 18,
+      "title": "Industri Mamin Tumbuh 6,51 Persen, Kemenperin Soroti Pasokan",
+      "link": "https://lensahukum.co.id/industri-mamin-tumbuh-pasokan-gas",
+      "media": "Lensa Hukum",
+      "tone": "Positif",
+      "date": "2026-11-21",
+      "datetime": "2026-11-21T14:21:07",
+      "time": "14:21",
+      "date_display": "Sabtu, 21 November 2026",
+      "spokesperson": "Muhammad Sarmuji",
+      "unit": "MENTERI",
+      "commodity": "Makanan & Minuman",
+      "has_review": false,
+      "review_text": "",
+      "isu": "Industri Mamin Tumbuh 6,51 Persen, Kemenperin Soroti Pasokan",
+      "alasan_tone": "Menperin menjadi narasumber utama yang memaparkan kinerja pertumbuhan industri mamin serta komitmen dukungan pasokan, memenuhi indikator P1 dengan tone Positif."
+    },
+    {
+      "id": 19,
+      "title": "Bukan Cuma Gas Murah, HGBT Sumbang Rp592 Triliun ke Ekonomi RI",
+      "link": "https://www.industry.co.id/read/159596/bukan-cuma-gas-murah-hgbt-sumbang-rp592-triliun-ke-ekonomi-ri",
+      "media": "Industry.co.id",
+      "tone": "Positif",
+      "date": "2026-11-21",
+      "datetime": "2026-11-21T11:05:00",
+      "time": "11:05",
+      "date_display": "Sabtu, 21 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Makanan & Minuman",
+      "has_review": false,
+      "review_text": "",
+      "isu": "Bukan Cuma Gas Murah, HGBT Sumbang Rp592 Triliun ke Ekonomi RI",
+      "alasan_tone": "Pejabat Kemenperin menjadi narasumber utama yang memaparkan kontribusi signifikan kebijakan HGBT terhadap industri manufaktur, memenuhi indikator P1 dengan tone Positif."
+    },
+    {
+      "id": 20,
+      "title": "Produksi CPO dan PKO Naik 12,03%, Stok Sawit Indonesia Turun Jadi 2 Juta Ton",
+      "link": "https://sumatera.infosawit.com/2026/11/21/produksi-cpo-dan-pko-naik-1203-stok-sawit-indonesia-turun-jadi-2-juta-ton/",
+      "media": "InfoSAWIT Sumatera",
+      "tone": "Netral",
+      "date": "2026-11-21",
+      "datetime": "2026-11-21T11:02:01",
+      "time": "11:02",
+      "date_display": "Sabtu, 21 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Kelapa Sawit & CPO",
+      "has_review": false,
+      "review_text": "",
+      "isu": "Produksi CPO dan PKO Naik 12,03%, Stok Sawit Indonesia Turun Jadi 2 Juta Ton",
+      "alasan_tone": "Berita menyajikan data kinerja produksi dan stok sawit dari GAPKI tanpa menyebut Kemenperin maupun memuat serangan kebijakan, sesuai indikator Ne2 dengan tone Netral."
+    },
+    {
+      "id": 21,
+      "title": "12 Sektor Prioritas BI Kaltim: Dari Hilirisasi Sawit ke Listrik",
+      "link": "https://kaltimpost.jawapos.com/bisnis/2611210023/12-sektor-prioritas-bi-kaltim-dari-hilirisasi-sawit-ke-listrik",
+      "media": "Kaltim Post",
+      "tone": "Netral",
+      "date": "2026-11-21",
+      "datetime": "2026-11-21T10:31:13",
+      "time": "10:31",
+      "date_display": "Sabtu, 21 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Kelapa Sawit & CPO",
+      "has_review": false,
+      "review_text": "",
+      "isu": "12 Sektor Prioritas BI Kaltim: Dari Hilirisasi Sawit ke Listrik",
+      "alasan_tone": "Berita menyoroti agenda hilirisasi yang didorong oleh Bank Indonesia Kaltim tanpa menyebut Kemenperin secara langsung atau memberikan serangan, sesuai indikator Ne2 dengan tone Netral."
+    },
+    {
+      "id": 22,
+      "title": "Tumbuh 13,47 Persen, Ekspor Makanan Olahan Capai USD4,49 Miliar",
+      "link": "https://peluangnews.id/tumbuh-1347-persen-ekspor-makanan-olahan-capai-usd449-miliar/",
+      "media": "Peluang News",
+      "tone": "Netral",
+      "date": "2026-11-21",
+      "datetime": "2026-11-21T10:25:03",
+      "time": "10:25",
+      "date_display": "Sabtu, 21 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Makanan & Minuman",
+      "has_review": false,
+      "review_text": "",
+      "isu": "Tumbuh 13,47 Persen, Ekspor Makanan Olahan Capai USD4,49 Miliar",
+      "alasan_tone": "Berita menyoroti kinerja ekspor makanan olahan dan kegiatan Kementerian Perdagangan tanpa menyebut Kemenperin, memenuhi indikator Ne2 sehingga dinilai Netral."
+    },
+    {
+      "id": 23,
+      "title": "Resmikan Pabrik Maharum, Menteri Perindustrian Dorong Parfum Lokal Mendunia",
+      "link": "https://banten.idntimes.com/news/banten/resmikan-pabrik-maharum-menteri-perindustrian-dorong-parfum-lokal-mendunia-c1c2-01-h9ml6-8cg1fv",
+      "media": "IDN Times Banten",
+      "tone": "Positif",
+      "date": "2026-11-21",
+      "datetime": "2026-11-21T10:19:20",
+      "time": "10:19",
+      "date_display": "Sabtu, 21 November 2026",
+      "spokesperson": "Muhammad Sarmuji",
+      "unit": "MENTERI",
+      "commodity": "Lainnya",
+      "has_review": false,
+      "review_text": "",
+      "isu": "Menteri Perindustrian meresmikan pabrik dan mendorong industri parfum lokal menggunakan bahan baku lokal ke pasar global.",
+      "alasan_tone": "Menteri Perindustrian (K1) menjadi pelaku utama dalam peresmian dan dorongan pengembangan industri parfum lokal yang mendukung eksistensi Kemenperin (P1)."
+    },
+    {
+      "id": 24,
+      "title": "Produksi Biodiesel Indonesia Diproyeksikan 23 Juta Kl Pada 2027",
+      "link": "https://sawitindonesia.com/produksi-biodiesel-indonesia-diproyeksikan-23-juta-kl-pada-2027",
+      "media": "Sawit Indonesia",
+      "tone": "Netral",
+      "date": "2026-11-21",
+      "datetime": "2026-11-21T09:05:41",
+      "time": "09:05",
+      "date_display": "Sabtu, 21 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Biodiesel & Bioenergi",
+      "has_review": false,
+      "review_text": "",
+      "isu": "Produksi Biodiesel Indonesia Diproyeksikan 23 Juta Kl Pada 2027",
+      "alasan_tone": "Berita membahas kapasitas industri biodiesel dan program Kementerian ESDM tanpa keterlibatan Kemenperin, sesuai aturan A3 dan indikator Ne2 sehingga dinilai Netral."
+    },
+    {
+      "id": 25,
+      "title": "Lawan Kampanye Negatif, Media dan Industri Sawit Diajak Bangun Komunikasi Berbasis Data",
+      "link": "https://mercusuar.web.id/berita-utama/lawan-kampanye-negatif-media-dan-industri-sawit-diajak-bangun-komunikasi-berbasis-data/",
+      "media": "harian mercusuar",
+      "tone": "Netral",
+      "date": "2026-11-21",
+      "datetime": "2026-11-21T08:43:07",
+      "time": "08:43",
+      "date_display": "Sabtu, 21 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Kelapa Sawit & CPO",
+      "has_review": false,
+      "review_text": "",
+      "isu": "Media dan Industri Sawit Diajak Bangun Komunikasi Berbasis Data untuk Lawan Kampanye Negatif",
+      "alasan_tone": "Pemberitaan mengenai kampanye industri sawit dan workshop jurnalistik PWI-GAPKI tanpa melibatkan peran atau kebijakan Kemenperin."
+    },
+    {
+      "id": 26,
+      "title": "Sampoerna Kuasai 30% Pangsa Pasar, Serap 90 Ribu Tenaga Kerja",
+      "link": "https://news.detik.com/berita/d-8762796/sampoerna-kuasai-30-pangsa-pasar-serap-90-ribu-tenaga-kerja",
+      "media": "detikNews",
+      "tone": "Netral",
+      "date": "2026-11-21",
+      "datetime": "2026-11-21T08:19:44",
+      "time": "08:19",
+      "date_display": "Sabtu, 21 November 2026",
+      "spokesperson": "",
+      "unit": "-",
+      "commodity": "Hasil Tembakau",
+      "has_review": false,
+      "review_text": "",
+      "isu": "PT HM Sampoerna Tbk mencatatkan penjualan bersih Rp87,5 triliun dan mempertahankan pangsa pasar 30%.",
+      "alasan_tone": "Berita membahas kinerja keuangan dan penjualan perusahaan rokok yang berkaitan dengan sektor industri binaan tanpa menyebut Kemenperin."
+    },
+    {
+      "id": 27,
+      "title": "Pemerintah Dorong Industri Parfum Serap Bahan Baku Lokal ke Pasar Global",
+      "link": "https://www.beritasatu.com/banten/3042666/pemerintah-dorong-industri-parfum-serap-bahan-baku-lokal-ke-pasar-global",
+      "media": "BeritaSatu.com",
+      "tone": "Positif",
+      "date": "2026-11-21",
+      "datetime": "2026-11-21T05:59:00",
+      "time": "05:59",
+      "date_display": "Sabtu, 21 November 2026",
+      "spokesperson": "Muhammad Sarmuji",
+      "unit": "MENTERI",
+      "commodity": "Lainnya",
+      "has_review": false,
+      "review_text": "",
+      "isu": "Menteri Perindustrian meresmikan pabrik dan mendorong industri parfum lokal menggunakan bahan baku lokal ke pasar global.",
+      "alasan_tone": "Menteri Perindustrian (K1) menjadi pelaku utama dalam peresmian dan dorongan pengembangan industri parfum lokal yang mendukung eksistensi Kemenperin (P1)."
+    },
+    {
+      "id": 28,
+      "title": "Dari Kekayaan Hayati ke Parfum: Industri Wewangian Lokal Didorong Naik Kelas",
+      "link": "https://patrolihukumindonesia.com/dari-kekayaan-hayati-ke-parfum-industri-wewangian-lokal-didorong-naik-kelas/",
+      "media": "patrolihukumindonesia.com",
+      "tone": "Positif",
+      "date": "2026-11-21",
+      "datetime": "2026-11-21T05:45:18",
+      "time": "05:45",
+      "date_display": "Sabtu, 21 November 2026",
+      "spokesperson": "Muhammad Sarmuji",
+      "unit": "MENTERI",
+      "commodity": "Lainnya",
+      "has_review": false,
+      "review_text": "",
+      "isu": "Dari Kekayaan Hayati ke Parfum: Industri Wewangian Lokal Didorong Naik Kelas",
+      "alasan_tone": "Menteri Perindustrian menjadi narasumber utama yang mendorong penguatan industri wewangian lokal, memenuhi indikator P1 sehingga dinilai Positif."
+    },
+    {
+      "id": 29,
       "title": "Peredaran Rokok Ilegal Mengkhawatirkan, Pengusaha Butuh Kepastian Hukum",
       "link": "https://www.tradingview.com/news/kontan:38f01f54d87ea:0/",
       "media": "TradingView",
@@ -550,7 +1061,7 @@
       "alasan_tone": "Permintaan ditujukan kepada pemerintah secara umum tanpa menyebut atau menyerang kebijakan spesifik Kemenperin."
     },
     {
-      "id": 2,
+      "id": 30,
       "title": "Menperin dorong hilirisasi bahan wewangian lokal lewat Maharum Group",
       "link": "https://banten.antaranews.com/berita/397719/menperin-dorong-hilirisasi-bahan-wewangian-lokal-lewat-maharum-group",
       "media": "ANTARA News Banten",
@@ -568,7 +1079,7 @@
       "alasan_tone": "Menperin menjadi narasumber dan pelaku utama yang mendorong penguatan hilirisasi bahan baku wewangian dan industri parfum nasional."
     },
     {
-      "id": 3,
+      "id": 31,
       "title": "Cerutu Jember Tembus 45 Negara, Hermin Dorong Perlindungan industri Hasil Tembakau Lokal",
       "link": "https://indonesiainteraktif.com/cerutu-jember-tembus-45-negara-hermin-dorong-perlindungan-industri-hasil-tembakau-lokal",
       "media": "Indonesia Interaktif",
@@ -586,7 +1097,7 @@
       "alasan_tone": "Berita membahas industri cerutu Jember dan apresiasi DPRD Jatim terhadap Pemkab serta Bea Cukai tanpa melibatkan Kemenperin."
     },
     {
-      "id": 4,
+      "id": 32,
       "title": "Menperin dorong hilirisasi bahan wewangian lokal lewat Maharum",
       "link": "https://www.antaranews.com/berita/5868127/menperin-dorong-hilirisasi-bahan-wewangian-lokal-lewat-maharum",
       "media": "ANTARA News",
@@ -604,7 +1115,7 @@
       "alasan_tone": "Menperin menjadi narasumber dan pelaku utama yang mendorong penguatan hilirisasi bahan baku wewangian dan industri parfum nasional."
     },
     {
-      "id": 5,
+      "id": 33,
       "title": "Dipimpin Wamenhan Richard, Satgas PKH Tertibkan Pabrik Sawit dan Cabut Izin Pabrik Kertas di Riau",
       "link": "https://indonesiadefense.com/dipimpin-wamenhan-richard-satgas-pkh-tertibkan-pabrik-sawit-dan-cabut-izin-pabrik-kertas-di-riau",
       "media": "Indonesiadefense.com",
@@ -622,7 +1133,7 @@
       "alasan_tone": "Berita menyoroti tindakan Satgas PKH terhadap perusahaan hutan dan sawit tanpa melibatkan atau menyerang Kemenperin."
     },
     {
-      "id": 6,
+      "id": 34,
       "title": "Biji Kopi Indonesia Disita di Taiwan, Kemendag Beri Penjelasan",
       "link": "https://mediaindonesia.com/ekonomi/958628/biji-kopi-indonesia-disita-di-taiwan-kemendag-beri-penjelasan",
       "media": "Media Indonesia",
@@ -640,7 +1151,7 @@
       "alasan_tone": "Berita membahas penyitaan biji kopi oleh Taiwan yang dijelaskan oleh Kementerian Perdagangan, tidak berkaitan dengan Kemenperin sesuai indikator A3."
     },
     {
-      "id": 7,
+      "id": 35,
       "title": "Indonesia Perkuat Industri Parfum Berbasis Kekayaan Hayati",
       "link": "https://centralbatam.co.id/indonesia-industri-parfum-kekayaan-hayati",
       "media": "CentralBatam",
@@ -658,7 +1169,7 @@
       "alasan_tone": "Menperin menjadi narasumber dan pelaku utama yang mendorong penguatan hilirisasi bahan baku wewangian dan industri parfum nasional."
     },
     {
-      "id": 8,
+      "id": 36,
       "title": "RI-Uni Eropa matangkan kesiapan IEU-CEPA jelang penandatanganan",
       "link": "https://m.antaranews.com/amp/berita/5867867/ri-uni-eropa-matangkan-kesiapan-ieu-cepa-jelang-penandatanganan",
       "media": "ANTARA News",
@@ -676,7 +1187,7 @@
       "alasan_tone": "Kemenperin (melalui Wamenperin) disebut sebagai bagian kecil dalam delegasi penandatanganan IEU-CEPA, sehingga dikategorikan netral (Ne1)."
     },
     {
-      "id": 9,
+      "id": 37,
       "title": "Menperin Dorong Industri Parfum Olah Bahan Baku Lokal",
       "link": "https://cwibc.co.id/industri-parfum-bahan-baku-lokal",
       "media": "cwibc.co.id",
@@ -694,7 +1205,7 @@
       "alasan_tone": "Menperin menjadi narasumber dan pelaku utama yang mendorong penguatan hilirisasi bahan baku wewangian dan industri parfum nasional."
     },
     {
-      "id": 10,
+      "id": 38,
       "title": "Menperin Targetkan Indonesia Jadi Raja Industri Parfum Dunia",
       "link": "https://www.liputan6.com/bisnis/read/8339289/menperin-targetkan-indonesia-jadi-raja-industri-parfum-dunia",
       "media": "Liputan6.com",
@@ -712,7 +1223,7 @@
       "alasan_tone": "Menperin menjadi narasumber dan pelaku utama yang mendorong penguatan hilirisasi bahan baku wewangian dan industri parfum nasional."
     },
     {
-      "id": 11,
+      "id": 39,
       "title": "Bandung Sahari : Keberlanjutan Jadi Prioritas dalam Produksi Minyak Sawit",
       "link": "https://duta.co/bandung-sahari-keberlanjutan-jadi-prioritas-dalam-produksi-minyak-sawit",
       "media": "duta.co",
@@ -730,7 +1241,7 @@
       "alasan_tone": "Berita membahas keberlanjutan produksi minyak sawit oleh perusahaan tanpa menyebut Kemenperin maupun kebijakan industrinya secara langsung."
     },
     {
-      "id": 12,
+      "id": 40,
       "title": "Satgas PKH Ambil Alih Pabrik-Kebun Sawit PT GSL & Cabut Izin PT RAPP",
       "link": "https://www.cnbcindonesia.com/news/20261120175840-4-787087/satgas-pkh-ambil-alih-pabrik-kebun-sawit-pt-gsl-cabut-izin-pt-rapp",
       "media": "CNBC Indonesia",
@@ -748,7 +1259,7 @@
       "alasan_tone": "Berita menyoroti tindakan Satgas PKH terhadap perusahaan hutan dan sawit tanpa melibatkan atau menyerang Kemenperin."
     },
     {
-      "id": 13,
+      "id": 41,
       "title": "Menakar Rasionalitas Kebijakan B50 dan E50 dalam Transisi Energi Nasional",
       "link": "https://www.liputan6.com/opini/read/8339111/menakar-rasionalitas-kebijakan-b50-dan-e50-dalam-transisi-energi-nasional",
       "media": "Liputan6.com",
@@ -766,7 +1277,7 @@
       "alasan_tone": "Berita membahas evaluasi kebijakan mandatori BBN dan transisi energi secara umum tanpa menyerang atau menyebut Kemenperin secara langsung."
     },
     {
-      "id": 14,
+      "id": 42,
       "title": "Vibrating Screen Double Deck Pabrik Sawit: Kunci Penyaringan CPO Maksimal Stasiun Klarifikasi",
       "link": "https://news.kharisma-sawit.com/berita-terkini-vibrating-screen-double-deck-pabrik-sawit-kunci-penyaringan-cpo-maksimal-stasiun-klarifikasi-814",
       "media": "news.kharisma-sawit.com",
@@ -784,7 +1295,7 @@
       "alasan_tone": "Artikel mengulas teknis penggunaan vibrating screen pada pabrik sawit tanpa menyebut atau berkaitan dengan kebijakan Kemenperin."
     },
     {
-      "id": 15,
+      "id": 43,
       "title": "Mesin Pemisah Minyak dan Sludge di Pabrik Sawit: Senjata Utama Menyelamatkan CPO yang Terbuang",
       "link": "https://news.kharisma-sawit.com/berita-terkini-mesin-pemisah-minyak-dan-sludge-di-pabrik-sawit-senjata-utama-menyelamatkan-cpo-yang-terbuang-813",
       "media": "news.kharisma-sawit.com",
@@ -802,7 +1313,7 @@
       "alasan_tone": "Berita membahas aspek teknis mesin pemisah minyak dan sludge di pabrik sawit tanpa mengaitkan dengan Kemenperin."
     },
     {
-      "id": 16,
+      "id": 44,
       "title": "Keberlanjutan Jadi Prioritas dalam Produksi Minyak Sawit",
       "link": "https://dialogpublik.com/keberlanjutan-jadi-prioritas-dalam-produksi-minyak-sawit/",
       "media": "dialogpublik.com",
@@ -820,7 +1331,7 @@
       "alasan_tone": "Berita membahas keberlanjutan produksi minyak sawit oleh perusahaan tanpa menyebut Kemenperin maupun kebijakan industrinya secara langsung."
     },
     {
-      "id": 17,
+      "id": 45,
       "title": "Biang Kerok Kerusakan Hutan, Satgas PKH Cabut Izin PT GSL dan RAPP Milik Taipan Sukanto Tanoto",
       "link": "https://www.inilah.com/biang-kerok-kerusakan-hutan-satgas-pkh-cabut-izin-pt-gsl-dan-rapp-milik-taipan-sukanto-tanoto",
       "media": "Inilah.com",
@@ -838,7 +1349,7 @@
       "alasan_tone": "Berita menyoroti tindakan Satgas PKH terhadap perusahaan hutan dan sawit tanpa melibatkan atau menyerang Kemenperin."
     },
     {
-      "id": 18,
+      "id": 46,
       "title": "Menperin Sarmuji Dorong Industri Parfum Nasional Tak Hanya Ekspor Bahan Baku",
       "link": "https://id.tradingview.com/news/kontan:cef7fbe6887ea:0/",
       "media": "TradingView",
@@ -856,7 +1367,7 @@
       "alasan_tone": "Menperin menjadi narasumber dan pelaku utama yang mendorong penguatan hilirisasi bahan baku wewangian dan industri parfum nasional."
     },
     {
-      "id": 19,
+      "id": 47,
       "title": "Kopi hingga gula aren RI diminati Eropa dengan potensi Rp233 miliar",
       "link": "https://m.antaranews.com/amp/berita/5867503/kopi-hingga-gula-aren-ri-diminati-eropa-dengan-potensi-rp233-miliar",
       "media": "ANTARA News",
@@ -874,7 +1385,7 @@
       "alasan_tone": "Berita membahas ekspor pangan dan pameran gastronomi yang diinisiasi oleh Kemendag tanpa melibatkan Kemenperin sehingga dikategorikan K4 dan Netral."
     },
     {
-      "id": 20,
+      "id": 48,
       "title": "Selain Ladaku dan Kopi, Taiwan Sita Produk Olahan Singkong Asal RI",
       "link": "https://www.cnnindonesia.com/internasional/20261120133112-113-1429421/selain-ladaku-dan-kopi-taiwan-sita-produk-olahan-singkong-asal-ri",
       "media": "CNN Indonesia",
@@ -892,7 +1403,7 @@
       "alasan_tone": "Isu terkait pengawasan produk ekspor oleh BPOM dan otoritas Taiwan tanpa adanya serangan atau penyebutan langsung terhadap Kemenperin."
     },
     {
-      "id": 21,
+      "id": 49,
       "title": "lawan-kampanye-negatif-media-dan-industri-sawit-diajak-bangun-komunikasi-berbasis-data",
       "link": "https://riaueksis.com/read-6-42194-2026-11-20-lawan-kampanye-negatif-media-dan-industri-sawit-diajak-bangun-komunikasi-berbasis-data.html",
       "media": "riaueksis.com",
@@ -910,7 +1421,7 @@
       "alasan_tone": "Pemberitaan mengenai kampanye industri sawit dan workshop jurnalistik PWI-GAPKI tanpa melibatkan peran atau kebijakan Kemenperin."
     },
     {
-      "id": 22,
+      "id": 50,
       "title": "Wacana Pelarangan Total Rokok Elektronik Perlu Dikaji Hati-hati",
       "link": "https://bsinews.id/pelarangan-total-rokok-elektronik",
       "media": "bsinews.id",
@@ -928,7 +1439,7 @@
       "alasan_tone": "Berita mencantumkan data investasi dan jumlah perusahaan dari Kementerian Perindustrian terkait wacana rokok elektronik tanpa ada serangan sehingga dikategorikan K3, tidak ada, dan Netral."
     },
     {
-      "id": 23,
+      "id": 51,
       "title": "Serikat Pekerja Minta Pemerintah Awasi Industri Rokok Elektronik",
       "link": "https://lensahukum.co.id/pengawasan-industri-rokok-elektronik",
       "media": "Lensa Hukum",
@@ -946,7 +1457,7 @@
       "alasan_tone": "Permintaan ditujukan kepada pemerintah secara umum tanpa menyebut atau menyerang kebijakan spesifik Kemenperin."
     },
     {
-      "id": 24,
+      "id": 52,
       "title": "Sampoerna Ngegas, Penjualan Bersih Kuartal III 2026 Tembus Rp87,5 Triliun - karawangbekasi.disway.id",
       "link": "https://karawangbekasi.disway.id/bisnis/read/55510/sampoerna-ngegas-penjualan-bersih-kuartal-iii-2026-tembus-rp875-triliun",
       "media": "karawang bekasi disway",
@@ -964,7 +1475,7 @@
       "alasan_tone": "Asosiasi/perusahaan mengapresiasi kebijakan pemerintah terkait cukai yang mendukung iklim industri, sehingga masuk kategori K3 mendukung (P2)."
     },
     {
-      "id": 25,
+      "id": 53,
       "title": "Pengawasan Rokok Elektronik Dinilai Lebih Tepat daripada Pelarangan",
       "link": "https://cwibc.co.id/pengawasan-rokok-elektronik",
       "media": "cwibc.co.id",
@@ -982,7 +1493,7 @@
       "alasan_tone": "Berita memuat data Kementerian Perindustrian sebagai pelengkap dalam isu pengawasan rokok elektronik tanpa menyerang Kemenperin sehingga dikategorikan K3, tidak ada, dan Netral."
     },
     {
-      "id": 26,
+      "id": 54,
       "title": "KEMENPERIN LIBATKAN GENERASI MUDA JADI MOTOR INOVASI INDUSTRI HALAL",
       "link": "https://post-pro.co.id/news-and-research/71417/kemenperin-libatkan-generasi-muda-jadi-motor-inovasi-industri-halal",
       "media": "post-pro.co.id",
@@ -1000,7 +1511,7 @@
       "alasan_tone": "Kemenperin menjadi pelaku utama dalam upaya penguatan ekosistem industri halal tanpa adanya unsur serangan."
     },
     {
-      "id": 27,
+      "id": 55,
       "title": "Ekstensifikasi Cukai dan Penguatan Fiskal Negara",
       "link": "https://nasional.sindonews.com/read/1774299/18/ekstensifikasi-cukai-dan-penguatan-fiskal-negara-1795162277/10",
       "media": "SINDOnews Nasional",
@@ -1018,7 +1529,7 @@
       "alasan_tone": "Berita membahas ekstensifikasi cukai, APBN, dan MBDK secara umum tanpa menyebut atau berkaitan langsung dengan Kemenperin."
     },
     {
-      "id": 28,
+      "id": 56,
       "title": "Serikat Pekerja: Pelarangan Vape Berpotensi Ancam 150 Ribu Tenaga Kerja",
       "link": "https://mediaindonesia.com/ekonomi/958499/serikat-pekerja-pelarangan-vape-berpotensi-ancam-150-ribu-tenaga-kerja",
       "media": "Media Indonesia",
@@ -1036,7 +1547,7 @@
       "alasan_tone": "Berita mengutip data Kementerian Perindustrian mengenai industri rokok elektronik tetapi Kemenperin tidak menjadi narasumber utama, sehingga dinilai netral (Ne2)."
     },
     {
-      "id": 29,
+      "id": 57,
       "title": "Lawan Kampanye Negatif, Media dan Industri Sawit Diajak Bangun Komunikasi Berbasis Data",
       "link": "https://radarsulbar.fajar.co.id/2026/11/20/lawan-kampanye-negatif-media-dan-industri-sawit-diajak-bangun-komunikasi-berbasis-data/",
       "media": "Radar Sulbar",
@@ -1054,7 +1565,7 @@
       "alasan_tone": "Pemberitaan mengenai kampanye industri sawit dan workshop jurnalistik PWI-GAPKI tanpa melibatkan peran atau kebijakan Kemenperin."
     },
     {
-      "id": 30,
+      "id": 58,
       "title": "Devisa Ekspor Sawit Tembus US$32,31 Miliar hingga September 2026, Produksi dan Pengapalan ke Pasar Utama Melonjak Tajam",
       "link": "https://sawitindonesia.com/devisa-ekspor-sawit-tembus-us-32-31-miliar-hingga-september-2026-produksi-dan-pengapalan-ke-pasar-utama-melonjak-tajam",
       "media": "Sawit Indonesia",
@@ -1072,7 +1583,7 @@
       "alasan_tone": "Berita membahas data kinerja produksi dan ekspor sawit oleh GAPKI tanpa menyebut Kemenperin atau kebijakannya secara langsung."
     },
     {
-      "id": 31,
+      "id": 59,
       "title": "Desak Pengawasan Gula Rafinasi Diperketat, Nasim Khan: Petani Jangan Dirugikan",
       "link": "https://www.fraksipkb.com/2026/11/20/desak-pengawasan-gula-rafinasi-diperketat-nasim-khan-petani-jangan-dirugikan/",
       "media": "FPKB DPR RI",
@@ -1090,7 +1601,7 @@
       "alasan_tone": "Berisi desakan asosiasi/DPR kepada pemerintah secara umum terkait pengawasan gula tanpa menyerang Kemenperin, sehingga dikategorikan netral (Ne2 + A2)."
     },
     {
-      "id": 32,
+      "id": 60,
       "title": "Kemenperin Perkuat Lima Sektor Industri Halal, Ini Daftar Prioritasnya",
       "link": "https://halalhub.republika.co.id/berita/toseww490/kemenperin-perkuat-lima-sektor-industri-halal-ini-daftar-prioritasnya",
       "media": "republika.co.id",
@@ -1108,7 +1619,7 @@
       "alasan_tone": "Kemenperin menjadi pelaku utama dalam program pengembangan klaster industri halal nasional yang bernilai positif."
     },
     {
-      "id": 33,
+      "id": 61,
       "title": "Rokok Ilegal Marak, Serikat Pekerja Minta Kenaikan Cukai Disetop",
       "link": "https://batampos.jawapos.com/amp/nasional/2611200008/rokok-ilegal-marak-serikat-pekerja-minta-kenaikan-cukai-disetop",
       "media": "Jawa Pos",
@@ -1126,7 +1637,7 @@
       "alasan_tone": "Permintaan ditujukan kepada pemerintah secara umum tanpa menyebut atau menyerang kebijakan spesifik Kemenperin."
     },
     {
-      "id": 34,
+      "id": 62,
       "title": "Lampung Jadi Pusat Pengembangan Kakao Nasional, Pemerintah Buka Peluang Hentikan Impor",
       "link": "https://www.metrotvnews.com/play/KRXCzqPE-lampung-jadi-pusat-pengembangan-kakao-nasional-pemerintah-buka-peluang-hentikan-impor",
       "media": "MetroTVNews.com",
@@ -1144,7 +1655,7 @@
       "alasan_tone": "Isu berkaitan dengan kebijakan pangan dan komoditas nasional tanpa menyebut Kemenperin secara langsung, sehingga dikategorikan netral (Ne2)."
     },
     {
-      "id": 35,
+      "id": 63,
       "title": "Selain Cabut Izin, Satgas PKH Hentikan Seluruh Aktivitas PT RAPP Termasuk Pabrik Kertas",
       "link": "https://nadariau.com/2026/11/20/selain-cabut-izin-satgas-pkh-hentikan-seluruh-aktivitas-pt-rapp-termasuk-pabrik-kertas/",
       "media": "Nadariau.com",
@@ -1162,7 +1673,7 @@
       "alasan_tone": "Berita menyoroti tindakan Satgas PKH terhadap perusahaan hutan dan sawit tanpa melibatkan atau menyerang Kemenperin."
     },
     {
-      "id": 36,
+      "id": 64,
       "title": "Kemandirian Energi dan Jalan Panjang Implementasi B50",
       "link": "https://www.cnnindonesia.com/ekonomi/20261120124047-85-1429392/kemandirian-energi-dan-jalan-panjang-implementasi-b50",
       "media": "CNN Indonesia",
@@ -1180,7 +1691,7 @@
       "alasan_tone": "Berita membahas peluncuran mandatori B50 dan dukungan industri tanpa menyerang atau menyebut Kemenperin secara langsung."
     },
     {
-      "id": 37,
+      "id": 65,
       "title": "PT DSI Pastikan Tata Kelola Ekspor Sawit Perkuat Transparansi Tanpa Ubah Mekanisme Dagang",
       "link": "https://www.metrotvnews.com/play/NxGCX3wj-pt-dsi-pastikan-tata-kelola-ekspor-sawit-perkuat-transparansi-tanpa-ubah-mekanisme-dagang",
       "media": "MetroTVNews.com",
@@ -1198,7 +1709,7 @@
       "alasan_tone": "Berita membahas sistem tata kelola ekspor sawit oleh PT DSI dan IPOC 2026 tanpa menyebut institusi Kemenperin."
     },
     {
-      "id": 38,
+      "id": 66,
       "title": "Produk Ladaku Asal RI Terdeteksi Residu Pestisida di Taiwan, BPOM Diminta Segera Investigasi",
       "link": "https://indoposco.id/2026/11/20/produk-ladaku-asal-ri-terdeteksi-residu-pestisida-di-taiwan-bpom-diminta-segera-investigasi/",
       "media": "indoposco.id",
@@ -1216,7 +1727,7 @@
       "alasan_tone": "Isu terkait pengawasan produk ekspor oleh BPOM dan otoritas Taiwan tanpa adanya serangan atau penyebutan langsung terhadap Kemenperin."
     },
     {
-      "id": 39,
+      "id": 67,
       "title": "Satgas PKH Ambil Alih Pabrik Kelapa Sawit dan Lahan 42 Hektare Milik PT GSL di Kuansing Riau",
       "link": "https://www.goriau.com/berita/baca/satgas-pkh-ambil-alih-pabrik-kelapa-sawit-dan-lahan-42-hektare-milik-pt-gsl-di-kuansing-riau.html",
       "media": "GoRiau.com",
@@ -1234,7 +1745,7 @@
       "alasan_tone": "Berita menyoroti tindakan Satgas PKH terhadap perusahaan hutan dan sawit tanpa melibatkan atau menyerang Kemenperin."
     },
     {
-      "id": 40,
+      "id": 68,
       "title": "Menko Pangan Rintis Kebangkitan Kakao dari Kebun hingga Industri",
       "link": "https://www.cnnindonesia.com/ekonomi/20261120105546-97-1429344/menko-pangan-rintis-kebangkitan-kakao-dari-kebun-hingga-industri",
       "media": "CNN Indonesia",
@@ -1252,7 +1763,7 @@
       "alasan_tone": "Berita membahas program hilirisasi kakao nasional oleh Kemenko Pangan dan Kementerian Pertanian tanpa keterlibatan langsung Kemenperin sehingga dinilai K4 dan Netral."
     },
     {
-      "id": 41,
+      "id": 69,
       "title": "Kemenperin Dorong Inovasi dan Generasi Muda untuk Jadikan Indonesia Pusat Industri Halal Global",
       "link": "https://infoekonomi.id/2026/11/kemenperin-dorong-inovasi-dan-generasi-muda-untuk-jadikan-indonesia-pusat-industri-halal-global/",
       "media": "Info Ekonomi",
@@ -1270,7 +1781,7 @@
       "alasan_tone": "Kemenperin menjadi pelaku utama dalam upaya penguatan ekosistem industri halal tanpa adanya unsur serangan."
     },
     {
-      "id": 42,
+      "id": 70,
       "title": "PT Langkat Sawit Hijau Pratama Rencanakan PKS Baru, Plt Bupati Langkat Minta Prioritaskan Tenaga Kerja Lokal",
       "link": "https://haisawit.co.id/news/detail/pt-langkat-sawit-hijau-pratama-rencanakan-pks-baru-plt-bupati-langkat-minta-prioritaskan-tenaga-kerja-lokal",
       "media": "HaiSawit",
@@ -1288,7 +1799,7 @@
       "alasan_tone": "Berita membahas investasi pabrik sawit dan kebijakan Pemkab Langkat tanpa keterkaitan dengan Kemenperin (A3/K4)."
     },
     {
-      "id": 43,
+      "id": 71,
       "title": "Kemenperin Tegas Minta Industri Tak Jadi Prioritas Terakhir Penerima Gas HGBT",
       "link": "https://www.industry.co.id/read/159497/kemenperin-tegas-minta-industri-tak-jadi-prioritas-terakhir-penerima-gas-hgbt",
       "media": "Industry.co.id",
@@ -1306,7 +1817,7 @@
       "alasan_tone": "Kemenperin menjadi narasumber utama yang mendorong perubahan prioritas penyaluran gas industri, mencerminkan indikator Positif P1."
     },
     {
-      "id": 44,
+      "id": 72,
       "title": "Dorongan Pelarangan AMDK di Bawah 1 Liter Dinilai Tak Menyentuh Akar Masalah Sampah Plastik",
       "link": "https://www.sinarharapan.net/dorongan-pelarangan-amdk-di-bawah-1-liter-dinilai-tak-menyentuh-akar-masalah-sampah-plastik/",
       "media": "sinarharapan.net",
@@ -1324,7 +1835,7 @@
       "alasan_tone": "Berita membahas wacana pelarangan AMDK oleh pemda/pihak lain dan pengelolaan sampah tanpa menyebut Kemenperin sehingga dikategorikan K3, tidak ada, dan Netral."
     },
     {
-      "id": 45,
+      "id": 73,
       "title": "Nestlé Perkuat Industri Indonesia Lewat Investasi dan Ekspor",
       "link": "https://cwibc.co.id/nestle-industri-investasi-ekspor",
       "media": "cwibc.co.id",
@@ -1342,7 +1853,7 @@
       "alasan_tone": "Berita membahas kunjungan Dubes Swiss, Wamen Diktisaintek, dan perusahaan Nestlé tanpa melibatkan atau menyebut Kemenperin."
     },
     {
-      "id": 46,
+      "id": 74,
       "title": "Dubes Swiss dan Stella Christie Kunjungi Pabrik Nestlé Karawang, Dorong Pengembangan Talenta Muda",
       "link": "https://www.liputan6.com/bisnis/read/8338791/dubes-swiss-dan-stella-christie-kunjungi-pabrik-nestle-karawang-dorong-pengembangan-talenta-muda",
       "media": "Liputan6.com",
@@ -1360,7 +1871,7 @@
       "alasan_tone": "Berita membahas kunjungan Dubes Swiss, Wamen Diktisaintek, dan perusahaan Nestlé tanpa melibatkan atau menyebut Kemenperin."
     },
     {
-      "id": 47,
+      "id": 75,
       "title": "Lawan Kampanye Negatif, Media dan Industri Sawit Diajak Bangun Komunikasi Berbasis Data - https://jambiindependent.disway.id/",
       "link": "https://jambiindependent.disway.id/nasional/read/720951/lawan-kampanye-negatif-media-dan-industri-sawit-diajak-bangun-komunikasi-berbasis-data",
       "media": "Jambi Independent",
@@ -1378,7 +1889,7 @@
       "alasan_tone": "Pemberitaan mengenai kampanye industri sawit dan workshop jurnalistik PWI-GAPKI tanpa melibatkan peran atau kebijakan Kemenperin."
     },
     {
-      "id": 48,
+      "id": 76,
       "title": "Lawan Kampanye Negatif, Media dan Industri Sawit Diminta Bangun Komunikasi Berbasis Data",
       "link": "https://harian.fajar.co.id/2026/11/20/lawan-kampanye-negatif-media-dan-industri-sawit-diminta-bangun-komunikasi-berbasis-data/",
       "media": "harian fajar",
@@ -1396,7 +1907,7 @@
       "alasan_tone": "Pemberitaan mengenai kampanye industri sawit dan workshop jurnalistik PWI-GAPKI tanpa melibatkan peran atau kebijakan Kemenperin."
     },
     {
-      "id": 49,
+      "id": 77,
       "title": "Nilai Ekonomi Sawit Hampir Rp800 Triliun, PASPI Sebut Potensinya Masih Besar",
       "link": "https://news.majalahhortus.com/nilai-ekonomi-sawit-hampir-rp800-triliun-paspi-sebut-potensinya-masih-besar/",
       "media": "Majalah HORTUS Archipelago",
@@ -1414,7 +1925,7 @@
       "alasan_tone": "Artikel mengulas potensi ekonomi industri sawit dari narasumber PASPI dan Kementerian Pertanian tanpa melibatkan Kemenperin secara langsung."
     },
     {
-      "id": 50,
+      "id": 78,
       "title": "Harga CPO KPBN Inacom Kamis (19/11) Turun Rp90 Jadi Rp14.100/kg, Rotterdam Ikut Melemah",
       "link": "https://www.agricom.id/2026/2115/harga-minyak-sawit-cpo/harga-cpo-kpbn-inacom-kamis-19-11-turun-rp90-jadi-rp14-100-kg-rotterdam-ikut-melemah/",
       "media": "Agricom.id",
@@ -1432,7 +1943,7 @@
       "alasan_tone": "Berita mengenai fluktuasi harga CPO dan komoditas sawit tanpa menyebut atau menyerang Kemenperin (A1/K4), sehingga bernilai netral."
     },
     {
-      "id": 51,
+      "id": 79,
       "title": "Shell Indonesia Perkuat Dukungan Industri Hadapi Implementasi Biodiesel B50",
       "link": "https://listrikindonesia.com/detail/21843/shell-indonesia-perkuat-dukungan-industri-hadapi-implementasi-biodiesel-b50",
       "media": "Listrik Indonesia",
@@ -1450,7 +1961,7 @@
       "alasan_tone": "Berita membahas peluncuran mandatori B50 dan dukungan industri tanpa menyerang atau menyebut Kemenperin secara langsung."
     },
     {
-      "id": 52,
+      "id": 80,
       "title": "Pasokan Gas Seret, Biaya Produksi Industri Pupuk Terancam Membengkak Rp 4,5 Triliun",
       "link": "https://www.industry.co.id/read/159507/pasokan-gas-seret-biaya-produksi-industri-pupuk-terancam-membengkak-rp-45-triliun",
       "media": "Industry.co.id",
@@ -1468,7 +1979,7 @@
       "alasan_tone": "Kemenperin melalui Dirjen Industri Kimia Hulu menjadi narasumber utama yang memperjuangkan kebijakan pro-industri terkait HGBT, sehingga masuk kategori Positif P1."
     },
     {
-      "id": 53,
+      "id": 81,
       "title": "Salehuddin Dukung Pembatasan Vape, Kesehatan Jangan Dikorbankan demi Bisnis",
       "link": "https://pusaranmedia.com/read/54159/salehuddin-dukung-pembatasan-vape-kesehatan-jangan-dikorbankan-demi-bisnis",
       "media": "PusaranMedia.com",
@@ -1486,7 +1997,7 @@
       "alasan_tone": "Berita membahas fatwa MUI dan dukungan DPRD Kaltim terhadap pembatasan vape tanpa melibatkan Kemenperin atau kebijakannya."
     },
     {
-      "id": 54,
+      "id": 82,
       "title": "DPRD Kaltim Dukung Fatwa Haram Vape, Lindungi Generasi Muda dari Kecanduan Nikotin",
       "link": "https://seputarfakta.com/dprd-provinsi-kalimantan-timur/dprd-kaltim-dukung-fatwa-haram-vape-lindungi-generasi-muda-dari-kecanduan-nikotin-23004",
       "media": "Seputar Fakta",
@@ -1504,7 +2015,7 @@
       "alasan_tone": "Berita membahas fatwa MUI dan dukungan DPRD Kaltim terhadap pembatasan vape tanpa melibatkan Kemenperin atau kebijakannya."
     },
     {
-      "id": 55,
+      "id": 83,
       "title": "Ekspor Sawit Melonjak, Devisa Tembus US$32,31 Miliar, Stok Terus Menyusut",
       "link": "https://news.majalahhortus.com/ekspor-sawit-melonjak-devisa-tembus-us3231-miliar-stok-terus-menyusut/",
       "media": "Majalah HORTUS Archipelago",
@@ -1522,7 +2033,7 @@
       "alasan_tone": "Berita memuat data produksi dan ekspor sawit oleh GAPKI tanpa menyebut Kemenperin, sehingga dikategorikan netral berdasarkan aturan A3 dan A1."
     },
     {
-      "id": 56,
+      "id": 84,
       "title": "Kemenperin Pacu Lima Klaster Industri Halal Nasional Demi Pasar Global",
       "link": "https://news.republika.co.id/berita/torm8x6130000/kemenperin-pacu-lima-klaster-industri-halal-nasional-demi-pasar-global",
       "media": "republika.co.id",
@@ -1540,7 +2051,7 @@
       "alasan_tone": "Kemenperin menjadi pelaku utama dalam program pengembangan klaster industri halal nasional yang bernilai positif."
     },
     {
-      "id": 57,
+      "id": 85,
       "title": "Serikat Pekerja Desak Pemerintah Beri Kepastian Hukum Industri Rokok",
       "link": "https://www.pantau.com/ekonomi/380105/serikat-pekerja-desak-pemerintah-beri-kepastian-hukum-industri-rokok",
       "media": "pantau.com",
@@ -1558,7 +2069,7 @@
       "alasan_tone": "Serikat pekerja mendesak pemerintah secara umum terkait industri rokok tanpa menyerang Kemenperin secara langsung, masuk indikator Ne2 + A2."
     },
     {
-      "id": 58,
+      "id": 86,
       "title": "Hakim MK Soroti Karakteristik Rokok Elektronik Legal dan Kontribusinya Terhadap Perekonomian",
       "link": "https://www.waspada.id/berita/hakim-mk-soroti-karakteristik-rokok-elektronik-legal-dan-kontribusinya-terhadap-perekonomian",
       "media": "Waspada.id",
@@ -1576,7 +2087,7 @@
       "alasan_tone": "Berita membahas sidang Mahkamah Konstitusi terkait UU Kesehatan dan rokok elektronik tanpa menyebut Kemenperin maupun kebijakan utamanya."
     },
     {
-      "id": 59,
+      "id": 87,
       "title": "World Vape Show Dubai 2026: Produsen Vape Indonesia Bidik Akses Pasar Global",
       "link": "https://tangerangonline.id/2026/11/19/world-vape-show-dubai-2026-produsen-vape-indonesia-bidik-akses-pasar-global/",
       "media": "Tangerang Online",
@@ -1594,7 +2105,7 @@
       "alasan_tone": "Berita bersumber dari asosiasi industri vape yang mengutip data ekspor Kemenperin untuk mendukung eksistensi industri, masuk indikator P2."
     },
     {
-      "id": 60,
+      "id": 88,
       "title": "Ekspor Sawit Indonesia Naik 9,26% pada September 2026, Pengiriman ke Uni Eropa Melonjak 60%",
       "link": "https://www.infosawit.com/2026/11/19/ekspor-sawit-indonesia-naik-926-pada-september-2026-pengiriman-ke-uni-eropa-melonjak-60/",
       "media": "InfoSAWIT",
@@ -1612,7 +2123,7 @@
       "alasan_tone": "Berita membahas data kinerja produksi dan ekspor sawit oleh GAPKI tanpa menyebut Kemenperin atau kebijakannya secara langsung."
     },
     {
-      "id": 61,
+      "id": 89,
       "title": "Industri Rokok Tertekan, Perusahaan Ini Malah Cetak Penjualan Rp87,5 Triliun",
       "link": "https://surabaya.inews.id/read/731261/industri-rokok-tertekan-perusahaan-ini-malah-cetak-penjualan-rp875-triliun",
       "media": "iNews.ID",
@@ -1630,7 +2141,7 @@
       "alasan_tone": "Asosiasi/perusahaan mengapresiasi kebijakan pemerintah terkait cukai yang mendukung iklim industri, sehingga masuk kategori K3 mendukung (P2)."
     },
     {
-      "id": 62,
+      "id": 90,
       "title": "Sidang UU Kesehatan, Hakim MK Soroti Regulasi dan Ekonomi Vape RI - malang.disway.id",
       "link": "https://malang.disway.id/malang-melintang/read/26753/sidang-uu-kesehatan-hakim-mk-soroti-regulasi-dan-ekonomi-vape-ri",
       "media": "Disway Malang",
@@ -1648,7 +2159,7 @@
       "alasan_tone": "Berita membahas sidang Mahkamah Konstitusi terkait UU Kesehatan dan rokok elektronik tanpa menyebut Kemenperin maupun kebijakan utamanya."
     },
     {
-      "id": 63,
+      "id": 91,
       "title": "Indonesia Jadi Guru 11 Negara Karibia, Ajarkan Olah Mangga dan Sukun Jadi Cuan",
       "link": "https://www.industry.co.id/read/159466/indonesia-jadi-guru-11-negara-karibia-ajarkan-olah-mangga-dan-sukun-jadi-cuan",
       "media": "Industry.co.id",
@@ -1666,7 +2177,7 @@
       "alasan_tone": "Kemenperin menjadi pelaku utama melalui program pelatihan vokasi internasional dan pernyataan Menperin, masuk indikator P1."
     },
     {
-      "id": 64,
+      "id": 92,
       "title": "Industri Sawit Siapkan Strategi Hadapi Dunia yang Terfragmentasi",
       "link": "https://www.kompas.id/artikel/industri-sawit-siapkan-strategi-hadapi-dunia-yang-terfragmentasi",
       "media": "Kompas.id",
@@ -1684,7 +2195,7 @@
       "alasan_tone": "Berita mengulas tantangan global industri sawit secara umum tanpa menyebut institusi Kemenperin, sehingga dikategorikan netral (Ne2 + A1)."
     },
     {
-      "id": 65,
+      "id": 93,
       "title": "Pertanian Topang Ekonomi Sulbar, Bapperida Dorong Pengolahan dan Peningkatan Nilai Tambah Komoditas",
       "link": "https://sulbarprov.go.id/post/pertanian-topang-ekonomi-sulbar-bapperida-dorong-pengolahan-dan-peningkatan-nilai-tambah-komoditas",
       "media": "Pemprov Sulbar",
@@ -1702,7 +2213,7 @@
       "alasan_tone": "Berita membahas pertumbuhan ekonomi dan sektor pertanian Sulawesi Barat oleh Bapperida tanpa mengaitkan Kemenperin, sehingga dinilai Netral."
     },
     {
-      "id": 66,
+      "id": 94,
       "title": "Kenaikan Harga Singkong Bisa Jadi Tantangan Bagi Saham BUDI",
       "link": "https://insight.kontan.co.id/news/kenaikan-harga-singkong-bisa-jadi-tantangan-bagi-saham-budi",
       "media": "KONTAN",
@@ -1720,7 +2231,7 @@
       "alasan_tone": "Berita mengenai kenaikan harga singkong dan dampaknya pada emiten tidak menyebut maupun berkaitan langsung dengan Kemenperin, sehingga dinilai netral (K4)."
     },
     {
-      "id": 67,
+      "id": 95,
       "title": "Maluku Bakal Punya Pabrik Sagu Pertama, Dibangun di Seram Bagian Timur",
       "link": "https://regional.kompas.com/read/2026/11/19/053556878/maluku-bakal-punya-pabrik-sagu-pertama-dibangun-di-seram-bagian-timur",
       "media": "Kompas.com",
@@ -1738,7 +2249,7 @@
       "alasan_tone": "Berita membahas rencana pembangunan pabrik sagu oleh Pemkab SBT dan investor swasta tanpa melibatkan atau menyebut Kemenperin, sehingga dikategorikan netral (K4)."
     },
     {
-      "id": 68,
+      "id": 96,
       "title": "Produksi Sawit RI Januari-September Naik 8,42%, Ekspor Tembus USD32,31 Miliar",
       "link": "https://sawitindonesia.com/produksi-sawit-ri-januari-september-naik-8-42-ekspor-tembus-us-32-31-miliar",
       "media": "Sawit Indonesia",
@@ -1756,7 +2267,7 @@
       "alasan_tone": "Berita memuat data produksi dan ekspor sawit oleh GAPKI tanpa menyebut Kemenperin, sehingga dikategorikan netral berdasarkan aturan A3 dan A1."
     },
     {
-      "id": 69,
+      "id": 97,
       "title": "Kinerja Industri Sawit September 2026: Ekspor Meningkat, Stok Menurun",
       "link": "https://benang.id/kinerja-industri-sawit-september-2026-ekspor-meningkat-stok-menurun/",
       "media": "https://benang.id/",
@@ -1774,7 +2285,7 @@
       "alasan_tone": "Berita membahas data kinerja produksi dan ekspor sawit oleh GAPKI tanpa menyebut Kemenperin atau kebijakannya secara langsung."
     },
     {
-      "id": 70,
+      "id": 98,
       "title": "Bappenas: Tanjabtim berpotensi jadi pusat industri kelapa terpadu",
       "link": "https://jambi.antaranews.com/berita/674623/bappenas-tanjabtim-berpotensi-jadi-pusat-industri-kelapa-terpadu",
       "media": "ANTARA News Jambi",
@@ -1790,7 +2301,7 @@
       "review_text": ""
     },
     {
-      "id": 71,
+      "id": 99,
       "title": "Kepastian Hukum Dinilai Penting untuk Jaga Investasi dan Lapangan Kerja",
       "link": "https://mediaindonesia.com/ekonomi/957825/kepastian-hukum-dinilai-penting-untuk-jaga-investasi-dan-lapangan-kerja",
       "media": "Media Indonesia",
@@ -1806,7 +2317,7 @@
       "review_text": ""
     },
     {
-      "id": 72,
+      "id": 100,
       "title": "Pengusaha dan Pekerja Minta Kepastian Hukum untuk Lindungi Industri Rokok Legal",
       "link": "https://wartaekonomi.co.id/read648847/pengusaha-dan-pekerja-minta-kepastian-hukum-untuk-lindungi-industri-rokok-legal",
       "media": "Warta Ekonomi",
@@ -1820,461 +2331,23 @@
       "commodity": "Hasil Tembakau",
       "has_review": false,
       "review_text": ""
-    },
-    {
-      "id": 73,
-      "title": "Di Tengah Dinamika Industri, Sampoerna Pertahankan Kepemimpinan Pasar",
-      "link": "https://www.cnbcindonesia.com/news/20261118214034-4-786458/di-tengah-dinamika-industri-sampoerna-pertahankan-kepemimpinan-pasar",
-      "media": "CNBC Indonesia",
-      "tone": "Positif",
-      "date": "2026-11-18",
-      "datetime": "2026-11-18T21:48:55",
-      "time": "21:48",
-      "date_display": "Rabu, 18 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Hasil Tembakau",
-      "has_review": false,
-      "review_text": ""
-    },
-    {
-      "id": 74,
-      "title": "Sampoerna Pertahankan Kepemimpinan Pasar di Tengah Dinamika Industri Hasil Tembakau",
-      "link": "https://www.harianjogja.com/r-1279430/sampoerna-pertahankan-kepemimpinan-pasar-di-tengah-dinamika-industri-hasil-tembakau",
-      "media": "Harian Jogja",
-      "tone": "Positif",
-      "date": "2026-11-18",
-      "datetime": "2026-11-18T20:42:54",
-      "time": "20:42",
-      "date_display": "Rabu, 18 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Hasil Tembakau",
-      "has_review": false,
-      "review_text": ""
-    },
-    {
-      "id": 75,
-      "title": "PENGELOLAAN LIMBAH PT INDAH KIAT PERAWANG DISOROT, SEJUMLAH PASAL LINGKUNGAN HIDUP SIAP MENJERAT JIKA PELANGGARAN TERBUKTI",
-      "link": "https://mentengnews.com/2026/11/pengelolaan-limbah-pt-indah-kiat-perawang-disorot-sejumlah-pasal-lingkungan-hidup-siap-menjerat-jika-pelanggaran-terbukti/",
-      "media": "Mentengnews.com",
-      "tone": "Negatif",
-      "date": "2026-11-18",
-      "datetime": "2026-11-18T20:07:15",
-      "time": "20:07",
-      "date_display": "Rabu, 18 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Pulp & Kertas",
-      "has_review": false,
-      "review_text": ""
-    },
-    {
-      "id": 76,
-      "title": "Biskuit Indonesia Jadi Rebutan India, Malaysia hingga Amerika",
-      "link": "https://www.cnbcindonesia.com/research/20261118104827-131-786205/biskuit-indonesia-jadi-rebutan-india-malaysia-hingga-amerika",
-      "media": "CNBC Indonesia",
-      "tone": "Positif",
-      "date": "2026-11-18",
-      "datetime": "2026-11-18T18:30:05",
-      "time": "18:30",
-      "date_display": "Rabu, 18 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Makanan & Minuman",
-      "has_review": false,
-      "review_text": ""
-    },
-    {
-      "id": 77,
-      "title": "Bappenas Lirik Tanjabtim, Industri Kelapa Dibidik Masuk PSN - https://jambiekspres.disway.id/",
-      "link": "https://jambiekspres.disway.id/berita-daerah/read/726521/bappenas-lirik-tanjabtim-industri-kelapa-dibidik-masuk-psn",
-      "media": "Jambi Ekspres",
-      "tone": "Positif",
-      "date": "2026-11-18",
-      "datetime": "2026-11-18T17:45:00",
-      "time": "17:45",
-      "date_display": "Rabu, 18 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Kelapa & Olahan",
-      "has_review": false,
-      "review_text": ""
-    },
-    {
-      "id": 78,
-      "title": "Sampoerna Tetep Jadi Pemimpin Pasar di Tengah Dinamika Industri Hasil Tembakau",
-      "link": "https://bisnis.espos.id/sampoerna-tetep-jadi-pemimpin-pasar-di-tengah-dinamika-industri-hasil-tembakau-2268051/amp",
-      "media": "Espos Indonesia",
-      "tone": "Positif",
-      "date": "2026-11-18",
-      "datetime": "2026-11-18T17:34:00",
-      "time": "17:34",
-      "date_display": "Rabu, 18 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Hasil Tembakau",
-      "has_review": false,
-      "review_text": ""
-    },
-    {
-      "id": 79,
-      "title": "Produsen kopi di Lampung gunakan gas bumi hemat bahan bakar 50 persen",
-      "link": "https://lampung.antaranews.com/berita/832619/produsen-kopi-di-lampung-gunakan-gas-bumi-hemat-bahan-bakar-50-persen",
-      "media": "ANTARA News Lampung",
-      "tone": "Positif",
-      "date": "2026-11-18",
-      "datetime": "2026-11-18T17:34:06",
-      "time": "17:34",
-      "date_display": "Rabu, 18 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Kopi & Teh",
-      "has_review": false,
-      "review_text": ""
-    },
-    {
-      "id": 80,
-      "title": "Sampoerna Pertahankan Pangsa Pasar di Tengah Dinamika Industri",
-      "link": "https://tirto.id/sampoerna-pertahankan-pangsa-pasar-di-tengah-dinamika-industri-idWD",
-      "media": "Tirto.id",
-      "tone": "Positif",
-      "date": "2026-11-18",
-      "datetime": "2026-11-18T17:05:00",
-      "time": "17:05",
-      "date_display": "Rabu, 18 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Hasil Tembakau",
-      "has_review": false,
-      "review_text": ""
-    },
-    {
-      "id": 81,
-      "title": "Penjualan Sampoerna Capai Rp87,5 Triliun hingga Kuartal III 2026, Pangsa Pasar 30 Persen",
-      "link": "https://surabaya.tribunnews.com/adv/1954789/penjualan-sampoerna-capai-rp875-triliun-hingga-kuartal-iii-2026-pangsa-pasar-30-persen",
-      "media": "Surya.co.id",
-      "tone": "Positif",
-      "date": "2026-11-18",
-      "datetime": "2026-11-18T16:46:10",
-      "time": "16:46",
-      "date_display": "Rabu, 18 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Hasil Tembakau",
-      "has_review": false,
-      "review_text": ""
-    },
-    {
-      "id": 82,
-      "title": "Sampoerna Topang 90.000 Lapangan Kerja, Dampak Ekonomi Capai Rp 204,1 Triliun per Tahun",
-      "link": "https://activity.kompas.com/baca-cepat/xplore/money/read/cm/2026/11/18/163720026/sampoerna-topang-90000-lapangan-kerja-dampak-ekonomi-capai-rp-2041-triliun",
-      "media": "Kompas.com",
-      "tone": "Positif",
-      "date": "2026-11-18",
-      "datetime": "2026-11-18T16:37:00",
-      "time": "16:37",
-      "date_display": "Rabu, 18 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Hasil Tembakau",
-      "has_review": false,
-      "review_text": ""
-    },
-    {
-      "id": 83,
-      "title": "Sampoerna Kuasai 30% Pangsa Pasar, Serap 90 Ribu Tenaga Kerja",
-      "link": "https://www.detik.com/jatim/bisnis/d-8758699/sampoerna-kuasai-30-pangsa-pasar-serap-90-ribu-tenaga-kerja",
-      "media": "detikcom",
-      "tone": "Positif",
-      "date": "2026-11-18",
-      "datetime": "2026-11-18T16:28:09",
-      "time": "16:28",
-      "date_display": "Rabu, 18 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Hasil Tembakau",
-      "has_review": false,
-      "review_text": ""
-    },
-    {
-      "id": 84,
-      "title": "Sabut Kelapa PPU Tembus Pasar Ekspor, Koperasi KIM Kirim 23 Ton Cocopeat ke Taiwan",
-      "link": "https://kaltim.tribunnews.com/tribun-etam/1174621/sabut-kelapa-ppu-tembus-pasar-ekspor-koperasi-kim-kirim-23-ton-cocopeat-ke-taiwan",
-      "media": "Tribunkaltim.co",
-      "tone": "Positif",
-      "date": "2026-11-18",
-      "datetime": "2026-11-18T15:52:26",
-      "time": "15:52",
-      "date_display": "Rabu, 18 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Kelapa & Olahan",
-      "has_review": false,
-      "review_text": ""
-    },
-    {
-      "id": 85,
-      "title": "Harga tepung meroket, pelaku usaha kerupuk terpaksa perkecil ukuran",
-      "link": "https://www.antaranews.com/foto/5862335/harga-tepung-meroket-pelaku-usaha-kerupuk-terpaksa-perkecil-ukuran",
-      "media": "ANTARA News",
-      "tone": "Negatif",
-      "date": "2026-11-18",
-      "datetime": "2026-11-18T15:29:00",
-      "time": "15:29",
-      "date_display": "Rabu, 18 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Tepung, Sagu & Pati",
-      "has_review": false,
-      "review_text": ""
-    },
-    {
-      "id": 86,
-      "title": "Penjualan Bersih Sampoerna Tembus Rp87,5 T hingga Kuartal III 2026, Pangsa Pasar Capai 30 Persen",
-      "link": "https://www.tribunnews.com/bisnis/7913163/penjualan-bersih-sampoerna-tembus-rp875-t-hingga-kuartal-iii-2026-pangsa-pasar-capai-30-persen",
-      "media": "Tribunnews.com",
-      "tone": "Positif",
-      "date": "2026-11-18",
-      "datetime": "2026-11-18T15:27:00",
-      "time": "15:27",
-      "date_display": "Rabu, 18 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Hasil Tembakau",
-      "has_review": false,
-      "review_text": ""
-    },
-    {
-      "id": 87,
-      "title": "Industri Vape Indonesia Perkuat Daya Saing",
-      "link": "https://industri.kontan.co.id/news/industri-vape-indonesia-perkuat-daya-saing",
-      "media": "kontan.co.id",
-      "tone": "Positif",
-      "date": "2026-11-18",
-      "datetime": "2026-11-18T15:14:17",
-      "time": "15:14",
-      "date_display": "Rabu, 18 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Hasil Tembakau",
-      "has_review": false,
-      "review_text": ""
-    },
-    {
-      "id": 88,
-      "title": "Kopi Jempol Lampung Hemat 50 Persen Sejak Tinggalkan Solar dan Beralih ke Gas PGN",
-      "link": "https://lampung.tribunnews.com/lampung/1222774/kopi-jempol-lampung-hemat-50-persen-sejak-tinggalkan-solar-dan-beralih-ke-gas-pgn",
-      "media": "Tribunlampung.co.id",
-      "tone": "Positif",
-      "date": "2026-11-18",
-      "datetime": "2026-11-18T14:30:22",
-      "time": "14:30",
-      "date_display": "Rabu, 18 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Kopi & Teh",
-      "has_review": false,
-      "review_text": ""
-    },
-    {
-      "id": 89,
-      "title": "Sampoerna Pertahankan Posisi Pemimpin Pasar Industri Tembakau",
-      "link": "https://www.cnnindonesia.com/ekonomi/20261118124452-625-1428481/sampoerna-pertahankan-posisi-pemimpin-pasar-industri-tembakau",
-      "media": "CNN Indonesia",
-      "tone": "Positif",
-      "date": "2026-11-18",
-      "datetime": "2026-11-18T12:52:14",
-      "time": "12:52",
-      "date_display": "Rabu, 18 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Hasil Tembakau",
-      "has_review": false,
-      "review_text": ""
-    },
-    {
-      "id": 90,
-      "title": "Kinerja Kuartal III 2026: Sampoerna Raup Penjualan Bersih Rp87,5 Triliun - harian.disway.id",
-      "link": "https://harian.disway.id/amp/979873/kinerja-kuartal-iii-2026-sampoerna-raup-penjualan-bersih-rp875-triliun",
-      "media": "HARIAN DISWAY",
-      "tone": "Positif",
-      "date": "2026-11-18",
-      "datetime": "2026-11-18T11:55:00",
-      "time": "11:55",
-      "date_display": "Rabu, 18 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Hasil Tembakau",
-      "has_review": false,
-      "review_text": ""
-    },
-    {
-      "id": 91,
-      "title": "Sherly Laos Jajaki Investasi Tiongkok, Industri Kelapa dan Pengembangan Sofifi Jadi Prioritas",
-      "link": "https://ternate.tribunnews.com/maluku-utara/107963/sherly-laos-jajaki-investasi-tiongkok-industri-kelapa-dan-pengembangan-sofifi-jadi-prioritas",
-      "media": "Tribunternate.com",
-      "tone": "Positif",
-      "date": "2026-11-18",
-      "datetime": "2026-11-18T09:34:21",
-      "time": "09:34",
-      "date_display": "Rabu, 18 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Kelapa & Olahan",
-      "has_review": false,
-      "review_text": ""
-    },
-    {
-      "id": 92,
-      "title": "Asosiasi Vape Dorong Pengawasan, Bukan Pelarangan Total",
-      "link": "https://industri.kontan.co.id/news/asosiasi-vape-dorong-pengawasan-bukan-pelarangan-total",
-      "media": "kontan.co.id",
-      "tone": "Negatif",
-      "date": "2026-11-18",
-      "datetime": "2026-11-18T09:00:27",
-      "time": "09:00",
-      "date_display": "Rabu, 18 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Hasil Tembakau",
-      "has_review": false,
-      "review_text": ""
-    },
-    {
-      "id": 93,
-      "title": "Hilirisasi Rumput Laut: Ambisi Indonesia Kuasai Pasar Dunia",
-      "link": "https://katadata.co.id/indepth/opini/6afb96201155f/hilirisasi-rumput-laut-ambisi-indonesia-kuasai-pasar-dunia",
-      "media": "Katadata.co.id",
-      "tone": "Positif",
-      "date": "2026-11-18",
-      "datetime": "2026-11-18T07:15:00",
-      "time": "07:15",
-      "date_display": "Rabu, 18 November 2026",
-      "spokesperson": "Muhammad Sarmuji",
-      "unit": "MENTERI",
-      "commodity": "Rumput Laut",
-      "has_review": false,
-      "review_text": ""
-    },
-    {
-      "id": 94,
-      "title": "Sawit Sumbermas (SSMS) Melicinkan Hilirisasi Sawit",
-      "link": "https://insight.kontan.co.id/news/sawit-sumbermas-ssms-melicinkan-hilirisasi-sawit",
-      "media": "KONTAN",
-      "tone": "Positif",
-      "date": "2026-11-18",
-      "datetime": "2026-11-18T06:35:13",
-      "time": "06:35",
-      "date_display": "Rabu, 18 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Kelapa Sawit & CPO",
-      "has_review": false,
-      "review_text": ""
-    },
-    {
-      "id": 95,
-      "title": "Emiten Ban Menghadapi Kenaikan Harga Bahan Baku ditengah Pemulihan Penjualan Otomotif",
-      "link": "https://insight.kontan.co.id/news/emiten-ban-menghadapi-kenaikan-harga-bahan-baku-ditengah-pemulihan-penjualan-otomotif",
-      "media": "KONTAN",
-      "tone": "Negatif",
-      "date": "2026-11-18",
-      "datetime": "2026-11-18T06:05:09",
-      "time": "06:05",
-      "date_display": "Rabu, 18 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Karet & Olahan",
-      "has_review": false,
-      "review_text": ""
-    },
-    {
-      "id": 96,
-      "title": "Bahan Pangan Impor Kerek Harga Makanan",
-      "link": "https://insight.kontan.co.id/news/bahan-pangan-impor-kerek-harga-makanan?source=home_insight",
-      "media": "KONTAN",
-      "tone": "Negatif",
-      "date": "2026-11-18",
-      "datetime": "2026-11-18T04:00:51",
-      "time": "04:00",
-      "date_display": "Rabu, 18 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Makanan & Minuman",
-      "has_review": false,
-      "review_text": ""
-    },
-    {
-      "id": 97,
-      "title": "Sidang Larangan Vape Digelar 25 November, MK Akan Dengar Pengusaha, BNN, dan MUI",
-      "link": "https://radarbanjarmasin.jawapos.com/hukum-peristiwa/2611170059/sidang-larangan-vape-digelar-25-november-mk-akan-dengar-pengusaha-bnn-dan-mui",
-      "media": "Radar Banjarmasin",
-      "tone": "Netral",
-      "date": "2026-11-17",
-      "datetime": "2026-11-17T20:35:10",
-      "time": "20:35",
-      "date_display": "Selasa, 17 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Hasil Tembakau",
-      "has_review": false,
-      "review_text": ""
-    },
-    {
-      "id": 98,
-      "title": "Pasar dunia minati produk olahan kelor asal NTB",
-      "link": "https://mataram.antaranews.com/berita/583159/pasar-dunia-minati-produk-olahan-kelor-asal-ntb",
-      "media": "ANTARA News Mataram",
-      "tone": "Positif",
-      "date": "2026-11-17",
-      "datetime": "2026-11-17T20:24:44",
-      "time": "20:24",
-      "date_display": "Selasa, 17 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Pakan Ternak",
-      "has_review": false,
-      "review_text": ""
-    },
-    {
-      "id": 99,
-      "title": "Menperin Terbitkan Surat Dukungan PSN Hilirisasi Sagu di SBT Maluku",
-      "link": "https://ameks.fajar.co.id/2026/11/17/menperin-terbitkan-surat-dukungan-psn-hilirisasi-sagu-di-sbt-maluku/",
-      "media": "Ameks Online",
-      "tone": "Positif",
-      "date": "2026-11-17",
-      "datetime": "2026-11-17T18:43:46",
-      "time": "18:43",
-      "date_display": "Selasa, 17 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Tepung, Sagu & Pati",
-      "has_review": false,
-      "review_text": ""
-    },
-    {
-      "id": 100,
-      "title": "Royal Canin Proyeksi Industri Pet Food RI Tumbuh Double Digit, Ini Pendorongnya",
-      "link": "https://www.fortuneidn.com/news/industri-pet-food-tumbuh-double-digit-tahun-depan-00-6cmtl-v2435n",
-      "media": "FORTUNE Indonesia",
-      "tone": "Positif",
-      "date": "2026-11-17",
-      "datetime": "2026-11-17T18:28:47",
-      "time": "18:28",
-      "date_display": "Selasa, 17 November 2026",
-      "spokesperson": "",
-      "unit": "-",
-      "commodity": "Makanan & Minuman",
-      "has_review": false,
-      "review_text": ""
     }
   ],
   "recent_days": [
     {
+      "fileDate": "2026-11-21",
+      "tglDisplay": "Sabtu, 21 Nov 2026",
+      "isNew": true,
+      "count": 28,
+      "countStr": "28 berita",
+      "pos": 8,
+      "net": 20,
+      "neg": 0
+    },
+    {
       "fileDate": "2026-11-20",
       "tglDisplay": "Jumat, 20 Nov 2026",
-      "isNew": true,
+      "isNew": false,
       "count": 56,
       "countStr": "56 berita",
       "pos": 13,
@@ -2400,16 +2473,6 @@
       "pos": 12,
       "net": 0,
       "neg": 2
-    },
-    {
-      "fileDate": "2026-11-07",
-      "tglDisplay": "Sabtu, 7 Nov 2026",
-      "isNew": false,
-      "count": 17,
-      "countStr": "17 berita",
-      "pos": 12,
-      "net": 0,
-      "neg": 5
     }
   ]
 }

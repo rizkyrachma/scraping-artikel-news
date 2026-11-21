@@ -43,5 +43,35 @@
     "ts": 1795207247.6150868,
     "reason": "rejected_target",
     "validator_version": "v1"
+  },
+  "https://news.google.com/articles/CBMiYEFVX3lxTE4zcW1sUEJiZHVYUmx0TUNNc0d2R0EzVlBmZzNoVy1hcFVVV1c1bEcyTnRPbVJqSUk0dU1VZlZHTVI5aGFYQjlvOHFJX3lPRVVELTlvTWZZbVFWZWxNYW1DYw::val_v1": {
+    "ts": 1795292596.57661,
+    "reason": "rejected_target",
+    "validator_version": "v1"
+  },
+  "https://news.google.com/articles/CBMifkFVX3lxTE1STUtkVGpZejVGNDRMYmFtTHdBZDh6YzdwZy1LWU84d3FON0w4R3dja3ljWHNMeU1TTzFHRExKbGtKakNFSDE0cEo3SVYzd0lEeUQya0pIc09VaC1ONWVHUUlfYmE2aU5RR0RZZHktc0FKcGNob3Bkd3BUU2R0QQ::val_v1": {
+    "ts": 1795293650.323327,
+    "reason": "rejected_target",
+    "validator_version": "v1"
+  },
+  "https://news.google.com/articles/CBMihwFBVV95cUxOVjlBMFgwSVpqTHJ1UG1HYk42SDJzck9xLVhQWEt4ZFk4MDdveTlhSEdobEhvZmN1SEY3T2xLWmNjTk1ONTUwckdFV2RBM2x4RkVrNEd1TmJIaEhfNWdSd1gySDhpMnp0UmlZN3hNWEc0Uk5zeERpZmQwcDNhY2V5N2JXeFo3dU0::val_v1": {
+    "ts": 1795293651.5823033,
+    "reason": "rejected_target",
+    "validator_version": "v1"
+  },
+  "https://news.google.com/articles/CBMihgFBVV95cUxOYU5Vbm5heExqTjJiRFpMNVVEbW9IaTVuUURYYS1fR012Y0FKZlhWRTRseDU2R0l1clVmU3pIT0dqa1Zqdkx3LXEyNGpONmdKU3o0a2l4Y2N0ZlBSenZOd1lxdUJnYWtWbkFjcG5FTUctVnJ2UDFrUXMweUY1WHRYcWlPWFdkZw::val_v1": {
+    "ts": 1795293651.9543417,
+    "reason": "rejected_target",
+    "validator_version": "v1"
+  },
+  "https://news.google.com/articles/CBMiZkFVX3lxTE9feU9QZUpfMERheUtMeWl3bEFiNHZnZUZZYnVlNExXa2xoMkhQZGVWSHEyMFd1YTgzVnJOdFhGemw0NXpGMTRBTElMMmQ3XzVJdENDQWRGeUJJaUoyanBheUV0eWc2Zw::val_v1": {
+    "ts": 1795293713.9735882,
+    "reason": "rejected_target",
+    "validator_version": "v1"
+  },
+  "https://news.google.com/articles/CBMiXkFVX3lxTE9DNFFCa0VCRTJ4NU10aW1oM2xqR0laMXlRVGRpUE9wdmU0Ylg1NUhLTV96eUU4dzUxTU5pVEc1VVZuRzBQcl9BV054NW5vcUFpakRtYnBzMFBWWUtOY1E::val_v1": {
+    "ts": 1795293838.118066,
+    "reason": "rejected_target",
+    "validator_version": "v1"
   }
 }

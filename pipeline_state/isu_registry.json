@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-21 03:55:05",
+  "updated_at": "2026-11-22 03:56:53",
   "issues": [
     {
       "isu_id": "rilis_74a1d93a45",
@@ -766,20 +766,22 @@
     },
     {
       "isu_id": "klaster_4d53be91b8",
-      "isu": "Industri Rokok Tertekan, Perusahaan Ini Malah Cetak Penjualan Rp87,5 Triliun",
+      "isu": "PT HM Sampoerna Tbk mencatatkan penjualan bersih Rp87,5 triliun dan mempertahankan pangsa pasar 30%.",
       "sumber_isu": "klaster",
       "tanggal_awal": "2026-11-19",
-      "tanggal_terakhir": "2026-11-20",
-      "_norm_title": "industri rokok tertekan perusahaan ini malah cetak penjualan rp 87_5 triliun",
-      "tone": "Positif",
-      "tone_alasan": "Asosiasi/perusahaan mengapresiasi kebijakan pemerintah terkait cukai yang mendukung iklim industri, sehingga masuk kategori K3 mendukung (P2).",
+      "tanggal_terakhir": "2026-11-21",
+      "_norm_title": "pt hm sampoerna tbk mencatatkan penjualan bersih rp 87_5 triliun dan mempertahankan pangsa pasar 30",
+      "tone": "Netral",
+      "tone_alasan": "Berita membahas kinerja keuangan dan penjualan perusahaan rokok yang berkaitan dengan sektor industri binaan tanpa menyebut Kemenperin.",
       "tone_keyakinan": "tinggi",
-      "evaluated_at": "2026-11-19 10:25:55",
-      "member_count_at_eval": 1,
-      "member_count": 2,
+      "evaluated_at": "2026-11-22 03:56:48",
+      "member_count_at_eval": 4,
+      "member_count": 4,
       "sample_titles": [
         "Industri Rokok Tertekan, Perusahaan Ini Malah Cetak Penjualan Rp87,5 Triliun",
-        "Sampoerna Ngegas, Penjualan Bersih Kuartal III 2026 Tembus Rp87,5 Triliun"
+        "Sampoerna Ngegas, Penjualan Bersih Kuartal III 2026 Tembus Rp87,5 Triliun",
+        "Sampoerna Catat Penjualan Bersih Rp 87,5 Triliun",
+        "Sampoerna Kuasai 30% Pangsa Pasar, Serap 90 Ribu Tenaga Kerja"
       ],
       "sample_snippets": [
         "SURABAYA, iNewsSurabaya.id – Industri hasil tembakau masih menghadapi tekanan akibat perubahan pola konsumsi masyarakat, pergeseran permintaan ke produk berharga lebih murah, hingga maraknya peredaran rokok ilegal. Di tengah kondisi tersebut, PT HM Sampoerna Tbk mencatat penjualan bersih sebesar Rp87,5 triliun hingga kuartal III 2026.\nNilai penjualan tersebut meningkat 4,5 persen dibandingkan periode yang sama tahun sebelumnya. Sementara volume penjualan selama Januari hingga September 2026 mencapai 60,4 miliar batang atau tumbuh 1,6 persen secara tahunan.\nPresiden Direktur PT HM Sampoerna Tbk, Ivan Cahyadi, menyebut perusahaan masih mampu mempertahankan kinerja di tengah dinamika pasar hasil tembakau. Menurutnya, kondisi kebijakan cukai dan penindakan terhadap rokok ilegal menjadi sejumlah faktor yang turut memengaruhi perkembangan industri.\n“Kami ingin menyampaikan apresiasi kepada pemerintah atas keputusan untuk tidak menaikkan tarif cukai hasil tembakau pada 2026, serta upaya penindakan rokok ilegal. Kebijakan ini, didukung efektivitas strategi portofolio yang kami jalankan secara konsisten, membantu kami menjaga kinerja bisnis perseroan,” ujar Ivan dalam paparan publik di Sura",
@@ -803,29 +805,49 @@
           "media_name": "karawang bekasi disway",
           "tanggal": "Fri, 20 Nov 2026 08:51:00 GMT",
           "skor": 0.645
+        },
+        {
+          "id": "27",
+          "title": "Sampoerna Catat Penjualan Bersih Rp 87,5 Triliun",
+          "link": "https://lensahukum.co.id/sampoerna-penjualan-bersih-2026",
+          "canonical_url": "https://lensahukum.co.id/sampoerna-penjualan-bersih-2026",
+          "media_name": "Lensa Hukum",
+          "tanggal": "Sat, 21 Nov 2026 08:06:12 GMT",
+          "skor": 0.7305
+        },
+        {
+          "id": "11",
+          "title": "Sampoerna Kuasai 30% Pangsa Pasar, Serap 90 Ribu Tenaga Kerja",
+          "link": "https://news.detik.com/berita/d-8762796/sampoerna-kuasai-30-pangsa-pasar-serap-90-ribu-tenaga-kerja",
+          "canonical_url": "https://news.detik.com/berita/d-8762796/sampoerna-kuasai-30-pangsa-pasar-serap-90-ribu-tenaga-kerja",
+          "media_name": "detikNews",
+          "tanggal": "Sat, 21 Nov 2026 01:19:44 GMT",
+          "skor": 0.3767
         }
       ],
       "tone_hubungan": "K3",
-      "tone_arah": "mendukung"
+      "tone_arah": "tidak ada",
+      "tone_metode": "AI-isu"
     },
     {
       "isu_id": "klaster_f0c1cb3760",
       "isu": "Serikat pekerja dan pengusaha meminta pemerintah mengawasi rokok ilegal serta memberikan kepastian hukum bagi industri hasil tembakau",
       "sumber_isu": "klaster",
       "tanggal_awal": "2026-11-19",
-      "tanggal_terakhir": "2026-11-20",
+      "tanggal_terakhir": "2026-11-21",
       "_norm_title": "serikat pekerja dan pengusaha minta pemerintah mengawasi rokok ilegal serta memberikan kepastian hukum bagi iht",
       "tone": "Netral",
       "tone_alasan": "Permintaan ditujukan kepada pemerintah secara umum tanpa menyebut atau menyerang kebijakan spesifik Kemenperin.",
       "tone_keyakinan": "tinggi",
       "evaluated_at": "2026-11-21 03:55:00",
       "member_count_at_eval": 4,
-      "member_count": 4,
+      "member_count": 5,
       "sample_titles": [
         "Serikat Pekerja Desak Pemerintah Beri Kepastian Hukum Industri Rokok",
         "Peredaran Rokok Ilegal Mengkhawatirkan, Pengusaha Butuh Kepastian Hukum",
         "Rokok Ilegal Marak, Serikat Pekerja Minta Kenaikan Cukai Disetop",
-        "Serikat Pekerja Minta Pemerintah Awasi Industri Rokok Elektronik"
+        "Serikat Pekerja Minta Pemerintah Awasi Industri Rokok Elektronik",
+        "Serikat Pekerja Desak Moratorium Kenaikan Cukai Rokok"
       ],
       "sample_snippets": [
         "Pantau - Forum Serikat Pekerja Rokok Tembakau Makanan dan Minuman Serikat Pekerja Seluruh Indonesia (FSP RTMM-SPSI) meminta pemerintah memberikan kepastian hukum dan kepastian berusaha bagi industri hasil tembakau (IHT) di tengah tekanan regulasi, kebijakan fiskal, serta meningkatnya peredaran rokok ilegal.\nKetua Umum FSP RTMM-SPSI Hendry Wardana mengatakan tekanan terhadap perusahaan rokok legal berpotensi mengancam keberlangsungan industri dan pekerjaan sekitar 500.000 tenaga kerja yang terlibat langsung dalam sektor manufaktur rokok.\nPernyataan tersebut disampaikan Hendry melalui keterangan tertulis di Jakarta, Kamis (19/11/2026).\nMenurutnya, perusahaan rokok legal menghadapi kewajiban cukai dan berbagai ketentuan pemerintah, sementara produk rokok ilegal beredar tanpa memenuhi kewajiban yang sama.\n“Jika perusahaan rokok legal akhirnya menyerah karena ketidakadilan yang terus terjadi, dampaknya akan sangat besar,” ujar Hendry.\nIa menilai pemerintah perlu memperhatikan keberlangsungan industri legal sekaligus perlindungan tenaga kerja dalam merumuskan kebijakan sektor tembakau.\nSerikat Pekerja Khawatir Nasib 500 Ribu Pekerja Industri Rokok\nHendry menjelaskan bahwa sektor manufakt",
@@ -867,6 +889,15 @@
           "media_name": "Lensa Hukum",
           "tanggal": "Fri, 20 Nov 2026 08:59:55 GMT",
           "skor": 0.7102
+        },
+        {
+          "id": "13",
+          "title": "Serikat Pekerja Desak Moratorium Kenaikan Cukai Rokok",
+          "link": "https://www.suaralandak.co.id/serikat-pekerja-moratorium-cukai-rokok",
+          "canonical_url": "https://suaralandak.co.id/serikat-pekerja-moratorium-cukai-rokok",
+          "media_name": "www.suaralandak.co.id",
+          "tanggal": "Sat, 21 Nov 2026 08:56:06 GMT",
+          "skor": 0.529
         }
       ],
       "tone_hubungan": "K3",
@@ -1472,14 +1503,14 @@
       "isu": "Media dan Industri Sawit Diajak Bangun Komunikasi Berbasis Data untuk Lawan Kampanye Negatif",
       "sumber_isu": "klaster",
       "tanggal_awal": "2026-11-20",
-      "tanggal_terakhir": "2026-11-20",
+      "tanggal_terakhir": "2026-11-21",
       "_norm_title": "media dan industri sawit diajak bangun komunikasi berbasis data untuk lawan kampanye negatif",
       "tone": "Netral",
       "tone_alasan": "Pemberitaan mengenai kampanye industri sawit dan workshop jurnalistik PWI-GAPKI tanpa melibatkan peran atau kebijakan Kemenperin.",
       "tone_keyakinan": "tinggi",
       "evaluated_at": "2026-11-21 03:55:00",
       "member_count_at_eval": 4,
-      "member_count": 4,
+      "member_count": 5,
       "sample_titles": [
         "Lawan Kampanye Negatif, Media dan Industri Sawit Diajak Bangun Komunikasi Berbasis Data",
         "lawan-kampanye-negatif-media-dan-industri-sawit-diajak-bangun-komunikasi-berbasis-data",
@@ -1525,6 +1556,15 @@
           "media_name": "harian fajar",
           "tanggal": "Fri, 20 Nov 2026 02:15:47 GMT",
           "skor": 0.9839
+        },
+        {
+          "id": "22",
+          "title": "Lawan Kampanye Negatif, Media dan Industri Sawit Diajak Bangun Komunikasi Berbasis Data",
+          "link": "https://mercusuar.web.id/berita-utama/lawan-kampanye-negatif-media-dan-industri-sawit-diajak-bangun-komunikasi-berbasis-data/",
+          "canonical_url": "https://mercusuar.web.id/berita-utama/lawan-kampanye-negatif-media-dan-industri-sawit-diajak-bangun-komunikasi-berbasis-data",
+          "media_name": "harian mercusuar",
+          "tanggal": "Sat, 21 Nov 2026 01:43:07 GMT",
+          "skor": 1.0
         }
       ],
       "tone_hubungan": "K4",
@@ -1827,21 +1867,22 @@
       "isu": "Menperin Mendorong Penguatan Hilirisasi Bahan Wewangian dan Industri Parfum Nasional",
       "sumber_isu": "klaster",
       "tanggal_awal": "2026-11-20",
-      "tanggal_terakhir": "2026-11-20",
+      "tanggal_terakhir": "2026-11-21",
       "_norm_title": "kemenperin mendorong penguatan hilirisasi bahan wewangian dan industri parfum nasional",
       "tone": "Positif",
       "tone_alasan": "Menperin menjadi narasumber dan pelaku utama yang mendorong penguatan hilirisasi bahan baku wewangian dan industri parfum nasional.",
       "tone_keyakinan": "tinggi",
       "evaluated_at": "2026-11-21 03:55:00",
       "member_count_at_eval": 6,
-      "member_count": 6,
+      "member_count": 7,
       "sample_titles": [
         "Indonesia Perkuat Industri Parfum Berbasis Kekayaan Hayati",
         "Menperin dorong hilirisasi bahan wewangian lokal lewat Maharum",
         "Menperin dorong hilirisasi bahan wewangian lokal lewat Maharum Group",
         "Menperin Dorong Industri Parfum Olah Bahan Baku Lokal",
         "Menperin Sarmuji Dorong Industri Parfum Nasional Tak Hanya Ekspor Bahan Baku",
-        "Menperin Targetkan Indonesia Jadi Raja Industri Parfum Dunia"
+        "Menperin Targetkan Indonesia Jadi Raja Industri Parfum Dunia",
+        "Menperin Dorong Maharum Hilirisasi Bahan Baku Parfum"
       ],
       "sample_snippets": [
         "Indonesia Perkuat Industri Parfum Berbasis Kekayaan Hayati\nIndonesia berpeluang memperbesar perannya dalam industri parfum dunia dengan mengoptimalkan kekayaan keanekaragaman hayati sebagai bahan baku wewangian. Menteri Perindustrian Muhammad Sarmuji menilai pengolahan minyak atsiri, nilam, dan cengkeh di dalam negeri dapat meningkatkan nilai tambah industri nasional. Seperti dilansir dari Liputan6, Sarmuji menyampaikan hal tersebut saat meresmikan pabrik kedua PT Maharum Group di Legok, Kabupaten Tangerang, Jumat (20/11/2026).\nIa menilai Indonesia memiliki sumber daya yang cukup untuk memasok kebutuhan bahan baku parfum di pasar internasional. Menurut Sarmuji, potensi ekspor Indonesia tidak hanya berasal dari bahan baku utama, tetapi juga produk hasil penyulingan berbagai komoditas. Pengembangan sektor tersebut dinilai dapat memperluas kontribusi industri berbasis keanekaragaman hayati.\n\"Sebenarnya kita bisa lebih banyak lagi mengekspor bahan baku ke luar negeri melalui keanekaragaman hayati kita, seperti minyak atsiri, nilam, dan minyak-minyak lainnya. Bisa juga penyulingan cengkeh dan sebagainya. Banyak yang bisa kita ekspor,\" ujar Muhammad Sarmuji, Menteri Perindustrian.\nPemeri",
@@ -1901,6 +1942,15 @@
           "media_name": "Liputan6.com",
           "tanggal": "Fri, 20 Nov 2026 11:30:49 GMT",
           "skor": 0.3881
+        },
+        {
+          "id": "3",
+          "title": "Menperin Dorong Maharum Hilirisasi Bahan Baku Parfum",
+          "link": "https://mediaindonesia.com/ekonomi/958823/menperin-dorong-maharum-hilirisasi-bahan-baku-parfum",
+          "canonical_url": "https://mediaindonesia.com/ekonomi/958823/menperin-dorong-maharum-hilirisasi-bahan-baku-parfum",
+          "media_name": "Media Indonesia",
+          "tanggal": "Sat, 21 Nov 2026 07:33:35 GMT",
+          "skor": 0.4376
         }
       ],
       "tone_hubungan": "K1",
@@ -2188,19 +2238,21 @@
       "isu": "Kopi hingga gula aren RI diminati Eropa dengan potensi Rp233 miliar",
       "sumber_isu": "klaster",
       "tanggal_awal": "2026-11-20",
-      "tanggal_terakhir": "2026-11-20",
+      "tanggal_terakhir": "2026-11-21",
       "_norm_title": "kopi hingga gula aren ri diminati eropa dengan potensi rp 233 miliar",
       "tone": "Netral",
       "tone_alasan": "Berita membahas ekspor pangan dan pameran gastronomi yang diinisiasi oleh Kemendag tanpa melibatkan Kemenperin sehingga dikategorikan K4 dan Netral.",
       "tone_keyakinan": "tinggi",
       "evaluated_at": "2026-11-21 03:54:51",
       "member_count_at_eval": 1,
-      "member_count": 1,
+      "member_count": 2,
       "sample_titles": [
-        "Kopi hingga gula aren RI diminati Eropa dengan potensi Rp233 miliar"
+        "Kopi hingga gula aren RI diminati Eropa dengan potensi Rp233 miliar",
+        "Kopi, Gula Aren, dan Boga Bahari Indonesia Diminati Gastronomi Eropa"
       ],
       "sample_snippets": [
-        "Kopi hingga gula aren RI diminati Eropa dengan potensi Rp233 miliar\nSalah satu pelaku usaha Indonesia ikut serta dalam pameran Gastronomic Forum Barcelona 2026, Spanyol pada 2-4 November 2026. ANTARA/HO-Kemendag\nDirektur Jenderal Pengembangan Ekspor Nasional Kemendag Fajarini Puntodewi mengapresiasi capaian tersebut dan keikutsertaan Indonesia menjadi upaya untuk terus meningkatkan ekspor produk Indonesia ke pasar Spanyol dan kawasan Eropa.\n\"Minat yang datang dari para pelaku industri gastronomi, koki, dan perwakilan restoran ini menjadi indikasi makin terbukanya peluang bagi produk Indonesia untuk dikenal dan dikembangkan di pasar Spanyol maupun Eropa,\" ujar Puntodewi dalam keterangan di Jakarta, Jumat.\nAtase Perdagangan (Atdag) RI Madrid Ratnaningsih Hidayati menerangkan bahwa partisipasi Indonesia\ndalam ajang tersebut menjadi sarana strategis untuk memperkenalkan kekayaan produk pangan Indonesia secara langsung kepada calon mitra usaha.\nMenurutnya, dari beragam produk yang ditampilkan Paviliun Indonesia, kopi menjadi salah satu yang paling dilirik. Perhatian tersebut menunjukkan prospek untuk mengembangkan komoditas kopi di pasar Spanyol.\n\"Untuk mengoptimalkan peluang tersebut, "
+        "Kopi hingga gula aren RI diminati Eropa dengan potensi Rp233 miliar\nSalah satu pelaku usaha Indonesia ikut serta dalam pameran Gastronomic Forum Barcelona 2026, Spanyol pada 2-4 November 2026. ANTARA/HO-Kemendag\nDirektur Jenderal Pengembangan Ekspor Nasional Kemendag Fajarini Puntodewi mengapresiasi capaian tersebut dan keikutsertaan Indonesia menjadi upaya untuk terus meningkatkan ekspor produk Indonesia ke pasar Spanyol dan kawasan Eropa.\n\"Minat yang datang dari para pelaku industri gastronomi, koki, dan perwakilan restoran ini menjadi indikasi makin terbukanya peluang bagi produk Indonesia untuk dikenal dan dikembangkan di pasar Spanyol maupun Eropa,\" ujar Puntodewi dalam keterangan di Jakarta, Jumat.\nAtase Perdagangan (Atdag) RI Madrid Ratnaningsih Hidayati menerangkan bahwa partisipasi Indonesia\ndalam ajang tersebut menjadi sarana strategis untuk memperkenalkan kekayaan produk pangan Indonesia secara langsung kepada calon mitra usaha.\nMenurutnya, dari beragam produk yang ditampilkan Paviliun Indonesia, kopi menjadi salah satu yang paling dilirik. Perhatian tersebut menunjukkan prospek untuk mengembangkan komoditas kopi di pasar Spanyol.\n\"Untuk mengoptimalkan peluang tersebut, ",
+        "BACELONA.NIAGA.ASIA – Keikutsertaan beragam produk pangan unggulan Indonesia dalam Gastronomic Forum Barcelona 2026 berhasil menarik perhatian pasar gastronomi Eropa. Dari penjajakan selama pameran, tercatat potensi transaksi hampir senilai USD 12,05 juta atau sekitar Rp223 miliar. Sementara itu, dari sisi volume potensi transaksinya, kopi, gula aren, dan boga bahari Indonesia menjadi yang terbesar dibandingkan produk-produk lain.\nDirektur Jenderal Pengembangan Ekspor Nasional Kementerian Perdagangan, Fajarini Puntodewi, mengapresiasi capaian tersebut. Menurutnya, keikutsertaan Indonesia menjadi upaya untuk terus meningkatkan ekspor produk Indonesia ke pasar Spanyol dan kawasan Eropa.\n“Partisipasi Indonesia bertujuan untuk memperkenalkan keragaman produk unggulan Indonesia, memperluas akses pasar, serta membuka peluang kerja sama perdagangan dengan mitra usaha dan buyer potensial. Minat yang datang dari para pelaku industri gastronomi, koki (chef), dan perwakilan restoran ini menjadi indikasi makin terbukanya peluang bagi produk Indonesia untuk dikenal dan dikembangkan di pasar Spanyol maupun Eropa,” tambah Puntodewi.\nAtase Perdagangan (Atdag) RI Madrid, Ratnaningsih Hidayati, mene"
       ],
       "matched_articles": [
         {
@@ -2211,6 +2263,15 @@
           "media_name": "ANTARA News",
           "tanggal": "Fri, 20 Nov 2026 09:37:43 GMT",
           "skor": 1.0
+        },
+        {
+          "id": "4",
+          "title": "Kopi, Gula Aren, dan Boga Bahari Indonesia Diminati Gastronomi Eropa",
+          "link": "https://www.niaga.asia/kopi-gula-aren-dan-boga-bahari-indonesia-diminati-gastronomi-eropa/",
+          "canonical_url": "https://niaga.asia/kopi-gula-aren-dan-boga-bahari-indonesia-diminati-gastronomi-eropa",
+          "media_name": "Niaga.Asia",
+          "tanggal": "Sat, 21 Nov 2026 08:02:55 GMT",
+          "skor": 0.6265
         }
       ],
       "tone_hubungan": "K4",
@@ -2218,22 +2279,26 @@
     },
     {
       "isu_id": "klaster_3518e40cef",
-      "isu": "RI-Uni Eropa matangkan kesiapan IEU-CEPA jelang penandatanganan",
+      "isu": "Indonesia dan Uni Eropa menandatangani perjanjian IEU CEPA untuk memperluas akses pasar ekspor unggulan.",
       "sumber_isu": "klaster",
       "tanggal_awal": "2026-11-20",
-      "tanggal_terakhir": "2026-11-20",
-      "_norm_title": "ri uni eropa matangkan kesiapan ieu cepa jelang penandatanganan",
+      "tanggal_terakhir": "2026-11-21",
+      "_norm_title": "indonesia dan uni eropa menandatangani perjanjian ieu cepa untuk memperluas akses pasar ekspor unggulan",
       "tone": "Netral",
-      "tone_alasan": "Kemenperin (melalui Wamenperin) disebut sebagai bagian kecil dalam delegasi penandatanganan IEU-CEPA, sehingga dikategorikan netral (Ne1).",
+      "tone_alasan": "Berita mengenai penandatanganan IEU CEPA oleh Kementerian Perdagangan dan Uni Eropa tanpa keterlibatan langsung institusi Kemenperin.",
       "tone_keyakinan": "tinggi",
-      "evaluated_at": "2026-11-21 03:54:51",
-      "member_count_at_eval": 1,
-      "member_count": 1,
+      "evaluated_at": "2026-11-22 03:56:48",
+      "member_count_at_eval": 4,
+      "member_count": 4,
       "sample_titles": [
-        "RI-Uni Eropa matangkan kesiapan IEU-CEPA jelang penandatanganan"
+        "RI-Uni Eropa matangkan kesiapan IEU-CEPA jelang penandatanganan",
+        "Indonesia dan Uni Eropa Teken Perjanjian IEU CEPA",
+        "Indonesia dan Uni Eropa Teken Perjanjian IEU-CEPA",
+        "Mendag: Penandatanganan IEU CEPA perluas ekspor sawit hingga karet"
       ],
       "sample_snippets": [
-        "RI-Uni Eropa matangkan kesiapan IEU-CEPA jelang penandatanganan\nMenteri Koordinator Bidang Perekonomian Airlangga Hartarto memimpin delegasi Indonesia menjelang penandatanganan Perjanjian Kemitraan Ekonomi Komprehensif Indonesia-Uni Eropa (IEU-CEPA), Brussels, Belgia, Jumat (20/11/2026). ANTARA/HO-Kemenko Perekonomian\nMenteri Koordinator Bidang Perekonomian Airlangga Hartarto yang memimpin delegasi Indonesia dalam rangkaian kunjungan ke Brussels, melakukan pertemuan bilateral dengan European Commissioner for Trade and Economic Security Maroš Šefčovič untuk membahas kesiapan penandatanganan IEU-CEPA.\n\"IEU-CEPA membuka akses yang lebih luas ke pasar Uni Eropa yang berpenduduk sekitar 450 juta jiwa, dengan nilai perdagangan bilateral mencapai sekitar 30 miliar dolar AS per tahun,\" kata Airlangga dalam keterangannya di Jakarta, Jumat.\nIa menilai pertemuan bilateral itu penting guna menegaskan komitmen kedua pihak untuk tak hanya menyelesaikan proses penandatanganan, tetapi juga memastikan kesiapan kedua pihak dalam memasuki tahap implementasi.\nPertemuan membahas langkah-langkah untuk memastikan perjanjian dapat segera diterapkan setelah ditandatangani.\nKedua pihak bertukar pandangan me"
+        "RI-Uni Eropa matangkan kesiapan IEU-CEPA jelang penandatanganan\nMenteri Koordinator Bidang Perekonomian Airlangga Hartarto memimpin delegasi Indonesia menjelang penandatanganan Perjanjian Kemitraan Ekonomi Komprehensif Indonesia-Uni Eropa (IEU-CEPA), Brussels, Belgia, Jumat (20/11/2026). ANTARA/HO-Kemenko Perekonomian\nMenteri Koordinator Bidang Perekonomian Airlangga Hartarto yang memimpin delegasi Indonesia dalam rangkaian kunjungan ke Brussels, melakukan pertemuan bilateral dengan European Commissioner for Trade and Economic Security Maroš Šefčovič untuk membahas kesiapan penandatanganan IEU-CEPA.\n\"IEU-CEPA membuka akses yang lebih luas ke pasar Uni Eropa yang berpenduduk sekitar 450 juta jiwa, dengan nilai perdagangan bilateral mencapai sekitar 30 miliar dolar AS per tahun,\" kata Airlangga dalam keterangannya di Jakarta, Jumat.\nIa menilai pertemuan bilateral itu penting guna menegaskan komitmen kedua pihak untuk tak hanya menyelesaikan proses penandatanganan, tetapi juga memastikan kesiapan kedua pihak dalam memasuki tahap implementasi.\nPertemuan membahas langkah-langkah untuk memastikan perjanjian dapat segera diterapkan setelah ditandatangani.\nKedua pihak bertukar pandangan me",
+        "Indonesia dan Uni Eropa Teken Perjanjian IEU CEPA\nIndonesia dan Uni Eropa resmi menandatangani perjanjian perdagangan bebas Indonesia–European Union Comprehensive Economic Partnership Agreement (IEU–CEPA) pada Sabtu (21/11/2026). Kesepakatan ini ditujukan untuk memperluas akses pasar, meningkatkan perdagangan kedua pihak, serta membuka peluang investasi dengan target pemberlakuan mulai Januari 2027, dilansir dari Idxchannel.\nMenteri Koordinator Bidang Perekonomian, Airlangga Hartarto, menyebut penandatanganan tersebut menjadi awal tahapan implementasi yang membutuhkan koordinasi dan pekerjaan lanjutan. Pemerintah menargetkan manfaat perjanjian dapat segera dirasakan pelaku usaha dan masyarakat Indonesia maupun Uni Eropa.\nAirlangga menegaskan bahwa tahap pelaksanaan membutuhkan upaya lebih besar dibandingkan proses perundingan yang telah dilalui.\n\"Hari ini kita memasuki fase implementasi yang mengharuskan kita untuk bergerak untuk bekerja lebih keras lagi daripada negosiasi itu sendiri, sehingga para pelaku usaha dan masyarakat di kedua belah pihak dapat merasakan manfaatnya paling cepat pada 1 Januari 2027,\" ujar Airlangga Hartarto, Menteri Koordinator Bidang Perekonomian.\nDari sis"
       ],
       "matched_articles": [
         {
@@ -2244,10 +2309,38 @@
           "media_name": "ANTARA News",
           "tanggal": "Fri, 20 Nov 2026 11:34:01 GMT",
           "skor": 1.0
+        },
+        {
+          "id": "20",
+          "title": "Indonesia dan Uni Eropa Teken Perjanjian IEU CEPA",
+          "link": "https://cwibc.co.id/indonesia-dan-uni-eropa-teken-perjanjian-ieu-cepa",
+          "canonical_url": "https://cwibc.co.id/indonesia-dan-uni-eropa-teken-perjanjian-ieu-cepa",
+          "media_name": "cwibc.co.id",
+          "tanggal": "Sat, 21 Nov 2026 16:01:06 GMT",
+          "skor": 0.6135
+        },
+        {
+          "id": "19",
+          "title": "Indonesia dan Uni Eropa Teken Perjanjian IEU-CEPA",
+          "link": "https://cwibc.co.id/indonesia-uni-eropa-teken-ieu-cepa",
+          "canonical_url": "https://cwibc.co.id/indonesia-uni-eropa-teken-ieu-cepa",
+          "media_name": "cwibc.co.id",
+          "tanggal": "Sat, 21 Nov 2026 15:02:54 GMT",
+          "skor": 0.6335
+        },
+        {
+          "id": "9",
+          "title": "Mendag: Penandatanganan IEU CEPA perluas ekspor sawit hingga karet",
+          "link": "https://www.antaranews.com/berita/5870175/mendag-penandatanganan-ieu-cepa-perluas-ekspor-sawit-hingga-karet",
+          "canonical_url": "https://antaranews.com/berita/5870175/mendag-penandatanganan-ieu-cepa-perluas-ekspor-sawit-hingga-karet",
+          "media_name": "ANTARA News",
+          "tanggal": "Sat, 21 Nov 2026 15:38:06 GMT",
+          "skor": 0.5847
         }
       ],
-      "tone_hubungan": "K2",
-      "tone_arah": "tidak ada"
+      "tone_hubungan": "K4",
+      "tone_arah": "tidak ada",
+      "tone_metode": "AI-isu"
     },
     {
       "isu_id": "klaster_51b24ba906",
@@ -2280,6 +2373,501 @@
         }
       ],
       "tone_hubungan": "K4",
+      "tone_arah": "tidak ada"
+    },
+    {
+      "isu_id": "klaster_38b269b97d",
+      "isu": "Produksi Biodiesel Indonesia Diproyeksikan 23 Juta Kl Pada 2027",
+      "sumber_isu": "klaster",
+      "tanggal_awal": "2026-11-21",
+      "tanggal_terakhir": "2026-11-21",
+      "_norm_title": "produksi biodiesel indonesia diproyeksikan 23 juta kl pada 2027",
+      "tone": "Netral",
+      "tone_alasan": "Berita membahas kapasitas industri biodiesel dan program Kementerian ESDM tanpa keterlibatan Kemenperin, sesuai aturan A3 dan indikator Ne2 sehingga dinilai Netral.",
+      "tone_keyakinan": "tinggi",
+      "evaluated_at": "2026-11-22 03:55:42",
+      "member_count_at_eval": 1,
+      "member_count": 1,
+      "sample_titles": [
+        "Produksi Biodiesel Indonesia Diproyeksikan 23 Juta Kl Pada 2027"
+      ],
+      "sample_snippets": [
+        "Asosiasi Produsen Biofuel Indonesia (APROBI) memproyeksikan kapasitas produksi biodiesel bertambah menjadi 23 juta Kl pada tahun depan. Masuknya investasi baru akan mendukung penambahan tersebut.\nWakil Ketua Umum Aprobi, Catra de Thouars menyebutkan terdapat tiga perusahaan yang berencana membangun pabrik baru maupun menambah kapasitas produksi.\n\"Dari informasi yang kami dapatkan, tiga perusahaan akan berinvestasi di biodiesel. Ada pemain baru tapi ada juga produsen lama,\" ujar Wakil Ketua Umum Aprobi, Catra de Thouars di sela-sela 6th Palm Biodiesel Conference, Kamis (17 September 2026).\nCatra de Thouars mengatakan penambahan investasi baru ini akan meningkatkan kapasitas produksi yang saat ini berada di angka 22 juta kiloliter (KL). Penambahan investasi akan meningkatkan kapasitas menjadi 23 juta KL di tahun mendatang.\n\"Setidaknya ada tiga perusahaan yang baru ataupun mau menambah kapasitas. Kalau yang tiga itu terealisasi tahun depan, estimasi penambahan kapasitasnya sekitar 1 juta sehingga totalnya minimal bisa mencapai 23 juta KL,\" ujar Catra.\nIa menambahkan bahwa perusahaan-perusahaan yang berencana menambah kapasitas tersebut berasal dari grup usaha sawit. Meski demikian, Ca"
+      ],
+      "matched_articles": [
+        {
+          "id": "23",
+          "title": "Produksi Biodiesel Indonesia Diproyeksikan 23 Juta Kl Pada 2027",
+          "link": "https://sawitindonesia.com/produksi-biodiesel-indonesia-diproyeksikan-23-juta-kl-pada-2027",
+          "canonical_url": "https://sawitindonesia.com/produksi-biodiesel-indonesia-diproyeksikan-23-juta-kl-pada-2027",
+          "media_name": "Sawit Indonesia",
+          "tanggal": "Sat, 21 Nov 2026 02:05:41 GMT",
+          "skor": 1.0
+        }
+      ],
+      "tone_hubungan": "K3",
+      "tone_arah": "tidak ada"
+    },
+    {
+      "isu_id": "klaster_bc1d41c4a7",
+      "isu": "Produksi CPO dan PKO Naik 12,03%, Stok Sawit Indonesia Turun Jadi 2 Juta Ton",
+      "sumber_isu": "klaster",
+      "tanggal_awal": "2026-11-21",
+      "tanggal_terakhir": "2026-11-21",
+      "_norm_title": "produksi cpo dan pko naik 12 03 stok sawit indonesia turun jadi 2 juta ton",
+      "tone": "Netral",
+      "tone_alasan": "Berita menyajikan data kinerja produksi dan stok sawit dari GAPKI tanpa menyebut Kemenperin maupun memuat serangan kebijakan, sesuai indikator Ne2 dengan tone Netral.",
+      "tone_keyakinan": "tinggi",
+      "evaluated_at": "2026-11-22 03:55:42",
+      "member_count_at_eval": 1,
+      "member_count": 1,
+      "sample_titles": [
+        "Produksi CPO dan PKO Naik 12,03%, Stok Sawit Indonesia Turun Jadi 2 Juta Ton"
+      ],
+      "sample_snippets": [
+        "InfoSAWIT SUMATERA, JAKARTA – Peningkatan produksi minyak sawit Indonesia belum cukup untuk mendorong penambahan persediaan nasional. Pada September 2026, produksi CPO dan minyak inti sawit (PKO) tumbuh 12,03% dibandingkan bulan sebelumnya, tetapi stok akhir justru menyusut menjadi 2,006 juta ton akibat tingginya arus perdagangan dan konsumsi domestik.\nBerdasarkan laporan kinerja industri minyak sawit Indonesia yang diterbitkan Gabungan Pengusaha Kelapa Sawit Indonesia (GAPKI) dan diterima InfoSAWIT Sumatera, total produksi CPO dan PKO pada September 2026 mencapai 5,986 juta ton. Jumlah tersebut meningkat dari 5,343 juta ton pada Agustus 2026.\nDirektur Eksekutif GAPKI, Mukti Sardjono, mencatat produksi CPO mencapai 5,467 juta ton, naik dari 4,88 juta ton pada bulan sebelumnya. Sementara itu, produksi PKO meningkat menjadi 519 ribu ton dari 464 ribu ton.\nSecara kumulatif, produksi CPO dan PKO selama Januari–September 2026 mencapai 46,984 juta ton. Angka tersebut meningkat 8,42% dibandingkan periode yang sama pada 2025 sebesar 43,335 juta ton.\nKonsumsi Domestik Masih Menyerap Produksi\nDi tengah peningkatan produksi, kebutuhan minyak sawit untuk pasar dalam negeri tetap menjadi kompon"
+      ],
+      "matched_articles": [
+        {
+          "id": "16",
+          "title": "Produksi CPO dan PKO Naik 12,03%, Stok Sawit Indonesia Turun Jadi 2 Juta Ton",
+          "link": "https://sumatera.infosawit.com/2026/11/21/produksi-cpo-dan-pko-naik-1203-stok-sawit-indonesia-turun-jadi-2-juta-ton/",
+          "canonical_url": "https://sumatera.infosawit.com/2026/11/21/produksi-cpo-dan-pko-naik-1203-stok-sawit-indonesia-turun-jadi-2-juta-ton",
+          "media_name": "InfoSAWIT Sumatera",
+          "tanggal": "Sat, 21 Nov 2026 04:02:01 GMT",
+          "skor": 1.0
+        }
+      ],
+      "tone_hubungan": "K3",
+      "tone_arah": "tidak ada"
+    },
+    {
+      "isu_id": "klaster_255b980f50",
+      "isu": "Cukai dan Pendapatan Negara Ditopang Oleh Produksi Rokok",
+      "sumber_isu": "klaster",
+      "tanggal_awal": "2026-11-21",
+      "tanggal_terakhir": "2026-11-21",
+      "_norm_title": "cukai dan pendapatan negara ditopang oleh produksi rokok",
+      "tone": "Netral",
+      "tone_alasan": "Berita membahas dinamika produksi dan cukai industri hasil tembakau tanpa menyebut Kemenperin, masuk kategori Ne2 sehingga dinilai Netral.",
+      "tone_keyakinan": "tinggi",
+      "evaluated_at": "2026-11-22 03:55:42",
+      "member_count_at_eval": 1,
+      "member_count": 1,
+      "sample_titles": [
+        "Cukai dan Pendapatan Negara Ditopang Oleh Produksi Rokok"
+      ],
+      "sample_snippets": [
+        "Di tengah berbagai perdebatan mengenai industri hasil tembakau (IHT), ada satu fakta yang tidak bisa diabaikan: cukai rokok merupakan salah satu sumber penerimaan negara yang memiliki kontribusi besar terhadap keuangan Indonesia. Setiap tahun, industri ini menyetorkan ratusan triliun rupiah melalui cukai hasil tembakau (CHT). Kontribusi tersebut menjadikan industri hasil tembakau sebagai salah satu sektor strategis dalam menopang pendapatan negara.\nJangan Hanya Menghitung Cukai, Rawat Industri yang Menopangnya\nData APBN hingga 31 Oktober 2026 menunjukkan bahwa penerimaan cukai mencapai Rp185,8 triliun. Angka ini tumbuh 0,9% dibandingkan periode yang sama tahun sebelumnya sebesar Rp184,2 triliun. Dari keseluruhan penerimaan kepabeanan dan cukai yang mencapai Rp267,2 triliun, penerimaan cukai menyumbang sekitar 69,5%. Artinya, lebih dari dua pertiga penerimaan kepabeanan dan cukai negara berasal dari sektor cukai.\nKontribusi tersebut bukan angka kecil. Dalam sepuluh bulan saja, penerimaan cukai telah mencapai 79,5% dari target APBN. Jika kita lihat dari komposisinya, cukai menjadi tulang punggung penerimaan kepabeanan dan cukai, bahkan jauh melampaui penerimaan bea masuk maupun bea k"
+      ],
+      "matched_articles": [
+        {
+          "id": "12",
+          "title": "Cukai dan Pendapatan Negara Ditopang Oleh Produksi Rokok",
+          "link": "https://komunitaskretek.or.id/editorial/2026/11/setoran-cukai-cuma-tumbuh-09-pertumbuhan-produksi-rokok-masih-jadi-tulang-punggung/",
+          "canonical_url": "https://komunitaskretek.or.id/editorial/2026/11/setoran-cukai-cuma-tumbuh-09-pertumbuhan-produksi-rokok-masih-jadi-tulang-punggung",
+          "media_name": "Komunitas Kretek",
+          "tanggal": "Sat, 21 Nov 2026 08:15:23 GMT",
+          "skor": 1.0
+        }
+      ],
+      "tone_hubungan": "K3",
+      "tone_arah": "tidak ada"
+    },
+    {
+      "isu_id": "klaster_dce676bd7a",
+      "isu": "12 Sektor Prioritas BI Kaltim: Dari Hilirisasi Sawit ke Listrik",
+      "sumber_isu": "klaster",
+      "tanggal_awal": "2026-11-21",
+      "tanggal_terakhir": "2026-11-21",
+      "_norm_title": "12 sektor prioritas bi kaltim dari hilirisasi sawit ke listrik",
+      "tone": "Netral",
+      "tone_alasan": "Berita menyoroti agenda hilirisasi yang didorong oleh Bank Indonesia Kaltim tanpa menyebut Kemenperin secara langsung atau memberikan serangan, sesuai indikator Ne2 dengan tone Netral.",
+      "tone_keyakinan": "tinggi",
+      "evaluated_at": "2026-11-22 03:55:42",
+      "member_count_at_eval": 1,
+      "member_count": 1,
+      "sample_titles": [
+        "12 Sektor Prioritas BI Kaltim: Dari Hilirisasi Sawit ke Listrik"
+      ],
+      "sample_snippets": [
+        "12 Sektor Prioritas BI Kaltim: Dari Hilirisasi Sawit ke Listrik\nKALTIMPOST.ID, SAMARINDA - Bank Indonesia (BI) Perwakilan Kalimantan Timur mendorong percepatan diversifikasi ekonomi daerah melalui optimalisasi 12 sektor prioritas. Upaya ini dilakukan agar ketergantungan pada sumber daya alam mentah dapat dikurangi secara bertahap.\nDeputi Kepala Perwakilan BI Kaltim, Bayuadi Hardiyanto, menyatakan hilirisasi kelapa sawit menjadi salah satu fokus utama dalam rencana tersebut. Selain itu, sektor konstruksi dan pariwisata berkelanjutan diproyeksikan sebagai penopang ekonomi jangka panjang.\n\"Ada 12 sektor yang menjadi prioritas. Salah satunya adalah CPO, hilirisasi kelapa sawit,\" ujar Bayuadi saat menjelaskan strategi diversifikasi ekonomi daerah.\nSelain hilirisasi sawit, terdapat 11 sektor lainnya yang terbagi menjadi sektor eksisting dan ekonomi baru. Sektor eksisting mencakup udang windu, pariwisata berkelanjutan, oleopangan, serta oleokimia.\nBaca Juga: Penyidikan Kasus Pemerkosaan Bupati Kupang, Polisi Temukan Bra dan Celana Dalam Korban\nSementara untuk pengembangan ekonomi baru, fokus diarahkan pada sektor energi baru terbarukan seperti PLTS, PLTA, dan biometana. Termasuk pula indu"
+      ],
+      "matched_articles": [
+        {
+          "id": "17",
+          "title": "12 Sektor Prioritas BI Kaltim: Dari Hilirisasi Sawit ke Listrik",
+          "link": "https://kaltimpost.jawapos.com/bisnis/2611210023/12-sektor-prioritas-bi-kaltim-dari-hilirisasi-sawit-ke-listrik",
+          "canonical_url": "https://kaltimpost.jawapos.com/bisnis/2611210023/12-sektor-prioritas-bi-kaltim-dari-hilirisasi-sawit-ke-listrik",
+          "media_name": "Kaltim Post",
+          "tanggal": "Sat, 21 Nov 2026 03:31:13 GMT",
+          "skor": 1.0
+        }
+      ],
+      "tone_hubungan": "K3",
+      "tone_arah": "tidak ada"
+    },
+    {
+      "isu_id": "klaster_801b41a453",
+      "isu": "Teladan Prima Agro Pertahankan Penghargaan Zero Accident di Seluruh Pabrik Kelapa Sawit",
+      "sumber_isu": "klaster",
+      "tanggal_awal": "2026-11-21",
+      "tanggal_terakhir": "2026-11-21",
+      "_norm_title": "teladan prima agro pertahankan penghargaan zero accident di seluruh pabrik kelapa sawit",
+      "tone": "Netral",
+      "tone_alasan": "Berita membahas penghargaan K3 dari Disnakertrans Kaltim kepada entitas perkebunan sawit tanpa keterkaitan dengan program Kemenperin sehingga dikategorikan K4 dengan tone Netral.",
+      "tone_keyakinan": "tinggi",
+      "evaluated_at": "2026-11-22 03:55:42",
+      "member_count_at_eval": 1,
+      "member_count": 1,
+      "sample_titles": [
+        "Teladan Prima Agro Pertahankan Penghargaan Zero Accident di Seluruh Pabrik Kelapa Sawit"
+      ],
+      "sample_snippets": [
+        "Agrofarm.co.id, Balikpapan – PT Teladan Prima Agro Tbk (TPA) kembali mempertahankan prestasinya dalam bidang Keselamatan dan Kesehatan Kerja (K3) melalui Penganugerahan Penghargaan Kepatuhan Perusahaan Bidang K3 Provinsi Kalimantan Timur Tahun 2026.\nAcara yang diselenggarakan di Ballroom Hotel Novotel Balikpapan pada Rabu, 18 November 2026 ini menjadi bentuk apresiasi pemerintah atas konsistensi perusahaan dalam menciptakan lingkungan kerja yang aman, sehat, dan produktif.\nDalam kesempatan tersebut, Kepala Dinas Tenaga Kerja dan Transmigrasi Provinsi Kalimantan Timur, Rozani Erawadi, menyampaikan harapannya agar sektor industri terus meningkatkan kepatuhan terhadap ketentuan K3 dan tanggung jawab sosial perusahaan.\nSinergi antara perusahaan dan pemerintah daerah diharapkan dapat mendorong produktivitas sekaligus mewujudkan tenaga kerja Kalimantan Timur yang sehat, selamat, dan berdaya saing.\nPada tahun ini, seluruh entitas anak usaha TPA yang mengelola pabrik kelapa sawit kembali berhasil meraih penghargaan Kecelakaan Nihil (Zero Accident). Penghargaan tersebut diterima oleh Sustainability Senior Officer – HSSE, Dadang Setiawan, dan HR Business Partner Senior Officer, Awang Zulfikr"
+      ],
+      "matched_articles": [
+        {
+          "id": "2",
+          "title": "Teladan Prima Agro Pertahankan Penghargaan Zero Accident di Seluruh Pabrik Kelapa Sawit",
+          "link": "http://www.agrofarm.co.id/2026/11/teladan-prima-agro-pertahankan-penghargaan-zero-accident-di-seluruh-pabrik-kelapa-sawit/",
+          "canonical_url": "https://agrofarm.co.id/2026/11/teladan-prima-agro-pertahankan-penghargaan-zero-accident-di-seluruh-pabrik-kelapa-sawit",
+          "media_name": "www.agrofarm.co.id",
+          "tanggal": "Sat, 21 Nov 2026 07:46:55 GMT",
+          "skor": 1.0
+        }
+      ],
+      "tone_hubungan": "K4",
+      "tone_arah": "tidak ada"
+    },
+    {
+      "isu_id": "klaster_2e4a41da25",
+      "isu": "Menteri Perdagangan menandatangani naskah perjanjian IEU-CEPA di Brussels untuk membuka pasar ekspor Eropa.",
+      "sumber_isu": "klaster",
+      "tanggal_awal": "2026-11-21",
+      "tanggal_terakhir": "2026-11-21",
+      "_norm_title": "menteri perdagangan menandatangani naskah perjanjian ieu cepa di brussels untuk membuka pasar ekspor eropa",
+      "tone": "Netral",
+      "tone_alasan": "Berita membahas perjanjian perdagangan IEU-CEPA yang melibatkan Kementerian Perdagangan tanpa menyebut atau melibatkan Kemenperin secara langsung.",
+      "tone_keyakinan": "tinggi",
+      "evaluated_at": "2026-11-22 03:56:48",
+      "member_count_at_eval": 5,
+      "member_count": 5,
+      "sample_titles": [
+        "IEU-CEPA Resmi Berlaku, Ini Komoditas yang Dapat Bebas Tarif ke Eropa",
+        "IEU-CEPA Resmi Diteken, 90,4% Produk RI Bebas Tarif Masuk Pasar Eropa",
+        "Indonesia dan Uni Eropa Sepakati Tarif Impor Nol Persen",
+        "Isi IEU-CEPA: Investasi Masuk, Biaya Produksi Industri Bisa Turun",
+        "Mendag Busan Optimistis Pasar Uni Eropa Makin Terbuka Setelah EU CEPA Ditandatangani"
+      ],
+      "sample_snippets": [
+        "IEU-CEPA Resmi Berlaku, Ini Komoditas yang Dapat Bebas Tarif ke Eropa\nJakarta, CNBC Indonesia - Indonesia dan Uni Eropa (UE) resmi menandatangani perjanjian kerja sama ekonomi komprehensif atau Indonesia-European Union Comprehensive Economic Partnership Agreement (IEU CEPA) pada Jumat (21/11/2026). Kesepakatan dagang ini membuka peluang lebih besar bagi produk Indonesia untuk menembus pasar Eropa, termasuk melalui penghapusan sebagian besar tarif bea masuk.\nPenandatanganan dilakukan oleh Menteri Koordinator Bidang Perekonomian Airlangga Hartarto bersama Menteri Perdagangan Budi Santoso di kantor Komisi Eropa, Brussel, Belgia. Presiden Komisi Eropa Ursula von der Leyen turut hadir menyaksikan prosesi tersebut. Selain IEU-CEPA, kedua pihak juga menandatangani Investment Protection Agreement (IPA) atau perjanjian perlindungan investasi.\n\"Ini di tengah dinamika geopolitik dan geoekonomi dunia serta sistem perdagangan global yang semakin kompetitif, Indonesia terus membuka akses pasar melalui kerja sama ekonomi dan salah satunya adalah dengan Uni Eropa,\" ujar Airlangga dalam konferensi pers, Sabtu (22/11/2026).\nKesepakatan tersebut menjadi penutup perjalanan panjang negosiasi yang berla",
+        "IEU-CEPA Resmi Diteken, 90,4% Produk RI Bebas Tarif Masuk Pasar Eropa\nJAKARTA, investortrust.id – Menteri Koordinator Bidang Perekonomian (Menko Perekonomian) Airlangga Hartarto menyebutkan sejumlah produk unggulan Indonesia, mulai dari minyak sawit dan turunannya, garmen, tekstil, hingga alas kaki, akan mendapatkan fasilitas pembebasan bea masuk atau tarif 0% untuk memasuki pasar Uni Eropa.\nBaca Juga\nFasilitas bea masuk atau tarif 0% ini akan dinikmati produk Indonesia untuk masuk ke pasar Eropa setelah perjanjian dagang Indonesia-European Union Comprehensive Economic Partnership Agreement (IEU-CEPA) diimplementasikan. Pemerintah sendiri menargetkan kesepakatan ini dimulai pada 1 Januari 2027.\n\"Sebanyak 90,4% pos tarif langsung tarifnya nol sejak diberlakukan,\" ujar Airlangga dalam konferensi persnya secara daring seusai melakukan penandatanganan IEU-CEPA dan Investment Protection Agreement (IPA) di Brussel, Belgia, Sabtu (21/11/2026).\nAirlangga menjelaskan, selain minyak sawit dan produk turunannya, sejumlah produk padat karya juga memperoleh fasilitas pembebasan tarif sejak awal implementasi perjanjian. Produk tersebut mencakup garmen, kain, aksesori, alas kaki berbahan kulit, s"
+      ],
+      "matched_articles": [
+        {
+          "id": "18",
+          "title": "IEU-CEPA Resmi Berlaku, Ini Komoditas yang Dapat Bebas Tarif ke Eropa",
+          "link": "https://www.cnbcindonesia.com/news/20261121220834-4-787236/ieu-cepa-resmi-berlaku-ini-komoditas-yang-dapat-bebas-tarif-ke-eropa",
+          "canonical_url": "https://cnbcindonesia.com/news/20261121220834-4-787236/ieu-cepa-resmi-berlaku-ini-komoditas-yang-dapat-bebas-tarif-ke-eropa",
+          "media_name": "CNBC Indonesia",
+          "tanggal": "Sat, 21 Nov 2026 15:20:07 GMT",
+          "skor": 0.6573
+        },
+        {
+          "id": "21",
+          "title": "IEU-CEPA Resmi Diteken, 90,4% Produk RI Bebas Tarif Masuk Pasar Eropa",
+          "link": "https://investortrust.id/macro/123296/ieu-cepa-resmi-diteken-90-4-produk-ri-bebas-tarif-masuk-pasar-eropa",
+          "canonical_url": "https://investortrust.id/macro/123296/ieu-cepa-resmi-diteken-90-4-produk-ri-bebas-tarif-masuk-pasar-eropa",
+          "media_name": "InvestorTrust",
+          "tanggal": "Sat, 21 Nov 2026 16:12:00 GMT",
+          "skor": 0.6573
+        },
+        {
+          "id": "14",
+          "title": "Indonesia dan Uni Eropa Sepakati Tarif Impor Nol Persen",
+          "link": "https://cwibc.co.id/indonesia-uni-eropa-sepakati-tarif-nol-persen",
+          "canonical_url": "https://cwibc.co.id/indonesia-uni-eropa-sepakati-tarif-nol-persen",
+          "media_name": "cwibc.co.id",
+          "tanggal": "Sat, 21 Nov 2026 16:17:52 GMT",
+          "skor": 0.3803
+        },
+        {
+          "id": "15",
+          "title": "Isi IEU-CEPA: Investasi Masuk, Biaya Produksi Industri Bisa Turun",
+          "link": "https://www.liputan6.com/bisnis/read/8339933/isi-ieu-cepa-investasi-masuk-biaya-produksi-industri-bisa-turun",
+          "canonical_url": "https://liputan6.com/bisnis/read/8339933/isi-ieu-cepa-investasi-masuk-biaya-produksi-industri-bisa-turun",
+          "media_name": "Liputan6.com",
+          "tanggal": "Sat, 21 Nov 2026 16:54:02 GMT",
+          "skor": 0.467
+        },
+        {
+          "id": "10",
+          "title": "Mendag Busan Optimistis Pasar Uni Eropa Makin Terbuka Setelah EU CEPA Ditandatangani",
+          "link": "https://www.niaga.asia/mendag-busan-optimistis-pasar-uni-eropa-makin-terbuka-setelah-eu-cepa-ditandatangani/",
+          "canonical_url": "https://niaga.asia/mendag-busan-optimistis-pasar-uni-eropa-makin-terbuka-setelah-eu-cepa-ditandatangani",
+          "media_name": "Niaga.Asia",
+          "tanggal": "Sat, 21 Nov 2026 16:41:15 GMT",
+          "skor": 0.377
+        }
+      ],
+      "tone_hubungan": "K4",
+      "tone_arah": "tidak ada",
+      "tone_metode": "AI-isu"
+    },
+    {
+      "isu_id": "klaster_b2dd497018",
+      "isu": "Industri Mamin Tumbuh 6,51 Persen, Kemenperin Soroti Pasokan",
+      "sumber_isu": "klaster",
+      "tanggal_awal": "2026-11-21",
+      "tanggal_terakhir": "2026-11-21",
+      "_norm_title": "industri mamin tumbuh 6 51 persen kemenperin soroti pasokan",
+      "tone": "Positif",
+      "tone_alasan": "Menperin menjadi narasumber utama yang memaparkan kinerja pertumbuhan industri mamin serta komitmen dukungan pasokan, memenuhi indikator P1 dengan tone Positif.",
+      "tone_keyakinan": "tinggi",
+      "evaluated_at": "2026-11-22 03:55:42",
+      "member_count_at_eval": 1,
+      "member_count": 1,
+      "sample_titles": [
+        "Industri Mamin Tumbuh 6,51 Persen, Kemenperin Soroti Pasokan"
+      ],
+      "sample_snippets": [
+        "Industri Mamin Tumbuh 6,51 Persen, Kemenperin Soroti Pasokan\nLensaHukum.co.id, Industri makanan dan minuman nasional mencatat pertumbuhan 6,51 persen pada triwulan II 2026. Capaian tersebut melampaui pertumbuhan industri pengolahan nonmigas sebesar 5,32 persen dan ekonomi nasional yang berada di angka 5,29 persen, dilansir dari Kabarbursa.\nMeski menunjukkan perkembangan positif, sektor makanan dan minuman masih menghadapi sejumlah kendala operasional. Kementerian Perindustrian (Kemenperin) menyoroti keberlanjutan pasokan gas industri, kestabilan harga energi, serta ketersediaan bahan baku sebagai persoalan yang perlu mendapatkan perhatian.\nKondisi tersebut menjadi perhatian pemerintah karena industri mamin memiliki posisi penting dalam menopang aktivitas manufaktur nasional. Dukungan terhadap ketersediaan kebutuhan produksi dinilai diperlukan agar pertumbuhan sektor ini dapat dipertahankan dan ditingkatkan.\nMenteri Perindustrian Muhammad Sarmuji menjelaskan bahwa pemerintah terus berupaya memperkuat dukungan terhadap pelaku industri makanan dan minuman, terutama dalam menghadapi persoalan pasokan dan harga bahan produksi.\n\"Ada beberapa hal yang masih memerlukan dukungan, misalnya t"
+      ],
+      "matched_articles": [
+        {
+          "id": "8",
+          "title": "Industri Mamin Tumbuh 6,51 Persen, Kemenperin Soroti Pasokan",
+          "link": "https://lensahukum.co.id/industri-mamin-tumbuh-pasokan-gas",
+          "canonical_url": "https://lensahukum.co.id/industri-mamin-tumbuh-pasokan-gas",
+          "media_name": "Lensa Hukum",
+          "tanggal": "Sat, 21 Nov 2026 07:21:07 GMT",
+          "skor": 1.0
+        }
+      ],
+      "tone_hubungan": "K1",
+      "tone_arah": "mendukung"
+    },
+    {
+      "isu_id": "klaster_6c000d3147",
+      "isu": "Tumbuh 13,47 Persen, Ekspor Makanan Olahan Capai USD4,49 Miliar",
+      "sumber_isu": "klaster",
+      "tanggal_awal": "2026-11-21",
+      "tanggal_terakhir": "2026-11-21",
+      "_norm_title": "tumbuh 13 47 persen ekspor makanan olahan capai usd4 49 miliar",
+      "tone": "Netral",
+      "tone_alasan": "Berita menyoroti kinerja ekspor makanan olahan dan kegiatan Kementerian Perdagangan tanpa menyebut Kemenperin, memenuhi indikator Ne2 sehingga dinilai Netral.",
+      "tone_keyakinan": "tinggi",
+      "evaluated_at": "2026-11-22 03:55:42",
+      "member_count_at_eval": 1,
+      "member_count": 1,
+      "sample_titles": [
+        "Tumbuh 13,47 Persen, Ekspor Makanan Olahan Capai USD4,49 Miliar"
+      ],
+      "sample_snippets": [
+        "PeluangNews, Bandung – Kinerja ekspor makanan olahan Indonesia yang mencapai USD4,49 miliar sepanjang Januari–Agustus 2026 menjadi peluang bagi pelaku usaha mikro, kecil, dan menengah (UMKM) untuk memperluas pasar ke mancanegara. Untuk menangkap peluang tersebut, Kementerian Perdagangan (Kemendag) memperkuat kapasitas dan kesiapan ekspor pelaku usaha, khususnya di sektor makanan dan minuman olahan.\nNilai ekspor tersebut tumbuh 13,47 persen dibandingkan periode yang sama tahun sebelumnya. Capaian ini menunjukkan potensi produk makanan olahan nasional di pasar internasional sekaligus membuka ruang bagi UMKM untuk mengambil bagian lebih besar dalam perdagangan global.\nDirektur Jenderal Perdagangan Luar Negeri Kemendag, Tommy Andana, mengatakan peningkatan daya saing produk dan pemahaman terhadap persyaratan ekspor menjadi faktor penting agar pelaku usaha dapat memanfaatkan peluang pasar secara optimal.\nHal tersebut disampaikan Tommy dalam Bimbingan Teknis (Bimtek) bertajuk “Dari Lokal untuk Global: Penguatan Daya Saing dan Kesiapan Ekspor Produk Makanan dan Minuman Olahan di Wilayah Jawa Barat” yang berlangsung di Bandung, Jawa Barat, Kamis (19/11).\nKegiatan yang diselenggarakan Direk"
+      ],
+      "matched_articles": [
+        {
+          "id": "24",
+          "title": "Tumbuh 13,47 Persen, Ekspor Makanan Olahan Capai USD4,49 Miliar",
+          "link": "https://peluangnews.id/tumbuh-1347-persen-ekspor-makanan-olahan-capai-usd449-miliar/",
+          "canonical_url": "https://peluangnews.id/tumbuh-1347-persen-ekspor-makanan-olahan-capai-usd449-miliar",
+          "media_name": "Peluang News",
+          "tanggal": "Sat, 21 Nov 2026 03:25:03 GMT",
+          "skor": 1.0
+        }
+      ],
+      "tone_hubungan": "K3",
+      "tone_arah": "tidak ada"
+    },
+    {
+      "isu_id": "klaster_e49b007fde",
+      "isu": "Kementerian Perindustrian mendorong penguatan struktur dan pertumbuhan industri halal nasional melalui inovasi dan teknologi.",
+      "sumber_isu": "klaster",
+      "tanggal_awal": "2026-11-21",
+      "tanggal_terakhir": "2026-11-21",
+      "_norm_title": "kementerian perindustrian mendorong penguatan struktur dan pertumbuhan industri halal nasional melalui inovasi dan teknologi",
+      "tone": "Positif",
+      "tone_alasan": "Kemenperin menjadi pelaku dan narasumber utama yang mendorong pengembangan serta penguatan struktur industri halal nasional.",
+      "tone_keyakinan": "tinggi",
+      "evaluated_at": "2026-11-22 03:56:48",
+      "member_count_at_eval": 2,
+      "member_count": 2,
+      "sample_titles": [
+        "Kemenperin Dorong Industri Halal Jadi Penggerak Pertumbuhan Manufaktur",
+        "Kemenperin Dorong Penguatan Struktur Industri Halal Nasional"
+      ],
+      "sample_snippets": [
+        "KABARBURSA.COM - Kementerian Perindustrian (Kemenperin) menekankan bahwa pengembangan industri halal perlu diarahkan pada penguatan struktur industri nasional, peningkatan kualitas produk, serta penciptaan nilai tambah melalui inovasi dan teknologi.\nIndustri halal dinilai memiliki peluang yang besar untuk menjadi salah satu penggerak pertumbuhan manufaktur, mengingat cakupannya yang luas dan potensi pasar domestik maupun global yang terus berkembang.\nOleh karena itu, penguatan ekosistem industri halal perlu dilakukan secara terintegrasi, mulai dari penyediaan bahan baku, pengembangan sumber daya manusia (SDM), penerapan standardisasi, hingga perluasan akses pasar dan peningkatan daya saing produk dalam negeri.\nSejalan dengan hal tersebut, Kepala Badan Standardisasi dan Kebijakan Jasa Industri (BSKJI) Emmy Suryandari menyampaikan, industri halal harus dipandang dalam perspektif yang lebih luas daripada sekadar pemenuhan kewajiban sertifikasi. Prinsip halal juga berkaitan erat dengan inovasi, teknologi, proses produksi, penciptaan nilai tambah, dan kemampuan produk Indonesia untuk bersaing di pasar global.\n“Halal bukan sekadar apa yang dikonsumsi, tetapi juga berkaitan dengan bagaima",
+        "Kemenperin Dorong Penguatan Struktur Industri Halal Nasional\nLensaHukum.co.id, KABARBURSA.COM - Kementerian Perindustrian (Kemenperin) menekankan bahwa pengembangan industri halal perlu diarahkan pada penguatan struktur industri nasional, peningkatan kualitas produk, serta penciptaan nilai tambah melalui inovasi dan teknologi.\nIndustri halal dinilai memiliki peluang yang besar untuk menjadi salah satu penggerak pertumbuhan manufaktur, mengingat cakupannya yang luas dan potensi pasar domestik maupun global yang terus berkembang.\nOleh karena itu, penguatan ekosistem industri halal perlu dilakukan secara terintegrasi, mulai dari penyediaan bahan baku, pengembangan sumber daya manusia (SDM), penerapan standardisasi, hingga perluasan akses pasar dan peningkatan daya saing produk dalam negeri.\nSejalan dengan hal tersebut, Kepala Badan Standardisasi dan Kebijakan Jasa Industri (BSKJI) Emmy Suryandari menyampaikan, industri halal harus dipandang dalam perspektif yang lebih luas daripada sekadar pemenuhan kewajiban sertifikasi. Prinsip halal juga berkaitan erat dengan inovasi, teknologi, proses produksi, penciptaan nilai tambah, dan kemampuan produk Indonesia untuk bersaing di pasar global."
+      ],
+      "matched_articles": [
+        {
+          "id": "26",
+          "title": "Kemenperin Dorong Industri Halal Jadi Penggerak Pertumbuhan Manufaktur",
+          "link": "https://www.kabarbursa.com/syariah/kemenperin-dorong-industri-halal-jadi-penggerak-pertumbuhan-manufaktur",
+          "canonical_url": "https://kabarbursa.com/syariah/kemenperin-dorong-industri-halal-jadi-penggerak-pertumbuhan-manufaktur",
+          "media_name": "KabarBursa.com",
+          "tanggal": "Sat, 21 Nov 2026 11:21:00 GMT",
+          "skor": 0.5246
+        },
+        {
+          "id": "25",
+          "title": "Kemenperin Dorong Penguatan Struktur Industri Halal Nasional",
+          "link": "https://lensahukum.co.id/penguatan-struktur-industri-halal",
+          "canonical_url": "https://lensahukum.co.id/penguatan-struktur-industri-halal",
+          "media_name": "Lensa Hukum",
+          "tanggal": "Sat, 21 Nov 2026 11:30:47 GMT",
+          "skor": 0.5246
+        }
+      ],
+      "tone_hubungan": "K1",
+      "tone_arah": "mendukung",
+      "tone_metode": "AI-isu"
+    },
+    {
+      "isu_id": "klaster_eabb964839",
+      "isu": "Menteri Perindustrian meresmikan pabrik dan mendorong industri parfum lokal menggunakan bahan baku lokal ke pasar global.",
+      "sumber_isu": "klaster",
+      "tanggal_awal": "2026-11-21",
+      "tanggal_terakhir": "2026-11-21",
+      "_norm_title": "menteri perindustrian meresmikan pabrik dan mendorong industri parfum lokal menggunakan bahan baku lokal ke pasar global",
+      "tone": "Positif",
+      "tone_alasan": "Menteri Perindustrian (K1) menjadi pelaku utama dalam peresmian dan dorongan pengembangan industri parfum lokal yang mendukung eksistensi Kemenperin (P1).",
+      "tone_keyakinan": "tinggi",
+      "evaluated_at": "2026-11-22 03:56:49",
+      "member_count_at_eval": 2,
+      "member_count": 2,
+      "sample_titles": [
+        "Pemerintah Dorong Industri Parfum Serap Bahan Baku Lokal ke Pasar Global",
+        "Resmikan Pabrik Maharum, Menteri Perindustrian Dorong Parfum Lokal Mendunia"
+      ],
+      "sample_snippets": [
+        "Pemerintah Dorong Industri Parfum Serap Bahan Baku Lokal ke Pasar Global\nSabtu, 21 November 2026 | 05:59 WIB\nTangerang, Beritasatu.com - Menteri Perindustrian Muhammad Sarmuji mendorong industri wewangian nasional untuk mengembangkan produk parfum lokal yang mampu bersaing di pasar internasional. Upaya tersebut perlu didukung dengan penguatan ekosistem industri dari hulu hingga hilir, termasuk pemanfaatan kekayaan alam Indonesia sebagai bahan baku.\nSarmuji mengatakan, Indonesia memiliki keanekaragaman hayati yang berpotensi dikembangkan menjadi bahan baku industri wewangian. Sejumlah komoditas, seperti minyak atsiri, nilam, dan cengkeh, selama ini telah dipasarkan ke luar negeri.\n\"Kita tidak hanya ingin berhenti pada ekspor bahan mentah dan bahan baku saja. Potensi keanekaragaman hayati kita harus kita eksplorasi, kita ekstraksi menjadi keunggulan kita yang jarang dimiliki oleh negara lain,\" kata Sarmuji saat menghadiri peresmian pabrik baru Maharum Group di Legok, Tangerang, Jumat (20/11/2026).\nSarmuji mengatakan, Kementerian Perindustrian (Kemenperin) mendorong penguatan ekosistem industri wewangian Indonesia yang terintegrasi, mulai dari pemasok bahan baku, industri pengolahan, ",
+        "- Menteri Perindustrian Muhammad Sarmuji meresmikan pabrik kedua dan Creative Center PT Maharum Group di Tangerang untuk mendorong parfum lokal dikenal hingga pasar global.\n- Pemerintah mendorong pemanfaatan bahan lokal seperti kemenyan, cengkeh, nilam, dan minyak atsiri, serta peningkatan TKDN; ekspor akan didampingi saat kapasitas produksi memadai.\n- Pabrik senilai Rp18 miliar berkapasitas 1,2 ton per tahun, dilengkapi laboratorium aroma, dan mendukung produk wewangian mulai parfum hingga deterjen.\nTangerang, IDN Times - Menteri Perindustrian RI, Muhammad Sarmuji meresmikan pabrik parfum dan Creative Center dalam negeri milik PT Maharum Group di Kawasan Industri Blessindo, Legok, Kabupaten Tangerang, Jumat (20/11/2026).\nMenteri Sarmuji mengungkapkan, peresmian pabrik kedua tersebut diharapkan mampu mendorong industri parfum dalam negeri agar semakin dikenal secara global.\n\"PT Maharum betul-betul bisa mengharumkan Indonesia. Syukur-syukur bisa menghasilkan parfum sampai nanti punya merek yang digandrungi oleh masyarakat dunia,\" kata Menteri Sarmuji.\n- 1. Menteri Sarmuji sebut Indonesia miliki potensi besar di industri parfum Menteri Sarmuji menuturkan, keberagaman hayati Indonesia"
+      ],
+      "matched_articles": [
+        {
+          "id": "7",
+          "title": "Pemerintah Dorong Industri Parfum Serap Bahan Baku Lokal ke Pasar Global",
+          "link": "https://www.beritasatu.com/banten/3042666/pemerintah-dorong-industri-parfum-serap-bahan-baku-lokal-ke-pasar-global",
+          "canonical_url": "https://beritasatu.com/banten/3042666/pemerintah-dorong-industri-parfum-serap-bahan-baku-lokal-ke-pasar-global",
+          "media_name": "BeritaSatu.com",
+          "tanggal": "Fri, 20 Nov 2026 22:59:00 GMT",
+          "skor": 0.5189
+        },
+        {
+          "id": "5",
+          "title": "Resmikan Pabrik Maharum, Menteri Perindustrian Dorong Parfum Lokal Mendunia",
+          "link": "https://banten.idntimes.com/news/banten/resmikan-pabrik-maharum-menteri-perindustrian-dorong-parfum-lokal-mendunia-c1c2-01-h9ml6-8cg1fv",
+          "canonical_url": "https://banten.idntimes.com/news/banten/resmikan-pabrik-maharum-menteri-perindustrian-dorong-parfum-lokal-mendunia-c1c2-01-h9ml6-8cg1fv",
+          "media_name": "IDN Times Banten",
+          "tanggal": "Sat, 21 Nov 2026 03:19:20 GMT",
+          "skor": 0.5189
+        }
+      ],
+      "tone_hubungan": "K1",
+      "tone_arah": "mendukung",
+      "tone_metode": "AI-isu"
+    },
+    {
+      "isu_id": "klaster_62c4fefa21",
+      "isu": "Dari Kekayaan Hayati ke Parfum: Industri Wewangian Lokal Didorong Naik Kelas",
+      "sumber_isu": "klaster",
+      "tanggal_awal": "2026-11-21",
+      "tanggal_terakhir": "2026-11-21",
+      "_norm_title": "dari kekayaan hayati ke parfum industri wewangian lokal didorong naik kelas",
+      "tone": "Positif",
+      "tone_alasan": "Menteri Perindustrian menjadi narasumber utama yang mendorong penguatan industri wewangian lokal, memenuhi indikator P1 sehingga dinilai Positif.",
+      "tone_keyakinan": "tinggi",
+      "evaluated_at": "2026-11-22 03:55:42",
+      "member_count_at_eval": 1,
+      "member_count": 1,
+      "sample_titles": [
+        "Dari Kekayaan Hayati ke Parfum: Industri Wewangian Lokal Didorong Naik Kelas"
+      ],
+      "sample_snippets": [
+        "Kabupaten Tangerang | Menteri Perindustrian Muhammad Sarmuji mendorong pengolahan bahan baku wewangian yang berasal dari keanekaragaman hayati Indonesia agar dilakukan di dalam negeri. Dorongan itu disampaikan setelah ia menghadiri peresmian pabrik parfum Maharum Group di Kabupaten Tangerang pada Jumat. Kehadiran fasilitas tersebut dinilai dapat menjadi titik penting untuk menghubungkan potensi sumber daya alam dengan kegiatan industri yang menghasilkan produk bernilai tambah.\nMenurut Sarmuji, Indonesia memiliki kekayaan hayati yang dapat dimanfaatkan sebagai sumber bahan parfum, mulai dari beragam tanaman hingga komoditas aromatik. Potensi ini membuka ruang bagi industri untuk mengembangkan bahan baku lokal menjadi bahan wewangian yang siap digunakan dalam formulasi parfum. Dengan pengolahan yang lebih kuat, nilai ekonomi tidak berhenti pada penjualan bahan mentah, tetapi dapat tumbuh melalui proses produksi, pengembangan produk, dan penciptaan merek.\nDalam menyampaikan gagasannya, Sarmuji membandingkan peluang Indonesia dengan Arab Saudi. Perbandingan tersebut menyoroti bahwa kekayaan alam yang dimiliki Indonesia dapat menjadi modal penting untuk membangun industri wewangian yang"
+      ],
+      "matched_articles": [
+        {
+          "id": "6",
+          "title": "Dari Kekayaan Hayati ke Parfum: Industri Wewangian Lokal Didorong Naik Kelas",
+          "link": "https://patrolihukumindonesia.com/dari-kekayaan-hayati-ke-parfum-industri-wewangian-lokal-didorong-naik-kelas/",
+          "canonical_url": "https://patrolihukumindonesia.com/dari-kekayaan-hayati-ke-parfum-industri-wewangian-lokal-didorong-naik-kelas",
+          "media_name": "patrolihukumindonesia.com",
+          "tanggal": "Fri, 20 Nov 2026 22:45:18 GMT",
+          "skor": 1.0
+        }
+      ],
+      "tone_hubungan": "K1",
+      "tone_arah": "mendukung"
+    },
+    {
+      "isu_id": "klaster_cbda3c9c96",
+      "isu": "Bukan Cuma Gas Murah, HGBT Sumbang Rp592 Triliun ke Ekonomi RI",
+      "sumber_isu": "klaster",
+      "tanggal_awal": "2026-11-21",
+      "tanggal_terakhir": "2026-11-21",
+      "_norm_title": "bukan cuma gas murah hgbt sumbang rp 592 triliun ke ekonomi ri",
+      "tone": "Positif",
+      "tone_alasan": "Pejabat Kemenperin menjadi narasumber utama yang memaparkan kontribusi signifikan kebijakan HGBT terhadap industri manufaktur, memenuhi indikator P1 dengan tone Positif.",
+      "tone_keyakinan": "tinggi",
+      "evaluated_at": "2026-11-22 03:55:42",
+      "member_count_at_eval": 1,
+      "member_count": 1,
+      "sample_titles": [
+        "Bukan Cuma Gas Murah, HGBT Sumbang Rp592 Triliun ke Ekonomi RI"
+      ],
+      "sample_snippets": [
+        "INDUSTRY.co.id - Jakarta – Kebijakan Harga Gas Bumi Tertentu (HGBT) memberikan kontribusi ekonomi yang signifikan bagi industri nasional. \nKementerian Perindustrian (Kemenperin) mencatat, kebijakan harga gas murah untuk industri tersebut menghasilkan nilai tambah mencapai Rp592,89 triliun sepanjang periode 2020–2025.\n \nDirektur Industri Kimia Hulu Kemenperin, Sri Bimo Pratomo mengatakan, manfaat HGBT tidak hanya dirasakan melalui penurunan biaya produksi, tetapi juga mendorong peningkatan penjualan, investasi, hingga penerimaan negara.\n \nBerdasarkan hasil evaluasi Kemenperin, nilai tambah tersebut terdiri atas peningkatan penjualan Rp351,98 triliun, tambahan investasi Rp158,68 triliun, peningkatan penerimaan pajak Rp38,30 triliun, serta pengurangan subsidi pupuk Rp43,93 triliun.\n \n“Gas bumi bukan sekadar sumber energi, tetapi juga menjadi faktor penting dalam meningkatkan produktivitas, daya saing, dan investasi sektor manufaktur,” ujar Bimo di Jakarta, beberapa waktu lalu.\n \nMenurut Bimo, besarnya kontribusi tersebut menjadi bukti pentingnya kepastian pasokan dan harga gas yang kompetitif bagi keberlangsungan industri nasional.\n \nTerlebih, berdasarkan data SKK Migas hingga Agustus"
+      ],
+      "matched_articles": [
+        {
+          "id": "1",
+          "title": "Bukan Cuma Gas Murah, HGBT Sumbang Rp592 Triliun ke Ekonomi RI",
+          "link": "https://www.industry.co.id/read/159596/bukan-cuma-gas-murah-hgbt-sumbang-rp592-triliun-ke-ekonomi-ri",
+          "canonical_url": "https://industry.co.id/read/159596/bukan-cuma-gas-murah-hgbt-sumbang-rp592-triliun-ke-ekonomi-ri",
+          "media_name": "Industry.co.id",
+          "tanggal": "Sat, 21 Nov 2026 04:05:00 GMT",
+          "skor": 1.0
+        }
+      ],
+      "tone_hubungan": "K1",
+      "tone_arah": "mendukung"
+    },
+    {
+      "isu_id": "klaster_292572925b",
+      "isu": "Djarum Black Matcha Shiro dan Kuro: Dua Warna, Dua Karakter dalam Inovasi Kretek Mesin",
+      "sumber_isu": "klaster",
+      "tanggal_awal": "2026-11-21",
+      "tanggal_terakhir": "2026-11-21",
+      "_norm_title": "djarum black matcha shiro dan kuro dua warna dua karakter dalam inovasi kretek mesin",
+      "tone": "Netral",
+      "tone_alasan": "Berita mengulas peluncuran inovasi produk industri hasil tembakau komersial tanpa menyebut Kemenperin, sesuai indikator Ne2 sehingga dinilai Netral.",
+      "tone_keyakinan": "tinggi",
+      "evaluated_at": "2026-11-22 03:55:42",
+      "member_count_at_eval": 1,
+      "member_count": 1,
+      "sample_titles": [
+        "Djarum Black Matcha Shiro dan Kuro: Dua Warna, Dua Karakter dalam Inovasi Kretek Mesin"
+      ],
+      "sample_snippets": [
+        "Inovasi dalam industri hasil tembakau tidak selalu berhenti pada pemilihan tembakau, racikan cengkeh, atau teknik produksi. Pengembangan cita rasa dan desain produk juga menjadi bagian dari dinamika industri kretek. Salah satu contohnya adalah kehadiran Djarum Black Matcha Shiro dan Kuro, dua varian terbaru yang membawa konsep matcha ke dalam kategori sigaret kretek mesin (SKM) mild.\nKeduanya merupakan pengembangan dari lini Djarum Black Matcha yang sebelumnya dikenal dalam format sigaret kretek tangan (SKT). Kali ini, konsep matcha berpadu dengan teknologi kapsul perasa pada bagian filter. Kehadiran kapsul tersebut memungkinkan perubahan karakter aroma dan sensasi rasa ketika menekannya.\nLantas, apa yang membedakan Shiro dan Kuro?\nKuro dan Shiro: Identitas dalam Dua Warna\nPemilihan nama kedua varian ini memiliki keterkaitan dengan bahasa Jepang. Kuro berarti hitam, sedangkan Shiro berarti putih. Keduanya sekaligus menjadi identitas visual yang membedakan masing-masing kemasan.\nDjarum Black Matcha Kuro hadir dengan dominasi warna hitam. Sementara Shiro menggunakan warna putih sebagai warna utama. Meski berbeda, keduanya tetap mempertahankan elemen visual khas Djarum Black, seperti "
+      ],
+      "matched_articles": [
+        {
+          "id": "28",
+          "title": "Djarum Black Matcha Shiro dan Kuro: Dua Warna, Dua Karakter dalam Inovasi Kretek Mesin",
+          "link": "https://komunitaskretek.or.id/ragam/2026/11/djarum-black-matcha-shiro-dan-kuro-dua-warna-dua-karakter-dalam-inovasi-kretek-mesin/",
+          "canonical_url": "https://komunitaskretek.or.id/ragam/2026/11/djarum-black-matcha-shiro-dan-kuro-dua-warna-dua-karakter-dalam-inovasi-kretek-mesin",
+          "media_name": "Komunitas Kretek",
+          "tanggal": "Sat, 21 Nov 2026 10:25:23 GMT",
+          "skor": 1.0
+        }
+      ],
+      "tone_hubungan": "K3",
       "tone_arah": "tidak ada"
     }
   ]
