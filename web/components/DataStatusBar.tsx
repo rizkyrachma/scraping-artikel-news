@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { CheckCircle2, Download, Play, RefreshCw, X } from "lucide-react";
+import { CheckCircle2, Download, Play, RefreshCw, X, AlertTriangle, AlertCircle, Info, ExternalLink } from "lucide-react";
 
 interface DataStatusBarProps {
   isRunning: boolean;
@@ -13,6 +13,12 @@ interface DataStatusBarProps {
   targetDateStr?: string;
   runCountStr?: string;
   totalArchiveStr?: string;
+  actionNotice?: {
+    type: "info" | "warning" | "error" | "success";
+    message: string;
+    url?: string;
+  } | null;
+  onDismissNotice?: () => void;
 }
 
 export default function DataStatusBar({
@@ -25,9 +31,43 @@ export default function DataStatusBar({
   targetDateStr = "—",
   runCountStr = "—",
   totalArchiveStr = "—",
+  actionNotice,
+  onDismissNotice,
 }: DataStatusBarProps) {
   return (
     <div className={`data-status-bar panel-primary ${isRunning ? "running" : ""}`}>
+      {actionNotice && (
+        <div className={`status-notice-banner notice-${actionNotice.type}`}>
+          <div className="notice-content">
+            {actionNotice.type === "error" && <AlertCircle size={16} className="notice-icon" />}
+            {actionNotice.type === "warning" && <AlertTriangle size={16} className="notice-icon" />}
+            {actionNotice.type === "success" && <CheckCircle2 size={16} className="notice-icon" />}
+            {actionNotice.type === "info" && <Info size={16} className="notice-icon" />}
+            <span className="notice-message">{actionNotice.message}</span>
+            {actionNotice.url && (
+              <a
+                href={actionNotice.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="notice-link"
+              >
+                Log GitHub <ExternalLink size={12} />
+              </a>
+            )}
+          </div>
+          {onDismissNotice && (
+            <button
+              type="button"
+              onClick={onDismissNotice}
+              className="btn-notice-dismiss"
+              aria-label="Tutup notifikasi"
+            >
+              <X size={14} />
+            </button>
+          )}
+        </div>
+      )}
+
       {/* 1. Status Indicator & Info Utama */}
       <div className="status-meta-group">
         <div className="status-icon-bubble">
