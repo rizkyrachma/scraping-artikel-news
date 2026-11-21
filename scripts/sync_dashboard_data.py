@@ -8,6 +8,7 @@ Fase 3: Sinkronisasi hasil scraping baru dari hasil_scrapping/ ke data_export/ d
 
 import argparse
 import datetime
+import hashlib
 import json
 import os
 import shutil
@@ -140,6 +141,23 @@ def _clean_cell_str(val) -> str:
     return "" if s.lower() in ("nan", "none") else s
 
 
+def _norm_link(link: str) -> str:
+    return (link or "").strip().rstrip("/").lower()
+
+
+def generate_article_id(date_str: str, link: str, title: str = "") -> str:
+    """Menghasilkan ID stabil berbasis hash SHA-256 dari (tanggal, link/title).
+    Format: art_<16-char-hex>, deterministik dan tidak bergeser saat urutan data berubah.
+    """
+    d = (date_str or "")[:10]
+    n_link = _norm_link(link)
+    if not n_link:
+        n_link = (title or "").strip().lower()
+    raw = f"{d}::{n_link}"
+    digest = hashlib.sha256(raw.encode("utf-8")).hexdigest()[:16]
+    return f"art_{digest}"
+
+
 def read_excel_articles(excel_path: Path, fallback_date: str) -> list[dict]:
     """Membaca baris artikel dari file Excel hasil main.py ke struktur articles_all.json."""
     if not excel_path.exists():
@@ -186,7 +204,7 @@ def read_excel_articles(excel_path: Path, fallback_date: str) -> list[dict]:
         )
 
         rec: dict[str, object] = {
-            "id": 0,
+            "id": generate_article_id(d_str, link, title),
             "title": title,
             "link": link,
             "media": media,
@@ -286,10 +304,6 @@ def rebuild_summary(articles: list[dict]) -> dict:
     }
 
 
-def _norm_link(link: str) -> str:
-    return (link or "").strip().rstrip("/").lower()
-
-
 def _article_composite_key(art: dict) -> tuple[str, str]:
     """Menghasilkan composite key (tanggal, link/title) agar URL yang sama di tanggal berbeda tetap terjaga."""
     d = (art.get("date") or "")[:10]
@@ -311,8 +325,9 @@ def merge_articles(new_articles: list[dict], existing_articles: list[dict]) -> l
     ]
     merged = list(new_articles) + preserved
     merged.sort(key=lambda x: (x.get("date", ""), x.get("time", "")), reverse=True)
-    for idx, art in enumerate(merged, start=1):
-        art["id"] = idx
+    for art in merged:
+        if not art.get("id"):
+            art["id"] = generate_article_id(art.get("date", ""), art.get("link", ""), art.get("title", ""))
     return merged
 
 
@@ -373,8 +388,9 @@ def rebuild_all_data_from_excels(files_dir: Path) -> tuple[list[dict], dict]:
         all_articles.extend(arts)
 
     all_articles.sort(key=lambda x: (x.get("date", ""), x.get("time", "")), reverse=True)
-    for idx, art in enumerate(all_articles, start=1):
-        art["id"] = idx
+    for art in all_articles:
+        if not art.get("id"):
+            art["id"] = generate_article_id(art.get("date", ""), art.get("link", ""), art.get("title", ""))
 
     summary_data = rebuild_summary(all_articles)
     return all_articles, summary_data
@@ -558,9 +574,11 @@ def run_self_check():
     baru_lintas_hari = [{"title": "B-hari-lain", "link": "https://site.id/news?id=2", "date": "2026-11-05", "time": "11:00"}]
     merged_lintas = merge_articles(baru_lintas_hari, existing)
     assert len(merged_lintas) == 4, f"Harusnya 4 artikel (id=2 di 3 Nov, 4 Nov, dan 5 Nov), dapat {len(merged_lintas)}"
-    # Verifikasi ID berurutan dan unik
+    # Verifikasi ID stabil dan unik
     ids = [a["id"] for a in merged_lintas]
     assert len(ids) == len(set(ids)) == 4, "Setiap artikel harus punya ID unik"
+    assert all(isinstance(i, str) and i.startswith("art_") for i in ids), "ID harus berupa string hash art_*"
+    assert generate_article_id("2026-11-04", "https://site.id/news?id=1") == generate_article_id("2026-11-04", "https://site.id/news?id=1")
 
     # Verifikasi URL sama di tanggal yang sama diperbarui (idempotent)
     baru_update_sama = [{"title": "B-re-scrape", "link": "https://site.id/news?id=2", "date": "2026-11-04", "time": "09:30"}]

@@ -328,9 +328,9 @@ export default function HalamanBerita({
   const sortedArticles = useMemo(() => {
     const list = [...filteredArticles];
     if (sortBy === "terbaru") {
-      list.sort((a, b) => (b.date || "").localeCompare(a.date || "") || b.id - a.id);
+      list.sort((a, b) => (b.date || "").localeCompare(a.date || "") || (b.time || "").localeCompare(a.time || "") || String(b.id).localeCompare(String(a.id)));
     } else if (sortBy === "terlama") {
-      list.sort((a, b) => (a.date || "").localeCompare(b.date || "") || a.id - b.id);
+      list.sort((a, b) => (a.date || "").localeCompare(b.date || "") || (a.time || "").localeCompare(b.time || "") || String(a.id).localeCompare(String(b.id)));
     } else if (sortBy === "media") {
       list.sort((a, b) => a.media.localeCompare(b.media));
     }
