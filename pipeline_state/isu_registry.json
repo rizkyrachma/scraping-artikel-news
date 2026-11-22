@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-22 03:56:53",
+  "updated_at": "2026-11-23 03:52:31",
   "issues": [
     {
       "isu_id": "rilis_74a1d93a45",
@@ -834,20 +834,21 @@
       "isu": "Serikat pekerja dan pengusaha meminta pemerintah mengawasi rokok ilegal serta memberikan kepastian hukum bagi industri hasil tembakau",
       "sumber_isu": "klaster",
       "tanggal_awal": "2026-11-19",
-      "tanggal_terakhir": "2026-11-21",
+      "tanggal_terakhir": "2026-11-22",
       "_norm_title": "serikat pekerja dan pengusaha minta pemerintah mengawasi rokok ilegal serta memberikan kepastian hukum bagi iht",
       "tone": "Netral",
       "tone_alasan": "Permintaan ditujukan kepada pemerintah secara umum tanpa menyebut atau menyerang kebijakan spesifik Kemenperin.",
       "tone_keyakinan": "tinggi",
       "evaluated_at": "2026-11-21 03:55:00",
       "member_count_at_eval": 4,
-      "member_count": 5,
+      "member_count": 6,
       "sample_titles": [
         "Serikat Pekerja Desak Pemerintah Beri Kepastian Hukum Industri Rokok",
         "Peredaran Rokok Ilegal Mengkhawatirkan, Pengusaha Butuh Kepastian Hukum",
         "Rokok Ilegal Marak, Serikat Pekerja Minta Kenaikan Cukai Disetop",
         "Serikat Pekerja Minta Pemerintah Awasi Industri Rokok Elektronik",
-        "Serikat Pekerja Desak Moratorium Kenaikan Cukai Rokok"
+        "Serikat Pekerja Desak Moratorium Kenaikan Cukai Rokok",
+        "Bersaing dengan Rokok Ilegal, Industri Legal Minta Kepastian Hukum dan Evaluasi Cukai"
       ],
       "sample_snippets": [
         "Pantau - Forum Serikat Pekerja Rokok Tembakau Makanan dan Minuman Serikat Pekerja Seluruh Indonesia (FSP RTMM-SPSI) meminta pemerintah memberikan kepastian hukum dan kepastian berusaha bagi industri hasil tembakau (IHT) di tengah tekanan regulasi, kebijakan fiskal, serta meningkatnya peredaran rokok ilegal.\nKetua Umum FSP RTMM-SPSI Hendry Wardana mengatakan tekanan terhadap perusahaan rokok legal berpotensi mengancam keberlangsungan industri dan pekerjaan sekitar 500.000 tenaga kerja yang terlibat langsung dalam sektor manufaktur rokok.\nPernyataan tersebut disampaikan Hendry melalui keterangan tertulis di Jakarta, Kamis (19/11/2026).\nMenurutnya, perusahaan rokok legal menghadapi kewajiban cukai dan berbagai ketentuan pemerintah, sementara produk rokok ilegal beredar tanpa memenuhi kewajiban yang sama.\n“Jika perusahaan rokok legal akhirnya menyerah karena ketidakadilan yang terus terjadi, dampaknya akan sangat besar,” ujar Hendry.\nIa menilai pemerintah perlu memperhatikan keberlangsungan industri legal sekaligus perlindungan tenaga kerja dalam merumuskan kebijakan sektor tembakau.\nSerikat Pekerja Khawatir Nasib 500 Ribu Pekerja Industri Rokok\nHendry menjelaskan bahwa sektor manufakt",
@@ -898,6 +899,15 @@
           "media_name": "www.suaralandak.co.id",
           "tanggal": "Sat, 21 Nov 2026 08:56:06 GMT",
           "skor": 0.529
+        },
+        {
+          "id": "16",
+          "title": "Bersaing dengan Rokok Ilegal, Industri Legal Minta Kepastian Hukum dan Evaluasi Cukai",
+          "link": "https://www.kabarbisnis.com/read/28138057/bersaing-dengan-rokok-ilegal-industri-legal-minta-kepastian-hukum-dan-evaluasi-cukai",
+          "canonical_url": "https://kabarbisnis.com/read/28138057/bersaing-dengan-rokok-ilegal-industri-legal-minta-kepastian-hukum-dan-evaluasi-cukai",
+          "media_name": "kabarbisnis.com",
+          "tanggal": "Sun, 22 Nov 2026 09:11:37 GMT",
+          "skor": 0.5725
         }
       ],
       "tone_hubungan": "K3",
@@ -1395,20 +1405,21 @@
       "isu": "Satgas PKH Mencabut Izin dan Menertibkan Aktivitas PT RAPP Serta PT GSL di Riau",
       "sumber_isu": "klaster",
       "tanggal_awal": "2026-11-20",
-      "tanggal_terakhir": "2026-11-20",
+      "tanggal_terakhir": "2026-11-22",
       "_norm_title": "satgas pkh mencabut izin dan menertibkan aktivitas pt rapp serta pt gsl di riau",
       "tone": "Netral",
       "tone_alasan": "Berita menyoroti tindakan Satgas PKH terhadap perusahaan hutan dan sawit tanpa melibatkan atau menyerang Kemenperin.",
       "tone_keyakinan": "tinggi",
       "evaluated_at": "2026-11-21 03:55:00",
       "member_count_at_eval": 5,
-      "member_count": 5,
+      "member_count": 6,
       "sample_titles": [
         "Biang Kerok Kerusakan Hutan, Satgas PKH Cabut Izin PT GSL dan RAPP Milik Taipan Sukanto Tanoto",
         "Dipimpin Wamenhan Richard, Satgas PKH Tertibkan Pabrik Sawit dan Cabut Izin Pabrik Kertas di Riau",
         "Satgas PKH Ambil Alih Pabrik-Kebun Sawit PT GSL & Cabut Izin PT RAPP",
         "Satgas PKH Ambil Alih Pabrik Kelapa Sawit dan Lahan 42 Hektare Milik PT GSL di Kuansing Riau",
-        "Selain Cabut Izin, Satgas PKH Hentikan Seluruh Aktivitas PT RAPP Termasuk Pabrik Kertas"
+        "Selain Cabut Izin, Satgas PKH Hentikan Seluruh Aktivitas PT RAPP Termasuk Pabrik Kertas",
+        "Izin RAPP Dicabut, Pemerintah Jamin 41 Ribu Pekerja Tak Kena PHK"
       ],
       "sample_snippets": [
         "Biang Kerok Kerusakan Hutan, Satgas PKH Cabut Izin PT GSL dan RAPP Milik Taipan Sukanto Tanoto\nSatgas PKH memasang plang pencabutan izin PT RAPP, perusahaan bubur kertas milik konglomerat Sukanto Tanoto. (Foto: ANTARA/Annisa Firdausi).\nSatuan Tugas Penertiban Kawasan Hutan (Satgas PKH) kembali menertibkan sejumlah perusahaan yang diduga melanggar pemanfaatan kawasan hutan di Provinsi Riau.\nJuru Bicara Satgas PKH, Barita Simanjuntak menyebut dua perusahaan yakni PT Gemilang Sawit Lestari (GSL), pabrik kelapa sawit (PKS) yang berada di Kabupaten Kuantan Singingi (Kuansing).\nSatunya lagi, PT Riau Andalan Pulp and Paper (RAPP) berlokasi di Pangkalan Kerinci, Kabupaten Pelalawan, Riau. \"Langkah penertiban merupakan bentuk kehadiran negara dalam melindungi kawasan hutan sekaligus memperbaiki tata kelola hutan agar kembali sesuai dengan fungsi dan peruntukannya,\" kata Barita, dikutip Jumat (20/11/2026).\nDalam penanganan PT GSL, kata dia, Satgas PKH menemukan indikasi bahwa PKS non-kebun itu, membeli dan mengolah sawit yang berasal dari aktivitas perkebunan di dalam kawasan hutan tanpa izin alias ilegal.\n\"Keberadaan pabrik tersebut diduga mendorong semakin masifnya perambahan kawasan hutan",
@@ -1459,6 +1470,15 @@
           "media_name": "Nadariau.com",
           "tanggal": "Fri, 20 Nov 2026 05:49:51 GMT",
           "skor": 0.6757
+        },
+        {
+          "id": "36",
+          "title": "Izin RAPP Dicabut, Pemerintah Jamin 41 Ribu Pekerja Tak Kena PHK",
+          "link": "https://cakradunia.co/news/izin-rapp-dicabut-pemerintah-jamin-41-ribu-pekerja-tak-kena-phk/index.html",
+          "canonical_url": "https://cakradunia.co/news/izin-rapp-dicabut-pemerintah-jamin-41-ribu-pekerja-tak-kena-phk/index.html",
+          "media_name": "Cakra Dunia",
+          "tanggal": "Sun, 22 Nov 2026 00:15:57 GMT",
+          "skor": 0.3759
         }
       ],
       "tone_hubungan": "K4",
@@ -2279,22 +2299,26 @@
     },
     {
       "isu_id": "klaster_3518e40cef",
-      "isu": "Indonesia dan Uni Eropa menandatangani perjanjian IEU CEPA untuk memperluas akses pasar ekspor unggulan.",
+      "isu": "Pemerintah Indonesia dan Uni Eropa Resmi Menandatangani Perjanjian IEU-CEPA untuk Memperluas Pasar Ekspor",
       "sumber_isu": "klaster",
       "tanggal_awal": "2026-11-20",
-      "tanggal_terakhir": "2026-11-21",
-      "_norm_title": "indonesia dan uni eropa menandatangani perjanjian ieu cepa untuk memperluas akses pasar ekspor unggulan",
+      "tanggal_terakhir": "2026-11-22",
+      "_norm_title": "pemerintah indonesia dan uni eropa resmi menandatangani perjanjian ieu cepa untuk memperluas pasar ekspor",
       "tone": "Netral",
-      "tone_alasan": "Berita mengenai penandatanganan IEU CEPA oleh Kementerian Perdagangan dan Uni Eropa tanpa keterlibatan langsung institusi Kemenperin.",
+      "tone_alasan": "Perjanjian dagang IEU-CEPA merupakan kebijakan lintas kementerian yang dipimpin Kemendag tanpa menyebut Kemenperin secara langsung.",
       "tone_keyakinan": "tinggi",
-      "evaluated_at": "2026-11-22 03:56:48",
-      "member_count_at_eval": 4,
-      "member_count": 4,
+      "evaluated_at": "2026-11-23 03:52:27",
+      "member_count_at_eval": 8,
+      "member_count": 8,
       "sample_titles": [
         "RI-Uni Eropa matangkan kesiapan IEU-CEPA jelang penandatanganan",
         "Indonesia dan Uni Eropa Teken Perjanjian IEU CEPA",
         "Indonesia dan Uni Eropa Teken Perjanjian IEU-CEPA",
-        "Mendag: Penandatanganan IEU CEPA perluas ekspor sawit hingga karet"
+        "Mendag: Penandatanganan IEU CEPA perluas ekspor sawit hingga karet",
+        "I-EU CEPA Ditandatangani, Indonesia Perluas Akses Ekspor ke Uni Eropa",
+        "IEU-CEPA Buka Akses Teknologi Eropa untuk Perkuat Industri RI",
+        "IEU CEPA Resmi Diteken, Mendag Budi Optimistis Pasar Uni Eropa Makin Terbuka",
+        "Indonesia-Uni Eropa Resmi Tandatangani IEU-CEPA, Tarif Ekspor Turun hingga 0 Persen"
       ],
       "sample_snippets": [
         "RI-Uni Eropa matangkan kesiapan IEU-CEPA jelang penandatanganan\nMenteri Koordinator Bidang Perekonomian Airlangga Hartarto memimpin delegasi Indonesia menjelang penandatanganan Perjanjian Kemitraan Ekonomi Komprehensif Indonesia-Uni Eropa (IEU-CEPA), Brussels, Belgia, Jumat (20/11/2026). ANTARA/HO-Kemenko Perekonomian\nMenteri Koordinator Bidang Perekonomian Airlangga Hartarto yang memimpin delegasi Indonesia dalam rangkaian kunjungan ke Brussels, melakukan pertemuan bilateral dengan European Commissioner for Trade and Economic Security Maroš Šefčovič untuk membahas kesiapan penandatanganan IEU-CEPA.\n\"IEU-CEPA membuka akses yang lebih luas ke pasar Uni Eropa yang berpenduduk sekitar 450 juta jiwa, dengan nilai perdagangan bilateral mencapai sekitar 30 miliar dolar AS per tahun,\" kata Airlangga dalam keterangannya di Jakarta, Jumat.\nIa menilai pertemuan bilateral itu penting guna menegaskan komitmen kedua pihak untuk tak hanya menyelesaikan proses penandatanganan, tetapi juga memastikan kesiapan kedua pihak dalam memasuki tahap implementasi.\nPertemuan membahas langkah-langkah untuk memastikan perjanjian dapat segera diterapkan setelah ditandatangani.\nKedua pihak bertukar pandangan me",
@@ -2336,9 +2360,45 @@
           "media_name": "ANTARA News",
           "tanggal": "Sat, 21 Nov 2026 15:38:06 GMT",
           "skor": 0.5847
+        },
+        {
+          "id": "12",
+          "title": "I-EU CEPA Ditandatangani, Indonesia Perluas Akses Ekspor ke Uni Eropa",
+          "link": "https://swa.co.id/read/479928/i-eu-cepa-ditandatangani-indonesia-perluas-akses-ekspor-ke-uni-eropa",
+          "canonical_url": "https://swa.co.id/read/479928/i-eu-cepa-ditandatangani-indonesia-perluas-akses-ekspor-ke-uni-eropa",
+          "media_name": "SWA.co.id",
+          "tanggal": "Sun, 22 Nov 2026 09:00:00 GMT",
+          "skor": 0.5767
+        },
+        {
+          "id": "9",
+          "title": "IEU-CEPA Buka Akses Teknologi Eropa untuk Perkuat Industri RI",
+          "link": "https://www.beritasatu.com/ekonomi/3042955/ieu-cepa-buka-akses-teknologi-eropa-untuk-perkuat-industri-ri",
+          "canonical_url": "https://beritasatu.com/ekonomi/3042955/ieu-cepa-buka-akses-teknologi-eropa-untuk-perkuat-industri-ri",
+          "media_name": "BeritaSatu.com",
+          "tanggal": "Sun, 22 Nov 2026 05:53:14 GMT",
+          "skor": 0.5417
+        },
+        {
+          "id": "15",
+          "title": "IEU CEPA Resmi Diteken, Mendag Budi Optimistis Pasar Uni Eropa Makin Terbuka",
+          "link": "https://investortrust.id/business/123320/ieu-cepa-resmi-diteken-mendag-budi-optimistis-pasar-uni-eropa-makin-terbuka",
+          "canonical_url": "https://investortrust.id/business/123320/ieu-cepa-resmi-diteken-mendag-budi-optimistis-pasar-uni-eropa-makin-terbuka",
+          "media_name": "InvestorTrust",
+          "tanggal": "Sun, 22 Nov 2026 07:06:00 GMT",
+          "skor": 0.4958
+        },
+        {
+          "id": "5",
+          "title": "Indonesia-Uni Eropa Resmi Tandatangani IEU-CEPA, Tarif Ekspor Turun hingga 0 Persen",
+          "link": "https://www.setneg.go.id/baca/index/indonesia_uni_eropa_resmi_tandatangani_ieu_cepa_tarif_ekspor_turun_hingga_0_persen",
+          "canonical_url": "https://setneg.go.id/baca/index/indonesia_uni_eropa_resmi_tandatangani_ieu_cepa_tarif_ekspor_turun_hingga_0_persen",
+          "media_name": "Kementerian Sekretariat Negara",
+          "tanggal": "Sun, 22 Nov 2026 09:27:55 GMT",
+          "skor": 0.4964
         }
       ],
-      "tone_hubungan": "K4",
+      "tone_hubungan": "K3",
       "tone_arah": "tidak ada",
       "tone_metode": "AI-isu"
     },
@@ -2542,23 +2602,30 @@
     },
     {
       "isu_id": "klaster_2e4a41da25",
-      "isu": "Menteri Perdagangan menandatangani naskah perjanjian IEU-CEPA di Brussels untuk membuka pasar ekspor Eropa.",
+      "isu": "Indonesia dan Uni Eropa Menandatangani Perjanjian IEU-CEPA yang Membuka Akses Ekspor Tanpa Bea Masuk",
       "sumber_isu": "klaster",
       "tanggal_awal": "2026-11-21",
-      "tanggal_terakhir": "2026-11-21",
-      "_norm_title": "menteri perdagangan menandatangani naskah perjanjian ieu cepa di brussels untuk membuka pasar ekspor eropa",
+      "tanggal_terakhir": "2026-11-22",
+      "_norm_title": "indonesia dan uni eropa menandatangani perjanjian ieu cepa yang membuka akses ekspor tanpa bea masuk",
       "tone": "Netral",
-      "tone_alasan": "Berita membahas perjanjian perdagangan IEU-CEPA yang melibatkan Kementerian Perdagangan tanpa menyebut atau melibatkan Kemenperin secara langsung.",
+      "tone_alasan": "Penandatanganan IEU-CEPA berkaitan dengan industri nasional tetapi bersumber dari Kementerian Perdagangan tanpa melibatkan Kemenperin secara langsung.",
       "tone_keyakinan": "tinggi",
-      "evaluated_at": "2026-11-22 03:56:48",
-      "member_count_at_eval": 5,
-      "member_count": 5,
+      "evaluated_at": "2026-11-23 03:52:27",
+      "member_count_at_eval": 18,
+      "member_count": 18,
       "sample_titles": [
         "IEU-CEPA Resmi Berlaku, Ini Komoditas yang Dapat Bebas Tarif ke Eropa",
         "IEU-CEPA Resmi Diteken, 90,4% Produk RI Bebas Tarif Masuk Pasar Eropa",
         "Indonesia dan Uni Eropa Sepakati Tarif Impor Nol Persen",
         "Isi IEU-CEPA: Investasi Masuk, Biaya Produksi Industri Bisa Turun",
-        "Mendag Busan Optimistis Pasar Uni Eropa Makin Terbuka Setelah EU CEPA Ditandatangani"
+        "Mendag Busan Optimistis Pasar Uni Eropa Makin Terbuka Setelah EU CEPA Ditandatangani",
+        "Daftar Produk RI-Uni Eropa yang Bebas Bea Masuk Karena IEU CEPA",
+        "Ekspor Sawit dan Karet ke Eropa Kini Lebih Leluasa Berkat IEU CEPA",
+        "I-EU CEPA Diteken, Mendag: Produk Sawit-Karet Bakal Bebas Tarif Ekspor ke Eropa",
+        "IEU-CEPA Bebaskan Tarif Sawit hingga Alas Kaki ke Eropa, Ini yang Diincar Pemerintah",
+        "IEU-CEPA Berlaku 2027, Tekstil hingga Sawit Makin Menarik bagi Pasar Eropa",
+        "IEU-CEPA Diteken, 90,4% Produk Indonesia Bebas Tarif ke Uni Eropa",
+        "IEU-CEPA Pangkas Tarif Ekspor Indonesia hingga Rp 17 Triliun"
       ],
       "sample_snippets": [
         "IEU-CEPA Resmi Berlaku, Ini Komoditas yang Dapat Bebas Tarif ke Eropa\nJakarta, CNBC Indonesia - Indonesia dan Uni Eropa (UE) resmi menandatangani perjanjian kerja sama ekonomi komprehensif atau Indonesia-European Union Comprehensive Economic Partnership Agreement (IEU CEPA) pada Jumat (21/11/2026). Kesepakatan dagang ini membuka peluang lebih besar bagi produk Indonesia untuk menembus pasar Eropa, termasuk melalui penghapusan sebagian besar tarif bea masuk.\nPenandatanganan dilakukan oleh Menteri Koordinator Bidang Perekonomian Airlangga Hartarto bersama Menteri Perdagangan Budi Santoso di kantor Komisi Eropa, Brussel, Belgia. Presiden Komisi Eropa Ursula von der Leyen turut hadir menyaksikan prosesi tersebut. Selain IEU-CEPA, kedua pihak juga menandatangani Investment Protection Agreement (IPA) atau perjanjian perlindungan investasi.\n\"Ini di tengah dinamika geopolitik dan geoekonomi dunia serta sistem perdagangan global yang semakin kompetitif, Indonesia terus membuka akses pasar melalui kerja sama ekonomi dan salah satunya adalah dengan Uni Eropa,\" ujar Airlangga dalam konferensi pers, Sabtu (22/11/2026).\nKesepakatan tersebut menjadi penutup perjalanan panjang negosiasi yang berla",
@@ -2609,9 +2676,126 @@
           "media_name": "Niaga.Asia",
           "tanggal": "Sat, 21 Nov 2026 16:41:15 GMT",
           "skor": 0.377
+        },
+        {
+          "id": "30",
+          "title": "Daftar Produk RI-Uni Eropa yang Bebas Bea Masuk Karena IEU CEPA",
+          "link": "https://www.bloombergtechnoz.com/detail-news/128499/daftar-produk-ri-uni-eropa-yang-bebas-bea-masuk-karena-ieu-cepa",
+          "canonical_url": "https://bloombergtechnoz.com/detail-news/128499/daftar-produk-ri-uni-eropa-yang-bebas-bea-masuk-karena-ieu-cepa",
+          "media_name": "Bloomberg Technoz",
+          "tanggal": "Sun, 22 Nov 2026 06:30:00 GMT",
+          "skor": 0.4528
+        },
+        {
+          "id": "26",
+          "title": "Ekspor Sawit dan Karet ke Eropa Kini Lebih Leluasa Berkat IEU CEPA",
+          "link": "https://www.suara.com/bisnis/2026/11/22/001236/ekspor-sawit-dan-karet-ke-eropa-kini-lebih-leluasa-berkat-ieu-cepa",
+          "canonical_url": "https://suara.com/bisnis/2026/11/22/001236/ekspor-sawit-dan-karet-ke-eropa-kini-lebih-leluasa-berkat-ieu-cepa",
+          "media_name": "Suara.com",
+          "tanggal": "Sat, 21 Nov 2026 17:12:36 GMT",
+          "skor": 0.4114
+        },
+        {
+          "id": "14",
+          "title": "I-EU CEPA Diteken, Mendag: Produk Sawit-Karet Bakal Bebas Tarif Ekspor ke Eropa",
+          "link": "http://www.agrofarm.co.id/2026/11/i-eu-cepa-diteken-mendag-produk-sawit-karet-bakal-bebas-tarif-ekspor-ke-eropa/",
+          "canonical_url": "https://agrofarm.co.id/2026/11/i-eu-cepa-diteken-mendag-produk-sawit-karet-bakal-bebas-tarif-ekspor-ke-eropa",
+          "media_name": "www.agrofarm.co.id",
+          "tanggal": "Sun, 22 Nov 2026 06:29:10 GMT",
+          "skor": 0.3737
+        },
+        {
+          "id": "13",
+          "title": "IEU-CEPA Bebaskan Tarif Sawit hingga Alas Kaki ke Eropa, Ini yang Diincar Pemerintah",
+          "link": "https://investortrust.id/business/123309/ieu-cepa-bebaskan-tarif-sawit-hingga-alas-kaki-ke-eropa-ini-yang-diincar-pemerintah",
+          "canonical_url": "https://investortrust.id/business/123309/ieu-cepa-bebaskan-tarif-sawit-hingga-alas-kaki-ke-eropa-ini-yang-diincar-pemerintah",
+          "media_name": "InvestorTrust",
+          "tanggal": "Sun, 22 Nov 2026 01:37:00 GMT",
+          "skor": 0.3794
+        },
+        {
+          "id": "25",
+          "title": "IEU-CEPA Berlaku 2027, Tekstil hingga Sawit Makin Menarik bagi Pasar Eropa",
+          "link": "https://www.jawapos.com/ekonomi/2611220370/ieu-cepa-berlaku-2027-tekstil-hingga-sawit-makin-menarik-bagi-pasar-eropa",
+          "canonical_url": "https://jawapos.com/ekonomi/2611220370/ieu-cepa-berlaku-2027-tekstil-hingga-sawit-makin-menarik-bagi-pasar-eropa",
+          "media_name": "Jawa Pos",
+          "tanggal": "Sun, 22 Nov 2026 13:40:06 GMT",
+          "skor": 0.4582
+        },
+        {
+          "id": "31",
+          "title": "IEU-CEPA Diteken, 90,4% Produk Indonesia Bebas Tarif ke Uni Eropa",
+          "link": "https://www.indragirione.com/2026/11/ieu-cepa-diteken-904-produk-indonesia-bebas-tarif-ke-uni-eropa",
+          "canonical_url": "https://indragirione.com/2026/11/ieu-cepa-diteken-904-produk-indonesia-bebas-tarif-ke-uni-eropa",
+          "media_name": "Indragirione.com",
+          "tanggal": "Sat, 21 Nov 2026 23:21:02 GMT",
+          "skor": 0.4755
+        },
+        {
+          "id": "17",
+          "title": "IEU-CEPA Pangkas Tarif Ekspor Indonesia hingga Rp 17 Triliun",
+          "link": "https://cwibc.co.id/ieu-cepa-pangkas-tarif-ekspor",
+          "canonical_url": "https://cwibc.co.id/ieu-cepa-pangkas-tarif-ekspor",
+          "media_name": "cwibc.co.id",
+          "tanggal": "Sat, 21 Nov 2026 17:42:00 GMT",
+          "skor": 0.3727
+        },
+        {
+          "id": "23",
+          "title": "Indonesia-Uni Eropa Sepakati Perdagangan Bebas, Ekspor Sawit RI Bisa Bebas Tarif",
+          "link": "https://www.kompas.com/global/read/2026/11/22/115556370/indonesia-uni-eropa-sepakati-perdagangan-bebas-ekspor-sawit-ri-bisa-bebas",
+          "canonical_url": "https://kompas.com/global/read/2026/11/22/115556370/indonesia-uni-eropa-sepakati-perdagangan-bebas-ekspor-sawit-ri-bisa-bebas",
+          "media_name": "Kompas.com",
+          "tanggal": "Sun, 22 Nov 2026 04:55:00 GMT",
+          "skor": 0.3792
+        },
+        {
+          "id": "3",
+          "title": "Minyak Sawit Bakal Banjiri Eropa, IEU-CEPA Bikin Tarif Ekspor Indonesia Turun hingga Nol Persen",
+          "link": "https://pontianakpost.jawapos.com/ekonomi/2611220071/minyak-sawit-bakal-banjiri-eropa-ieu-cepa-bikin-tarif-ekspor-indonesia-turun-hingga-nol-persen",
+          "canonical_url": "https://pontianakpost.jawapos.com/ekonomi/2611220071/minyak-sawit-bakal-banjiri-eropa-ieu-cepa-bikin-tarif-ekspor-indonesia-turun-hingga-nol-persen",
+          "media_name": "Pontianak Post",
+          "tanggal": "Sun, 22 Nov 2026 15:36:59 GMT",
+          "skor": 0.3824
+        },
+        {
+          "id": "29",
+          "title": "Resmi Diteken, Ini Poin-Poin Penting Kesepakatan Dagang RI-Uni Eropa",
+          "link": "https://www.cnbcindonesia.com/news/20261121225455-4-787238/resmi-diteken-ini-poin-poin-penting-kesepakatan-dagang-ri-uni-eropa",
+          "canonical_url": "https://cnbcindonesia.com/news/20261121225455-4-787238/resmi-diteken-ini-poin-poin-penting-kesepakatan-dagang-ri-uni-eropa",
+          "media_name": "CNBC Indonesia",
+          "tanggal": "Sat, 21 Nov 2026 23:20:55 GMT",
+          "skor": 0.3803
+        },
+        {
+          "id": "22",
+          "title": "Sawit hingga Sepatu RI Bakal Banjiri Pasar Eropa Tanpa Bea Masuk, Efek IEU-CEPA Resmi Diteken!",
+          "link": "https://www.inilah.com/sawit-hingga-sepatu-ri-bakal-banjiri-pasar-eropa-tanpa-bea-masuk-efek-ieu-cepa-resmi-diteken",
+          "canonical_url": "https://inilah.com/sawit-hingga-sepatu-ri-bakal-banjiri-pasar-eropa-tanpa-bea-masuk-efek-ieu-cepa-resmi-diteken",
+          "media_name": "Inilah.com",
+          "tanggal": "Sat, 21 Nov 2026 20:03:00 GMT",
+          "skor": 0.4085
+        },
+        {
+          "id": "21",
+          "title": "Teken Perjanjian Dagang, Sawit hingga Furnitur Indonesia Bebas Bea Masuk ke Uni Eropa Mulai 2027",
+          "link": "https://kumparan.com/kumparanbisnis/teken-perjanjian-dagang-sawit-hingga-furnitur-indonesia-bebas-bea-masuk-ke-uni-eropa-mulai-2027-28cYSg7ivee",
+          "canonical_url": "https://kumparan.com/kumparanbisnis/teken-perjanjian-dagang-sawit-hingga-furnitur-indonesia-bebas-bea-masuk-ke-uni-eropa-mulai-2027-28cYSg7ivee",
+          "media_name": "kumparan",
+          "tanggal": "Sun, 22 Nov 2026 02:28:00 GMT",
+          "skor": 0.4249
+        },
+        {
+          "id": "33",
+          "title": "Usai IEU-CEPA Diteken, Ini Daftar Produk RI yang Kini Bebas Tarif di Pasar Eropa",
+          "link": "https://www.viva.co.id/bisnis/1945603-usai-ieu-cepa-diteken-ini-daftar-produk-ri-yang-kini-bebas-tarif-di-pasar-eropa",
+          "canonical_url": "https://viva.co.id/bisnis/1945603-usai-ieu-cepa-diteken-ini-daftar-produk-ri-yang-kini-bebas-tarif-di-pasar-eropa",
+          "media_name": "VIVA.co.id",
+          "tanggal": "Sun, 22 Nov 2026 12:35:22 GMT",
+          "skor": 0.4535
         }
       ],
-      "tone_hubungan": "K4",
+      "tone_hubungan": "K3",
       "tone_arah": "tidak ada",
       "tone_metode": "AI-isu"
     },
@@ -2868,6 +3052,460 @@
         }
       ],
       "tone_hubungan": "K3",
+      "tone_arah": "tidak ada"
+    },
+    {
+      "isu_id": "klaster_2e7270a874",
+      "isu": "Wakil Menteri Kelautan dan Perikanan Mengunjungi Stan Produk Olahan Rumput Laut di Harkanas 2026",
+      "sumber_isu": "klaster",
+      "tanggal_awal": "2026-11-22",
+      "tanggal_terakhir": "2026-11-22",
+      "_norm_title": "wakil menteri kelautan dan perikanan mengunjungi stan produk olahan rumput_laut di harkanas 2026",
+      "tone": "Netral",
+      "tone_alasan": "Berita menyoroti kegiatan Kementerian Kelautan dan Perikanan tanpa keterkaitan langsung dengan institusi Kemenperin.",
+      "tone_keyakinan": "tinggi",
+      "evaluated_at": "2026-11-23 03:52:27",
+      "member_count_at_eval": 2,
+      "member_count": 2,
+      "sample_titles": [
+        "Dua Wamen KKP Kunjungi Stan Tartaruga Dinasti Indonesia, Inovasi Olahan Rumput Laut Jadi Sorotan Harkanas 2026",
+        "Stan Tartaruga Dinasti Indonesia Dikunjungi Wamen KKP, Achmad Jawahir Perkenalkan Inovasi Produk Rumput Laut"
+      ],
+      "sample_snippets": [
+        "MEDIALITERASI.ID | JAKARTA – Inovasi produk olahan rumput laut yang dikembangkan PT Tartaruga Dinasti Indonesia menjadi salah satu perhatian dalam kegiatan Hari Ikan Nasional (Harkanas) 2026. Stan perusahaan tersebut dikunjungi dua Wakil Menteri Kelautan dan Perikanan (KKP), yakni Laksamana TNI (Purn.) Dr. Didit Herdiawan Ashaf dan Prof. Dr. Irwan Meilano.\nDalam kunjungan tersebut, Direktur sekaligus CEO PT Tartaruga Dinasti Indonesia, Achmad Jawahir, memperkenalkan sejumlah produk unggulan berbahan dasar rumput laut, mulai dari makanan ringan (snack), nori, onigiri, hingga berbagai produk olahan lainnya yang menyasar pasar ritel modern.\nAchmad Jawahir menjelaskan bahwa rumput laut memiliki potensi besar untuk dikembangkan menjadi berbagai produk bernilai tambah. Menurutnya, pengolahan komoditas tersebut perlu terus didorong agar Indonesia tidak hanya menjadi pemasok bahan baku, tetapi juga mampu menghasilkan produk olahan yang memiliki daya saing.\nIa mengatakan, keikutsertaan PT Tartaruga Dinasti Indonesia dalam Harkanas 2026 tidak hanya bertujuan memperkenalkan produk, tetapi juga membuka peluang kerja sama, memperluas jaringan bisnis, serta memperkuat hubungan antara pelaku usah",
+        "METROPOLITAN POST– Stan PT Tartaruga Dinasti Indonesia menjadi salah satu perhatian dalam kegiatan Hari Ikan Nasional (Harkanas) 2026. Kehadiran Wakil Menteri Kelautan dan Perikanan, Laksamana TNI (Purn.) Dr. Didit Herdiawan Ashaf dan Prof. Dr. Irwan Meilano di stan perusahaan tersebut menjadi momentum bagi pelaku industri untuk memperkenalkan inovasi produk olahan rumput laut Indonesia.\nDirektur sekaligus CEO PT Tartaruga Dinasti Indonesia, Achmad Jawahir, menyambut kunjungan tersebut dengan memperkenalkan sejumlah produk unggulan perusahaan yang bergerak dalam pengembangan produk rumput laut dan turunannya.\nDalam kesempatan itu, Achmad Jawahir menjelaskan potensi pengembangan rumput laut menjadi berbagai produk bernilai tambah, mulai dari bahan baku, snack rumput laut, nori, onigiri, hingga produk inovatif lainnya yang menyasar pasar retail modern.\nKunjungan Wakil Menteri KKP tersebut menjadi momentum strategis bagi PT Tartaruga Dinasti Indonesia untuk memperkenalkan perkembangan usaha, inovasi produk, sekaligus menyampaikan aspirasi terkait penguatan industri olahan rumput laut nasional.\nAchmad Jawahir mengatakan, partisipasi dalam Harkanas 2026 bukan sekadar ajang promosi, mela"
+      ],
+      "matched_articles": [
+        {
+          "id": "7",
+          "title": "Dua Wamen KKP Kunjungi Stan Tartaruga Dinasti Indonesia, Inovasi Olahan Rumput Laut Jadi Sorotan Harkanas 2026",
+          "link": "https://medialiterasi.id/dua-wamen-kkp-kunjungi-stan-tartaruga-dinasti-indonesia-inovasi-olahan-rumput-laut-jadi-sorotan-harkanas-2026/",
+          "canonical_url": "https://medialiterasi.id/dua-wamen-kkp-kunjungi-stan-tartaruga-dinasti-indonesia-inovasi-olahan-rumput-laut-jadi-sorotan-harkanas-2026",
+          "media_name": "Media Literasi",
+          "tanggal": "Sun, 22 Nov 2026 06:18:00 GMT",
+          "skor": 0.8147
+        },
+        {
+          "id": "8",
+          "title": "Stan Tartaruga Dinasti Indonesia Dikunjungi Wamen KKP, Achmad Jawahir Perkenalkan Inovasi Produk Rumput Laut",
+          "link": "https://metropolitanpost.id/stan-tartaruga-dinasti-indonesia-dikunjungi-wamen-kkp-achmad-jawahir-perkenalkan-inovasi-produk-rumput-laut/",
+          "canonical_url": "https://metropolitanpost.id/stan-tartaruga-dinasti-indonesia-dikunjungi-wamen-kkp-achmad-jawahir-perkenalkan-inovasi-produk-rumput-laut",
+          "media_name": "Metropolitan Post -",
+          "tanggal": "Sun, 22 Nov 2026 09:17:15 GMT",
+          "skor": 0.8147
+        }
+      ],
+      "tone_hubungan": "K4",
+      "tone_arah": "tidak ada",
+      "tone_metode": "AI-isu"
+    },
+    {
+      "isu_id": "klaster_1e12ad611a",
+      "isu": "ILaPOC 2026 Dorong Jaminan Sosial Jadi Pilar Keberlanjutan Industri Sawit",
+      "sumber_isu": "klaster",
+      "tanggal_awal": "2026-11-22",
+      "tanggal_terakhir": "2026-11-22",
+      "_norm_title": "ilapoc 2026 dorong jaminan sosial jadi pilar keberlanjutan industri sawit",
+      "tone": "Netral",
+      "tone_alasan": "Berita membahas jaminan sosial dan keberlanjutan industri sawit secara umum tanpa menyebut institusi Kemenperin secara langsung.",
+      "tone_keyakinan": "tinggi",
+      "evaluated_at": "2026-11-23 03:52:22",
+      "member_count_at_eval": 1,
+      "member_count": 1,
+      "sample_titles": [
+        "ILaPOC 2026 Dorong Jaminan Sosial Jadi Pilar Keberlanjutan Industri Sawit"
+      ],
+      "sample_snippets": [
+        "InfoSAWIT, JAKARTA – Agenda keberlanjutan industri kelapa sawit Indonesia dinilai perlu memberikan perhatian lebih besar terhadap perlindungan pekerja. Selama ini, pembahasan keberlanjutan kerap didominasi persoalan lingkungan, sementara aspek sosial, termasuk jaminan sosial ketenagakerjaan dan praktik kerja layak, belum memperoleh perhatian yang seimbang.\nPersoalan tersebut menjadi salah satu landasan penyelenggaraan Indonesia Labour on Palm Oil Conference (ILaPOC) 2026 yang berlangsung di Jakarta pada 18 November 2026, bertepatan dengan peringatan Hari Sawit Nasional.\nKonferensi yang digagas Sumarjono Saragih, Dewan Pengawas BPJS Ketenagakerjaan periode 2026–2031, tersebut mengangkat tema “Jaminan Sosial Pilar Sawit Berkelanjutan”. Pesan utamanya terangkum dalam prinsip No Social Security, No Sustainability: tanpa perlindungan jaminan sosial, keberlanjutan industri sawit belum dapat dikatakan menyeluruh.\nILaPOC dirancang sebagai ruang pertemuan berbagai pemangku kepentingan yang terlibat dalam upaya memperkuat praktik kerja layak atau decent work di industri sawit. Pesertanya mencakup unsur pengusaha, pekerja, pemerintah, serta organisasi masyarakat sipil nasional dan internasion"
+      ],
+      "matched_articles": [
+        {
+          "id": "34",
+          "title": "ILaPOC 2026 Dorong Jaminan Sosial Jadi Pilar Keberlanjutan Industri Sawit",
+          "link": "https://www.infosawit.com/2026/11/22/ilapoc-2026-dorong-jaminan-sosial-jadi-pilar-keberlanjutan-industri-sawit/",
+          "canonical_url": "https://infosawit.com/2026/11/22/ilapoc-2026-dorong-jaminan-sosial-jadi-pilar-keberlanjutan-industri-sawit",
+          "media_name": "InfoSAWIT",
+          "tanggal": "Sun, 22 Nov 2026 01:25:00 GMT",
+          "skor": 1.0
+        }
+      ],
+      "tone_hubungan": "K3",
+      "tone_arah": "tidak ada"
+    },
+    {
+      "isu_id": "klaster_3f79095789",
+      "isu": "Perdagangan Tembus US$14,81 Miliar, Pemerintah Dorong Mamin Masuk Korea",
+      "sumber_isu": "klaster",
+      "tanggal_awal": "2026-11-22",
+      "tanggal_terakhir": "2026-11-22",
+      "_norm_title": "perdagangan tembus usd 14_81 miliar pemerintah dorong mamin masuk korea",
+      "tone": "Netral",
+      "tone_alasan": "Berita mengulas kegiatan promosi ekspor makanan dan minuman oleh Kemendag di Korea Selatan tanpa melibatkan institusi Kemenperin.",
+      "tone_keyakinan": "tinggi",
+      "evaluated_at": "2026-11-23 03:52:22",
+      "member_count_at_eval": 1,
+      "member_count": 1,
+      "sample_titles": [
+        "Perdagangan Tembus US$14,81 Miliar, Pemerintah Dorong Mamin Masuk Korea"
+      ],
+      "sample_snippets": [
+        "Perdagangan Tembus US$14,81 Miliar, Pemerintah Dorong Mamin Masuk Korea\nPaviliun Indonesia di Seoul International Café Show 2026. Dok. Kemendag\nNilai perdagangan Indonesia dengan Korea Selatan mencapai US$14,81 miliar sepanjang Januari-September 2026. Dari jumlah itu, ekspor Indonesia tercatat sebesar US$7,82 miliar, sedangkan impor mencapai US$6,98 miliar.\nBesarnya nilai perdagangan tersebut membuka peluang bagi Indonesia untuk memperluas penetrasi produk unggulan ke pasar Korea Selatan. Salah satu sektor yang tengah didorong adalah industri makanan dan minuman (mamin), termasuk kopi, teh, cokelat, hingga bahan baku industri kafe.\nUpaya memperluas pasar tersebut salah satunya dilakukan melalui Paviliun Indonesia dalam Seoul International Café Show 2026 di COEX Seoul, Korea Selatan, pada 11-14 November 2026. Keikutsertaan Indonesia dalam pameran tersebut menghasilkan potensi transaksi sebesar US$10,96 juta atau sekitar Rp197,22 miliar.\nMelalui Indonesia Trade Promotion Center (ITPC) Busan, pemerintah memfasilitasi 10 eksportir Indonesia untuk memperkenalkan produk sekaligus menjajaki peluang kerja sama dengan calon mitra bisnis di Korea Selatan.\nKepala ITPC Busan, Husodo Kuncoro Ya"
+      ],
+      "matched_articles": [
+        {
+          "id": "1",
+          "title": "Perdagangan Tembus US$14,81 Miliar, Pemerintah Dorong Mamin Masuk Korea",
+          "link": "https://www.inilah.com/perdagangan-tembus-usdollar1481-miliar-pemerintah-dorong-mamin-masuk-korea",
+          "canonical_url": "https://inilah.com/perdagangan-tembus-usdollar1481-miliar-pemerintah-dorong-mamin-masuk-korea",
+          "media_name": "Inilah.com",
+          "tanggal": "Sun, 22 Nov 2026 08:43:00 GMT",
+          "skor": 1.0
+        }
+      ],
+      "tone_hubungan": "K3",
+      "tone_arah": "tidak ada"
+    },
+    {
+      "isu_id": "klaster_eac707b140",
+      "isu": "DPRD Kutim Dorong Hilirisasi Sawit agar Masyarakat Tak Hanya Bergantung pada Bahan Mentah",
+      "sumber_isu": "klaster",
+      "tanggal_awal": "2026-11-22",
+      "tanggal_terakhir": "2026-11-22",
+      "_norm_title": "dprd kutim dorong hilirisasi sawit agar masyarakat tak hanya bergantung pada bahan mentah",
+      "tone": "Netral",
+      "tone_alasan": "Berita memuat dorongan DPRD Kutim terkait hilirisasi sawit tanpa menyebut Kemenperin secara langsung maupun tidak langsung, sehingga masuk K4 netral.",
+      "tone_keyakinan": "tinggi",
+      "evaluated_at": "2026-11-23 03:52:22",
+      "member_count_at_eval": 1,
+      "member_count": 1,
+      "sample_titles": [
+        "DPRD Kutim Dorong Hilirisasi Sawit agar Masyarakat Tak Hanya Bergantung pada Bahan Mentah"
+      ],
+      "sample_snippets": [
+        "KUTAI TIMUR – Pengembangan industri hilir kelapa sawit dinilai menjadi salah satu strategi penting untuk meningkatkan nilai tambah ekonomi masyarakat Kabupaten Kutai Timur (Kutim). Selama ini, daerah memiliki potensi perkebunan sawit yang besar, tetapi manfaat ekonomi yang diterima masyarakat dinilai perlu diperkuat melalui pengolahan produk.\nAnggota DPRD Kutai Timur, Novel Tyty Paembonan, mengatakan pemerintah daerah perlu mulai memikirkan strategi pengembangan industri hilir, bukan hanya mengandalkan aktivitas produksi bahan mentah. Menurutnya, pengolahan hasil perkebunan dapat membuka peluang usaha baru dan menciptakan nilai tambah yang lebih besar dibandingkan hanya menjual hasil produksi dari sektor hulu.\n“Pemerintah harus mulai berpikir ke industri hilir. Jangan hanya berhenti pada produksi bahan mentah,” ujarnya.\nNovel mencontohkan pengembangan produk turunan sawit, seperti minyak olahan, sabun, dan kosmetik. Menurutnya, potensi perkebunan yang dimiliki Kutim dapat menjadi dasar untuk mendorong investasi dan pengembangan industri pengolahan di daerah.\nIa juga menilai pemerintah perlu menyiapkan regulasi dan strategi yang dapat mendorong keterlibatan pihak swasta dalam pengem"
+      ],
+      "matched_articles": [
+        {
+          "id": "27",
+          "title": "DPRD Kutim Dorong Hilirisasi Sawit agar Masyarakat Tak Hanya Bergantung pada Bahan Mentah",
+          "link": "https://www.berandaindonesia.id/2026/11/22/dprd-kutim-dorong-hilirisasi-sawit-agar-masyarakat-tak-hanya-bergantung-pada-bahan-mentah",
+          "canonical_url": "https://berandaindonesia.id/2026/11/22/dprd-kutim-dorong-hilirisasi-sawit-agar-masyarakat-tak-hanya-bergantung-pada-bahan-mentah",
+          "media_name": "Beranda Indonesia",
+          "tanggal": "Sun, 22 Nov 2026 12:10:00 GMT",
+          "skor": 1.0
+        }
+      ],
+      "tone_hubungan": "K4",
+      "tone_arah": "tidak ada"
+    },
+    {
+      "isu_id": "klaster_fbe1f04fdb",
+      "isu": "Kesepakatan IEU-CEPA membuka peluang investasi Eropa, menekan biaya produksi, dan penggunaan mesin teknologi bagi industri nasional.",
+      "sumber_isu": "klaster",
+      "tanggal_awal": "2026-11-22",
+      "tanggal_terakhir": "2026-11-22",
+      "_norm_title": "kesepakatan ieu cepa membuka peluang investasi eropa menekan biaya produksi dan penggunaan mesin teknologi bagi industri nasional",
+      "tone": "Netral",
+      "tone_alasan": "Isu berkaitan dengan kebijakan perdagangan dan industri nasional secara umum tetapi tidak menyebut Kemenperin secara langsung.",
+      "tone_keyakinan": "tinggi",
+      "evaluated_at": "2026-11-23 03:52:27",
+      "member_count_at_eval": 2,
+      "member_count": 2,
+      "sample_titles": [
+        "IEU-CEPA Buka Investasi Eropa dan Tekan Biaya Produksi RI",
+        "IEU-CEPA Buka Peluang Industri Nasional Kembali Gunakan Mesin Teknologi Asal Eropa"
+      ],
+      "sample_snippets": [
+        "IEU-CEPA Buka Investasi Eropa dan Tekan Biaya Produksi RI\nKesepakatan perdagangan Indonesia dan Uni Eropa melalui Indonesia-European Union Comprehensive Economic Partnership Agreement (IEU-CEPA) membuka peluang investasi baru sekaligus berpotensi menurunkan biaya produksi industri nasional. Pemerintah menargetkan masuknya modal asing ke sejumlah sektor strategis setelah kedua pihak menandatangani perjanjian tersebut pada Sabtu, 21 November 2026, sebagaimana dilansir dari Liputan6.\nMenteri Koordinator Bidang Perekonomian Airlangga Hartarto menjelaskan, kerja sama tersebut mencakup peluang investasi langsung di sektor kimia, farmasi, pembangkit listrik, serta pengolahan makanan. Pemerintah berharap kesepakatan ini memperkuat aktivitas industri dalam negeri melalui peningkatan arus modal dari Eropa.\nAirlangga menyebut sektor-sektor tersebut menjadi sasaran investasi yang diharapkan tumbuh setelah pemberlakuan perjanjian ekonomi bilateral.\n\"Di bidang investasi ini kami berharap investasi langsung bisa masuk ke sektor kimia, farmasi, pembangkit listrik serta pengolahan makanan,\" kata Airlangga dalam konferensi pers virtual.\nSelain investasi, IEU-CEPA memberikan peluang bagi industri nas",
+        "IEU-CEPA Buka Peluang Industri Nasional Kembali Gunakan Mesin Teknologi Asal Eropa\nJAKARTA, investortrust.id – Penandatanganan perjanjian dagang Indonesia-European Union Comprehensive Economic Partnership Agreement (IEU-CEPA) dinilai membuka peluang bagi industri manufaktur nasional untuk kembali memperluas penggunaan mesin dan teknologi asal Eropa. Kesepakatan ini juga diharapkan memperkuat struktur industri dalam negeri melalui akses terhadap barang modal yang lebih kompetitif.\nWakil Menteri Perindustrian Faisol Riza mengatakan, IEU-CEPA menjadi momentum bagi industri nasional untuk meningkatkan kapasitas produksi, kompetensi, dan kemampuan memenuhi standar pasar Eropa. Pasalnya, akses ke pasar tersebut menuntut pelaku industri dalam negeri untuk meningkatkan kualitas serta daya saing produk.\nFaisol menyebutkan, sejumlah produk Indonesia telah memiliki pasar di berbagai negara Eropa. Produk alas kaki, misalnya, diekspor ke Belanda dan Belgia. Selain itu, Indonesia juga memasok produk kertas ke Belgia, Polandia, dan Yunani, minyak atsiri ke Belgia, serta besi baja ke Prancis.\n\"Ini momentum di mana industri di dalam negeri bisa semakin menaikkan kapasitas, kompetensi, dan kemampuan"
+      ],
+      "matched_articles": [
+        {
+          "id": "19",
+          "title": "IEU-CEPA Buka Investasi Eropa dan Tekan Biaya Produksi RI",
+          "link": "https://cwibc.co.id/ieu-cepa-investasi-eropa-biaya-produksi",
+          "canonical_url": "https://cwibc.co.id/ieu-cepa-investasi-eropa-biaya-produksi",
+          "media_name": "cwibc.co.id",
+          "tanggal": "Sat, 21 Nov 2026 17:00:00 GMT",
+          "skor": 0.5506
+        },
+        {
+          "id": "10",
+          "title": "IEU-CEPA Buka Peluang Industri Nasional Kembali Gunakan Mesin Teknologi Asal Eropa",
+          "link": "https://investortrust.id/business/123301/ieu-cepa-buka-peluang-industri-nasional-kembali-gunakan-mesin-teknologi-asal-eropa",
+          "canonical_url": "https://investortrust.id/business/123301/ieu-cepa-buka-peluang-industri-nasional-kembali-gunakan-mesin-teknologi-asal-eropa",
+          "media_name": "InvestorTrust",
+          "tanggal": "Sun, 22 Nov 2026 01:09:00 GMT",
+          "skor": 0.5506
+        }
+      ],
+      "tone_hubungan": "K3",
+      "tone_arah": "tidak ada",
+      "tone_metode": "AI-isu"
+    },
+    {
+      "isu_id": "klaster_11cbab7d01",
+      "isu": "IEU-CEPA Membuka Peluang Ekspor Produk Unggulan Indonesia Termasuk CPO ke Pasar Eropa",
+      "sumber_isu": "klaster",
+      "tanggal_awal": "2026-11-22",
+      "tanggal_terakhir": "2026-11-22",
+      "_norm_title": "ieu cepa membuka peluang ekspor produk unggulan indonesia termasuk cpo ke pasar eropa",
+      "tone": "Netral",
+      "tone_alasan": "Berita membahas kesepakatan IEU-CEPA dan peluang ekspor sawit tanpa menyebut institusi atau narasumber Kemenperin secara langsung.",
+      "tone_keyakinan": "tinggi",
+      "evaluated_at": "2026-11-23 03:52:27",
+      "member_count_at_eval": 2,
+      "member_count": 2,
+      "sample_titles": [
+        "IEU-CEPA Buka Peluang Ekspor CPO Bebas Bea, Kuota Naik Bertahap hingga Tahun Kesembilan",
+        "Karpet Merah Eropa untuk Sawit, Kuota Bebas Bea Masuk CPO 1,9 Juta Ton"
+      ],
+      "sample_snippets": [
+        "JAKARTA (Waspada.id): Kesepakatan Kemitraan Ekonomi Komprehensif Indonesia-Uni Eropa (IEU-CEPA) membawa peluang baru bagi peningkatan ekspor produk unggulan Indonesia ke pasar Eropa. Salah satu sektor yang mendapat manfaat adalah industri kelapa sawit melalui peningkatan kuota ekspor crude palm oil (CPO) dan minyak kelapa sawit dengan fasilitas bebas bea keluar.\nMenteri Koordinator Bidang Perekonomian, Airlangga Hartarto, mengungkapkan bahwa kuota ekspor bebas bea keluar untuk produk CPO dan minyak kelapa sawit akan meningkat secara bertahap setelah IEU-CEPA diimplementasikan.\n\"Kemudian kebijakan kuota bebas bea keluar untuk CPO dan minyak sawit sebesar 1,9 juta ton dan 140 ribu ton dan kuota ini akan naik secara bertahap hingga batas tertinggi di tahun ke-9,\" ungkap Airlangga dalam konferensi pers virtual, Sabtu (21/11/2026).\nSelain memberikan peluang lebih besar bagi industri kelapa sawit, kesepakatan tersebut juga menghadirkan kemudahan bagi pelaku Usaha Mikro, Kecil, dan Menengah (UMKM), khususnya dalam mengakses pasar ekspor.\nSalah satu kemudahan yang diberikan adalah penyederhanaan pengurusan dokumen ekspor. Melalui skema IEU-CEPA, UMKM dapat memanfaatkan pernyataan asal bara",
+        "PONTIANAK POST – Produk minyak sawit Indonesia mendapat peluang lebih besar menembus pasar Eropa setelah Indonesia dan Uni Eropa (UE) resmi menandatangani Indonesia-European Union Comprehensive Economic Partnership Agreement (IEU-CEPA) dan Investment Protection Agreement (IPA), Sabtu (21/11).\nMelalui kesepakatan tersebut, crude palm oil (CPO) Indonesia memperoleh fasilitas kuota bebas bea masuk sebesar 1,9 juta ton. Sementara itu, produk minyak sawit lainnya mendapat kuota 140 ribu ton. Jumlah kuota tersebut akan ditingkatkan secara bertahap hingga mencapai batas maksimal pada tahun kesembilan penerapan perjanjian.\nKesepakatan perdagangan ini menjadi peluang penting bagi industri sawit nasional untuk memperluas pasar ekspor. Penghapusan bea masuk diharapkan meningkatkan daya saing harga produk Indonesia sekaligus membuka ruang bagi peningkatan volume perdagangan dengan negara-negara Eropa.\nPenandatanganan berlangsung di Brussels, Belgia, setelah proses perundingan yang dimulai sejak Juli 2016. Substansi perjanjian sebenarnya telah dirampungkan pada 23 September 2025, tetapi penandatanganan baru dilakukan setelah pemeriksaan dan penyelarasan aspek hukum (legal scrubbing) selesai.\nMe"
+      ],
+      "matched_articles": [
+        {
+          "id": "35",
+          "title": "IEU-CEPA Buka Peluang Ekspor CPO Bebas Bea, Kuota Naik Bertahap hingga Tahun Kesembilan",
+          "link": "https://www.waspada.id/berita/ieu-cepa-buka-peluang-ekspor-cpo-bebas-bea-kuota-naik-bertahap-hingga-tahun-kesembilan",
+          "canonical_url": "https://waspada.id/berita/ieu-cepa-buka-peluang-ekspor-cpo-bebas-bea-kuota-naik-bertahap-hingga-tahun-kesembilan",
+          "media_name": "Waspada.id",
+          "tanggal": "Sun, 22 Nov 2026 02:29:10 GMT",
+          "skor": 0.4901
+        },
+        {
+          "id": "18",
+          "title": "Karpet Merah Eropa untuk Sawit, Kuota Bebas Bea Masuk CPO 1,9 Juta Ton",
+          "link": "https://pontianakpost.jawapos.com/amp/ekonomi/2611220073/karpet-merah-eropa-untuk-sawit-kuota-bebas-bea-masuk-cpo-19-juta-ton",
+          "canonical_url": "https://pontianakpost.jawapos.com/amp/ekonomi/2611220073/karpet-merah-eropa-untuk-sawit-kuota-bebas-bea-masuk-cpo-19-juta-ton",
+          "media_name": "Pontianak Post",
+          "tanggal": "Sun, 22 Nov 2026 15:45:40 GMT",
+          "skor": 0.4901
+        }
+      ],
+      "tone_hubungan": "K3",
+      "tone_arah": "tidak ada",
+      "tone_metode": "AI-isu"
+    },
+    {
+      "isu_id": "klaster_5ef8f28c16",
+      "isu": "Ekspor Sawit Bisa Nambah 1 Juta Ton ke Eropa? GAPKI Bongkar Faktanya",
+      "sumber_isu": "klaster",
+      "tanggal_awal": "2026-11-22",
+      "tanggal_terakhir": "2026-11-22",
+      "_norm_title": "ekspor sawit bisa nambah 1 juta ton ke eropa gapki bongkar faktanya",
+      "tone": "Netral",
+      "tone_alasan": "Berita membahas ekspor sawit dan regulasi EUDR oleh GAPKI tanpa menyebut atau melibatkan Kemenperin, sehingga dikategorikan netral K4.",
+      "tone_keyakinan": "tinggi",
+      "evaluated_at": "2026-11-23 03:52:22",
+      "member_count_at_eval": 1,
+      "member_count": 1,
+      "sample_titles": [
+        "Ekspor Sawit Bisa Nambah 1 Juta Ton ke Eropa? GAPKI Bongkar Faktanya"
+      ],
+      "sample_snippets": [
+        "Ekspor Sawit Bisa Nambah 1 Juta Ton ke Eropa? GAPKI Bongkar Faktanya\nKetua Umum Gabungan Pengusaha Kelapa Sawit (GAPKI) Eddy Martono. (Foto: ANTARA/Arnidhya Nur Zhafira)\nKesepakatan dagang Indonesia-European Union Comprehensive Economic Partnership Agreement (IEU-CEPA) membuka peluang besar bagi industri kelapa sawit nasional untuk menggenjot ekspor ke pasar Eropa.\nPenghapusan tarif bea masuk berpotensi membuat produk sawit Indonesia lebih kompetitif, bahkan membuka peluang tambahan ekspor hingga 1 juta ton. Namun, keuntungan tersebut tidak serta-merta bisa dinikmati industri sawit nasional.\nKetua Gabungan Pengusaha Kelapa Sawit Indonesia (GAPKI), Eddy Martono mengingatkan, masih ada hambatan serius berupa European Union Deforestation Regulation (EUDR) atau regulasi antideforestasi Uni Eropa yang berpotensi menghambat realisasi ekspor.\n“Yang bebas tarif 1 juta ton, sementara ekspor kita ke EU saat ini sekitar 3 juta ton. Jadi dengan adanya IEU-CEPA kemungkinan ekspor ke EU bisa naik antara 500 ribu - 1 juta ton. Tapi tergantung apakah EUDR Indonesia bisa penuhi atau tidak,” kata Eddy kepada Inilah.com, Minggu (22/11/2026).\nTarif Nol Persen Bikin Sawit RI Lebih Kompetitif\nPenghapusa"
+      ],
+      "matched_articles": [
+        {
+          "id": "2",
+          "title": "Ekspor Sawit Bisa Nambah 1 Juta Ton ke Eropa? GAPKI Bongkar Faktanya",
+          "link": "https://www.inilah.com/ekspor-sawit-bisa-nambah-1-juta-ton-ke-eropa-gapki-bongkar-faktanya",
+          "canonical_url": "https://inilah.com/ekspor-sawit-bisa-nambah-1-juta-ton-ke-eropa-gapki-bongkar-faktanya",
+          "media_name": "Inilah.com",
+          "tanggal": "Sun, 22 Nov 2026 06:33:00 GMT",
+          "skor": 1.0
+        }
+      ],
+      "tone_hubungan": "K4",
+      "tone_arah": "tidak ada"
+    },
+    {
+      "isu_id": "klaster_d88d8c3988",
+      "isu": "Mendag dan Menko Perekonomian sebut penandatanganan IEU CEPA bebaskan tarif dan perluas ekspor produk Indonesia ke Uni Eropa.",
+      "sumber_isu": "klaster",
+      "tanggal_awal": "2026-11-22",
+      "tanggal_terakhir": "2026-11-22",
+      "_norm_title": "mendag dan menko perekonomian sebut penandatanganan ieu cepa bebaskan tarif dan perluas ekspor produk indonesia ke uni eropa",
+      "tone": "Netral",
+      "tone_alasan": "Berita membahas perjanjian dagang IEU-CEPA yang melibatkan Kementerian Perdagangan dan Kemenko Perekonomian tanpa menyebut Kemenperin.",
+      "tone_keyakinan": "tinggi",
+      "evaluated_at": "2026-11-23 03:52:27",
+      "member_count_at_eval": 3,
+      "member_count": 3,
+      "sample_titles": [
+        "Dari Sawit hingga Kopi, 90,4 Persen Produk RI Bakal Bebas Tarif ke Uni Eropa",
+        "Mendag: Penandatanganan IEU CEPA perluas ekspor sawit hingga karet",
+        "Tekstil hingga Sawit RI Bebas Tarif ke Eropa pada 2027"
+      ],
+      "sample_snippets": [
+        "Dari Sawit hingga Kopi, 90,4 Persen Produk RI Bakal Bebas Tarif ke Uni Eropa\nJAKARTA, DISWAY.ID— Menteri Koordinator Bidang Perekonomian Airlangga Hartarto menyatakan 90,4 persen pos tarif produk Indonesia yang masuk ke pasar Uni Eropa akan langsung mendapatkan pembebasan bea masuk usai Perjanjian Indonesia-European Union Comprehensive Economic Partnership Agreement (IEU-CEPA) diberlakukan.\nSebanyak 8,37 persen pos tarif lainnya akan mendapatkan penurunan tarif secara bertahap dalam kurun waktu 3 hingga 15 tahun. Sebagian produk juga memperoleh fasilitas melalui mekanisme Tariff Rate Quota (TRQ).\n“Manfaat yang diharapkan oleh para eksportir kita ini adalah pembebasan 90,4% pos tarif langsung tarifnya nol sejak diberlakukan. Kemudian sebanyak 8,37% pos tarif ini pemberlakuannya diturunkan bertahap dari 3 sampai dengan 15 tahun dan menggunakan sistem yang dikenal dengan tariff rate quota,” ungkap Airlangga dalam konferensi pers, Sabtu (21/11/2026).\nBACA JUGA:IEU-CEPA Resmi Diteken, 90,4% Pos Tarif Indonesia ke Eropa Langsung Nol Persen\nKebijakan tersebut akan memberikan keuntungan bagi sejumlah produk unggulan Indonesia, mulai dari minyak sawit, garmen, tekstil, hingga alas kaki.\n“Be",
+        "Jakarta (ANTARA) - Menteri Perdagangan (Mendag) Budi Santoso optimistis penandatanganan Perjanjian Kemitraan Ekonomi Komprehensif Indonesia-Uni Eropa (IEU CEPA) memperluas peluang ekspor sejumlah komoditas unggulan Indonesia ke pasar Uni Eropa, mulai dari minyak kelapa sawit, karet, produk perikanan, hingga furnitur dan alas kaki.\nDalam keterangan di Jakarta, Sabtu, Budi menyebut sebanyak 90,4 persen dari total pos tarif Uni Eropa akan langsung diturunkan menjadi nol persen saat perjanjian berlaku. Cakupan produk tersebut antara lain minyak kelapa sawit dan sejumlah produk turunannya, karet dan produk karet, alas kaki, serta tekstil dan produk tekstil.\nSementara itu, sebanyak 7,92 persen pos tarif lainnya akan dihapuskan secara bertahap dalam kurun waktu 3 hingga 15 tahun. Dengan demikian, cakupan penghapusan tarif mencapai 98,35 persen dari total pos tarif Uni Eropa.\n\"Lebih dari 98 persen pos tarif UE akan memberikan akses pasar dengan tarif preferensial bagi produk ekspor unggulan Indonesia seperti minyak kelapa sawit dan turunannya, alas kaki, tekstil, produk perikanan, karet, furnitur, dan berbagai produk manufaktur lainnya,\" ujar Budi.\nBudi menilai penurunan tarif tersebut dap"
+      ],
+      "matched_articles": [
+        {
+          "id": "24",
+          "title": "Dari Sawit hingga Kopi, 90,4 Persen Produk RI Bakal Bebas Tarif ke Uni Eropa",
+          "link": "https://disway.id/read/980597/dari-sawit-hingga-kopi-904-persen-produk-ri-bakal-bebas-tarif-ke-uni-eropa",
+          "canonical_url": "https://disway.id/read/980597/dari-sawit-hingga-kopi-904-persen-produk-ri-bakal-bebas-tarif-ke-uni-eropa",
+          "media_name": "Disway",
+          "tanggal": "Sun, 22 Nov 2026 05:36:00 GMT",
+          "skor": 0.5787
+        },
+        {
+          "id": "11",
+          "title": "Mendag: Penandatanganan IEU CEPA perluas ekspor sawit hingga karet",
+          "link": "https://gorontalo.antaranews.com/berita/437431/mendag-penandatanganan-ieu-cepa-perluas-ekspor-sawit-hingga-karet",
+          "canonical_url": "https://gorontalo.antaranews.com/berita/437431/mendag-penandatanganan-ieu-cepa-perluas-ekspor-sawit-hingga-karet",
+          "media_name": "ANTARA News Gorontalo",
+          "tanggal": "Sun, 22 Nov 2026 05:57:49 GMT",
+          "skor": 0.376
+        },
+        {
+          "id": "20",
+          "title": "Tekstil hingga Sawit RI Bebas Tarif ke Eropa pada 2027",
+          "link": "https://batampos.jawapos.com/ekbis/2611220029/tekstil-hingga-sawit-ri-bebas-tarif-ke-eropa-pada-2027",
+          "canonical_url": "https://batampos.jawapos.com/ekbis/2611220029/tekstil-hingga-sawit-ri-bebas-tarif-ke-eropa-pada-2027",
+          "media_name": "Jawa Pos",
+          "tanggal": "Sun, 22 Nov 2026 15:45:32 GMT",
+          "skor": 0.5787
+        }
+      ],
+      "tone_hubungan": "K4",
+      "tone_arah": "tidak ada",
+      "tone_metode": "AI-isu"
+    },
+    {
+      "isu_id": "klaster_4f3a1d7bd4",
+      "isu": "IEU-CEPA Resmi Diteken, Ini Sederet Manfaatnya bagi Indonesia",
+      "sumber_isu": "klaster",
+      "tanggal_awal": "2026-11-22",
+      "tanggal_terakhir": "2026-11-22",
+      "_norm_title": "ieu cepa resmi diteken ini sederet manfaatnya bagi indonesia",
+      "tone": "Netral",
+      "tone_alasan": "Berita menyoroti penandatanganan IEU-CEPA oleh Kemenko Perekonomian yang berdampak luas bagi industri nasional tanpa menyebut Kemenperin secara langsung.",
+      "tone_keyakinan": "tinggi",
+      "evaluated_at": "2026-11-23 03:52:22",
+      "member_count_at_eval": 1,
+      "member_count": 1,
+      "sample_titles": [
+        "IEU-CEPA Resmi Diteken, Ini Sederet Manfaatnya bagi Indonesia"
+      ],
+      "sample_snippets": [
+        "Brussels, Indonesia dan Uni Eropa resmi menandatangani Persetujuan Kemitraan Ekonomi Komprehensif Indonesia-Uni Eropa (Indonesia-European Union Comprehensive Economic Partnership Agreement/IEU-CEPA) dan Persetujuan Perlindungan Investasi (Investment Protection Agreement/IPA) di Brussels, Belgia, Sabtu (21/11).\nKesepakatan bersejarah ini membuka peluang lebih luas bagi produk Indonesia untuk menembus pasar Eropa, menarik investasi berkualitas, memperkuat industri nasional, hingga menciptakan lapangan kerja.\nPenandatanganan tersebut dilakukan Menteri Koordinator Bidang Perekonomian Airlangga Hartarto bersama European Commissioner for Trade Maroš Šefčovič. Prosesi ini turut disaksikan Presiden Komisi Eropa Ursula von der Leyen dan didahului komunikasi melalui konferensi video antara Presiden Republik Indonesia Prabowo Subianto dan Presiden Komisi Eropa.\nAirlangga menyebut penandatanganan IEU-CEPA dan IPA sebagai tonggak baru hubungan ekonomi Indonesia dan Uni Eropa setelah melalui proses perundingan selama hampir satu dekade, sejak Juli 2016.\n\"Penandatanganan ini merupakan sebuah tonggak penting, bukan tujuan akhir. Hari ini, kita memasuki tahap implementasi yang menuntut kerja lebih "
+      ],
+      "matched_articles": [
+        {
+          "id": "32",
+          "title": "IEU-CEPA Resmi Diteken, Ini Sederet Manfaatnya bagi Indonesia",
+          "link": "https://mediabudayaindonesia.com/news/show/2211202604-ieu-cepa-resmi-diteken-ini-sederet-manfaatnya-bagi-indonesia",
+          "canonical_url": "https://mediabudayaindonesia.com/news/show/2211202604-ieu-cepa-resmi-diteken-ini-sederet-manfaatnya-bagi-indonesia",
+          "media_name": "Media Budaya Indonesia",
+          "tanggal": "Sun, 22 Nov 2026 09:21:00 GMT",
+          "skor": 1.0
+        }
+      ],
+      "tone_hubungan": "K3",
+      "tone_arah": "tidak ada"
+    },
+    {
+      "isu_id": "klaster_1f75ffdbf2",
+      "isu": "Airlangga Beberkan Isi IEU-CEPA, Target Berlaku 1 Januari 2027",
+      "sumber_isu": "klaster",
+      "tanggal_awal": "2026-11-22",
+      "tanggal_terakhir": "2026-11-22",
+      "_norm_title": "airlangga beberkan isi ieu cepa target berlaku 1 januari 2027",
+      "tone": "Netral",
+      "tone_alasan": "Berita membahas ratifikasi perjanjian IEU-CEPA di bawah koordinasi Kemenko Perekonomian tanpa menyebut Kemenperin secara langsung.",
+      "tone_keyakinan": "tinggi",
+      "evaluated_at": "2026-11-23 03:52:22",
+      "member_count_at_eval": 1,
+      "member_count": 1,
+      "sample_titles": [
+        "Airlangga Beberkan Isi IEU-CEPA, Target Berlaku 1 Januari 2027"
+      ],
+      "sample_snippets": [
+        "Pemerintah Indonesia segera menindaklanjuti proses berikutnya usai perjanjian Indonesia-European Union Comprehensive Economic Partnership Agreement (IEU-CEPA) dan Investment Protection Agreement (IPA) ditandatangani pada Sabtu (21/11).\nIEU-CEPA ditargetkan mulai berlaku pada 1 Januari 2027. Perjanjian ini akan menghapus bea masuk untuk hampir seluruh perdagangan di antara dua belah pihak.\nMenteri Koordinator Bidang Perekonomian Airlangga Hartarto menjelaskan pemerintah akan mempercepat proses ratifikasi di dalam negeri agar implementasi kesepakatan tersebut tidak mengganggu kelangsungan ekspor Indonesia ke pasar Eropa.\n“Perjanjian ini direncanakan segera diratifikasi di EU dan mereka akan masukkan ke Parlemen hari Senin besok tanggal 23 dan kita berharap perjanjian ini juga nanti di Indonesia akan segera diratifikasi dan targetnya per 1 Januari sudah bisa diefektifkan ataupun bisa diberlakukan,” kata Airlangga dalam konferensi pers secara daring, Sabtu (21/11).\nUni Eropa yang dijadwalkan memasukkan perjanjian tersebut ke parlemen pada Senin (23/11), ditargetkan mendapat persetujuan persetujuan Parlemen Eropa dalam sidang pleno pada Desember 2026.\nAirlangga berharap implementasi IEU"
+      ],
+      "matched_articles": [
+        {
+          "id": "28",
+          "title": "Airlangga Beberkan Isi IEU-CEPA, Target Berlaku 1 Januari 2027",
+          "link": "https://kumparan.com/kumparanbisnis/airlangga-beberkan-isi-ieu-cepa-target-berlaku-1-januari-2027-28cUb1QITUS",
+          "canonical_url": "https://kumparan.com/kumparanbisnis/airlangga-beberkan-isi-ieu-cepa-target-berlaku-1-januari-2027-28cUb1QITUS",
+          "media_name": "kumparan",
+          "tanggal": "Sat, 21 Nov 2026 22:41:00 GMT",
+          "skor": 1.0
+        }
+      ],
+      "tone_hubungan": "K3",
+      "tone_arah": "tidak ada"
+    },
+    {
+      "isu_id": "klaster_f123310933",
+      "isu": "Limbah Kelapa Sawit Bakal Disulap Jadi Gas Biometana",
+      "sumber_isu": "klaster",
+      "tanggal_awal": "2026-11-22",
+      "tanggal_terakhir": "2026-11-22",
+      "_norm_title": "limbah kelapa sawit bakal disulap jadi gas biometana",
+      "tone": "Netral",
+      "tone_alasan": "Berita membahas kerja sama PTPN IV dan PGN dalam pengolahan limbah sawit menjadi gas biometana tanpa keterlibatan Kemenperin, sehingga dikategorikan netral K4.",
+      "tone_keyakinan": "tinggi",
+      "evaluated_at": "2026-11-23 03:52:22",
+      "member_count_at_eval": 1,
+      "member_count": 1,
+      "sample_titles": [
+        "Limbah Kelapa Sawit Bakal Disulap Jadi Gas Biometana"
+      ],
+      "sample_snippets": [
+        "- PTPN IV dan PGN menandatangani MoU kajian pengembangan proyek Compressed Biomethane Gas di PKS Betung, Banyuasin, Sumatera Selatan.\n- Fasilitas di PKS Betung ditargetkan menghasilkan gas biometana 109.000 MMBtu per tahun untuk didistribusikan melalui jaringan pipa PGN.\n- PTPN IV bertindak sebagai penyedia bahan baku limbah cair sawit, sedangkan PGN berperan sebagai pembeli dan distributor.\nSuara.com - PT Perkebunan Nusantara IV (PTPN IV) menggandeng PT Perusahaan Gas Negara Tbk (PGN) untuk mengembangkan energi alternatif dari limbah cair kelapa sawit atau Palm Oil Mill Effluent (POME). Melalui kerja sama ini, limbah pengolahan sawit akan dimanfaatkan menjadi gas biometana yang berpotensi memberikan nilai tambah ekonomi bagi perusahaan.\nKedua perusahaan telah menandatangani nota kesepahaman atau Memorandum of Understanding (MoU) terkait kajian pengembangan proyek Compressed Biomethane Gas (CBG). Proyek percontohan tersebut akan dilakukan di Pabrik Kelapa Sawit (PKS) Betung, Kabupaten Banyuasin, Sumatera Selatan.\nDalam proyek tersebut, PKS Betung ditargetkan mampu menghasilkan CBG hingga 109.000 MMBtu per tahun. Gas hasil pengolahan limbah sawit itu nantinya akan disalurkan melalui"
+      ],
+      "matched_articles": [
+        {
+          "id": "4",
+          "title": "Limbah Kelapa Sawit Bakal Disulap Jadi Gas Biometana",
+          "link": "https://www.suara.com/bisnis/2026/11/22/173307/limbah-kelapa-sawit-bakal-disulap-jadi-gas-biometana",
+          "canonical_url": "https://suara.com/bisnis/2026/11/22/173307/limbah-kelapa-sawit-bakal-disulap-jadi-gas-biometana",
+          "media_name": "Suara.com",
+          "tanggal": "Sun, 22 Nov 2026 10:33:07 GMT",
+          "skor": 1.0
+        }
+      ],
+      "tone_hubungan": "K4",
+      "tone_arah": "tidak ada"
+    },
+    {
+      "isu_id": "klaster_1a40154a4a",
+      "isu": "Harga Tepung Tapioka Melonjak Empat Kali Lipat, Usaha Kerupuk Merah Bainal Tertekan",
+      "sumber_isu": "klaster",
+      "tanggal_awal": "2026-11-22",
+      "tanggal_terakhir": "2026-11-22",
+      "_norm_title": "harga tepung tapioka melonjak empat kali lipat usaha kerupuk merah bainal tertekan",
+      "tone": "Netral",
+      "tone_alasan": "Berita mengenai lonjakan harga tepung tapioka dan dampaknya pada usaha kerupuk lokal tidak menyebut maupun berkaitan secara langsung dengan kebijakan Kemenperin.",
+      "tone_keyakinan": "tinggi",
+      "evaluated_at": "2026-11-23 03:52:22",
+      "member_count_at_eval": 1,
+      "member_count": 1,
+      "sample_titles": [
+        "Harga Tepung Tapioka Melonjak Empat Kali Lipat, Usaha Kerupuk Merah Bainal Tertekan"
+      ],
+      "sample_snippets": [
+        "Harga Tepung Tapioka Melonjak Empat Kali Lipat, Usaha Kerupuk Merah Bainal Tertekan\nRADARPATI.JAWAPOS.COM - Kenaikan harga tepung tapioka dari sekitar Rp 100 ribu menjadi Rp 400 ribu per karung membuat keuntungan usaha Kerupuk Merah Bainal di Piladang, Kabupaten Limapuluh Kota, semakin tertekan.\nPadahal, usaha keluarga yang dirintis sejak 1984 tersebut mampu memproduksi hingga 75 ton kerupuk merah setiap bulan.\nPesanan produknya bahkan datang dari berbagai daerah, seperti Pekanbaru, Bengkulu, Pasaman, Padang, Palembang, hingga Dumai.\nBainal, 75, mengatakan kenaikan harga bahan baku selama dua tahun terakhir membuat biaya produksi terus membengkak.\nAkibatnya, peningkatan pesanan belum mampu memberikan keuntungan yang sebanding dengan besarnya produksi.\nSaat ini, kerupuk merah dijual dengan harga Rp 90 ribu per tim berbobot 5 kilogram.\nHarga tersebut meningkat dibandingkan sebelumnya yang masih berada di angka Rp70 ribu per tim.\nHarga Bahan Baku Naik, Harga Jual Terbatas\nBainal mengaku harus menghadapi dilema untuk mempertahankan keberlangsungan usaha kerupuk merah yang telah dibangun keluarganya selama puluhan tahun.\nHarga tepung tapioka yang menjadi bahan utama produksi terus menin"
+      ],
+      "matched_articles": [
+        {
+          "id": "6",
+          "title": "Harga Tepung Tapioka Melonjak Empat Kali Lipat, Usaha Kerupuk Merah Bainal Tertekan",
+          "link": "https://radarpati.jawapos.com/ekonomi/2611220012/harga-tepung-tapioka-melonjak-empat-kali-lipat-usaha-kerupuk-merah-bainal-tertekan",
+          "canonical_url": "https://radarpati.jawapos.com/ekonomi/2611220012/harga-tepung-tapioka-melonjak-empat-kali-lipat-usaha-kerupuk-merah-bainal-tertekan",
+          "media_name": "Radar Pati",
+          "tanggal": "Sun, 22 Nov 2026 03:11:11 GMT",
+          "skor": 1.0
+        }
+      ],
+      "tone_hubungan": "K4",
       "tone_arah": "tidak ada"
     }
   ]
