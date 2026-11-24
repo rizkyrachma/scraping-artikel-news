@@ -1,5 +1,18 @@
 [
   {
+    "id": "run-20261124-114245",
+    "waktu_display": "24 Nov, 11.42",
+    "timestamp": "2026-11-24T11:42:45",
+    "durasi": "0m 01s",
+    "hasil_berita": 0,
+    "status": "Gagal",
+    "target_date": "2026-11-23",
+    "pemicu": "Terjadwal",
+    "rentang_data": "-",
+    "catatan": "Exit code 1",
+    "log_url": "https://github.com/rizkyrachma/scraping-artikel-news/actions/runs/45328135355"
+  },
+  {
     "id": "run-20261124-111614",
     "waktu_display": "24 Nov, 11.16",
     "timestamp": "2026-11-24T11:16:14",
@@ -535,16 +548,5 @@
     "target_date": "2026-11-02",
     "pemicu": "Terjadwal",
     "rentang_data": "2 Nov 2026"
-  },
-  {
-    "id": "run-20261102-0712",
-    "waktu_display": "02 Nov, 07.12",
-    "timestamp": "2026-11-02T07:12:00",
-    "durasi": "3m 31s",
-    "hasil_berita": 17,
-    "status": "Berhasil",
-    "target_date": "2026-11-01",
-    "pemicu": "Terjadwal",
-    "rentang_data": "1 Nov 2026"
   }
 ]
