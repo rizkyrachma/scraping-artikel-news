@@ -3,11 +3,11 @@
     "last_updated": "2026-11-23",
     "last_updated_display": "Senin, 23 November 2026",
     "earliest_date": "2026-08-06",
-    "total_articles": 1869,
+    "total_articles": 1881,
     "tone_summary": {
-      "Positif": 1224,
-      "Netral": 329,
-      "Negatif": 316
+      "Positif": 1233,
+      "Netral": 330,
+      "Negatif": 318
     },
     "calendar_counts": {
       "2026-11-23": 67,
@@ -18,12 +18,12 @@
       "2026-11-18": 27,
       "2026-11-17": 23,
       "2026-11-16": 36,
-      "2026-11-15": 25,
-      "2026-11-14": 19,
-      "2026-11-13": 54,
+      "2026-11-15": 28,
+      "2026-11-14": 24,
+      "2026-11-13": 57,
       "2026-11-12": 69,
       "2026-11-11": 21,
-      "2026-11-10": 37,
+      "2026-11-10": 38,
       "2026-11-09": 62,
       "2026-11-08": 14,
       "2026-11-07": 17,
@@ -124,21 +124,21 @@
         "neg": 11
       },
       "2026-11-15": {
-        "count": 25,
-        "pos": 16,
+        "count": 28,
+        "pos": 18,
+        "net": 2,
+        "neg": 8
+      },
+      "2026-11-14": {
+        "count": 24,
+        "pos": 15,
         "net": 2,
         "neg": 7
       },
-      "2026-11-14": {
-        "count": 19,
-        "pos": 11,
-        "net": 2,
-        "neg": 6
-      },
       "2026-11-13": {
-        "count": 54,
-        "pos": 32,
-        "net": 10,
+        "count": 57,
+        "pos": 34,
+        "net": 11,
         "neg": 12
       },
       "2026-11-12": {
@@ -154,8 +154,8 @@
         "neg": 4
       },
       "2026-11-10": {
-        "count": 37,
-        "pos": 28,
+        "count": 38,
+        "pos": 29,
         "net": 5,
         "neg": 4
       },
@@ -458,15 +458,15 @@
   "commodities": [
     {
       "name": "Kelapa Sawit & CPO",
-      "count": 470
+      "count": 473
     },
     {
       "name": "Hasil Tembakau",
-      "count": 345
+      "count": 347
     },
     {
       "name": "Makanan & Minuman",
-      "count": 267
+      "count": 270
     },
     {
       "name": "Lainnya",
@@ -474,11 +474,11 @@
     },
     {
       "name": "Tepung, Sagu & Pati",
-      "count": 121
+      "count": 122
     },
     {
       "name": "Kakao & Cokelat",
-      "count": 68
+      "count": 69
     },
     {
       "name": "Pulp & Kertas",
@@ -486,7 +486,7 @@
     },
     {
       "name": "Kelapa & Olahan",
-      "count": 62
+      "count": 63
     },
     {
       "name": "Biodiesel & Bioenergi",
@@ -502,7 +502,7 @@
     },
     {
       "name": "Kopi & Teh",
-      "count": 45
+      "count": 46
     },
     {
       "name": "Kayu & Furnitur",
@@ -524,7 +524,7 @@
   "spokespersons": [
     {
       "name": "Muhammad Sarmuji",
-      "count": 388
+      "count": 390
     },
     {
       "name": "Faisol Riza",
@@ -1759,7 +1759,7 @@
       "alasan_tone": "Berita membahas program pelatihan kerja PT Indah Kiat dan kunjungan Bupati Siak tanpa ada keterkaitan dengan Kemenperin sehingga bernilai Netral."
     },
     {
-      "id": 1,
+      "id": "art_3221be76fad28c3b",
       "title": "Karpet Merah Eropa untuk Sawit, Kuota Bebas Bea Masuk CPO 1,9 Juta Ton",
       "link": "https://pontianakpost.jawapos.com/amp/ekonomi/2611220073/karpet-merah-eropa-untuk-sawit-kuota-bebas-bea-masuk-cpo-19-juta-ton",
       "media": "Pontianak Post",
@@ -1777,7 +1777,7 @@
       "alasan_tone": "Berita membahas kesepakatan IEU-CEPA dan peluang ekspor sawit tanpa menyebut institusi atau narasumber Kemenperin secara langsung."
     },
     {
-      "id": 2,
+      "id": "art_46dfae9e80eff143",
       "title": "Tekstil hingga Sawit RI Bebas Tarif ke Eropa pada 2027",
       "link": "https://batampos.jawapos.com/ekbis/2611220029/tekstil-hingga-sawit-ri-bebas-tarif-ke-eropa-pada-2027",
       "media": "Jawa Pos",
@@ -1795,7 +1795,7 @@
       "alasan_tone": "Berita membahas perjanjian dagang IEU-CEPA yang melibatkan Kementerian Perdagangan dan Kemenko Perekonomian tanpa menyebut Kemenperin."
     },
     {
-      "id": 3,
+      "id": "art_45e0b11d6ed12e00",
       "title": "Minyak Sawit Bakal Banjiri Eropa, IEU-CEPA Bikin Tarif Ekspor Indonesia Turun hingga Nol Persen",
       "link": "https://pontianakpost.jawapos.com/ekonomi/2611220071/minyak-sawit-bakal-banjiri-eropa-ieu-cepa-bikin-tarif-ekspor-indonesia-turun-hingga-nol-persen",
       "media": "Pontianak Post",
@@ -1813,7 +1813,7 @@
       "alasan_tone": "Penandatanganan IEU-CEPA berkaitan dengan industri nasional tetapi bersumber dari Kementerian Perdagangan tanpa melibatkan Kemenperin secara langsung."
     },
     {
-      "id": 4,
+      "id": "art_ac8d8d1b8c7c2354",
       "title": "IEU-CEPA Berlaku 2027, Tekstil hingga Sawit Makin Menarik bagi Pasar Eropa",
       "link": "https://www.jawapos.com/ekonomi/2611220370/ieu-cepa-berlaku-2027-tekstil-hingga-sawit-makin-menarik-bagi-pasar-eropa",
       "media": "Jawa Pos",
@@ -1831,7 +1831,7 @@
       "alasan_tone": "Penandatanganan IEU-CEPA berkaitan dengan industri nasional tetapi bersumber dari Kementerian Perdagangan tanpa melibatkan Kemenperin secara langsung."
     },
     {
-      "id": 5,
+      "id": "art_5e642e3f72e0c200",
       "title": "Usai IEU-CEPA Diteken, Ini Daftar Produk RI yang Kini Bebas Tarif di Pasar Eropa",
       "link": "https://www.viva.co.id/bisnis/1945603-usai-ieu-cepa-diteken-ini-daftar-produk-ri-yang-kini-bebas-tarif-di-pasar-eropa",
       "media": "VIVA.co.id",
@@ -1849,7 +1849,7 @@
       "alasan_tone": "Penandatanganan IEU-CEPA berkaitan dengan industri nasional tetapi bersumber dari Kementerian Perdagangan tanpa melibatkan Kemenperin secara langsung."
     },
     {
-      "id": 6,
+      "id": "art_2e7af75468dcc9d5",
       "title": "DPRD Kutim Dorong Hilirisasi Sawit agar Masyarakat Tak Hanya Bergantung pada Bahan Mentah",
       "link": "https://www.berandaindonesia.id/2026/11/22/dprd-kutim-dorong-hilirisasi-sawit-agar-masyarakat-tak-hanya-bergantung-pada-bahan-mentah",
       "media": "Beranda Indonesia",
@@ -1867,7 +1867,7 @@
       "alasan_tone": "Berita memuat dorongan DPRD Kutim terkait hilirisasi sawit tanpa menyebut Kemenperin secara langsung maupun tidak langsung, sehingga masuk K4 netral."
     },
     {
-      "id": 7,
+      "id": "art_991ee8c6e189c029",
       "title": "Limbah Kelapa Sawit Bakal Disulap Jadi Gas Biometana",
       "link": "https://www.suara.com/bisnis/2026/11/22/173307/limbah-kelapa-sawit-bakal-disulap-jadi-gas-biometana",
       "media": "Suara.com",
@@ -1885,7 +1885,7 @@
       "alasan_tone": "Berita membahas kerja sama PTPN IV dan PGN dalam pengolahan limbah sawit menjadi gas biometana tanpa keterlibatan Kemenperin, sehingga dikategorikan netral K4."
     },
     {
-      "id": 8,
+      "id": "art_164d37a3209d42be",
       "title": "Indonesia-Uni Eropa Resmi Tandatangani IEU-CEPA, Tarif Ekspor Turun hingga 0 Persen",
       "link": "https://www.setneg.go.id/baca/index/indonesia_uni_eropa_resmi_tandatangani_ieu_cepa_tarif_ekspor_turun_hingga_0_persen",
       "media": "Kementerian Sekretariat Negara",
@@ -1903,7 +1903,7 @@
       "alasan_tone": "Perjanjian dagang IEU-CEPA merupakan kebijakan lintas kementerian yang dipimpin Kemendag tanpa menyebut Kemenperin secara langsung."
     },
     {
-      "id": 9,
+      "id": "art_3f0c858c61ecbc32",
       "title": "IEU-CEPA Resmi Diteken, Ini Sederet Manfaatnya bagi Indonesia",
       "link": "https://mediabudayaindonesia.com/news/show/2211202604-ieu-cepa-resmi-diteken-ini-sederet-manfaatnya-bagi-indonesia",
       "media": "Media Budaya Indonesia",
@@ -1921,7 +1921,7 @@
       "alasan_tone": "Berita menyoroti penandatanganan IEU-CEPA oleh Kemenko Perekonomian yang berdampak luas bagi industri nasional tanpa menyebut Kemenperin secara langsung."
     },
     {
-      "id": 10,
+      "id": "art_e8a9880ac1829948",
       "title": "Stan Tartaruga Dinasti Indonesia Dikunjungi Wamen KKP, Achmad Jawahir Perkenalkan Inovasi Produk Rumput Laut",
       "link": "https://metropolitanpost.id/stan-tartaruga-dinasti-indonesia-dikunjungi-wamen-kkp-achmad-jawahir-perkenalkan-inovasi-produk-rumput-laut/",
       "media": "Metropolitan Post -",
@@ -1939,7 +1939,7 @@
       "alasan_tone": "Berita menyoroti kegiatan Kementerian Kelautan dan Perikanan tanpa keterkaitan langsung dengan institusi Kemenperin."
     },
     {
-      "id": 11,
+      "id": "art_d5383bedef819cb9",
       "title": "Bersaing dengan Rokok Ilegal, Industri Legal Minta Kepastian Hukum dan Evaluasi Cukai",
       "link": "https://www.kabarbisnis.com/read/28138057/bersaing-dengan-rokok-ilegal-industri-legal-minta-kepastian-hukum-dan-evaluasi-cukai",
       "media": "kabarbisnis.com",
@@ -1957,7 +1957,7 @@
       "alasan_tone": "Permintaan ditujukan kepada pemerintah secara umum tanpa menyebut atau menyerang kebijakan spesifik Kemenperin."
     },
     {
-      "id": 12,
+      "id": "art_6716c435318e61e5",
       "title": "I-EU CEPA Ditandatangani, Indonesia Perluas Akses Ekspor ke Uni Eropa",
       "link": "https://swa.co.id/read/479928/i-eu-cepa-ditandatangani-indonesia-perluas-akses-ekspor-ke-uni-eropa",
       "media": "SWA.co.id",
@@ -1975,7 +1975,7 @@
       "alasan_tone": "Perjanjian dagang IEU-CEPA merupakan kebijakan lintas kementerian yang dipimpin Kemendag tanpa menyebut Kemenperin secara langsung."
     },
     {
-      "id": 13,
+      "id": "art_0bd1d048e16004a0",
       "title": "Perdagangan Tembus US$14,81 Miliar, Pemerintah Dorong Mamin Masuk Korea",
       "link": "https://www.inilah.com/perdagangan-tembus-usdollar1481-miliar-pemerintah-dorong-mamin-masuk-korea",
       "media": "Inilah.com",
@@ -1993,7 +1993,7 @@
       "alasan_tone": "Berita mengulas kegiatan promosi ekspor makanan dan minuman oleh Kemendag di Korea Selatan tanpa melibatkan institusi Kemenperin."
     },
     {
-      "id": 14,
+      "id": "art_86d9cdeb0cfc5b6f",
       "title": "IEU CEPA Resmi Diteken, Mendag Budi Optimistis Pasar Uni Eropa Makin Terbuka",
       "link": "https://investortrust.id/business/123320/ieu-cepa-resmi-diteken-mendag-budi-optimistis-pasar-uni-eropa-makin-terbuka",
       "media": "InvestorTrust",
@@ -2011,7 +2011,7 @@
       "alasan_tone": "Perjanjian dagang IEU-CEPA merupakan kebijakan lintas kementerian yang dipimpin Kemendag tanpa menyebut Kemenperin secara langsung."
     },
     {
-      "id": 15,
+      "id": "art_a5dc81c7b924ed96",
       "title": "Ekspor Sawit Bisa Nambah 1 Juta Ton ke Eropa? GAPKI Bongkar Faktanya",
       "link": "https://www.inilah.com/ekspor-sawit-bisa-nambah-1-juta-ton-ke-eropa-gapki-bongkar-faktanya",
       "media": "Inilah.com",
@@ -2029,7 +2029,7 @@
       "alasan_tone": "Berita membahas ekspor sawit dan regulasi EUDR oleh GAPKI tanpa menyebut atau melibatkan Kemenperin, sehingga dikategorikan netral K4."
     },
     {
-      "id": 16,
+      "id": "art_15005b5c029fbfc0",
       "title": "Daftar Produk RI-Uni Eropa yang Bebas Bea Masuk Karena IEU CEPA",
       "link": "https://www.bloombergtechnoz.com/detail-news/128499/daftar-produk-ri-uni-eropa-yang-bebas-bea-masuk-karena-ieu-cepa",
       "media": "Bloomberg Technoz",
@@ -2047,7 +2047,7 @@
       "alasan_tone": "Penandatanganan IEU-CEPA berkaitan dengan industri nasional tetapi bersumber dari Kementerian Perdagangan tanpa melibatkan Kemenperin secara langsung."
     },
     {
-      "id": 17,
+      "id": "art_d99c54ab5145ade7",
       "title": "I-EU CEPA Diteken, Mendag: Produk Sawit-Karet Bakal Bebas Tarif Ekspor ke Eropa",
       "link": "http://www.agrofarm.co.id/2026/11/i-eu-cepa-diteken-mendag-produk-sawit-karet-bakal-bebas-tarif-ekspor-ke-eropa/",
       "media": "www.agrofarm.co.id",
@@ -2065,7 +2065,7 @@
       "alasan_tone": "Penandatanganan IEU-CEPA berkaitan dengan industri nasional tetapi bersumber dari Kementerian Perdagangan tanpa melibatkan Kemenperin secara langsung."
     },
     {
-      "id": 18,
+      "id": "art_df92257663b81321",
       "title": "Dua Wamen KKP Kunjungi Stan Tartaruga Dinasti Indonesia, Inovasi Olahan Rumput Laut Jadi Sorotan Harkanas 2026",
       "link": "https://medialiterasi.id/dua-wamen-kkp-kunjungi-stan-tartaruga-dinasti-indonesia-inovasi-olahan-rumput-laut-jadi-sorotan-harkanas-2026/",
       "media": "Media Literasi",
@@ -2083,7 +2083,7 @@
       "alasan_tone": "Berita menyoroti kegiatan Kementerian Kelautan dan Perikanan tanpa keterkaitan langsung dengan institusi Kemenperin."
     },
     {
-      "id": 19,
+      "id": "art_d5fc23f62ed57d2d",
       "title": "Mendag: Penandatanganan IEU CEPA perluas ekspor sawit hingga karet",
       "link": "https://gorontalo.antaranews.com/berita/437431/mendag-penandatanganan-ieu-cepa-perluas-ekspor-sawit-hingga-karet",
       "media": "ANTARA News Gorontalo",
@@ -2101,7 +2101,7 @@
       "alasan_tone": "Berita membahas perjanjian dagang IEU-CEPA yang melibatkan Kementerian Perdagangan dan Kemenko Perekonomian tanpa menyebut Kemenperin."
     },
     {
-      "id": 20,
+      "id": "art_b0c3078f9897bd66",
       "title": "IEU-CEPA Buka Akses Teknologi Eropa untuk Perkuat Industri RI",
       "link": "https://www.beritasatu.com/ekonomi/3042955/ieu-cepa-buka-akses-teknologi-eropa-untuk-perkuat-industri-ri",
       "media": "BeritaSatu.com",
@@ -2119,7 +2119,7 @@
       "alasan_tone": "Perjanjian dagang IEU-CEPA merupakan kebijakan lintas kementerian yang dipimpin Kemendag tanpa menyebut Kemenperin secara langsung."
     },
     {
-      "id": 21,
+      "id": "art_8e8c7abae6a8f293",
       "title": "Dari Sawit hingga Kopi, 90,4 Persen Produk RI Bakal Bebas Tarif ke Uni Eropa - disway.id",
       "link": "https://disway.id/read/980597/dari-sawit-hingga-kopi-904-persen-produk-ri-bakal-bebas-tarif-ke-uni-eropa",
       "media": "Disway",
@@ -2137,7 +2137,7 @@
       "alasan_tone": "Berita membahas perjanjian dagang IEU-CEPA yang melibatkan Kementerian Perdagangan dan Kemenko Perekonomian tanpa menyebut Kemenperin."
     },
     {
-      "id": 22,
+      "id": "art_9b60e77f14aa12fb",
       "title": "Indonesia-Uni Eropa Sepakati Perdagangan Bebas, Ekspor Sawit RI Bisa Bebas Tarif",
       "link": "https://www.kompas.com/global/read/2026/11/22/115556370/indonesia-uni-eropa-sepakati-perdagangan-bebas-ekspor-sawit-ri-bisa-bebas",
       "media": "Kompas.com",
@@ -2155,7 +2155,7 @@
       "alasan_tone": "Penandatanganan IEU-CEPA berkaitan dengan industri nasional tetapi bersumber dari Kementerian Perdagangan tanpa melibatkan Kemenperin secara langsung."
     },
     {
-      "id": 23,
+      "id": "art_090b03eb1e9f3fdd",
       "title": "Harga Tepung Tapioka Melonjak Empat Kali Lipat, Usaha Kerupuk Merah Bainal Tertekan",
       "link": "https://radarpati.jawapos.com/ekonomi/2611220012/harga-tepung-tapioka-melonjak-empat-kali-lipat-usaha-kerupuk-merah-bainal-tertekan",
       "media": "Radar Pati",
@@ -2173,7 +2173,7 @@
       "alasan_tone": "Berita mengenai lonjakan harga tepung tapioka dan dampaknya pada usaha kerupuk lokal tidak menyebut maupun berkaitan secara langsung dengan kebijakan Kemenperin."
     },
     {
-      "id": 24,
+      "id": "art_f078c241fe32a96b",
       "title": "IEU-CEPA Buka Peluang Ekspor CPO Bebas Bea, Kuota Naik Bertahap hingga Tahun Kesembilan",
       "link": "https://www.waspada.id/berita/ieu-cepa-buka-peluang-ekspor-cpo-bebas-bea-kuota-naik-bertahap-hingga-tahun-kesembilan",
       "media": "Waspada.id",
@@ -2191,7 +2191,7 @@
       "alasan_tone": "Berita membahas kesepakatan IEU-CEPA dan peluang ekspor sawit tanpa menyebut institusi atau narasumber Kemenperin secara langsung."
     },
     {
-      "id": 25,
+      "id": "art_b88932f315d638fe",
       "title": "Teken Perjanjian Dagang, Sawit hingga Furnitur Indonesia Bebas Bea Masuk ke Uni Eropa Mulai 2027 - kumparan.com",
       "link": "https://kumparan.com/kumparanbisnis/teken-perjanjian-dagang-sawit-hingga-furnitur-indonesia-bebas-bea-masuk-ke-uni-eropa-mulai-2027-28cYSg7ivee",
       "media": "kumparan",
@@ -2209,7 +2209,7 @@
       "alasan_tone": "Penandatanganan IEU-CEPA berkaitan dengan industri nasional tetapi bersumber dari Kementerian Perdagangan tanpa melibatkan Kemenperin secara langsung."
     },
     {
-      "id": 26,
+      "id": "art_ad2d8f7c41f0542c",
       "title": "IEU-CEPA Bebaskan Tarif Sawit hingga Alas Kaki ke Eropa, Ini yang Diincar Pemerintah",
       "link": "https://investortrust.id/business/123309/ieu-cepa-bebaskan-tarif-sawit-hingga-alas-kaki-ke-eropa-ini-yang-diincar-pemerintah",
       "media": "InvestorTrust",
@@ -2227,7 +2227,7 @@
       "alasan_tone": "Penandatanganan IEU-CEPA berkaitan dengan industri nasional tetapi bersumber dari Kementerian Perdagangan tanpa melibatkan Kemenperin secara langsung."
     },
     {
-      "id": 27,
+      "id": "art_52a0da11b70d821b",
       "title": "ILaPOC 2026 Dorong Jaminan Sosial Jadi Pilar Keberlanjutan Industri Sawit",
       "link": "https://www.infosawit.com/2026/11/22/ilapoc-2026-dorong-jaminan-sosial-jadi-pilar-keberlanjutan-industri-sawit/",
       "media": "InfoSAWIT",
@@ -2245,7 +2245,7 @@
       "alasan_tone": "Berita membahas jaminan sosial dan keberlanjutan industri sawit secara umum tanpa menyebut institusi Kemenperin secara langsung."
     },
     {
-      "id": 28,
+      "id": "art_244f66b084bf7b82",
       "title": "IEU-CEPA Buka Peluang Industri Nasional Kembali Gunakan Mesin Teknologi Asal Eropa",
       "link": "https://investortrust.id/business/123301/ieu-cepa-buka-peluang-industri-nasional-kembali-gunakan-mesin-teknologi-asal-eropa",
       "media": "InvestorTrust",
@@ -2263,7 +2263,7 @@
       "alasan_tone": "Isu berkaitan dengan kebijakan perdagangan dan industri nasional secara umum tetapi tidak menyebut Kemenperin secara langsung."
     },
     {
-      "id": 29,
+      "id": "art_be9ef55466ed9965",
       "title": "Izin RAPP Dicabut, Pemerintah Jamin 41 Ribu Pekerja Tak Kena PHK",
       "link": "https://cakradunia.co/news/izin-rapp-dicabut-pemerintah-jamin-41-ribu-pekerja-tak-kena-phk/index.html",
       "media": "Cakra Dunia",
@@ -2281,7 +2281,7 @@
       "alasan_tone": "Berita menyoroti tindakan Satgas PKH terhadap perusahaan hutan dan sawit tanpa melibatkan atau menyerang Kemenperin."
     },
     {
-      "id": 30,
+      "id": "art_9c94c2d914bcd105",
       "title": "IEU-CEPA Diteken, 90,4% Produk Indonesia Bebas Tarif ke Uni Eropa",
       "link": "https://www.indragirione.com/2026/11/ieu-cepa-diteken-904-produk-indonesia-bebas-tarif-ke-uni-eropa",
       "media": "Indragirione.com",
@@ -2299,7 +2299,7 @@
       "alasan_tone": "Penandatanganan IEU-CEPA berkaitan dengan industri nasional tetapi bersumber dari Kementerian Perdagangan tanpa melibatkan Kemenperin secara langsung."
     },
     {
-      "id": 31,
+      "id": "art_7cfa18bd88f93996",
       "title": "Resmi Diteken, Ini Poin-Poin Penting Kesepakatan Dagang RI-Uni Eropa",
       "link": "https://www.cnbcindonesia.com/news/20261121225455-4-787238/resmi-diteken-ini-poin-poin-penting-kesepakatan-dagang-ri-uni-eropa",
       "media": "CNBC Indonesia",
@@ -2317,7 +2317,7 @@
       "alasan_tone": "Penandatanganan IEU-CEPA berkaitan dengan industri nasional tetapi bersumber dari Kementerian Perdagangan tanpa melibatkan Kemenperin secara langsung."
     },
     {
-      "id": 32,
+      "id": "art_e182ec0ecede6611",
       "title": "Airlangga Beberkan Isi IEU-CEPA, Target Berlaku 1 Januari 2027 - kumparan.com",
       "link": "https://kumparan.com/kumparanbisnis/airlangga-beberkan-isi-ieu-cepa-target-berlaku-1-januari-2027-28cUb1QITUS",
       "media": "kumparan",
@@ -2335,7 +2335,7 @@
       "alasan_tone": "Berita membahas ratifikasi perjanjian IEU-CEPA di bawah koordinasi Kemenko Perekonomian tanpa menyebut Kemenperin secara langsung."
     },
     {
-      "id": 33,
+      "id": "art_28c868ff387b3931",
       "title": "Sawit hingga Sepatu RI Bakal Banjiri Pasar Eropa Tanpa Bea Masuk, Efek IEU-CEPA Resmi Diteken!",
       "link": "https://www.inilah.com/sawit-hingga-sepatu-ri-bakal-banjiri-pasar-eropa-tanpa-bea-masuk-efek-ieu-cepa-resmi-diteken",
       "media": "Inilah.com",
@@ -2438,30 +2438,30 @@
       "fileDate": "2026-11-15",
       "tglDisplay": "Minggu, 15 Nov 2026",
       "isNew": false,
-      "count": 25,
-      "countStr": "25 berita",
-      "pos": 16,
+      "count": 28,
+      "countStr": "28 berita",
+      "pos": 18,
       "net": 2,
-      "neg": 7
+      "neg": 8
     },
     {
       "fileDate": "2026-11-14",
       "tglDisplay": "Sabtu, 14 Nov 2026",
       "isNew": false,
-      "count": 19,
-      "countStr": "19 berita",
-      "pos": 11,
+      "count": 24,
+      "countStr": "24 berita",
+      "pos": 15,
       "net": 2,
-      "neg": 6
+      "neg": 7
     },
     {
       "fileDate": "2026-11-13",
       "tglDisplay": "Jumat, 13 Nov 2026",
       "isNew": false,
-      "count": 54,
-      "countStr": "54 berita",
-      "pos": 32,
-      "net": 10,
+      "count": 57,
+      "countStr": "57 berita",
+      "pos": 34,
+      "net": 11,
       "neg": 12
     },
     {
@@ -2488,9 +2488,9 @@
       "fileDate": "2026-11-10",
       "tglDisplay": "Selasa, 10 Nov 2026",
       "isNew": false,
-      "count": 37,
-      "countStr": "37 berita",
-      "pos": 28,
+      "count": 38,
+      "countStr": "38 berita",
+      "pos": 29,
       "net": 5,
       "neg": 4
     }
