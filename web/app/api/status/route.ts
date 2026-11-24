@@ -73,6 +73,44 @@ export async function GET() {
       }
     }
 
+    let latestRunDetails: {
+      wasSkipped: boolean;
+      skipReason: string | null;
+      failedStep: string | null;
+    } = {
+      wasSkipped: false,
+      skipReason: null,
+      failedStep: null,
+    };
+
+    if (!activeRun && latestRun) {
+      try {
+        const jobsUrl = `https://api.github.com/repos/${repo}/actions/runs/${latestRun.id}/jobs`;
+        const jobsRes = await fetch(jobsUrl, {
+          headers: buildGitHubHeaders(token),
+          cache: "no-store",
+        });
+        if (jobsRes.ok) {
+          const jobsData = await jobsRes.json();
+          const firstJob = jobsData.jobs?.[0];
+          const steps: Array<{ name: string; conclusion: string | null }> = firstJob?.steps || [];
+
+          const pipelineStep = steps.find((s) => s.name?.includes("Jalankan Pipeline Scraping"));
+          if (pipelineStep && pipelineStep.conclusion === "skipped" && latestRun.conclusion === "success") {
+            latestRunDetails.wasSkipped = true;
+            latestRunDetails.skipReason = "Data tanggal target sudah ada di arsip data_export (dilewati oleh sistem).";
+          }
+
+          const failedStep = steps.find((s) => s.conclusion === "failure");
+          if (failedStep) {
+            latestRunDetails.failedStep = failedStep.name;
+          }
+        }
+      } catch {
+        // Abaikan jika gagal membaca detail jobs
+      }
+    }
+
     return NextResponse.json({
       ok: true,
       isRunning: Boolean(activeRun),
@@ -96,6 +134,9 @@ export async function GET() {
             createdAt: latestRun.created_at,
             updatedAt: latestRun.updated_at,
             event: latestRun.event,
+            wasSkipped: latestRunDetails.wasSkipped,
+            skipReason: latestRunDetails.skipReason,
+            failedStep: latestRunDetails.failedStep,
           }
         : null,
     });
