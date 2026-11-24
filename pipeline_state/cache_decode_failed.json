@@ -138,5 +138,65 @@
     "ts": 1795498248.0151787,
     "reason": "rejected_target",
     "validator_version": "v1"
+  },
+  "https://news.google.com/articles/CBMi3gFBVV95cUxQdWtUNGtEbEpMeFVQNWlra0R1OHN5ZXNXa2VGWVhEcGFEUVJPTTRYcXpBbjZHQmhVTk51dkduSGtmRjRUV25mRnFFY09IVXo5NUFZdHdJdUpNUFM0b3QxYzFOZHVHX0dqSnRTckF1a2s1NXVmUm13U3F0UVJqWGEwMmltdzhYUW5VWGpCcmtsSE8xTnhxajN2Wnc3SlBnN2Q4bEpHU3NDbUhxd21wRFdsNjg2QS1CdVlmbHVLaHNRaXBqTWlfZlMwUTc0dGFsUE5rbTZQVmJQS29JOVNLa1E::val_v1": {
+    "ts": 1795551266.860241,
+    "reason": "rejected_target",
+    "validator_version": "v1"
+  },
+  "https://news.google.com/articles/CBMiZkFVX3lxTE5lYllIVVVadjE2VWtBaU1NSi1wT25xRDRQak1DWWpteTFnTFY5eTMzeFJmZlB6bENfdHFIdlczUURJMDN4eTRROEZ2b1A0OHdCbWdvM1dEU04yU3N5VTdaSXBHdV9qdw::val_v1": {
+    "ts": 1795551390.3882158,
+    "reason": "rejected_target",
+    "validator_version": "v1"
+  },
+  "https://news.google.com/articles/CBMiZ0FVX3lxTFBER01ZNzQzSEtzWkh4c1VIZExkOUNuT3UtWDhLMEpZVjMwTG81UVFwX2VnRjdmMVpFZ3RpbUxtQXZMQ0ppOEhRbHYxY1Y4aWlqMFVfWkNIN3BEcE52R1I0QzAwOVI1T2s::val_v1": {
+    "ts": 1795551740.7866545,
+    "reason": "rejected_target",
+    "validator_version": "v1"
+  },
+  "https://news.google.com/articles/CBMiTkFVX3lxTE1ULXQwVm9YM0xnX0dCNmpEQmF3N2ZndmE0VFY0TkxZUDA4NTI0bVhRdkhfM3ZZVjJiVlFpcmhWNkRWR1YxVGc4dFpBc21zdw::val_v1": {
+    "ts": 1795552693.1963425,
+    "reason": "rejected_target",
+    "validator_version": "v1"
+  },
+  "https://news.google.com/articles/CBMitAFBVV95cUxOSUM3QXdXeXBDNzRzcHl1clpVSWZGSGtDVGdhd2M3eWNxNzdXT0h6d0dnYU9aUFhtRmRSLU90V2djdmp6WjE4WTRQMnlnRUtRR3ZhTlRRQ1JHQmpOT1pkalEtRm9kdFFPNnF2YkRBZjlaeE13TnlUWG11TjhRMUNTWWhTbHlURVBWNjFiQkhSclJlVGpFRmpsNlkyWWFWQlVTT1lXTEhnRkdnU2hWbVJOLVlNQXg::val_v1": {
+    "ts": 1795552795.1004322,
+    "reason": "rejected_target",
+    "validator_version": "v1"
+  },
+  "https://news.google.com/articles/CBMiogFBVV95cUxQdU03amluay04LW1sQzRXV3NrNDhFZW5INF81ZlBnRFI4MVQ0OHI4cnZIU09kUFNBT1ZETWJ2MDhBYVVxTmNmcFFuSDZTN2VCYklfSE1aOXo2aDd1WVVBN29RNkxxZVpkUUlobmpsT09ySl8tY25iQjlkOEZSdnJsZUVucXhVYmhvNVVSemMxRk1iQjFnTUd4aTYyeW5wM2o4R0E::val_v1": {
+    "ts": 1795552883.5150447,
+    "reason": "rejected_target",
+    "validator_version": "v1"
+  },
+  "https://news.google.com/articles/CBMivgFBVV95cUxPazJGbmNPZ0F0ME5tXzkxa1UxczR0TlhYdzdhMzRZZFJpS1dHUDRMY0VBRmFhYlVUQkh4NE9tUHZGOW5VcWtzdW5LdTUwUjhkQVNGei1JdkF3S0h3Y2JNSzJHazlvNUdaek54UklTVC1ZeWg4NElrOHlZYWUxckU4c3ZnVmpnY0M0UnZoUlZrQTVsNnczM0szMGdDTjVvdHo4TXgzMDc0WHJHcnZBYm9Nal8tSHc0VnhKTkJYYmhB::val_v1": {
+    "ts": 1795553024.8002286,
+    "reason": "rejected_target",
+    "validator_version": "v1"
+  },
+  "https://news.google.com/articles/CBMijAFBVV95cUxOWVpLYzhiUW9RamE1WncwYjhjcVF4Qy1qMnh2ckdxMlVhc3NVQnV6WlR6SGhXdG9HMGZFT3VtZFZVN2F3OG5OQTh6UnZLZXVmbTRSWXRFbHNxVEZlSkpqS0xpVGRHNENOV0gyZ05jMUk5T0Q1NU50Q2xPN0haMy1CYlJDWUowdXZYcnRwZg::val_v1": {
+    "ts": 1795553160.8969674,
+    "reason": "rejected_target",
+    "validator_version": "v1"
+  },
+  "https://news.google.com/articles/CBMihgFBVV95cUxPOW1NTG9WeTVScm8xcGx3c0JveVlKcTc1bGQ2NDZaTGlEUWpFYmtuNmt1NHRTOUZTenphSF9uckVTdDlpXzZPbHdheHExcm1OejVkMXNEdnJLRVA1MEJYYU4zMWJNRkF5OEZJalA5emw0MElVVHdOSzJkY1lNYmR0Qk9KcHpQdw::val_v1": {
+    "ts": 1795553161.9845397,
+    "reason": "rejected_target",
+    "validator_version": "v1"
+  },
+  "https://news.google.com/articles/CBMipAFBVV95cUxQcWZneUpvelR0elBDT1ZQb0ZVek5mVTAyTnNyVzVpQjhWRUMtWjdZNGY1UlJ2NVhMSy1OcEdUUXpYRVV1TFhQVlJJTnFEcnFVekpTNmlqaHhkU1Zyd3Q0NDJETTU2UlZtY1pEbEJtSXB1MTBGV3RpUUZRSXBTVkNiWFBhRlNzY2FpMzJpbU11QklCbjJUV2pQSEd1cFJBbklpYWwzNg::val_v1": {
+    "ts": 1795553340.3905761,
+    "reason": "rejected_target",
+    "validator_version": "v1"
+  },
+  "https://news.google.com/articles/CBMioAFBVV95cUxPN2M1TkVfb3ZGT2trWUVTMWp2LUJYN1FpeVJGTUZSN3Q3dWRvUF9pVmpiY1hOOGN5RGN5Nkk0R1pFWEJLZklXRWhMSEd0LVpEZlBhZkZOSHZ6T2lTR2U5ZjlOVFhPeWVEVEsxdEw1N1dSbWdSR0FLMWxuRUhUTDZQLXBaTnR2aDQzRzJlRTc4eWRlR1l2WWsyYmlKdGtodTNt::val_v1": {
+    "ts": 1795553422.0197234,
+    "reason": "rejected_target",
+    "validator_version": "v1"
+  },
+  "https://news.google.com/articles/CBMiP0FVX3lxTE52UW5PZVZ3R2JIajJWZmh2RUM2a251ZTRLUHZHY3kwcWNtdzI1aVd6SnFqd0F5cFRtY2ZqY091SQ::val_v1": {
+    "ts": 1795553643.9986775,
+    "reason": "rejected_target",
+    "validator_version": "v1"
   }
 }
