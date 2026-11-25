@@ -1,5 +1,26 @@
 [
   {
+    "id": "run-20261126-040607",
+    "waktu_display": "26 Nov, 04.06",
+    "timestamp": "2026-11-26T04:06:07",
+    "durasi": "51m 52s",
+    "hasil_berita": 50,
+    "status": "Berhasil",
+    "target_date": "2026-11-25",
+    "pemicu": "Terjadwal",
+    "rentang_data": "25 Nov 2026",
+    "stats": {
+      "final": 50,
+      "perlu_review": 0,
+      "tanpa_spokesperson": 34,
+      "mentah": 3998,
+      "filter_tgl": 2478,
+      "unik": 166,
+      "noise_dibuang_pct": 99
+    },
+    "log_url": "https://github.com/rizkyrachma/scraping-artikel-news/actions/runs/45692813194"
+  },
+  {
     "id": "run-20261125-040525",
     "waktu_display": "25 Nov, 04.05",
     "timestamp": "2026-11-25T04:05:25",
@@ -556,17 +577,5 @@
     "target_date": "2026-11-04",
     "pemicu": "Terjadwal",
     "rentang_data": "4 Nov 2026"
-  },
-  {
-    "id": "run-20261104-1930",
-    "waktu_display": "04 Nov, 19.30",
-    "timestamp": "2026-11-04T19:30:00",
-    "durasi": "1m 02s",
-    "hasil_berita": 0,
-    "status": "Gagal",
-    "catatan": "Timeout",
-    "pemicu": "Manual",
-    "rentang_data": "-",
-    "log_url": "https://github.com/agro-monitor/actions/runs/11674201"
   }
 ]
