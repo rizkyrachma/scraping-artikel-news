@@ -198,5 +198,10 @@
     "ts": 1795553643.9986775,
     "reason": "rejected_target",
     "validator_version": "v1"
+  },
+  "https://news.google.com/articles/CBMixwFBVV95cUxOY1ROTWVyM0RiWjZseE1YcUxlRWJ1YzRHY0xzU2QtUGJLRjFPVzByb1ZOQU5Oc2RfZFRQUkRidEZrOGFxYUliNEY4NFdxSG9FZU9TTnNsQjN3VlAxYmt5dHpWbHhyamZsZVB0WnJPUXNoampIY1dNQXFQNm9ucGdoY2UyZVhHWjBwWG8zQkhVMnFpajdsMVF0MWlLSUwwaERtMmZvSG9QeXREczFlUVpscWNLa2V1M0M5ajVDOXREOUR6RlFzYzhr::val_v1": {
+    "ts": 1795637673.454652,
+    "reason": "rejected_target",
+    "validator_version": "v1"
   }
 }

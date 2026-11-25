@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-25 04:05:28",
+  "updated_at": "2026-11-26 04:06:11",
   "issues": [
     {
       "isu_id": "rilis_74a1d93a45",
@@ -864,14 +864,14 @@
       "isu": "Peredaran rokok ilegal menekan industri legal dan memicu desakan moratorium kenaikan cukai kepada pemerintah.",
       "sumber_isu": "klaster",
       "tanggal_awal": "2026-11-19",
-      "tanggal_terakhir": "2026-11-24",
+      "tanggal_terakhir": "2026-11-25",
       "_norm_title": "peredaran rokok ilegal menekan industri legal dan memicu desakan moratorium kenaikan cukai kepada pemerintah",
       "tone": "Netral",
       "tone_alasan": "Iu berkaitan dengan kepentingan industri tanpa menyebut atau menyerang Kemenperin secara langsung.",
       "tone_keyakinan": "tinggi",
       "evaluated_at": "2026-11-25 04:05:24",
       "member_count_at_eval": 8,
-      "member_count": 8,
+      "member_count": 9,
       "sample_titles": [
         "Serikat Pekerja Desak Pemerintah Beri Kepastian Hukum Industri Rokok",
         "Peredaran Rokok Ilegal Mengkhawatirkan, Pengusaha Butuh Kepastian Hukum",
@@ -880,7 +880,8 @@
         "Serikat Pekerja Desak Moratorium Kenaikan Cukai Rokok",
         "Bersaing dengan Rokok Ilegal, Industri Legal Minta Kepastian Hukum dan Evaluasi Cukai",
         "Pengusaha Rokok Teriak, Minta Cukai Tak Naik 3 Tahun Kedepan",
-        "Rokok Ilegal Tekan Industri Legal dan Ancam 500.000 Pekerja"
+        "Rokok Ilegal Tekan Industri Legal dan Ancam 500.000 Pekerja",
+        "Peredaran Rokok Ilegal Diklaim Capai 30 Persen, Industri Minta Kepastian Cukai"
       ],
       "sample_snippets": [
         "Pantau - Forum Serikat Pekerja Rokok Tembakau Makanan dan Minuman Serikat Pekerja Seluruh Indonesia (FSP RTMM-SPSI) meminta pemerintah memberikan kepastian hukum dan kepastian berusaha bagi industri hasil tembakau (IHT) di tengah tekanan regulasi, kebijakan fiskal, serta meningkatnya peredaran rokok ilegal.\nKetua Umum FSP RTMM-SPSI Hendry Wardana mengatakan tekanan terhadap perusahaan rokok legal berpotensi mengancam keberlangsungan industri dan pekerjaan sekitar 500.000 tenaga kerja yang terlibat langsung dalam sektor manufaktur rokok.\nPernyataan tersebut disampaikan Hendry melalui keterangan tertulis di Jakarta, Kamis (19/11/2026).\nMenurutnya, perusahaan rokok legal menghadapi kewajiban cukai dan berbagai ketentuan pemerintah, sementara produk rokok ilegal beredar tanpa memenuhi kewajiban yang sama.\n“Jika perusahaan rokok legal akhirnya menyerah karena ketidakadilan yang terus terjadi, dampaknya akan sangat besar,” ujar Hendry.\nIa menilai pemerintah perlu memperhatikan keberlangsungan industri legal sekaligus perlindungan tenaga kerja dalam merumuskan kebijakan sektor tembakau.\nSerikat Pekerja Khawatir Nasib 500 Ribu Pekerja Industri Rokok\nHendry menjelaskan bahwa sektor manufakt",
@@ -958,6 +959,15 @@
           "media_name": "www.suaralandak.co.id",
           "tanggal": "Tue, 24 Nov 2026 06:33:42 GMT",
           "skor": 0.4185
+        },
+        {
+          "id": "22",
+          "title": "Peredaran Rokok Ilegal Diklaim Capai 30 Persen, Industri Minta Kepastian Cukai",
+          "link": "https://www.jawapos.com/nasional/2611250349/peredaran-rokok-ilegal-diklaim-capai-30-persen-industri-minta-kepastian-cukai?page=all",
+          "canonical_url": "https://jawapos.com/nasional/2611250349/peredaran-rokok-ilegal-diklaim-capai-30-persen-industri-minta-kepastian-cukai?page=all",
+          "media_name": "Jawa Pos",
+          "tanggal": "Wed, 25 Nov 2026 08:55:31 GMT",
+          "skor": 0.5226
         }
       ],
       "tone_hubungan": "K3",
@@ -2666,14 +2676,14 @@
       "isu": "Penandatanganan kesepakatan IEU-CEPA membuka peluang ekspor komoditas Indonesia seperti sawit dan sepatu ke Eropa dengan tarif nol persen.",
       "sumber_isu": "klaster",
       "tanggal_awal": "2026-11-21",
-      "tanggal_terakhir": "2026-11-24",
+      "tanggal_terakhir": "2026-11-25",
       "_norm_title": "penandatanganan kesepakatan ieu cepa membuka peluang ekspor komoditas indonesia seperti sawit dan sepatu ke eropa dengan tarif nol persen",
       "tone": "Netral",
       "tone_alasan": "Berita berfokus pada kebijakan perdagangan luar negeri oleh Kemendag dan Uni Eropa tanpa melibatkan Kemenperin secara langsung.",
       "tone_keyakinan": "tinggi",
       "evaluated_at": "2026-11-24 12:45:15",
       "member_count_at_eval": 21,
-      "member_count": 22,
+      "member_count": 23,
       "sample_titles": [
         "IEU-CEPA Resmi Berlaku, Ini Komoditas yang Dapat Bebas Tarif ke Eropa",
         "IEU-CEPA Resmi Diteken, 90,4% Produk RI Bebas Tarif Masuk Pasar Eropa",
@@ -2890,6 +2900,15 @@
           "media_name": "Agricom.id",
           "tanggal": "Tue, 24 Nov 2026 01:43:55 GMT",
           "skor": 0.4089
+        },
+        {
+          "id": "50",
+          "title": "Tarif Sawit ke Uni Eropa Dipangkas Nol Persen, Indonesia Bidik Tambahan Ekspor Miliaran Dolar",
+          "link": "https://www.infosawit.com/2026/11/25/tarif-sawit-ke-uni-eropa-dipangkas-nol-persen-indonesia-bidik-tambahan-ekspor-miliaran-dolar/",
+          "canonical_url": "https://infosawit.com/2026/11/25/tarif-sawit-ke-uni-eropa-dipangkas-nol-persen-indonesia-bidik-tambahan-ekspor-miliaran-dolar",
+          "media_name": "InfoSAWIT",
+          "tanggal": "Wed, 25 Nov 2026 07:00:55 GMT",
+          "skor": 0.4813
         }
       ],
       "tone_hubungan": "K4",
@@ -3421,19 +3440,21 @@
       "isu": "Ekspor Sawit Bisa Nambah 1 Juta Ton ke Eropa? GAPKI Bongkar Faktanya",
       "sumber_isu": "klaster",
       "tanggal_awal": "2026-11-22",
-      "tanggal_terakhir": "2026-11-22",
+      "tanggal_terakhir": "2026-11-25",
       "_norm_title": "ekspor sawit bisa nambah 1 juta ton ke eropa gapki bongkar faktanya",
       "tone": "Netral",
       "tone_alasan": "Berita membahas ekspor sawit dan regulasi EUDR oleh GAPKI tanpa menyebut atau melibatkan Kemenperin, sehingga dikategorikan netral K4.",
       "tone_keyakinan": "tinggi",
       "evaluated_at": "2026-11-23 03:52:22",
       "member_count_at_eval": 1,
-      "member_count": 1,
+      "member_count": 2,
       "sample_titles": [
-        "Ekspor Sawit Bisa Nambah 1 Juta Ton ke Eropa? GAPKI Bongkar Faktanya"
+        "Ekspor Sawit Bisa Nambah 1 Juta Ton ke Eropa? GAPKI Bongkar Faktanya",
+        "Ekspor Sawit Indonesia ke Bangladesh Capai 1,55 Juta Ton, GAPKI Dorong Harga CPO Lebih Stabil"
       ],
       "sample_snippets": [
-        "Ekspor Sawit Bisa Nambah 1 Juta Ton ke Eropa? GAPKI Bongkar Faktanya\nKetua Umum Gabungan Pengusaha Kelapa Sawit (GAPKI) Eddy Martono. (Foto: ANTARA/Arnidhya Nur Zhafira)\nKesepakatan dagang Indonesia-European Union Comprehensive Economic Partnership Agreement (IEU-CEPA) membuka peluang besar bagi industri kelapa sawit nasional untuk menggenjot ekspor ke pasar Eropa.\nPenghapusan tarif bea masuk berpotensi membuat produk sawit Indonesia lebih kompetitif, bahkan membuka peluang tambahan ekspor hingga 1 juta ton. Namun, keuntungan tersebut tidak serta-merta bisa dinikmati industri sawit nasional.\nKetua Gabungan Pengusaha Kelapa Sawit Indonesia (GAPKI), Eddy Martono mengingatkan, masih ada hambatan serius berupa European Union Deforestation Regulation (EUDR) atau regulasi antideforestasi Uni Eropa yang berpotensi menghambat realisasi ekspor.\n“Yang bebas tarif 1 juta ton, sementara ekspor kita ke EU saat ini sekitar 3 juta ton. Jadi dengan adanya IEU-CEPA kemungkinan ekspor ke EU bisa naik antara 500 ribu - 1 juta ton. Tapi tergantung apakah EUDR Indonesia bisa penuhi atau tidak,” kata Eddy kepada Inilah.com, Minggu (22/11/2026).\nTarif Nol Persen Bikin Sawit RI Lebih Kompetitif\nPenghapusa"
+        "Ekspor Sawit Bisa Nambah 1 Juta Ton ke Eropa? GAPKI Bongkar Faktanya\nKetua Umum Gabungan Pengusaha Kelapa Sawit (GAPKI) Eddy Martono. (Foto: ANTARA/Arnidhya Nur Zhafira)\nKesepakatan dagang Indonesia-European Union Comprehensive Economic Partnership Agreement (IEU-CEPA) membuka peluang besar bagi industri kelapa sawit nasional untuk menggenjot ekspor ke pasar Eropa.\nPenghapusan tarif bea masuk berpotensi membuat produk sawit Indonesia lebih kompetitif, bahkan membuka peluang tambahan ekspor hingga 1 juta ton. Namun, keuntungan tersebut tidak serta-merta bisa dinikmati industri sawit nasional.\nKetua Gabungan Pengusaha Kelapa Sawit Indonesia (GAPKI), Eddy Martono mengingatkan, masih ada hambatan serius berupa European Union Deforestation Regulation (EUDR) atau regulasi antideforestasi Uni Eropa yang berpotensi menghambat realisasi ekspor.\n“Yang bebas tarif 1 juta ton, sementara ekspor kita ke EU saat ini sekitar 3 juta ton. Jadi dengan adanya IEU-CEPA kemungkinan ekspor ke EU bisa naik antara 500 ribu - 1 juta ton. Tapi tergantung apakah EUDR Indonesia bisa penuhi atau tidak,” kata Eddy kepada Inilah.com, Minggu (22/11/2026).\nTarif Nol Persen Bikin Sawit RI Lebih Kompetitif\nPenghapusa",
+        "Ekspor Sawit Indonesia ke Bangladesh Capai 1,55 Juta Ton, GAPKI Dorong Harga CPO Lebih Stabil\nSumeks.co, Harga minyak sawit mentah atau crude palm oil (CPO) di pasar dunia sering mengalami perubahan. Kondisi cuaca, kebijakan pemerintah, hingga konflik antarnegara bisa membuat harga naik atau turun dalam waktu singkat.\nUntuk menghadapi kondisi tersebut, Gabungan Pengusaha Kelapa Sawit Indonesia (GAPKI) mendorong penggunaan sistem perdagangan yang dapat membantu produsen dan pembeli mengantisipasi perubahan harga.\nHal itu disampaikan Wakil Sekretaris Jenderal GAPKI, Lolita Bangun, saat menjadi pembicara dalam forum perdagangan komoditas di Dhaka, Bangladesh, Kamis (19 November 2026).\nDalam acara tersebut, Lolita menjelaskan pentingnya instrumen derivatif komoditas untuk membuat perdagangan minyak sawit lebih stabil. Salah satu bentuknya adalah kontrak berjangka yang dapat membantu pelaku usaha mengurangi risiko akibat perubahan harga.\nForum bertajuk Building a More Resilient CPO Market through Commodity Derivatives itu merupakan bagian dari kegiatan pengenalan bursa derivatif komoditas yang diselenggarakan Chittagong Stock Exchange PLC (CSE).\nCSE merupakan bursa derivatif komoditas t"
       ],
       "matched_articles": [
         {
@@ -3444,6 +3465,15 @@
           "media_name": "Inilah.com",
           "tanggal": "Sun, 22 Nov 2026 06:33:00 GMT",
           "skor": 1.0
+        },
+        {
+          "id": "41",
+          "title": "Ekspor Sawit Indonesia ke Bangladesh Capai 1,55 Juta Ton, GAPKI Dorong Harga CPO Lebih Stabil",
+          "link": "https://sumeks.disway.id/ekbis/read/802341/ekspor-sawit-indonesia-ke-bangladesh-capai-155-juta-ton-gapki-dorong-harga-cpo-lebih-stabil",
+          "canonical_url": "https://sumeks.disway.id/ekbis/read/802341/ekspor-sawit-indonesia-ke-bangladesh-capai-155-juta-ton-gapki-dorong-harga-cpo-lebih-stabil",
+          "media_name": "Sumeks",
+          "tanggal": "Wed, 25 Nov 2026 12:03:55 GMT",
+          "skor": 0.5699
         }
       ],
       "tone_hubungan": "K4",
@@ -4463,17 +4493,17 @@
     },
     {
       "isu_id": "klaster_1b43cb93a3",
-      "isu": "Kemenperin menurunkan tim dari Ditjen Industri Agro untuk menyelidiki kebakaran pabrik permen di Cikande, Serang.",
+      "isu": "Kemenperin Kawal Penanganan dan Investigasi Kebakaran Pabrik di Cikande",
       "sumber_isu": "klaster",
       "tanggal_awal": "2026-11-23",
-      "tanggal_terakhir": "2026-11-23",
-      "_norm_title": "kemenperin menurunkan tim dari ditjen industri agro untuk menyelidiki kebakaran pabrik permen di cikande serang",
+      "tanggal_terakhir": "2026-11-25",
+      "_norm_title": "kemenperin kawal penanganan dan investigasi kebakaran pabrik di cikande",
       "tone": "Positif",
-      "tone_alasan": "Kemenperin menjadi pelaku utama melalui pengiriman tim investigasi untuk penanganan masalah industri.",
+      "tone_alasan": "Kemenperin menjadi pelaku utama yang menurunkan tim dan mengawal penanganan serta investigasi kebakaran pabrik.",
       "tone_keyakinan": "tinggi",
-      "evaluated_at": "2026-11-24 12:45:15",
-      "member_count_at_eval": 10,
-      "member_count": 10,
+      "evaluated_at": "2026-11-26 04:06:05",
+      "member_count_at_eval": 13,
+      "member_count": 13,
       "sample_titles": [
         "Kebakaran Pabrik Cikande Jadi Perhatian Menperin, Tim Industri Agro Turun ke Lokasi",
         "Kebakaran Pabrik Permen di Cikande, Menperin Sarmuji Turunkan Tim Industri Agro ke Lokasi",
@@ -4485,7 +4515,8 @@
         "Kemenperin Turunkan Tim Selidiki Kebakaran Pabrik Cikande",
         "Kemenperin Turunkan Tim Usut Kebakaran Pabrik Cikande",
         "Kemenperin Turunkan Tim Usut Kebakaran Pabrik Permen Cikande",
-        "Tak Hanya Menperin, Menaker Yassierli Turunkan Tim Investigasi Kebakaran Maut Pabrik Permen Cikande"
+        "Tak Hanya Menperin, Menaker Yassierli Turunkan Tim Investigasi Kebakaran Maut Pabrik Permen Cikande",
+        "Kebakaran Pabrik Permen, Kemenperin Minta Investigasi Tuntas dan Evaluasi Standar K3"
       ],
       "sample_snippets": [
         "Kebakaran Pabrik Cikande Jadi Perhatian Menperin, Tim Industri Agro Turun ke Lokasi\n- ANTARA/Desi Purnama Sari)\nJakarta, VIVA - Menteri Perindustrian (Menperin) Muhammad Sarmuji menugaskan tim dari Direktorat Jenderal Industri Agro untuk menyelidiki penyebab kebakaran pabrik permen PT Fonusa Agung Mulia di Cikande, Kabupaten Serang, Banten. Tim tersebut telah diterjunkan langsung ke lokasi untuk melihat kondisi pabrik dan mengidentifikasi faktor yang memicu kebakaran.\nSarmuji mengatakan, penugasan tim dari Kementerian Perindustrian (Kemenperin) dilakukan untuk mengetahui bagaimana kebakaran tersebut bisa terjadi. Selain itu, tim juga diminta mengkaji langkah mitigasi yang perlu dilakukan agar kejadian serupa dapat dicegah.\n\"Kita sudah, Ditjen Industri Agro sudah ke lapangan untuk melihat bagaimana itu bisa terjadi dan mitigasi apa yang harus kita lakukan,\" ujar Sarmuji saat ditemui di kantor Kemenperin, Jakarta Selatan, Senin, 23 November 2026.\nMenurut Sarmuji, pemeriksaan langsung ke lokasi diperlukan agar pemerintah dapat mengetahui persoalan yang sebenarnya terjadi. Dengan begitu, penanganan dan langkah lanjutan bisa disusun berdasarkan hasil temuan di lapangan.\n\"Itu memang haru",
@@ -4581,6 +4612,33 @@
           "media_name": "SuaraGarut.ID",
           "tanggal": "Mon, 23 Nov 2026 05:08:35 GMT",
           "skor": 1.0
+        },
+        {
+          "id": "9",
+          "title": "Kebakaran Pabrik Permen, Kemenperin Minta Investigasi Tuntas dan Evaluasi Standar K3",
+          "link": "https://investortrust.id/national/123625/kebakaran-pabrik-permen-kemenperin-minta-investigasi-tuntas-dan-evaluasi-standar-k3",
+          "canonical_url": "https://investortrust.id/national/123625/kebakaran-pabrik-permen-kemenperin-minta-investigasi-tuntas-dan-evaluasi-standar-k3",
+          "media_name": "InvestorTrust",
+          "tanggal": "Wed, 25 Nov 2026 05:17:00 GMT",
+          "skor": 0.4746
+        },
+        {
+          "id": "7",
+          "title": "KEMENPERIN KAWAL PENANGANAN INSIDEN KEBAKARAN PABRIK DI CIKANDE",
+          "link": "https://post-pro.co.id/news-and-research/71624/kemenperin-kawal-penanganan-insiden-kebakaran-pabrik-di-cikande",
+          "canonical_url": "https://post-pro.co.id/news-and-research/71624/kemenperin-kawal-penanganan-insiden-kebakaran-pabrik-di-cikande",
+          "media_name": "post-pro.co.id",
+          "tanggal": "Wed, 25 Nov 2026 05:18:02 GMT",
+          "skor": 0.4935
+        },
+        {
+          "id": "8",
+          "title": "Kemenperin Kawal Penanganan Kebakaran Pabrik Di Cikande",
+          "link": "https://rm.id/baca-berita/ekonomi-bisnis/335952/kemenperin-kawal-penanganan-kebakaran-pabrik-di-cikande",
+          "canonical_url": "https://rm.id/baca-berita/ekonomi-bisnis/335952/kemenperin-kawal-penanganan-kebakaran-pabrik-di-cikande",
+          "media_name": "RM.ID",
+          "tanggal": "Wed, 25 Nov 2026 03:56:00 GMT",
+          "skor": 0.5177
         }
       ],
       "tone_hubungan": "K1",
@@ -4860,23 +4918,28 @@
     },
     {
       "isu_id": "klaster_e5e892b832",
-      "isu": "Tak Hanya Menperin, Menaker Yassierli Turunkan Tim Investigasi Kebakaran Maut Pabrik Permen Cikande",
+      "isu": "Kemenperin Kawal Penanganan Insiden Kebakaran Pabrik di Cikande dan Prioritaskan Keselamatan Pekerja",
       "sumber_isu": "klaster",
       "tanggal_awal": "Mon, 23 No",
       "tanggal_terakhir": "Mon, 23 No",
-      "_norm_title": "tak hanya kemenperin menaker yassierli turunkan tim investigasi kebakaran maut pabrik permen cikande",
-      "tone": "Netral",
-      "tone_alasan": "Kemenperin disebut sebagai bagian pelengkap dalam investigasi kebakaran pabrik bersama Kemnaker tanpa adanya serangan terhadap institusi, sehingga dikategorikan Netral (Ne1).",
+      "_norm_title": "kemenperin kawal penanganan insiden kebakaran pabrik di cikande dan prioritaskan keselamatan pekerja",
+      "tone": "Positif",
+      "tone_alasan": "Kemenperin menjadi pelaku utama yang aktif memantau dan mengawal penanganan insiden kebakaran tanpa adanya serangan terhadap institusi.",
       "tone_keyakinan": "tinggi",
-      "tone_metode": "AI-outlier",
-      "evaluated_at": "2026-11-24 12:45:16",
-      "member_count_at_eval": 1,
-      "member_count": 1,
+      "tone_metode": "AI-isu",
+      "evaluated_at": "2026-11-26 04:06:05",
+      "member_count_at_eval": 5,
+      "member_count": 5,
       "sample_titles": [
-        "Tak Hanya Menperin, Menaker Yassierli Turunkan Tim Investigasi Kebakaran Maut Pabrik Permen Cikande"
+        "Tak Hanya Menperin, Menaker Yassierli Turunkan Tim Investigasi Kebakaran Maut Pabrik Permen Cikande",
+        "Kemenperin Dukung Investigasi Pihak Berwenang Memastikan Penyebab Kebakaran Pabrik PT Fonusa Agung Mulia di Cikande",
+        "Kemenperin Kawal Penanganan Insiden Kebakaran Pabrik di Cikande, Prioritaskan Keselamatan Pekerja",
+        "Kemenperin Kawal Penanganan Insiden Kebakaran Pabrik PT Fonusa Agung Mulia di Cikande, Prioritaskan Keselamatan Pekerja",
+        "Kemenperin Minta PT Fonusa Transparan Soal Kebakaran Pabrik Cikande"
       ],
       "sample_snippets": [
-        "Tak Hanya Menperin, Menaker Yassierli Turunkan Tim Investigasi Kebakaran Maut Pabrik Permen Cikande\n- ANTARA/Desi Purnama Sari)\nJakarta, VIVA - Pemerintah mulai melakukan investigasi menyeluruh terhadap kebakaran maut yang melanda pabrik permen PT Fonusa Agung Mulia di Cikande, Kabupaten Serang, Banten. Tak hanya Kementerian Perindustrian (Kemenperin), Kementerian Ketenagakerjaan (Kemnaker) juga m"
+        "Tak Hanya Menperin, Menaker Yassierli Turunkan Tim Investigasi Kebakaran Maut Pabrik Permen Cikande\n- ANTARA/Desi Purnama Sari)\nJakarta, VIVA - Pemerintah mulai melakukan investigasi menyeluruh terhadap kebakaran maut yang melanda pabrik permen PT Fonusa Agung Mulia di Cikande, Kabupaten Serang, Banten. Tak hanya Kementerian Perindustrian (Kemenperin), Kementerian Ketenagakerjaan (Kemnaker) juga m",
+        "Kemenperin Dukung Investigasi Pihak Berwenang Memastikan Penyebab Kebakaran Pabrik PT Fonusa Agung Mulia di Cikande\nJAKARTA, (tubasmedia.com) – Kementerian Perindustrian (Kemenperin) terus memantau dan berkoordinasi secara intensif dengan Pemerintah Provinsi Banten, serta manajemen PT Fonusa Agung Mulia (FAM) menyusul insiden kebakaran yang melanda fasilitas produksi perusahaan di Cikande, Kabupaten Serang, Banten, pada Sabtu (21/11).\nPlt. Direktur Jenderal Industri Agro, Putu Juli Ardika, menyampaikan keprihatinan mendalam serta belasungkawa kepada para pekerja dan keluarga yang terdampak musibah tersebut. Ia menegaskan bahwa keselamatan tenaga kerja, penanganan korban, serta pendampingan bagi keluarga harus menjadi prioritas utama di atas segalanya.\n“Kami menyampaikan keprihatinan dan duka yang mendalam atas musibah kebakaran yang terjadi di fasilitas produksi PT Fonusa Agung Mulia di Cikande. Sejak menerima laporan kejadian, Kementerian Perindustrian langsung menjalin koordinasi dengan pemerintah daerah dan pihak perusahaan,” ujar Putu di Jakarta, Selasa (24/11).\nPutu mengapresiasi langkah cepat sinergi lintas instansi mulai dari Pemerintah Provinsi Banten, Polda Banten, Polres "
       ],
       "matched_articles": [
         {
@@ -4887,8 +4950,46 @@
           "media_name": "VIVA.co.id",
           "tanggal": "Mon, 23 Nov 2026 08:30:00 GMT",
           "skor": 1.0
+        },
+        {
+          "id": "10",
+          "title": "Kemenperin Dukung Investigasi Pihak Berwenang Memastikan Penyebab Kebakaran Pabrik PT Fonusa Agung Mulia di Cikande",
+          "link": "https://tubasmedia.com/kemenperin-dukung-investigasi-pihak-berwenang-memastikan-penyebab-kebakaran-pabrik-pt-fonusa-agung-mulia-di-cikande/",
+          "canonical_url": "https://tubasmedia.com/kemenperin-dukung-investigasi-pihak-berwenang-memastikan-penyebab-kebakaran-pabrik-pt-fonusa-agung-mulia-di-cikande",
+          "media_name": "tubasmedia.com",
+          "tanggal": "Wed, 25 Nov 2026 11:07:11 GMT",
+          "skor": 0.4057
+        },
+        {
+          "id": "4",
+          "title": "Kemenperin Kawal Penanganan Insiden Kebakaran Pabrik di Cikande, Prioritaskan Keselamatan Pekerja",
+          "link": "https://beritanasional.com/detail/159632/kemenperin-kawal-penanganan-insiden-kebakaran-pabrik-di-cikande-prioritaskan-keselamatan-pekerja",
+          "canonical_url": "https://beritanasional.com/detail/159632/kemenperin-kawal-penanganan-insiden-kebakaran-pabrik-di-cikande-prioritaskan-keselamatan-pekerja",
+          "media_name": "Berita Nasional - Media Pencerah Bangsa",
+          "tanggal": "Wed, 25 Nov 2026 06:13:00 GMT",
+          "skor": 0.4367
+        },
+        {
+          "id": "3",
+          "title": "Kemenperin Kawal Penanganan Insiden Kebakaran Pabrik PT Fonusa Agung Mulia di Cikande, Prioritaskan Keselamatan Pekerja",
+          "link": "https://www.agrofarm.co.id/2026/11/kemenperin-kawal-penanganan-insiden-kebakaran-pabrik-pt-fonusa-agung-mulia-di-cikande-prioritaskan-keselamatan-pekerja/",
+          "canonical_url": "https://agrofarm.co.id/2026/11/kemenperin-kawal-penanganan-insiden-kebakaran-pabrik-pt-fonusa-agung-mulia-di-cikande-prioritaskan-keselamatan-pekerja",
+          "media_name": "agrofarm.co.id",
+          "tanggal": "Wed, 25 Nov 2026 15:49:26 GMT",
+          "skor": 0.3975
+        },
+        {
+          "id": "6",
+          "title": "Kemenperin Minta PT Fonusa Transparan Soal Kebakaran Pabrik Cikande",
+          "link": "https://www.beritasatu.com/banten/3043741/kemenperin-minta-pt-fonusa-transparan-soal-kebakaran-pabrik-cikande",
+          "canonical_url": "https://beritasatu.com/banten/3043741/kemenperin-minta-pt-fonusa-transparan-soal-kebakaran-pabrik-cikande",
+          "media_name": "BeritaSatu.com",
+          "tanggal": "Wed, 25 Nov 2026 07:44:51 GMT",
+          "skor": 0.4678
         }
-      ]
+      ],
+      "tone_hubungan": "K1",
+      "tone_arah": "mendukung"
     },
     {
       "isu_id": "klaster_bc798f35e9",
@@ -5049,17 +5150,18 @@
       "isu": "Keberhasilan Hilirisasi Industri Agro Bergantung Pada Sinergi Hulu Ke Hilir",
       "sumber_isu": "klaster",
       "tanggal_awal": "2026-11-24",
-      "tanggal_terakhir": "2026-11-24",
+      "tanggal_terakhir": "2026-11-25",
       "_norm_title": "keberhasilan hilirisasi industri agro bergantung pada sinergi hulu ke hilir",
       "tone": "Netral",
       "tone_alasan": "Isu berkaitan dengan kebijakan dan kepentingan industri agro Kemenperin namun tidak menyebut institusi atau narasumber Kemenperin secara langsung.",
       "tone_keyakinan": "tinggi",
       "evaluated_at": "2026-11-25 04:05:24",
       "member_count_at_eval": 2,
-      "member_count": 2,
+      "member_count": 3,
       "sample_titles": [
         "Keberhasilan Hilirisasi Industri Agro Bergantung pada Sinergi Hulu ke Hilir",
-        "Sinergi Hulu-Hilir Jadi Kunci Keberhasilan Hilirisasi Industri Agro"
+        "Sinergi Hulu-Hilir Jadi Kunci Keberhasilan Hilirisasi Industri Agro",
+        "Hilirisasi Industri Agro Dibidik Dongkrak Ekonomi, Ketersediaan Bahan Baku Jadi Tantangan"
       ],
       "sample_snippets": [
         "Keberhasilan Hilirisasi Industri Agro Bergantung pada Sinergi Hulu ke Hilir\njpnn.com, JAKARTA - Industri agro memiliki peluang besar untuk mengambil peran lebih kuat dalam pengembangan ekspor produk hilirisasi, sekaligus mendukung pencapaian target pertumbuhan ekonomi nasional.\nUntuk mengoptimalkan potensi tersebut, sinergi pemangku kepentingan dari hulu ke hilir diperlukan untuk mengatasi sejumlah tantangan di sektor hulu yang perlu mendapat perhatian, terutama terkait pemenuhan bahan baku dan kebutuhan industri.\nKementerian Perdagangan (Kemendag) mencatat total ekspor Indonesia pada April 2026 menembus angka US$25,30 miliar, tumbuh 12,32% dibandingkan dengan bulan sebelumnya dan naik 21,98% secara tahunan (year-on-year/yoy). Kenaikan tersebut didorong oleh lonjakan ekspor nonmigas sebesar 13,66%.\nDari data tersebut, beberapa komoditas nonmigas utama dengan pertumbuhan ekspor tertinggi adalah kopi, teh, dan rempah-rempah yang meningkat 54,44%. Sementara itu, produk tembakau dan rokok naik hingga 43,49%.\nCEO Center for Indonesian Policy Studies (CIPS) Anton Sulaiman mengatakan bahwa penguatan sektor hulu untuk industri agro juga sejalan dengan program prioritas nasional Presiden Pr",
@@ -5083,6 +5185,15 @@
           "media_name": "Media Indonesia",
           "tanggal": "Tue, 24 Nov 2026 07:42:16 GMT",
           "skor": 0.9289
+        },
+        {
+          "id": "44",
+          "title": "Hilirisasi Industri Agro Dibidik Dongkrak Ekonomi, Ketersediaan Bahan Baku Jadi Tantangan",
+          "link": "https://www.ntvnews.id/ekonomi/01127697/hilirisasi-industri-agro-dibidik-dongkrak-ekonomi-ketersediaan-bahan-baku-jadi-tantangan",
+          "canonical_url": "https://ntvnews.id/ekonomi/01127697/hilirisasi-industri-agro-dibidik-dongkrak-ekonomi-ketersediaan-bahan-baku-jadi-tantangan",
+          "media_name": "NTVNews.id",
+          "tanggal": "Wed, 25 Nov 2026 09:15:00 GMT",
+          "skor": 0.3918
         }
       ],
       "tone_hubungan": "K3",
@@ -5169,23 +5280,26 @@
     },
     {
       "isu_id": "klaster_54dacd4241",
-      "isu": "Barry Callebaut membangun pabrik cokelat baru di Karawang dengan investasi US$150 juta.",
+      "isu": "Barry Callebaut membangun pabrik cokelat ketiga di Karawang, Jawa Barat.",
       "sumber_isu": "klaster",
       "tanggal_awal": "2026-11-24",
-      "tanggal_terakhir": "2026-11-24",
-      "_norm_title": "barry callebaut membangun pabrik cokelat baru di karawang dengan investasi usd 150 juta",
+      "tanggal_terakhir": "2026-11-25",
+      "_norm_title": "barry callebaut membangun pabrik cokelat ketiga di karawang jawa barat",
       "tone": "Netral",
-      "tone_alasan": "Berita membahas investasi dan pembangunan pabrik oleh perusahaan swasta tanpa menyebut Kemenperin.",
+      "tone_alasan": "Berita membahas investasi dan pembangunan pabrik oleh pihak swasta tanpa menyebut Kemenperin.",
       "tone_keyakinan": "tinggi",
-      "evaluated_at": "2026-11-25 04:05:24",
-      "member_count_at_eval": 5,
-      "member_count": 5,
+      "evaluated_at": "2026-11-26 04:06:05",
+      "member_count_at_eval": 9,
+      "member_count": 9,
       "sample_titles": [
         "Barry Callebaut Bangun Pabrik Cokelat Ketiga di Indonesia, Berlokasi di Atas Lahan Baru di Karawang",
         "Barry Callebaut Investasi US$150 Juta, Bangun Pabrik Cokelat Ketiga di Karawang",
         "Cokelat Makin Dilirik, Barry Callebaut Bangun Pabrik Baru di Karawang",
         "Investasi Industri Cokelat di Indonesia Tembus US$150 Juta, Pabrik Baru Dibangun di Karawang",
-        "Investasi US$150 Juta, Barry Callebaut Bangun Pabrik Cokelat Ketiga di Karawang"
+        "Investasi US$150 Juta, Barry Callebaut Bangun Pabrik Cokelat Ketiga di Karawang",
+        "Barry Callebaut Bangun Pabrik Cokelat Ketiga di Indonesia, Lokasinya di Karawang",
+        "Industri Kakao Asia Menguat, Produsen Cokelat Global Perluas Investasi di Indonesia",
+        "Produsen Cokelat Van Houten Profesional Bangun Pabrik di Karawang"
       ],
       "sample_snippets": [
         "- Pabrik baru di Karawang akan melengkapi dua pabrik cokelat Barry Callebaut yang telah beroperasi di Gresik dan Rancaekek-Sumedang, serta pabrik pengolahan kakao di Bandung.\n- Pembangunan pabrik ini menambah total investasi Barry Callebaut di Indonesia menjadi lebih dari US$150 juta dalam 15 tahun terakhir.\n- Investasi tersebut menegaskan komitmen jangka panjang Barry Callebaut untuk melayani pelanggan di Indonesia dan seluruh Asia Tenggara.\n- Ekspansi ini berlangsung di tengah meningkatnya aktivitas pengolahan kakao di Asia. Pada Triwulan III-2026, volume penggilingan kakao naik 29% dibandingkan periode yang sama pada tahun lalu.\nKARAWANG, Indonesia,Â 24 November 2026Â /PRNewswire/ -- Barry Callebaut, produsen cokelat bermutu tinggi dan solusi kakao terkemuka di dunia, mengumumkan rencana pembangunan pabrik cokelat baru di Karawang, Jawa Barat. Pabrik yang dibangun dari awal di atas lahan baru (greenfield facility) ini akan menjadi pabrik cokelat ketiga sekaligus fasilitas produksi keempat perusahaan di Indonesia. Pabrik tersebut ditargetkan mulai beroperasi secara komersial pada Maret 2029.\nPembangunan pabrik ini menjadi langkah terbaru Barry Callebaut untuk memperkuat bisnisnya",
@@ -5236,6 +5350,42 @@
           "media_name": "Pasardana",
           "tanggal": "Tue, 24 Nov 2026 08:03:00 GMT",
           "skor": 1.0
+        },
+        {
+          "id": "27",
+          "title": "Barry Callebaut Bangun Pabrik Cokelat Ketiga di Indonesia, Berlokasi di Atas Lahan Baru di Karawang",
+          "link": "https://ambon.antaranews.com/rilis-pers/5877219/barry-callebaut-bangun-pabrik-cokelat-ketiga-di-indonesia-berlokasi-di-atas-lahan-baru-di-karawang",
+          "canonical_url": "https://ambon.antaranews.com/rilis-pers/5877219/barry-callebaut-bangun-pabrik-cokelat-ketiga-di-indonesia-berlokasi-di-atas-lahan-baru-di-karawang",
+          "media_name": "ANTARA News",
+          "tanggal": "Wed, 25 Nov 2026 07:25:00 GMT",
+          "skor": 0.6926
+        },
+        {
+          "id": "28",
+          "title": "Barry Callebaut Bangun Pabrik Cokelat Ketiga di Indonesia, Lokasinya di Karawang",
+          "link": "https://www.jpnn.com/news/barry-callebaut-bangun-pabrik-cokelat-ketiga-di-indonesia-lokasinya-di-karawang",
+          "canonical_url": "https://jpnn.com/news/barry-callebaut-bangun-pabrik-cokelat-ketiga-di-indonesia-lokasinya-di-karawang",
+          "media_name": "JPNN.com",
+          "tanggal": "Tue, 24 Nov 2026 17:07:00 GMT",
+          "skor": 0.6802
+        },
+        {
+          "id": "29",
+          "title": "Industri Kakao Asia Menguat, Produsen Cokelat Global Perluas Investasi di Indonesia",
+          "link": "https://mediaindonesia.com/ekonomi/960073/industri-kakao-asia-menguat-produsen-cokelat-global-perluas-investasi-di-indonesia",
+          "canonical_url": "https://mediaindonesia.com/ekonomi/960073/industri-kakao-asia-menguat-produsen-cokelat-global-perluas-investasi-di-indonesia",
+          "media_name": "Media Indonesia",
+          "tanggal": "Tue, 24 Nov 2026 20:14:40 GMT",
+          "skor": 0.3815
+        },
+        {
+          "id": "26",
+          "title": "Produsen Cokelat Van Houten Profesional Bangun Pabrik di Karawang",
+          "link": "https://ekonomi.republika.co.id/berita/tp0hy7370/produsen-cokelat-van-houten-profesional-bangun-pabrik-di-karawang",
+          "canonical_url": "https://ekonomi.republika.co.id/berita/tp0hy7370/produsen-cokelat-van-houten-profesional-bangun-pabrik-di-karawang",
+          "media_name": "republika.co.id",
+          "tanggal": "Tue, 24 Nov 2026 17:05:00 GMT",
+          "skor": 0.4568
         }
       ],
       "tone_hubungan": "K4",
@@ -5368,19 +5518,21 @@
       "isu": "B50 Berpotensi Pangkas Ekspor Sawit 2027, Devisa Indonesia Terancam Susut Rp190 Triliun",
       "sumber_isu": "klaster",
       "tanggal_awal": "2026-11-24",
-      "tanggal_terakhir": "2026-11-24",
+      "tanggal_terakhir": "2026-11-25",
       "_norm_title": "b50 berpotensi pangkas ekspor sawit 2027 devisa indonesia terancam susut rp 190 triliun",
       "tone": "Netral",
       "tone_alasan": "Berita membahas proyeksi kebijakan energi dan sawit oleh instansi lain (ESDM/Kementan) tanpa mengaitkan Kemenperin secara langsung.",
       "tone_keyakinan": "tinggi",
       "evaluated_at": "2026-11-25 04:05:13",
       "member_count_at_eval": 1,
-      "member_count": 1,
+      "member_count": 2,
       "sample_titles": [
-        "B50 Berpotensi Pangkas Ekspor Sawit 2027, Devisa Indonesia Terancam Susut Rp190 Triliun"
+        "B50 Berpotensi Pangkas Ekspor Sawit 2027, Devisa Indonesia Terancam Susut Rp190 Triliun",
+        "Mengintip Proyeksi Harga dan Pasokan Sawit Indonesia pada 2027"
       ],
       "sample_snippets": [
-        "The Indonesia Times -Kebijakan biodiesel B50 yang diproyeksikan berlaku penuh pada 2027 berpotensi membawa perubahan besar terhadap perekonomian Indonesia. Selain memperkuat ketahanan energi dan mengurangi ketergantungan impor solar, peningkatan penggunaan minyak sawit untuk kebutuhan domestik diperkirakan menekan volume ekspor dan penerimaan devisa negara.\nTekanan tersebut muncul ketika industri sawit nasional juga menghadapi risiko penurunan produksi akibat faktor cuaca. Kondisi ini membuat pemerintah harus menjaga keseimbangan antara kebutuhan energi dalam negeri, kepentingan industri pengolahan, serta keberlanjutan ekspor komoditas unggulan Indonesia.\nCommodity Market Expert sekaligus Kepala Bagian Bursa dan Pengembangan Bisnis PT Kharisma Pemasaran Bersama Nusantara (KPBN), Andrial Saputra, memperkirakan volume ekspor sawit Indonesia pada 2027 turun 12,27 persen menjadi 29,73 juta ton dari 33,89 juta ton pada 2026.\nProyeksi tersebut disampaikan dalam forum Economic & Capital Market Outlook 2027 yang diselenggarakan Perkumpulan Analis Efek Indonesia (PAEI) bersama CSA Community di Jakarta, Selasa (24/11/2026).\n\"Implementasi penuh B50 akan meningkatkan penyerapan CPO untuk kebut"
+        "The Indonesia Times -Kebijakan biodiesel B50 yang diproyeksikan berlaku penuh pada 2027 berpotensi membawa perubahan besar terhadap perekonomian Indonesia. Selain memperkuat ketahanan energi dan mengurangi ketergantungan impor solar, peningkatan penggunaan minyak sawit untuk kebutuhan domestik diperkirakan menekan volume ekspor dan penerimaan devisa negara.\nTekanan tersebut muncul ketika industri sawit nasional juga menghadapi risiko penurunan produksi akibat faktor cuaca. Kondisi ini membuat pemerintah harus menjaga keseimbangan antara kebutuhan energi dalam negeri, kepentingan industri pengolahan, serta keberlanjutan ekspor komoditas unggulan Indonesia.\nCommodity Market Expert sekaligus Kepala Bagian Bursa dan Pengembangan Bisnis PT Kharisma Pemasaran Bersama Nusantara (KPBN), Andrial Saputra, memperkirakan volume ekspor sawit Indonesia pada 2027 turun 12,27 persen menjadi 29,73 juta ton dari 33,89 juta ton pada 2026.\nProyeksi tersebut disampaikan dalam forum Economic & Capital Market Outlook 2027 yang diselenggarakan Perkumpulan Analis Efek Indonesia (PAEI) bersama CSA Community di Jakarta, Selasa (24/11/2026).\n\"Implementasi penuh B50 akan meningkatkan penyerapan CPO untuk kebut",
+        "Ilustrasi biodiesel B50. Foto: Dokumen Kementerian ESDM.\nMengintip Proyeksi Harga dan Pasokan Sawit Indonesia pada 2027\nDeny Irwanto • 25 November 2026 05:17\n                        Jakarta: Rencana implementasi penuh program biodiesel B50 pada 2027 diproyeksikan membawa perubahan pada struktur pasokan dan permintaan industri kelapa sawit nasional. Di satu sisi, peningkatan serapan crude palm oil (CPO) di dalam negeri memperkuat ketahanan energi. Di sisi lain, industri perlu menyesuaikan pengelolaan volume ekspor serta daya saing di pasar global.\nDinamika tersebut mengemuka dalam forum Economic & Capital Market Outlook 2027 bertema Building Stronger Foundations for Bigger Opportunities Through Resilience and Reform yang digelar Perkumpulan Analis Efek Indonesia (PAEI) bersama CSA Community.\nDalam sesi Palm Oil Market Outlook 2027, Commodity Market Expert sekaligus Kepala Bagian Bursa dan Pengembangan Bisnis PT Kharisma Pemasaran Bersama Nusantara (KPBN), Andrial Saputra, memaparkan penerapan penuh B50 diproyeksikan meningkatkan serapan CPO khusus untuk biodiesel dari sekitar 14,69 juta ton pada 2026 menjadi 17,40 juta ton pada 2027. Angka ini naik sekitar 18,45 persen.\nPeningkatan "
       ],
       "matched_articles": [
         {
@@ -5391,6 +5543,15 @@
           "media_name": "The Indonesia Times",
           "tanggal": "Tue, 24 Nov 2026 12:23:00 GMT",
           "skor": 1.0
+        },
+        {
+          "id": "38",
+          "title": "Mengintip Proyeksi Harga dan Pasokan Sawit Indonesia pada 2027",
+          "link": "https://www.metrotvnews.com/read/bmRCXvV8-mengintip-proyeksi-harga-dan-pasokan-sawit-indonesia-pada-2027",
+          "canonical_url": "https://metrotvnews.com/read/bmRCXvV8-mengintip-proyeksi-harga-dan-pasokan-sawit-indonesia-pada-2027",
+          "media_name": "MetroTVNews.com",
+          "tanggal": "Tue, 24 Nov 2026 22:17:51 GMT",
+          "skor": 0.4023
         }
       ],
       "tone_hubungan": "K4",
@@ -5431,22 +5592,29 @@
     },
     {
       "isu_id": "klaster_e611f23e1a",
-      "isu": "CLEO Bidik Pasar Baru, Luncurkan SuperO2 Imut 180 ml! Penjualan Tembus Rp2,6 Triliun",
+      "isu": "Emiten Hermanto Tanoko Melalui CLEO Memperluas Portofolio Produk dan Pasar AMDK untuk Kebut Penjualan Double Digit",
       "sumber_isu": "klaster",
       "tanggal_awal": "2026-11-24",
-      "tanggal_terakhir": "2026-11-24",
-      "_norm_title": "cleo bidik pasar baru luncurkan supero2 imut 180 ml penjualan tembus rp 2_6 triliun",
+      "tanggal_terakhir": "2026-11-25",
+      "_norm_title": "emiten hermanto tanoko melalui cleo memperluas portofolio produk dan pasar amdk untuk kebut penjualan double digit",
       "tone": "Netral",
-      "tone_alasan": "Berita mengenai ekspansi produk perusahaan swasta CLEO sama sekali tidak berkaitan dengan Kemenperin, sehingga masuk kategori K4 dan bernilai Netral.",
+      "tone_alasan": "Berita membahas strategi ekspansi bisnis emiten swasta tanpa keterlibatan atau kaitan langsung dengan kebijakan Kemenperin.",
       "tone_keyakinan": "tinggi",
-      "evaluated_at": "2026-11-25 04:05:13",
-      "member_count_at_eval": 1,
-      "member_count": 1,
+      "evaluated_at": "2026-11-26 04:06:05",
+      "member_count_at_eval": 7,
+      "member_count": 7,
       "sample_titles": [
-        "CLEO Bidik Pasar Baru, Luncurkan SuperO2 Imut 180 ml! Penjualan Tembus Rp2,6 Triliun"
+        "CLEO Bidik Pasar Baru, Luncurkan SuperO2 Imut 180 ml! Penjualan Tembus Rp2,6 Triliun",
+        "Gara-gara ini, Emiten Hermanto Tanoko Kebut Penjualan Double Digit",
+        "Penjualan CLEO Tumbuh 25,5%, Ekspansi SuperO2 Bidik Peluang Pasar AMDK",
+        "Perluas Pasar AMDK, CLEO Hadirkan SuperO2 Kemasan Unik",
+        "Perluas Portofolio Produk, CLEO Bidik Pertumbuhan Pangsa Pasar",
+        "Tanobel Perluas Pasar Air Mineral lewat SuperO2 Kemasan 180 Ml",
+        "TANOBEL PERLUAS PORTOFOLIO MEREK AIR MINUM SELAIN CLEO"
       ],
       "sample_snippets": [
-        "SuperO2 Imut|PT Sariguna Primatirta Tbk|CLEO|Air Minum Dalam Kemasan (AMDK)|kinerja perusahaan\nOleh: Corri\nFoto: istimewa\nSentimen: positive(Skor: 7)\nRingkasan, sentimen dan tag pada data ini merupakan klasifikasi isi berita yang dihasilkan AI, bukan saran atau rekomendasi investasi. Sumber: Pasardana.\nPasardana.id – PT Sariguna Primatirta Tbk (IDX: CLEO) semakin agresif memperluas pasar air minum dalam kemasan (AMDK) dengan meluncurkan SuperO2 Imut berukuran 180 ml.\nProduk anyar yang diperkenalkan pada pertengahan November 2026 ini menjadi bagian dari strategi Perseroan menggarap segmen air mineral sekaligus membuka sumber pertumbuhan baru di luar bisnis air murni.\nMelalui kemasan praktis dan ekonomis, SuperO2 Imut menyasar kebutuhan konsumsi berfrekuensi tinggi, mulai dari acara keluarga, pengajian, pertemuan hingga berbagai kegiatan komunal.\nProduk ini juga menawarkan diferensiasi melalui karakteristik lite water dengan kadar Total Dissolved Solids (TDS) rendah, sehingga memberikan sensasi air yang lebih ringan.\nDirektur Utama CLEO, Melisa Patricia, mengatakan industri AMDK nasional masih memiliki peluang pertumbuhan besar seiring perubahan kebutuhan dan preferensi konsumen.\n\"Pe"
+        "SuperO2 Imut|PT Sariguna Primatirta Tbk|CLEO|Air Minum Dalam Kemasan (AMDK)|kinerja perusahaan\nOleh: Corri\nFoto: istimewa\nSentimen: positive(Skor: 7)\nRingkasan, sentimen dan tag pada data ini merupakan klasifikasi isi berita yang dihasilkan AI, bukan saran atau rekomendasi investasi. Sumber: Pasardana.\nPasardana.id – PT Sariguna Primatirta Tbk (IDX: CLEO) semakin agresif memperluas pasar air minum dalam kemasan (AMDK) dengan meluncurkan SuperO2 Imut berukuran 180 ml.\nProduk anyar yang diperkenalkan pada pertengahan November 2026 ini menjadi bagian dari strategi Perseroan menggarap segmen air mineral sekaligus membuka sumber pertumbuhan baru di luar bisnis air murni.\nMelalui kemasan praktis dan ekonomis, SuperO2 Imut menyasar kebutuhan konsumsi berfrekuensi tinggi, mulai dari acara keluarga, pengajian, pertemuan hingga berbagai kegiatan komunal.\nProduk ini juga menawarkan diferensiasi melalui karakteristik lite water dengan kadar Total Dissolved Solids (TDS) rendah, sehingga memberikan sensasi air yang lebih ringan.\nDirektur Utama CLEO, Melisa Patricia, mengatakan industri AMDK nasional masih memiliki peluang pertumbuhan besar seiring perubahan kebutuhan dan preferensi konsumen.\n\"Pe",
+        "Gara-gara ini, Emiten Hermanto Tanoko Kebut Penjualan Double Digit\n: 0\nTampak aktivitas di area pabrik air minum kemasan besutan perseroan. Foto - Dok CLEO\nEmitenNews.com - Sariguna Primatirta (CLEO), kembali memperluas portofolio merek air minum dalam kemasan (AMDK). Langkah itu bagian dari strategi pengembangan bisnis untuk menjangkau segmen pasar lebih beragam. Setelah memperkuat posisi di kategori air murni (pure water) melalui merek CLEO, perseroan makin agresif memperluas portofolio merek untuk meningkatkan penetrasi pasar.\nLangkah tersebut dilakukan dengan membidik peluang kategori air mineral, yang memiliki volume pasar besar Indonesia, dan selama ini didominasi pemain eksisting. Salah satu merek diandalkan pperseroan untuk menggarap segmen tersebut SuperO2. Langkah strategis itu, diwujudkan melalui peluncuran varian kemasan botol ringkas terbaru nan unik, SuperO2 Imut (180 ml), pada pertengahan November 2026.\nKehadiran produk itu, bukan sekadar penambahan portofolio, melainkan bagian dari strategi ekspansi terukur perseroan untuk menembus segmen konsumsi baru yang memiliki frekuensi permintaan tinggi, dan volume serapan masif, seperti kebutuhan acara komunal, pertemuan kel"
       ],
       "matched_articles": [
         {
@@ -5457,29 +5625,87 @@
           "media_name": "Pasardana",
           "tanggal": "Tue, 24 Nov 2026 10:40:00 GMT",
           "skor": 1.0
+        },
+        {
+          "id": "33",
+          "title": "Gara-gara ini, Emiten Hermanto Tanoko Kebut Penjualan Double Digit",
+          "link": "https://www.emitennews.com/news/gara-gara-ini-emiten-hermanto-tanoko-kebut-penjualan-double-digit",
+          "canonical_url": "https://emitennews.com/news/gara-gara-ini-emiten-hermanto-tanoko-kebut-penjualan-double-digit",
+          "media_name": "Emitennews.com",
+          "tanggal": "Tue, 24 Nov 2026 23:55:00 GMT",
+          "skor": 0.3755
+        },
+        {
+          "id": "32",
+          "title": "Penjualan CLEO Tumbuh 25,5%, Ekspansi SuperO2 Bidik Peluang Pasar AMDK",
+          "link": "https://moneter.id/penjualan-cleo-tumbuh-255-ekspansi-supero2-bidik-peluang-pasar-amdk/",
+          "canonical_url": "https://moneter.id/penjualan-cleo-tumbuh-255-ekspansi-supero2-bidik-peluang-pasar-amdk",
+          "media_name": "moneter.id",
+          "tanggal": "Wed, 25 Nov 2026 07:22:00 GMT",
+          "skor": 0.5309
+        },
+        {
+          "id": "31",
+          "title": "Perluas Pasar AMDK, CLEO Hadirkan SuperO2 Kemasan Unik",
+          "link": "https://www.topbusiness.id/140758/perluas-pasar-amdk-cleo-hadirkan-supero2-kemasan-unik.html",
+          "canonical_url": "https://topbusiness.id/140758/perluas-pasar-amdk-cleo-hadirkan-supero2-kemasan-unik.html",
+          "media_name": "TopBusiness.id",
+          "tanggal": "Wed, 25 Nov 2026 01:22:00 GMT",
+          "skor": 0.4189
+        },
+        {
+          "id": "36",
+          "title": "Perluas Portofolio Produk, CLEO Bidik Pertumbuhan Pangsa Pasar",
+          "link": "https://www.fortuneidn.com/business/perluas-portofolio-produk-cleo-bidik-pertumbuhan-pangsa-pasar-00-4pj81-7wbx7w",
+          "canonical_url": "https://fortuneidn.com/business/perluas-portofolio-produk-cleo-bidik-pertumbuhan-pangsa-pasar-00-4pj81-7wbx7w",
+          "media_name": "FORTUNE Indonesia",
+          "tanggal": "Wed, 25 Nov 2026 04:39:14 GMT",
+          "skor": 0.403
+        },
+        {
+          "id": "30",
+          "title": "Tanobel Perluas Pasar Air Mineral lewat SuperO2 Kemasan 180 Ml",
+          "link": "https://swa.co.id/read/480027/tanobel-perluas-pasar-air-mineral-lewat-supero2-kemasan-180-ml",
+          "canonical_url": "https://swa.co.id/read/480027/tanobel-perluas-pasar-air-mineral-lewat-supero2-kemasan-180-ml",
+          "media_name": "SWA.co.id",
+          "tanggal": "Wed, 25 Nov 2026 05:30:00 GMT",
+          "skor": 0.4773
+        },
+        {
+          "id": "34",
+          "title": "TANOBEL PERLUAS PORTOFOLIO MEREK AIR MINUM SELAIN CLEO",
+          "link": "https://itrade.cgsi.co.id/tanobel-perluas-portofolio-merek-air-minum-selain-cleo",
+          "canonical_url": "https://itrade.cgsi.co.id/tanobel-perluas-portofolio-merek-air-minum-selain-cleo",
+          "media_name": "iTrade CGS International",
+          "tanggal": "Wed, 25 Nov 2026 01:00:48 GMT",
+          "skor": 0.3751
         }
       ],
       "tone_hubungan": "K4",
-      "tone_arah": "tidak ada"
+      "tone_arah": "tidak ada",
+      "tone_metode": "AI-isu"
     },
     {
       "isu_id": "klaster_8bfaa9db6a",
       "isu": "Sekilas Mirip, Ternyata Berbeda! BPDP dan Bea Cukai Perkuat Keahlian Identifikasi Produk Turunan Sawit",
       "sumber_isu": "klaster",
       "tanggal_awal": "2026-11-24",
-      "tanggal_terakhir": "2026-11-24",
+      "tanggal_terakhir": "2026-11-25",
       "_norm_title": "sekilas mirip ternyata berbeda bpdp dan bea cukai perkuat keahlian identifikasi produk turunan sawit",
       "tone": "Netral",
       "tone_alasan": "Berita menyoroti kerja sama pelatihan teknis antara BPDP dan Bea Cukai terkait produk sawit tanpa menyebut Kemenperin.",
       "tone_keyakinan": "tinggi",
       "evaluated_at": "2026-11-25 04:05:13",
       "member_count_at_eval": 1,
-      "member_count": 1,
+      "member_count": 3,
       "sample_titles": [
-        "Sekilas Mirip, Ternyata Berbeda! BPDP dan Bea Cukai Perkuat Keahlian Identifikasi Produk Turunan Sawit"
+        "Sekilas Mirip, Ternyata Berbeda! BPDP dan Bea Cukai Perkuat Keahlian Identifikasi Produk Turunan Sawit",
+        "BPDP-Bea Cukai Gelar Pelatihan Teknis Metode Pengujian CPO dan Produk Turunannya di Surabaya",
+        "Perkuat Akurasi Klasifikasi Produk Hilir Sawit, BPDP dan Bea Cukai Gelar Pelatihan Teknis Pengujian CPO hingga POME dan EFB Oil di Surabaya"
       ],
       "sample_snippets": [
-        "Sekilas Mirip, Ternyata Berbeda! BPDP dan Bea Cukai Perkuat Keahlian Identifikasi Produk Turunan Sawit\nSurabaya, 30 Oktober 2026 – Di balik beragamnya produk turunan kelapa sawit, ada tantangan yang tidak sesederhana kelihatannya. Beberapa produk mungkin tampak serupa secara fisik, tetapi memiliki karakteristik, proses pengolahan, hingga nilai ekonomi yang berbeda. Lantas, bagaimana cara memastikan jenis produk sawit yang sedang diuji benar-benar sesuai dengan karakteristiknya?\nInilah salah satu hal yang menjadi perhatian dalam kerja sama Badan Pengelola Dana Perkebunan (BPDP) dan Direktorat Jenderal Bea dan Cukai (DJBC) melalui Pelatihan Teknis Metode Pengujian Crude Palm Oil (CPO) dan Produk Turunannya, yang diselenggarakan pada 27–30 Oktober 2026 di Surabaya. Pelatihan yang diikuti oleh pegawai BPDP dan DJBC ini menjadi wadah untuk memperkuat kompetensi teknis sekaligus membangun kesamaan pemahaman mengenai karakteristik dan metode pengujian produk turunan kelapa sawit.\nSeiring berkembangnya hilirisasi kelapa sawit, produk yang dihasilkan kini semakin beragam. Tidak hanya CPO, tetapi juga berbagai produk hasil pengolahan lanjutan maupun produk samping seperti Palm Oil Mill Efflu"
+        "Sekilas Mirip, Ternyata Berbeda! BPDP dan Bea Cukai Perkuat Keahlian Identifikasi Produk Turunan Sawit\nSurabaya, 30 Oktober 2026 – Di balik beragamnya produk turunan kelapa sawit, ada tantangan yang tidak sesederhana kelihatannya. Beberapa produk mungkin tampak serupa secara fisik, tetapi memiliki karakteristik, proses pengolahan, hingga nilai ekonomi yang berbeda. Lantas, bagaimana cara memastikan jenis produk sawit yang sedang diuji benar-benar sesuai dengan karakteristiknya?\nInilah salah satu hal yang menjadi perhatian dalam kerja sama Badan Pengelola Dana Perkebunan (BPDP) dan Direktorat Jenderal Bea dan Cukai (DJBC) melalui Pelatihan Teknis Metode Pengujian Crude Palm Oil (CPO) dan Produk Turunannya, yang diselenggarakan pada 27–30 Oktober 2026 di Surabaya. Pelatihan yang diikuti oleh pegawai BPDP dan DJBC ini menjadi wadah untuk memperkuat kompetensi teknis sekaligus membangun kesamaan pemahaman mengenai karakteristik dan metode pengujian produk turunan kelapa sawit.\nSeiring berkembangnya hilirisasi kelapa sawit, produk yang dihasilkan kini semakin beragam. Tidak hanya CPO, tetapi juga berbagai produk hasil pengolahan lanjutan maupun produk samping seperti Palm Oil Mill Efflu",
+        "Palmoil.id, Surabaya– Di balik beragamnya produk turunan kelapa sawit, ada tantangan yang tidak sesederhana kelihatannya.\nBeberapa produk mungkin tampak serupa secara fisik, tetapi memiliki karakteristik, proses pengolahan, hingga nilai ekonomi yang berbeda. Lantas, bagaimana cara memastikan jenis produk sawit yang sedang diuji benar-benar sesuai dengan karakteristiknya?\nInilah salah satu hal yang menjadi perhatian dalam kerja sama Badan Pengelola Dana Perkebunan (BPDP) dan Direktorat Jenderal Bea dan Cukai (DJBC) melalui Pelatihan Teknis Metode Pengujian Crude Palm Oil (CPO) dan Produk Turunannya, yang diselenggarakan pada 27–30 Oktober 2026 di Surabaya.\nPelatihan yang diikuti oleh pegawai BPDP dan DJBC ini menjadi wadah untuk memperkuat kompetensi teknis sekaligus membangun kesamaan pemahaman mengenai karakteristik dan metode pengujian produk turunan kelapa sawit.\nSeiring berkembangnya hilirisasi kelapa sawit, produk yang dihasilkan kini semakin beragam. Tidak hanya CPO, tetapi juga berbagai produk hasil pengolahan lanjutan maupun produk samping seperti Palm Oil Mill Effluent (POME) Oil dan Empty Fruit Bunch (EFB) Oil. Masing-masing memiliki karakteristik tersendiri yang tidak se"
       ],
       "matched_articles": [
         {
@@ -5490,9 +5716,690 @@
           "media_name": "BPDP",
           "tanggal": "Tue, 24 Nov 2026 04:07:00 GMT",
           "skor": 1.0
+        },
+        {
+          "id": "39",
+          "title": "BPDP-Bea Cukai Gelar Pelatihan Teknis Metode Pengujian CPO dan Produk Turunannya di Surabaya",
+          "link": "https://www.palmoil.id/2026/11/24/bpdp-bea-cukai-gelar-pelatihan-teknis-metode-pengujian-cpo-dan-produk-turunannya-di-surabaya/",
+          "canonical_url": "https://palmoil.id/2026/11/24/bpdp-bea-cukai-gelar-pelatihan-teknis-metode-pengujian-cpo-dan-produk-turunannya-di-surabaya",
+          "media_name": "palmoil.id",
+          "tanggal": "Wed, 25 Nov 2026 10:47:43 GMT",
+          "skor": 0.5382
+        },
+        {
+          "id": "42",
+          "title": "Perkuat Akurasi Klasifikasi Produk Hilir Sawit, BPDP dan Bea Cukai Gelar Pelatihan Teknis Pengujian CPO hingga POME dan EFB Oil di Surabaya",
+          "link": "https://sawitindonesia.com/perkuat-akurasi-klasifikasi-produk-hilir-sawit-bpdp-dan-bea-cukai-gelar-pelatihan-teknis-pengujian-cpo-hingga-pome-dan-efb-oil-di-surabaya",
+          "canonical_url": "https://sawitindonesia.com/perkuat-akurasi-klasifikasi-produk-hilir-sawit-bpdp-dan-bea-cukai-gelar-pelatihan-teknis-pengujian-cpo-hingga-pome-dan-efb-oil-di-surabaya",
+          "media_name": "Sawit Indonesia",
+          "tanggal": "Wed, 25 Nov 2026 07:02:55 GMT",
+          "skor": 0.5783
         }
       ],
       "tone_hubungan": "K4",
+      "tone_arah": "tidak ada"
+    },
+    {
+      "isu_id": "klaster_0146667c54",
+      "isu": "ATI Perkuat Konsistensi Bisnis dan Penguatan SDM di Tengah Dinamika Industri",
+      "sumber_isu": "klaster",
+      "tanggal_awal": "2026-11-25",
+      "tanggal_terakhir": "2026-11-25",
+      "_norm_title": "ati perkuat konsistensi bisnis dan penguatan sdm di tengah dinamika industri",
+      "tone": "Netral",
+      "tone_alasan": "Artikel memuat perayaan ulang tahun perusahaan swasta PT Aroma Tobacco International tanpa menyebut atau berkaitan langsung dengan Kemenperin, sehingga bernilai Netral.",
+      "tone_keyakinan": "tinggi",
+      "evaluated_at": "2026-11-26 04:05:49",
+      "member_count_at_eval": 1,
+      "member_count": 1,
+      "sample_titles": [
+        "ATI Perkuat Konsistensi Bisnis dan Penguatan SDM di Tengah Dinamika Industri"
+      ],
+      "sample_snippets": [
+        "ATI Perkuat Konsistensi Bisnis dan Penguatan SDM di Tengah Dinamika Industri\nKUDUS, Investortrust.id - PT Aroma Tobacco International, perusahaan di industri hasil tembakau, memperkuat konsistensi kualitas produk dan kapabilitas sumber daya manusia (SDM) setelah genap 20 tahun beroperasi. Momentum tersebut ditandai dengan perayaan ulang tahun perusahaan di Kudus, yang juga menjadi bagian dari upaya memperkuat kolaborasi internal dan menjaga keberlangsungan bisnis di tengah dinamika industri.\nDirektur PT Aroma Tobacco International Rico Budiman mengatakan, keberlangsungan perusahaan selama 20 tahun tidak terlepas dari kekompakan dan kontribusi seluruh pemangku kepentingan di dalam perusahaan. Konsistensi menjaga mutu produk dan memberikan kinerja terbaik menjadi fondasi penting bagi perusahaan dalam mempertahankan kepercayaan konsumen.\n“Momentum ini menjadi kesempatan untuk mensyukuri perjalanan yang telah dilalui bersama sekaligus menyampaikan apresiasi atas komitmen dan kontribusi yang terus diberikan dari waktu ke waktu,” ujar Rico dalam keterangannya, Rabu (25/11/2026).\nBaca Juga\nSelama dua dekade, Aroma Tobacco International menghadapi perkembangan industri yang diwarnai peruba"
+      ],
+      "matched_articles": [
+        {
+          "id": "25",
+          "title": "ATI Perkuat Konsistensi Bisnis dan Penguatan SDM di Tengah Dinamika Industri",
+          "link": "https://investortrust.id/business/123686/ati-perkuat-konsistensi-bisnis-dan-penguatan-sdm-di-tengah-dinamika-industri",
+          "canonical_url": "https://investortrust.id/business/123686/ati-perkuat-konsistensi-bisnis-dan-penguatan-sdm-di-tengah-dinamika-industri",
+          "media_name": "InvestorTrust",
+          "tanggal": "Wed, 25 Nov 2026 15:21:00 GMT",
+          "skor": 1.0
+        }
+      ],
+      "tone_hubungan": "K4",
+      "tone_arah": "tidak ada"
+    },
+    {
+      "isu_id": "klaster_f87d7cb0ba",
+      "isu": "PERKUAT KOMPETENSI DAN PEMAHAMAN BAHAN BAKU, DISKOPINDAG GELAR PELATIHAN BLENDING BAGI INDUSTRI HASIL TEMBAKAU",
+      "sumber_isu": "klaster",
+      "tanggal_awal": "2026-11-25",
+      "tanggal_terakhir": "2026-11-25",
+      "_norm_title": "perkuat kompetensi dan pemahaman bahan baku diskopindag gelar pelatihan blending bagi iht",
+      "tone": "Netral",
+      "tone_alasan": "Berita mengenai pelatihan blending IHT oleh Diskopindag Lumajang tidak berkaitan secara langsung maupun tidak langsung dengan kebijakan atau program Kemenperin, sehingga dikategorikan K4 Netral.",
+      "tone_keyakinan": "tinggi",
+      "evaluated_at": "2026-11-26 04:05:49",
+      "member_count_at_eval": 1,
+      "member_count": 1,
+      "sample_titles": [
+        "PERKUAT KOMPETENSI DAN PEMAHAMAN BAHAN BAKU, DISKOPINDAG GELAR PELATIHAN BLENDING BAGI INDUSTRI HASIL TEMBAKAU"
+      ],
+      "sample_snippets": [
+        "Perkuat Kompetensi dan Pemahaman Bahan Baku, Diskopindag Lumajang Gelar Pelatihan Blending bagi Industri Hasil Tembakau\nPengembangan industri hasil tembakau (IHT) tidak terlepas dari kualitas bahan baku, pemahaman karakteristik tembakau, serta keterampilan dalam proses pengolahan. Untuk mendukung peningkatan kompetensi pelaku industri, Dinas Koperasi, Usaha Mikro, Perindustrian dan Perdagangan Kabupaten Lumajang kembali menyelenggarakan Pelatihan Blending bagi Industri Hasil Tembakau pada tanggal 23–25 November 2026.\nKegiatan ini diikuti oleh peserta dari berbagai unsur, meliputi binaan petani PT. Alliance One Indonesia (AOI), Asosiasi Petani Tembakau Indonesia (APTI), PT. IDS, PT. Semeru Langgeng Sentosa Jatiroto, serta PR. Gambiran.\nSelama tiga hari pelaksanaan, pelatihan menghadirkan narasumber dari instansi pemerintah dan pelaku industri. Pada hari pertama, materi disampaikan oleh narasumber dari UPT PSMB Jember dan Dinas Ketahanan Pangan dan Pertanian Kabupaten Lumajang. Hari kedua menghadirkan narasumber dari PT. Alam Anugerah Cakrawala, Pasirian, kemudian dilanjutkan pada hari ketiga bersama narasumber dari CV. Inti Tembakau Berkah, Tekung.\nMelalui pelatihan ini, peserta dih"
+      ],
+      "matched_articles": [
+        {
+          "id": "23",
+          "title": "PERKUAT KOMPETENSI DAN PEMAHAMAN BAHAN BAKU, DISKOPINDAG GELAR PELATIHAN BLENDING BAGI INDUSTRI HASIL TEMBAKAU",
+          "link": "https://lumajangkab.go.id/berita-opd/detail/15858",
+          "canonical_url": "https://lumajangkab.go.id/berita-opd/detail/15858",
+          "media_name": "Pemerintah Kabupaten Lumajang",
+          "tanggal": "Wed, 25 Nov 2026 09:34:15 GMT",
+          "skor": 1.0
+        }
+      ],
+      "tone_hubungan": "K4",
+      "tone_arah": "tidak ada"
+    },
+    {
+      "isu_id": "klaster_4b711af71a",
+      "isu": "Sariguna CLEO Perluas Portofolio Merek Air Minum dalam Kemasan",
+      "sumber_isu": "klaster",
+      "tanggal_awal": "2026-11-25",
+      "tanggal_terakhir": "2026-11-25",
+      "_norm_title": "sariguna cleo perluas portofolio merek air minum dalam kemasan",
+      "tone": "Netral",
+      "tone_alasan": "Berita mengenai strategi bisnis perusahaan swasta dan tidak berkaitan dengan Kemenperin.",
+      "tone_keyakinan": "tinggi",
+      "evaluated_at": "2026-11-26 04:06:05",
+      "member_count_at_eval": 2,
+      "member_count": 2,
+      "sample_titles": [
+        "Genjot Kinerja, Sariguna (CLEO) Perluas Portofolio Merek Air Minum dalam Kemasan",
+        "Penjualan Tumbuh 25,5%, CLEO Agresif Garap Segmen Baru Pasar AMDK"
+      ],
+      "sample_snippets": [
+        "Genjot Kinerja, Sariguna (CLEO) Perluas Portofolio Merek Air Minum dalam Kemasan\nKONTAN.CO.ID - JAKARTA. PT Sariguna Primatirta Tbk (CLEO) kembali memperluas portofolio merek air minum dalam kemasan (AMDK). Langkah ini merupakan bagian dari strategi pengembangan bisnis perusahaan untuk menjangkau segmen pasar yang lebih beragam.\nSetelah memperkuat posisinya di kategori air murni melalui merek CLEO, perusahaan kini semakin agresif memperluas portofolio merek untuk meningkatkan penetrasi pasar.\nLangkah ini dilakukan dengan membidik peluang di kategori air mineral, yang memiliki volume pasar besar di Indonesia dan selama ini didominasi oleh pemain eksisting. Salah satu merek yang diandalkan perusahaan untuk menggarap segmen tersebut adalah SuperO2.\nLangkah strategis ini diwujudkan melalui peluncuran varian kemasan botol ringkas terbaru yang unik, SuperO2 Imut (180 ml), pada pertengahan November 2026.\nKehadiran produk ini bukan sekadar penambahan portofolio, melainkan bagian dari strategi ekspansi terukur perusahaan untuk menembus segmen konsumsi baru yang memiliki frekuensi permintaan tinggi dan volume serapan masif, seperti kebutuhan acara komunal, pertemuan keluarga, pengajian, hing",
+        "INDUSTRY.co.id - JAKARTA – PT Sariguna Primatirta Tbk (CLEO) semakin agresif memperluas pasar air minum dalam kemasan (AMDK) dengan mengembangkan portofolio produk di luar kategori air murni (pure water). Melalui merek SuperO2, emiten yang dikenal dengan identitas bisnis Tanobel ini membidik peluang pertumbuhan di segmen air mineral yang memiliki volume pasar besar di Indonesia.\nStrategi tersebut menjadi upaya CLEO membangun sumber pertumbuhan baru di tengah persaingan industri AMDK nasional yang semakin kompetitif. Selama ini, perseroan mengandalkan merek CLEO untuk memperkuat penetrasi di kategori air murni. Kini, ekspansi ke segmen air mineral diharapkan dapat memperluas basis konsumen sekaligus meningkatkan kontribusi penjualan.\nSalah satu langkah konkret dilakukan melalui peluncuran SuperO2 Imut dengan kemasan botol berukuran 180 mililiter pada pertengahan November 2026. Produk ini dirancang untuk menyasar kebutuhan konsumsi praktis dengan frekuensi permintaan tinggi, terutama untuk kegiatan komunal seperti pertemuan keluarga, pengajian, hingga berbagai acara hajatan.\nEkspansi melalui kemasan berukuran kecil tersebut juga mencerminkan strategi CLEO dalam menangkap peluang pasa"
+      ],
+      "matched_articles": [
+        {
+          "id": "37",
+          "title": "Genjot Kinerja, Sariguna (CLEO) Perluas Portofolio Merek Air Minum dalam Kemasan",
+          "link": "https://id.tradingview.com/news/kontan:2024a130f87ea:0/",
+          "canonical_url": "https://id.tradingview.com/news/kontan:2024a130f87ea:0",
+          "media_name": "TradingView",
+          "tanggal": "Wed, 25 Nov 2026 03:49:59 GMT",
+          "skor": 0.3877
+        },
+        {
+          "id": "35",
+          "title": "Penjualan Tumbuh 25,5%, CLEO Agresif Garap Segmen Baru Pasar AMDK",
+          "link": "https://www.industry.co.id/read/159848/penjualan-tumbuh-255-cleo-agresif-garap-segmen-baru-pasar-amdk",
+          "canonical_url": "https://industry.co.id/read/159848/penjualan-tumbuh-255-cleo-agresif-garap-segmen-baru-pasar-amdk",
+          "media_name": "Industry.co.id",
+          "tanggal": "Wed, 25 Nov 2026 07:14:00 GMT",
+          "skor": 0.3877
+        }
+      ],
+      "tone_hubungan": "K4",
+      "tone_arah": "tidak ada",
+      "tone_metode": "AI-isu"
+    },
+    {
+      "isu_id": "klaster_364f6896a9",
+      "isu": "Industri Furnitur Tumbuh 12,68% pada Kuartal III, HIMKI Sebut Pemulihan Belum Merata",
+      "sumber_isu": "klaster",
+      "tanggal_awal": "2026-11-25",
+      "tanggal_terakhir": "2026-11-25",
+      "_norm_title": "industri furnitur tumbuh 12 68 pada kuartal iii himki sebut pemulihan belum merata",
+      "tone": "Netral",
+      "tone_alasan": "Berita membahas dinamika industri furnitur dan data utilisasi Kemenperin tanpa menjadikan Kemenperin sebagai pelaku utama atau sasaran serangan, sehingga bernilai Netral (Ne2).",
+      "tone_keyakinan": "tinggi",
+      "evaluated_at": "2026-11-26 04:05:49",
+      "member_count_at_eval": 1,
+      "member_count": 1,
+      "sample_titles": [
+        "Industri Furnitur Tumbuh 12,68% pada Kuartal III, HIMKI Sebut Pemulihan Belum Merata"
+      ],
+      "sample_snippets": [
+        "Industri Furnitur Tumbuh 12,68% pada Kuartal III, HIMKI Sebut Pemulihan Belum Merata\nPertumbuhan industri furnitur nasional sebesar 12,68% secara tahunan (year on year/yoy) pada kuartal III-2026 belum sepenuhnya mencerminkan pemulihan bisnis yang merata di seluruh pelaku industri.\nHimpunan Industri Mebel dan Kerajinan Indonesia (HIMKI) menilai, pertumbuhan tersebut menjadi sinyal positif bagi pemulihan produksi furnitur nasional. Terlebih, subsektor furnitur sebelumnya mengalami kontraksi sebesar 4,34% pada kuartal III-2025.\nNamun demikian, pertumbuhan tersebut perlu dicermati karena kondisi bisnis di tingkat perusahaan masih beragam. Ketua Umum HIMKI Abdul Sobur menilai, sebagian produsen sudah memperoleh tambahan pesanan dan mampu meningkatkan produksi.\nNamun, sebagian pelaku usaha lainnya masih menghadapi kehati-hatian buyer, penundaan pesanan, hingga tingkat utilisasi yang belum optimal.\n\"Sebagian produsen mendapat pesanan dan mampu meningkatkan produksi, sementara sebagian lain masih menghadapi buyer yang berhati-hati, pesanan tertunda, atau utilisasi yang belum optimal. Jadi, capaian ini positif, tetapi belum berarti seluruh industri telah pulih dengan kekuatan yang sama,\" un"
+      ],
+      "matched_articles": [
+        {
+          "id": "19",
+          "title": "Industri Furnitur Tumbuh 12,68% pada Kuartal III, HIMKI Sebut Pemulihan Belum Merata",
+          "link": "https://id.tradingview.com/news/kontan:a033316ed87ea:0/",
+          "canonical_url": "https://id.tradingview.com/news/kontan:a033316ed87ea:0",
+          "media_name": "TradingView",
+          "tanggal": "Wed, 25 Nov 2026 11:03:28 GMT",
+          "skor": 1.0
+        }
+      ],
+      "tone_hubungan": "K3",
+      "tone_arah": "tidak ada"
+    },
+    {
+      "isu_id": "klaster_b5bc173ec2",
+      "isu": "Pelemahan Rupiah dan Daya Beli Membayangi, Begini Prospek Indofood (INDF)",
+      "sumber_isu": "klaster",
+      "tanggal_awal": "2026-11-25",
+      "tanggal_terakhir": "2026-11-25",
+      "_norm_title": "pelemahan rupiah dan daya beli membayangi begini prospek indofood indf",
+      "tone": "Netral",
+      "tone_alasan": "Berita membahas prospek keuangan dan kinerja Indofood tanpa menyebut atau melibatkan Kemenperin, sehingga bernilai Netral.",
+      "tone_keyakinan": "tinggi",
+      "evaluated_at": "2026-11-26 04:05:49",
+      "member_count_at_eval": 1,
+      "member_count": 1,
+      "sample_titles": [
+        "Pelemahan Rupiah dan Daya Beli Membayangi, Begini Prospek Indofood (INDF)"
+      ],
+      "sample_snippets": [
+        "Pelemahan Rupiah dan Daya Beli Membayangi, Begini Prospek Indofood (INDF)\nWalau penjualan naik, labaPT Indofood Sukses Makmur Tbk (INDF) malah menyusut per kuartal III 2026.\nDi periode tersebut, INDF membukukan kenaikan pendapatan sebesar 11,55% secara tahunan (YoY) menjadi Rp 101,49 triliun, dari Rp 90,98 triliun pada periode sama tahun lalu.\nSementara laba yang diatribusikan kepada pemilik entitas induk tercatat turun tipis 0,20% YoY menjadi Rp 7,87 triliun, dibandingkan Rp 7,88 triliun pada periode sama tahun sebelumnya.\nSenior Market Analyst Mirae Asset Sekuritas Nafan Aji Gusta mengatakan,pertumbuhan penjualan INDF belum sepenuhnya terkonversi menjadi pertumbuhan laba. Kinerja tersebut menunjukkan bahwa INDF masih mampu mempertahankan pertumbuhan pendapatan yang solid.\nHal ini mencerminkan permintaan terhadap produk-produk Indofood, efektivitas distribusi, serta kontribusi berbagai segmen bisnis yang relatif terjaga di tengah dinamika ekonomi domestik.\nMeski demikian, pertumbuhan pendapatan yang belum diikuti peningkatan laba bersih mengindikasikan adanya tekanan pada profitabilitas. Sejumlah faktor yang berpotensi memengaruhi kondisi tersebut antara lain tekanan biaya bahan b"
+      ],
+      "matched_articles": [
+        {
+          "id": "16",
+          "title": "Pelemahan Rupiah dan Daya Beli Membayangi, Begini Prospek Indofood (INDF)",
+          "link": "https://id.tradingview.com/news/kontan:f759475e387ea:0/",
+          "canonical_url": "https://id.tradingview.com/news/kontan:f759475e387ea:0",
+          "media_name": "TradingView",
+          "tanggal": "Wed, 25 Nov 2026 04:53:09 GMT",
+          "skor": 1.0
+        }
+      ],
+      "tone_hubungan": "K4",
+      "tone_arah": "tidak ada"
+    },
+    {
+      "isu_id": "klaster_7f36785600",
+      "isu": "Rupiah Melemah, Kemenperin Waspadai Kenaikan Biaya Produksi Industri",
+      "sumber_isu": "klaster",
+      "tanggal_awal": "2026-11-25",
+      "tanggal_terakhir": "2026-11-25",
+      "_norm_title": "rupiah melemah kemenperin waspadai kenaikan biaya produksi industri",
+      "tone": "Positif",
+      "tone_alasan": "Kemenperin menjadi pelaku utama yang membahas langkah mitigasi kenaikan biaya produksi, sehingga masuk kategori Positif (P1).",
+      "tone_keyakinan": "tinggi",
+      "evaluated_at": "2026-11-26 04:05:49",
+      "member_count_at_eval": 1,
+      "member_count": 1,
+      "sample_titles": [
+        "Rupiah Melemah, Kemenperin Waspadai Kenaikan Biaya Produksi Industri"
+      ],
+      "sample_snippets": [
+        "Rupiah Melemah, Kemenperin Waspadai Kenaikan Biaya Produksi Industri\nKementerian Perindustrian (Kemenperin) mulai mewaspadai pelemahan nilai tukar rupiah terhadap dolar Amerika Serikat (AS).Pasalnya, pelemahan rupiah berpotensi meningkatkan biaya produksi industri manufaktur yang masih bergantung pada bahan baku impor.\nMelansir data Bloomberg, Rabu (25/11/2026), rupiah spot ditutup di level Rp 18.332 per dolar Amerika Serikat (AS), melemah 0,56% dibandingkan dengan penutupan hari sebelumnya.\nMenteri Perindustrian Muhammad Sarmuji mengatakan, dampak pelemahan rupiah terhadap biaya produksi industri sulit dihindari. Hal ini lantaran sejumlah sektor manufaktur masih mengandalkan bahan baku dan komponen dari luar negeri.\n\"Iya, itu agak sulit dihindari memang. Kami akan coba berkoordinasi dengan kementerian lain untuk mitigasi,\" ujar Sarmuji saat ditemui di Kantor Kemenperin, Rabu (25/11/2026).\nSarmuji mengatakan, Kemenperin tengah membahas langkah antisipasi secara internal untuk menghadapi potensi penguatan dolar AS lebih lanjut. Pemerintah juga akan berkoordinasi dengan kementerian terkait untuk menyiapkan langkah mitigasi.\n\"Kita kemarin mendiskusikan, lagi mendiskusikan di internal "
+      ],
+      "matched_articles": [
+        {
+          "id": "5",
+          "title": "Rupiah Melemah, Kemenperin Waspadai Kenaikan Biaya Produksi Industri",
+          "link": "https://id.tradingview.com/news/kontan:90eefd1ef87ea:0/",
+          "canonical_url": "https://id.tradingview.com/news/kontan:90eefd1ef87ea:0",
+          "media_name": "TradingView",
+          "tanggal": "Wed, 25 Nov 2026 08:34:36 GMT",
+          "skor": 1.0
+        }
+      ],
+      "tone_hubungan": "K1",
+      "tone_arah": "mendukung"
+    },
+    {
+      "isu_id": "klaster_bd468862a0",
+      "isu": "Menteri Perindustrian berharap 24 perusahaan National Lighthouse Industri 4.0 menjadi rujukan.",
+      "sumber_isu": "klaster",
+      "tanggal_awal": "2026-11-25",
+      "tanggal_terakhir": "2026-11-25",
+      "_norm_title": "menteri perindustrian berharap 24 perusahaan national lighthouse industri 4 0 menjadi rujukan",
+      "tone": "Positif",
+      "tone_alasan": "Menperin menjadi narasumber utama yang menyampaikan capaian dan harapan terkait program Industri 4.0 Kemenperin.",
+      "tone_keyakinan": "tinggi",
+      "evaluated_at": "2026-11-26 04:06:05",
+      "member_count_at_eval": 2,
+      "member_count": 2,
+      "sample_titles": [
+        "Menperin Harap 24 Perusahaan Jadi Rujukan Industri",
+        "Terapkan Industri 4.0, Produktivitas Pabrik Percontohan Naik hingga 129 Persen, Menperin Sarmuji Harap Jadi Rujukan"
+      ],
+      "sample_snippets": [
+        "TVRINews, Jakarta\nSebanyak 24 perusahaan yang dikukuhkan sebagai National Lighthouse Industri 4.0 pada 2026 mencatat peningkatan kinerja setelah menerapkan teknologi digital dalam proses industri. Produktivitas perusahaan meningkat 3,28 hingga 129 persen, efisiensi biaya operasional mencapai 3 hingga 55 persen, serta waktu henti mesin berkurang 25 hingga 83 persen.\nMenteri Perindustrian Muhammad Sarmuji berharap perusahaan-perusahaan tersebut dapat menjadi contoh bagi pelaku industri lainnya dalam mempercepat transformasi digital dan meningkatkan daya saing industri nasional.\nHal tersebut disampaikan Sarmuji dalam acara Penganugerahan National Lighthouse, Rintisan Teknologi, dan Jasa Industri 2026 di Jakarta, Rabu, 25 November 2026.\nMenurut Sarmuji, perkembangan teknologi telah mengubah lanskap industri global. Kondisi tersebut menuntut pelaku usaha untuk menyesuaikan diri dengan sistem produksi yang semakin fleksibel, otomatis, dan terintegrasi.\n\"Pemanfaatan data secara real-time serta kecerdasan artifisial (artificial intelligence/AI) juga menjadi semakin penting dalam mendukung pengambilan keputusan secara cepat dan presisi,\" kata Sarmuji dalam keterangan yang diterima tvrinews ",
+        "Agrofarm.co.id – Sebanyak 24 perusahaan yang dikukuhkan sebagai National Lighthouse Industri 4.0 tahun ini melaporkan sejumlah capaian setelah menerapkan teknologi digital. Produktivitas mereka naik 3,28–129 persen, biaya operasional lebih efisien 3–55 persen, dan waktu henti mesin berkurang 25–83 persen. Menteri Perindustrian Muhammad Sarmuji berharap perusahaan-perusahaan ini menjadi mercusuar yang menginspirasi dan menjadi rujukan bagi pelaku industri lain.\nHal itu disampaikan pada Penganugerahan National Lighthouse, Rintisan Teknologi, dan Jasa Industri 2026 di Jakarta, Rabu (25/11).\nMenurut Sarmuji, perkembangan teknologi telah mengubah wajah industri global. Pelaku usaha dituntut beradaptasi dengan sistem produksi yang lebih fleksibel, otomatis, dan saling terhubung.\n“Pemanfaatan data secara real-time serta kecerdasan artifisial (artificial intelligence/AI) juga menjadi semakin penting dalam mendukung pengambilan keputusan secara cepat dan presisi,” kata Sarmuji.\nIa berharap perusahaan National Lighthouse terus meningkatkan kapasitasnya hingga mendapat pengakuan internasional sebagai Global Lighthouse.\nBelajar dari Shenzhen\nSarmuji juga menyoroti pesatnya perkembangan teknolo"
+      ],
+      "matched_articles": [
+        {
+          "id": "45",
+          "title": "Menperin Harap 24 Perusahaan Jadi Rujukan Industri",
+          "link": "https://nasional.tvrinews.com/berita/tqo4xp2-menperin-harap-24-perusahaan-jadi-rujukan-industri",
+          "canonical_url": "https://nasional.tvrinews.com/berita/tqo4xp2-menperin-harap-24-perusahaan-jadi-rujukan-industri",
+          "media_name": "TVRI News",
+          "tanggal": "Wed, 25 Nov 2026 13:45:00 GMT",
+          "skor": 0.4133
+        },
+        {
+          "id": "46",
+          "title": "Terapkan Industri 4.0, Produktivitas Pabrik Percontohan Naik hingga 129 Persen, Menperin Sarmuji Harap Jadi Rujukan",
+          "link": "https://www.agrofarm.co.id/2026/11/terapkan-industri-4-0-produktivitas-pabrik-percontohan-naik-hingga-129-persen-menperin-sarmuji-harap-jadi-rujukan/",
+          "canonical_url": "https://agrofarm.co.id/2026/11/terapkan-industri-4-0-produktivitas-pabrik-percontohan-naik-hingga-129-persen-menperin-sarmuji-harap-jadi-rujukan",
+          "media_name": "agrofarm.co.id",
+          "tanggal": "Wed, 25 Nov 2026 15:54:03 GMT",
+          "skor": 0.4133
+        }
+      ],
+      "tone_hubungan": "K1",
+      "tone_arah": "mendukung",
+      "tone_metode": "AI-isu"
+    },
+    {
+      "isu_id": "klaster_e5debf42ac",
+      "isu": "Airlangga Bocorkan Tarif AS: Sawit RI 0 Persen, Produk Padat Karya 10%",
+      "sumber_isu": "klaster",
+      "tanggal_awal": "2026-11-25",
+      "tanggal_terakhir": "2026-11-25",
+      "_norm_title": "airlangga bocorkan tarif as sawit ri 0 persen produk padat karya 10",
+      "tone": "Netral",
+      "tone_alasan": "Berita berkaitan dengan kebijakan tarif ekspor AS yang disampaikan oleh Kemenko Perekonomian tanpa melibatkan Kemenperin, sehingga bernilai Netral.",
+      "tone_keyakinan": "tinggi",
+      "evaluated_at": "2026-11-26 04:05:49",
+      "member_count_at_eval": 1,
+      "member_count": 1,
+      "sample_titles": [
+        "Airlangga Bocorkan Tarif AS: Sawit RI 0 Persen, Produk Padat Karya 10%"
+      ],
+      "sample_snippets": [
+        "Jakarta, CNN Indonesia --\nMenteri Koordinator Bidang Perekonomian Airlangga Hartarto membocorkan besaran tarif impor Amerika Serikat (AS) untuk sejumlah produk Indonesia.\nProduk sawit dan komoditas lainnya disebut akan dikenakan tarif nol persen, sedangkan produk industri padat karya sebesar 10 persen.\nAirlangga mengatakan besaran tarif tersebut merupakan bagian dari skema baru AS melalui penyelidikan kelebihan kapasitas industri (excess industrial capacity).\nPemerintah AS dijadwalkan mengumumkan hasil penyelidikan terhadap 16 mitra dagangnya, termasuk Indonesia, pada pekan ini.\n\"Untuk yang labor intensive kita 10 persen. Kemudian untuk sawit dan yang lain kita 0 persen,\" ujar Airlangga di Kemenko Perekonomian, Jakarta Pusat, Rabu (25/11).\nIa menjelaskan skema baru tersebut menjadi pengganti secara hukum atas kebijakan tarif resiprokal atau reciprocal trade agreement (ART) yang sebelumnya dibatalkan Mahkamah Agung AS (SCOTUS).\nMeski dasar hukumnya berbeda, Airlangga menyebut besaran tarif untuk Indonesia tetap sama.\n\"Secara legal, yang dibatalkan oleh SCOTUS diganti oleh penyelidikan mengenai excess capacity. Tetapi tarifnya sama,\" ujarnya.\nPemerintah RI, sambung Airlangga, telah m"
+      ],
+      "matched_articles": [
+        {
+          "id": "40",
+          "title": "Airlangga Bocorkan Tarif AS: Sawit RI 0 Persen, Produk Padat Karya 10%",
+          "link": "https://www.cnnindonesia.com/ekonomi/20261125202207-532-1431552/airlangga-bocorkan-tarif-as-sawit-ri-0-persen-produk-padat-karya-10",
+          "canonical_url": "https://cnnindonesia.com/ekonomi/20261125202207-532-1431552/airlangga-bocorkan-tarif-as-sawit-ri-0-persen-produk-padat-karya-10",
+          "media_name": "CNN Indonesia",
+          "tanggal": "Wed, 25 Nov 2026 13:35:17 GMT",
+          "skor": 1.0
+        }
+      ],
+      "tone_hubungan": "K4",
+      "tone_arah": "tidak ada"
+    },
+    {
+      "isu_id": "klaster_d5fb57c818",
+      "isu": "Kemenperin berkoordinasi dan mendukung investigasi menyeluruh atas kebakaran pabrik permen di Cikande.",
+      "sumber_isu": "klaster",
+      "tanggal_awal": "2026-11-25",
+      "tanggal_terakhir": "2026-11-25",
+      "_norm_title": "kemenperin berkoordinasi dan mendukung investigasi menyeluruh atas kebakaran pabrik permen di cikande",
+      "tone": "Positif",
+      "tone_alasan": "Kemenperin bertindak sebagai pelaku utama yang memberikan pernyataan, perhatian, serta koordinasi terkait penanganan musibah.",
+      "tone_keyakinan": "tinggi",
+      "evaluated_at": "2026-11-26 04:06:05",
+      "member_count_at_eval": 4,
+      "member_count": 4,
+      "sample_titles": [
+        "Kebakaran Pabrik Permen Cikande, Kemenperin Turun Tangan",
+        "Kemenperin dukung investigasi menyeluruh kebakaran pabrik Cikande",
+        "Kemenperin minta investigasi menyeluruh kebakaran pabrik Cikande",
+        "Tragedi Kebakaran Pabrik Permen Cikande, Kemenperin Desak Investigasi Menyeluruh"
+      ],
+      "sample_snippets": [
+        "INDUSTRY.co.id - Jakarta – Kementerian Perindustrian (Kemenperin) terus berkoordinasi dengan Pemerintah Provinsi Banten dan manajemen PT Fonusa Agung Mulia (FAM) menyusul kebakaran yang melanda fasilitas produksi pabrik permen tersebut di Cikande, Kabupaten Serang, Banten, Sabtu (21/11/2026). Pemerintah menegaskan penanganan korban, keselamatan pekerja, serta pendampingan keluarga terdampak menjadi prioritas utama.\nPelaksana Tugas (Plt) Direktur Jenderal Industri Agro Kemenperin, Putu Juli Ardika, menyampaikan keprihatinan mendalam dan belasungkawa kepada para pekerja serta keluarga korban atas musibah tersebut.\nMenurut Putu, sejak menerima laporan kejadian, Kemenperin langsung melakukan koordinasi dengan pemerintah daerah dan pihak perusahaan untuk memantau perkembangan penanganan insiden.\n\"Kami menyampaikan keprihatinan dan duka yang mendalam atas musibah kebakaran yang terjadi di fasilitas produksi PT Fonusa Agung Mulia di Cikande. Sejak menerima laporan kejadian, Kementerian Perindustrian langsung menjalin koordinasi dengan pemerintah daerah dan pihak perusahaan,\" ujar Putu di Jakarta, Selasa (24/11/2026).\nIa menegaskan, keselamatan tenaga kerja harus menjadi perhatian utama da",
+        "Kemenperin dukung investigasi menyeluruh kebakaran pabrik Cikande\nFoto udara kondisi gedung pabrik permen seusai kebakaran di Kawasan Industri Pancatama, Cikande, Kabupaten Serang, Banten, Senin (23/11/2026). ANTARA FOTO/Rafsanjani/YU\nPelaksana Tugas Direktur Jenderal Industri Agro Kemenperin Putu Juli Ardika dalam pernyataan tertulis yang sudah dikonfirmasi di Jakarta, Rabu menyampaikan keprihatinan mendalam serta belasungkawa kepada para pekerja dan keluarga yang terdampak musibah tersebut.\n\"Kami meminta pihak perusahaan terus membuka komunikasi yang transparan dan memberikan pendampingan penuh kepada seluruh keluarga korban, termasuk melalui posko informasi dan pelaporan yang telah disediakan. Kemenperin juga mendukung penuh investigasi menyeluruh dari pihak berwenang guna memastikan penyebab insiden secara akurat,\" ucap Putu Juli.\nIa menegaskan bahwa keselamatan tenaga kerja, penanganan korban, serta pendampingan bagi keluarga harus menjadi prioritas utama di atas segalanya.\nBaca juga: Menaker jadikan tragedi Cikande momentum perbaikan K3 industri\nSelain itu Kemenperin juga terus memantau dan berkoordinasi secara intensif dengan lembaga terkait dalam penanganan kasus ini.\nLebih"
+      ],
+      "matched_articles": [
+        {
+          "id": "11",
+          "title": "Kebakaran Pabrik Permen Cikande, Kemenperin Turun Tangan",
+          "link": "https://www.industry.co.id/read/159842/kebakaran-pabrik-permen-cikande-kemenperin-turun-tangan",
+          "canonical_url": "https://industry.co.id/read/159842/kebakaran-pabrik-permen-cikande-kemenperin-turun-tangan",
+          "media_name": "Industry.co.id",
+          "tanggal": "Wed, 25 Nov 2026 06:06:00 GMT",
+          "skor": 0.6979
+        },
+        {
+          "id": "2",
+          "title": "Kemenperin dukung investigasi menyeluruh kebakaran pabrik Cikande",
+          "link": "https://m.antaranews.com/amp/berita/5877951/kemenperin-dukung-investigasi-menyeluruh-kebakaran-pabrik-cikande",
+          "canonical_url": "https://m.antaranews.com/amp/berita/5877951/kemenperin-dukung-investigasi-menyeluruh-kebakaran-pabrik-cikande",
+          "media_name": "ANTARA News",
+          "tanggal": "Wed, 25 Nov 2026 10:33:06 GMT",
+          "skor": 0.955
+        },
+        {
+          "id": "1",
+          "title": "Kemenperin minta investigasi menyeluruh kebakaran pabrik Cikande",
+          "link": "https://jatim.antaranews.com/berita/1123515/kemenperin-minta-investigasi-menyeluruh-kebakaran-pabrik-cikande",
+          "canonical_url": "https://jatim.antaranews.com/berita/1123515/kemenperin-minta-investigasi-menyeluruh-kebakaran-pabrik-cikande",
+          "media_name": "Antara News jatim",
+          "tanggal": "Wed, 25 Nov 2026 10:34:40 GMT",
+          "skor": 0.9663
+        },
+        {
+          "id": "12",
+          "title": "Tragedi Kebakaran Pabrik Permen Cikande, Kemenperin Desak Investigasi Menyeluruh",
+          "link": "https://wartaekonomi.co.id/read650275/tragedi-kebakaran-pabrik-permen-cikande-kemenperin-desak-investigasi-menyeluruh",
+          "canonical_url": "https://wartaekonomi.co.id/read650275/tragedi-kebakaran-pabrik-permen-cikande-kemenperin-desak-investigasi-menyeluruh",
+          "media_name": "Warta Ekonomi",
+          "tanggal": "Wed, 25 Nov 2026 05:20:00 GMT",
+          "skor": 0.9663
+        }
+      ],
+      "tone_hubungan": "K1",
+      "tone_arah": "mendukung",
+      "tone_metode": "AI-isu"
+    },
+    {
+      "isu_id": "klaster_083d41f1b4",
+      "isu": "Gubernur Aceh Mualem Pantau Progres Investasi Pabrik Rokok di Aceh Utara",
+      "sumber_isu": "klaster",
+      "tanggal_awal": "2026-11-25",
+      "tanggal_terakhir": "2026-11-25",
+      "_norm_title": "gubernur aceh mualem pantau progres investasi pabrik rokok di aceh utara",
+      "tone": "Netral",
+      "tone_alasan": "Berita membahas kunjungan Gubernur Aceh terhadap investasi pabrik tanpa keterlibatan Kemenperin.",
+      "tone_keyakinan": "tinggi",
+      "evaluated_at": "2026-11-26 04:06:05",
+      "member_count_at_eval": 3,
+      "member_count": 3,
+      "sample_titles": [
+        "Gubernur Mualem Pantau Progres Investasi Pabrik Rokok di Aceh Utara, Segera Beroperasi",
+        "Krak, Mualem Pantau Progres Investasi Pabrik Rokok di Aceh Utara",
+        "Pabrik Rokok Kubra di Aceh Utara Segera Beroperasi, Siapkan 160 Lapangan Kerja"
+      ],
+      "sample_snippets": [
+        "Aceh Utara-Gubernur Aceh Muzakir Manaf (Mualem) memantau langsung perkembangan investasi pembangunan industri hasil tembakau atau pabrik rokok milik CV Rencong Makmur Sejahtera di Gampong Paya Gaboh, Kecamatan Sawang, Kabupaten Aceh Utara, Selasa (24/11/2026) malam.\nPabrik dengan merek rokok Kubra tersebut bakal segera beroperasi karena pembangunan fisik 99 persen dan kini sedang tahap uji coba produksi.\nDalam kunjungan itu, Mualem melihat langsung peralatan produksi rokok linting tangan dan mesin, termasuk proses uji coba produksi.\n“Iya sepertinya kita lihat memuaskan ya. Semoga banyak anak muda Aceh yang bekerja di sini,” kata Mualem di lokasi pabrik tersebut.\nIa berharap keberadaan perusahaan tersebut dapat menjadi contoh bagi masuknya investasi industri lainnya ke Aceh.\n“Perusahaan ini yang kita banggakanlah buat sementara ini supaya ke depan lebih banyak lagi perusahaan-perusahaan atau pabrik-pabrik yang akan masuk ke Aceh,” ujar Mualem.\nPembangunan pabrik ini berawal dari rencana investasi yang mendapat perhatian Mualem sejak tahap persiapan lokasi. Pada Senin (10/3/2025), Mualem bahkan meninjau langsung lahan yang direncanakan menjadi lokasi pembangunan pabrik bersama invest",
+        "LHOKSEUMAWE — Gubernur Aceh, H. Muzakir Manaf (Mualem), memantau secara langsung perkembangan realisasi investasi pembangunan industri hasil tembakau atau pabrik rokok milik CV Rencong Makmur Sejahtera di Gampong Paya Gaboh, Kecamatan Sawang, Kabupaten Aceh Utara, Selasa (24/11/2026) malam.\nPabrik yang akan memproduksi rokok dengan merek Kubra tersebut diproyeksikan segera beroperasi penuh menyusul progres pembangunan fisik yang telah mencapai 99 persen dan saat ini tengah memasuki tahapan uji coba (trial) produksi.\nDalam peninjauan lapangan tersebut, Mualem mengecek langsung kesiapan fasilitas dan peralatan produksi, baik untuk lini rokok linting tangan maupun lini mesin, sekaligus menyaksikan proses uji coba produksi yang sedang berlangsung.\n“Iya sepertinya kita lihat memuaskan ya. Semoga banyak anak muda Aceh yang bekerja di sini,” ujar Mualem saat berada di lokasi pabrik.\nGubernur berharap kehadiran industri pengolahan tersebut dapat menjadi percontohan sekaligus pemicu masuknya arus investasi sektor industri lainnya ke Bumi Serambi Mekkah.\n“Perusahaan ini yang kita banggakanlah buat sementara ini supaya ke depan lebih banyak lagi perusahaan-perusahaan atau pabrik-pabrik yang a"
+      ],
+      "matched_articles": [
+        {
+          "id": "20",
+          "title": "Gubernur Mualem Pantau Progres Investasi Pabrik Rokok di Aceh Utara, Segera Beroperasi",
+          "link": "https://humas.acehprov.go.id/gubernur-mualem-pantau-progres-investasi-pabrik-rokok-di-aceh-utara-segera-beroperasi/amp/",
+          "canonical_url": "https://humas.acehprov.go.id/gubernur-mualem-pantau-progres-investasi-pabrik-rokok-di-aceh-utara-segera-beroperasi/amp",
+          "media_name": "biro administrasi pimpinan setda aceh",
+          "tanggal": "Wed, 25 Nov 2026 01:55:21 GMT",
+          "skor": 1.0
+        },
+        {
+          "id": "49",
+          "title": "Krak, Mualem Pantau Progres Investasi Pabrik Rokok di Aceh Utara",
+          "link": "https://atjehwatch.com/2026/11/krak-mualem-pantau-progres-investasi-pabrik-rokok-di-aceh-utara/",
+          "canonical_url": "https://atjehwatch.com/2026/11/krak-mualem-pantau-progres-investasi-pabrik-rokok-di-aceh-utara",
+          "media_name": "Atjeh Watch",
+          "tanggal": "Wed, 25 Nov 2026 03:06:45 GMT",
+          "skor": 1.0
+        },
+        {
+          "id": "24",
+          "title": "Pabrik Rokok Kubra di Aceh Utara Segera Beroperasi, Siapkan 160 Lapangan Kerja",
+          "link": "https://www.acehbisnis.com/news/pabrik-rokok-kubra-di-aceh-utara-segera-beroperasi-siapkan-160-lapangan-kerja/index.html",
+          "canonical_url": "https://acehbisnis.com/news/pabrik-rokok-kubra-di-aceh-utara-segera-beroperasi-siapkan-160-lapangan-kerja/index.html",
+          "media_name": "ACEH BISNIS",
+          "tanggal": "Wed, 25 Nov 2026 06:45:23 GMT",
+          "skor": 0.8444
+        }
+      ],
+      "tone_hubungan": "K4",
+      "tone_arah": "tidak ada",
+      "tone_metode": "AI-isu"
+    },
+    {
+      "isu_id": "klaster_9599747bf0",
+      "isu": "SP-RTMM dukung pemerintah lakukan pemberantasan rokok ilegal",
+      "sumber_isu": "klaster",
+      "tanggal_awal": "2026-11-25",
+      "tanggal_terakhir": "2026-11-25",
+      "_norm_title": "sp rtmm dukung pemerintah lakukan pemberantasan rokok ilegal",
+      "tone": "Positif",
+      "tone_alasan": "Menperin menegaskan dukungan terhadap pemberantasan rokok ilegal untuk menjaga keadilan industri, masuk kategori Positif (P1).",
+      "tone_keyakinan": "tinggi",
+      "evaluated_at": "2026-11-26 04:05:49",
+      "member_count_at_eval": 1,
+      "member_count": 1,
+      "sample_titles": [
+        "SP-RTMM dukung pemerintah lakukan pemberantasan rokok ilegal"
+      ],
+      "sample_snippets": [
+        "Jakarta (ANTARA) - Serikat Pekerja Rokok Tembakau Makanan dan Minuman (SP-RTMM) menyatakan dukungannya terhadap upaya pemerintah dalam memberantas peredaran rokok ilegal yang dinilai semakin menekan industri hasil tembakau legal\nKetua Umum SP-RTMM Henry Wardana menilai pemberantasan rokok ilegal merupakan langkah penting untuk menjaga keberlangsungan industri sekaligus melindungi pekerja.\n\"Penindakan terhadap produk ilegal perlu diperkuat, bersamaan dengan upaya menjaga kepastian usaha dan melindungi tenaga kerja di industri legal,\" ujar dia dalam keterangannya di Jakarta, Rabu.\nBerdasarkan pengamatan RTMM bersama serikat pekerja di sejumlah daerah, tambahnya, peredaran rokok ilegal diperkirakan telah mencapai 20 – 30 persen, bahkan di beberapa wilayah, persaingan antara produk legal dan ilegal disebut sudah hampir seimbang.\nHenry menilai tingginya peredaran rokok ilegal tidak terlepas dari disparitas harga. Pengusaha legal harus memperhitungkan cukai dan berbagai ketentuan pemerintah dalam menjalankan usahanya, sementara produk ilegal dapat dijual dengan harga lebih rendah karena tidak menanggung kewajiban yang sama.\nRTMM mencatat sekitar 158.000 anggotanya bekerja di industri rok"
+      ],
+      "matched_articles": [
+        {
+          "id": "21",
+          "title": "SP-RTMM dukung pemerintah lakukan pemberantasan rokok ilegal",
+          "link": "https://www.antaranews.com/berita/5876727/sprtmm-dukung-pemerintah-lakukan-pemberantasan-rokok-ilegal",
+          "canonical_url": "https://antaranews.com/berita/5876727/sprtmm-dukung-pemerintah-lakukan-pemberantasan-rokok-ilegal",
+          "media_name": "ANTARA News",
+          "tanggal": "Wed, 25 Nov 2026 04:09:41 GMT",
+          "skor": 1.0
+        }
+      ],
+      "tone_hubungan": "K1",
+      "tone_arah": "mendukung"
+    },
+    {
+      "isu_id": "klaster_bc49cd6c95",
+      "isu": "BKPM menyebut potensi kelautan dan perikanan mencapai US$ 15,3 miliar.",
+      "sumber_isu": "klaster",
+      "tanggal_awal": "2026-11-25",
+      "tanggal_terakhir": "2026-11-25",
+      "_norm_title": "bkpm menyebut potensi kelautan dan perikanan mencapai usd 15_3 miliar",
+      "tone": "Netral",
+      "tone_alasan": "Berita menyoroti potensi investasi kelautan oleh BKPM tanpa melibatkan atau menyebut Kemenperin.",
+      "tone_keyakinan": "tinggi",
+      "evaluated_at": "2026-11-26 04:06:05",
+      "member_count_at_eval": 2,
+      "member_count": 2,
+      "sample_titles": [
+        "BKPM: Potensi investasi kelautan dan perikanan 15,3 miliar dolar AS",
+        "BKPM Sebut Potensi Kelautan dan Perikanan Capai US$ 15,3 Miliar"
+      ],
+      "sample_snippets": [
+        "BKPM: Potensi investasi kelautan dan perikanan 15,3 miliar dolar AS\nWakil Menteri Investasi dan Hilirisasi/Wakil Kepala Badan Koordinasi Penanaman Modal (BKPM) Todotua Pasaribu dalam sesi Investment Dialogue Global Marine Spatial Planning (MSP) Conference & Expo 2026 yang digelar di Nusa Dua, Badung, Bali, Rabu (25/11/2026). ANTARA/Putu Indah Savitri\n“Itu (investasi) termasuk untuk produk seperti rumput laut,” ujar Todotua dalam sesi Investment Dialogue Global Marine Spatial Planning (MSP) Conference & Expo 2026 yang digelar di Nusa Dua, Badung, Bali, Rabu.\nUntuk rumput laut, Todotua menyampaikan, Indonesia adalah pemasok nomor satu di dunia. Indonesia mengekspor kurang lebih sekitar 65 persen dari rumput laut yang diproduksinya sebagai produk mentah atau rumput laut kering.\nTodotua mengakui bahwa terdapat banyak potensi untuk mengembangkan sumber daya rumput laut, seperti melakukan hilirisasi menjadi biostimulan.\nSelain rumput laut, Todotua juga menyampaikan Indonesia memiliki potensi lainnya, yakni udang, tuna, dan garam.\n“Untuk garam, saat ini kami fokus mengembangkannya dan sudah ada beberapa investasi strategis yang masuk,” ucap Todotua.\nIa mengungkapkan terdapat investor dari",
+        "BKPM Sebut Potensi Kelautan dan Perikanan Capai US$ 15,3 Miliar\nRabu, 25 November 2026 | 22:57 WIB\nBadung, Beritasatu.com – Indonesia memiliki potensi investasi sebesar US$ 15,3 miliar di sektor kelautan dan perikanan. Peluang tersebut mencakup pengembangan rumput laut, udang, tuna, hingga industri garam yang didorong melalui penguatan hilirisasi.\nWakil Menteri Investasi dan Hilirisasi/Wakil Kepala Badan Koordinasi Penanaman Modal (BKPM) Todotua Pasaribu mengatakan, rumput laut menjadi salah satu komoditas yang memiliki prospek investasi besar.\n“Itu (investasi) termasuk untuk produk seperti rumput laut,” ujar Todotua dilansir dari Antara, Rabu (25/11/2026).\nTodotua menjelaskan, Indonesia merupakan pemasok rumput laut terbesar di dunia. Namun, sekitar 65% produksi rumput laut nasional masih diekspor dalam bentuk bahan mentah atau rumput laut kering.\nMenurut dia, kondisi tersebut membuka peluang untuk meningkatkan nilai tambah melalui pengolahan lebih lanjut. Salah satu produk yang berpotensi dikembangkan adalah biostimulan berbasis rumput laut.\nSelain rumput laut, Indonesia juga memiliki peluang investasi pada komoditas udang, tuna, dan garam.\nUntuk garam, pemerintah tengah memprior"
+      ],
+      "matched_articles": [
+        {
+          "id": "14",
+          "title": "BKPM: Potensi investasi kelautan dan perikanan 15,3 miliar dolar AS",
+          "link": "https://m.antaranews.com/amp/berita/5878727/bkpm-potensi-investasi-kelautan-dan-perikanan-153-miliar-dolar-as",
+          "canonical_url": "https://m.antaranews.com/amp/berita/5878727/bkpm-potensi-investasi-kelautan-dan-perikanan-153-miliar-dolar-as",
+          "media_name": "ANTARA News",
+          "tanggal": "Wed, 25 Nov 2026 14:49:31 GMT",
+          "skor": 0.6869
+        },
+        {
+          "id": "15",
+          "title": "BKPM Sebut Potensi Kelautan dan Perikanan Capai US$ 15,3 Miliar",
+          "link": "https://www.beritasatu.com/ekonomi/3043845/bkpm-sebut-potensi-kelautan-dan-perikanan-capai-us-153-miliar",
+          "canonical_url": "https://beritasatu.com/ekonomi/3043845/bkpm-sebut-potensi-kelautan-dan-perikanan-capai-us-153-miliar",
+          "media_name": "BeritaSatu.com",
+          "tanggal": "Wed, 25 Nov 2026 15:57:50 GMT",
+          "skor": 0.6869
+        }
+      ],
+      "tone_hubungan": "K4",
+      "tone_arah": "tidak ada",
+      "tone_metode": "AI-isu"
+    },
+    {
+      "isu_id": "klaster_00ee5f9af9",
+      "isu": "Wamenlu bidik kerja sama internasional untuk hilirisasi rumput laut",
+      "sumber_isu": "klaster",
+      "tanggal_awal": "2026-11-25",
+      "tanggal_terakhir": "2026-11-25",
+      "_norm_title": "wamenlu bidik kerja sama internasional untuk hilirisasi rumput_laut",
+      "tone": "Netral",
+      "tone_alasan": "Berita membahas kerja sama internasional hilirisasi rumput laut oleh Kemenlu tanpa menyebut Kemenperin, sehingga dikategorikan tidak berkaitan dan bernilai Netral.",
+      "tone_keyakinan": "tinggi",
+      "evaluated_at": "2026-11-26 04:05:49",
+      "member_count_at_eval": 1,
+      "member_count": 1,
+      "sample_titles": [
+        "Wamenlu bidik kerja sama internasional untuk hilirisasi rumput laut"
+      ],
+      "sample_snippets": [
+        "Wamenlu bidik kerja sama internasional untuk hilirisasi rumput laut\nBadung, Bali (ANTARA) - Wakil Menteri Luar Negeri Arif Havas Oegroseno membidik kerja sama internasional untuk mengembangkan industri hilirisasi rumput laut menjadi biostimulan.\n“Saya harap kami bisa bekerja sama dengan GIZ, IFAD, dan UNDP, dalam mengembangkan rumput laut kami menjadi biostimulan,” ujar Havas dalam sesi Investment Dialogue Global Marine Spatial Planning (MSP) Conference & Expo 2026 yang digelar di Nusa Dua, Badung, Bali, Rabu.\nGIZ merupakan Gesellschaft für Internationale Zusammenarbeit (Badan Kerja Sama Internasional Jerman; IFAD adalah International Fund for Agricultural Development atau Dana Internasional untuk Pembangunan Pertanian; dan UNDP adalah United Nations Development Programme atau Program Pembangunan Perserikatan Bangsa-Bangsa.\nMenurut Havas, hilirisasi rumput laut menjadi biostimulan dapat menjadi alternatif pupuk. Saat ini, tutur Havas, Indonesia memberikan subsidi pupuk sekitar 10 juta ton. Sementara itu, pupuk yang tidak disubsidi sekitar 14 juta ton.\n“Dan Indonesia mengimpor 8,3 juta ton pupuk. Bayangkan, kalau kita bisa bikin biostimulan dari rumput laut yang bisa meningkatkan pe"
+      ],
+      "matched_articles": [
+        {
+          "id": "13",
+          "title": "Wamenlu bidik kerja sama internasional untuk hilirisasi rumput laut",
+          "link": "https://jogja.antaranews.com/berita/870791/wamenlu-bidik-kerja-sama-internasional-untuk-hilirisasi-rumput-laut",
+          "canonical_url": "https://jogja.antaranews.com/berita/870791/wamenlu-bidik-kerja-sama-internasional-untuk-hilirisasi-rumput-laut",
+          "media_name": "ANTARA News Yogyakarta",
+          "tanggal": "Wed, 25 Nov 2026 09:32:28 GMT",
+          "skor": 1.0
+        }
+      ],
+      "tone_hubungan": "K4",
+      "tone_arah": "tidak ada"
+    },
+    {
+      "isu_id": "klaster_1ef4c2ce7e",
+      "isu": "Pemerintah Tunjuk PT Garuda Adidaya Nusantara Kelola Eks RAPP",
+      "sumber_isu": "klaster",
+      "tanggal_awal": "2026-11-25",
+      "tanggal_terakhir": "2026-11-25",
+      "_norm_title": "pemerintah tunjuk pt garuda adidaya nusantara kelola eks rapp",
+      "tone": "Netral",
+      "tone_alasan": "Isu berkaitan dengan kebijakan peralihan pengelola industri namun tidak menyebut institusi Kemenperin secara langsung.",
+      "tone_keyakinan": "tinggi",
+      "evaluated_at": "2026-11-26 04:06:05",
+      "member_count_at_eval": 2,
+      "member_count": 2,
+      "sample_titles": [
+        "Bukan Agrinas, Pemerintah Tunjuk PT Garuda Adidaya Nusantara Kelola Eks RAPP",
+        "Pemerintah Tunjuk PT Garuda Adidaya Nusantara Kelola Eks RAPP, Bagaimana Nasib Pekerja?"
+      ],
+      "sample_snippets": [
+        "PEKANBARU-Peralihan pengelolaan industri raksasa eks PT Riau Andalan Pulp and Paper (RAPP) menemukan titik terang. Pemerintah menunjuk BUMN PT Garuda Adidaya Nusantara untuk mengambil alih pengelolaan aset dan kegiatan usaha, setelah izin pengelolaan kawasan hutan perusahaan tersebut dicabut pada 20 November 2026.\nNamun, pergantian pengelola bukan sekadar persoalan siapa yang menguasai aset dan menjalankan industri. Ada ribuan pekerja, aktivitas produksi dan rantai pasok yang menunggu kepastian di tengah masa transisi.\nPemerintah kini dihadapkan pada dua pekerjaan besar, menata kembali pengelolaan kawasan dan memastikan industri tetap memiliki masa depan tanpa mengabaikan hak-hak tenaga kerja.\nPenunjukan PT Garuda Adidaya Nusantara terungkap dalam rapat koordinasi tindak lanjut pengelolaan eks RAPP yang melibatkan kementerian, lembaga terkait dan Pelaksana Tugas (Plt) Gubernur Riau, Selasa (24/11/2026).\nKeputusan itu sekaligus menjawab spekulasi mengenai BUMN yang akan mengambil alih industri pulp dan kertas berskala besar itu. Sebelumnya, nama Agrinas sempat mencuat sebagai calon pengelola.\nSK Pengelola Sementara Disiapkan\nWakil Menteri Kehutanan RI, Rohmat Marzuki menjelaskan, pe",
+        "PEKANBARU, FOKUSRIAU.COM-Peralihan pengelolaan industri raksasa eks PT Riau Andalan Pulp and Paper (RAPP) menemukan titik terang. Pemerintah menunjuk BUMN PT Garuda Adidaya Nusantara untuk mengambil alih pengelolaan aset dan kegiatan usaha, setelah izin pengelolaan kawasan hutan perusahaan tersebut dicabut pada 20 November 2026.\nNamun, pergantian pengelola bukan sekadar persoalan siapa yang menguasai aset dan menjalankan industri. Ada ribuan pekerja, aktivitas produksi dan rantai pasok yang menunggu kepastian di tengah masa transisi.\nPemerintah kini dihadapkan pada dua pekerjaan besar, menata kembali pengelolaan kawasan dan memastikan industri tetap memiliki masa depan tanpa mengabaikan hak-hak tenaga kerja.\nPenunjukan PT Garuda Adidaya Nusantara terungkap dalam rapat koordinasi tindak lanjut pengelolaan eks RAPP yang melibatkan kementerian, lembaga terkait dan Pelaksana Tugas (Plt) Gubernur Riau, Selasa (24/11/2026).\nKeputusan itu sekaligus menjawab spekulasi mengenai BUMN yang akan mengambil alih industri pulp dan kertas berskala besar itu. Sebelumnya, nama Agrinas sempat mencuat sebagai calon pengelola.\nSK Pengelola Sementara Disiapkan\nWakil Menteri Kehutanan RI, Rohmat Marzuki "
+      ],
+      "matched_articles": [
+        {
+          "id": "48",
+          "title": "Bukan Agrinas, Pemerintah Tunjuk PT Garuda Adidaya Nusantara Kelola Eks RAPP",
+          "link": "https://pekanbarutv.com/berita/14057-bukan-agrinas-pemerintah-tunjuk-pt-garuda-adidaya-nusantara-kelola-eks-rapp",
+          "canonical_url": "https://pekanbarutv.com/berita/14057-bukan-agrinas-pemerintah-tunjuk-pt-garuda-adidaya-nusantara-kelola-eks-rapp",
+          "media_name": "PEKANBARU TV",
+          "tanggal": "Wed, 25 Nov 2026 03:44:15 GMT",
+          "skor": 0.9819
+        },
+        {
+          "id": "47",
+          "title": "Pemerintah Tunjuk PT Garuda Adidaya Nusantara Kelola Eks RAPP, Bagaimana Nasib Pekerja?",
+          "link": "https://fokusriau.com/pemerintah-tunjuk-pt-garuda-adidaya-nusantara-kelola-eks-rapp-bagaimana-nasib-pekerja/",
+          "canonical_url": "https://fokusriau.com/pemerintah-tunjuk-pt-garuda-adidaya-nusantara-kelola-eks-rapp-bagaimana-nasib-pekerja",
+          "media_name": "Fokus Riau",
+          "tanggal": "Wed, 25 Nov 2026 00:38:00 GMT",
+          "skor": 0.9819
+        }
+      ],
+      "tone_hubungan": "K3",
+      "tone_arah": "tidak ada",
+      "tone_metode": "AI-isu"
+    },
+    {
+      "isu_id": "klaster_b317f955c7",
+      "isu": "Kementerian Investasi Ungkap RAPP Sudah Tanam Modal Rp27,98 Triliun, Ingatkan Soal Kepastian Hukum",
+      "sumber_isu": "klaster",
+      "tanggal_awal": "2026-11-25",
+      "tanggal_terakhir": "2026-11-25",
+      "_norm_title": "kementerian investasi ungkap rapp sudah tanam modal rp 27_98 triliun ingatkan soal kepastian hukum",
+      "tone": "Netral",
+      "tone_alasan": "Berita menyoroti Kementerian Investasi dan Kementerian Kehutanan terkait investasi dan pencabutan izin RAPP tanpa melibatkan Kemenperin, sehingga bernilai Netral.",
+      "tone_keyakinan": "tinggi",
+      "evaluated_at": "2026-11-26 04:05:49",
+      "member_count_at_eval": 1,
+      "member_count": 1,
+      "sample_titles": [
+        "Kementerian Investasi Ungkap RAPP Sudah Tanam Modal Rp27,98 Triliun, Ingatkan Soal Kepastian Hukum"
+      ],
+      "sample_snippets": [
+        "Ecobiz.asia – PT Riau Andalan Pulp and Paper (RAPP) yang merupakan bagian dari April Group telah merealisasikan investasi sebesar Rp27,98 triliun dan mencatatkan rencana penanaman modal lanjutan senilai Rp90,88 triliun.\nKementerian Investasi dan Hilirisasi/Badan Koordinasi Penanaman Modal (BKPM) menilai kepastian hukum diperlukan untuk menjaga keberlanjutan kegiatan usaha dan rencana pengembangan perusahaan tersebut.\nWakil Menteri Investasi dan Hilirisasi/Wakil Kepala BKPM Todotua Pasaribu mengatakan, berdasarkan data kementeriannya, realisasi investasi RAPP mencakup 44 proyek kegiatan usaha. Sementara itu, rencana investasi lanjutan perusahaan yang tercatat dalam basis data kementerian mencapai Rp90,88 triliun.\n“Realisasi investasi PT RAPP yang sudah terjadi mencapai Rp27,98 triliun, sementara rencana investasi yang telah masuk dalam database kami mencapai Rp90,88 triliun. Angka ini menunjukkan pentingnya kepastian hukum dan kejelasan kebijakan pemerintah terhadap keberlangsungan kegiatan usaha tersebut,” kata Todotua dikutip dari situs resmi Pemprov Riau.\nPernyataan tersebut disampaikan dalam Rapat Tindak Lanjut Pengelolaan Eks PT RAPP secara virtual di Ruang Rapat Melati, Kantor"
+      ],
+      "matched_articles": [
+        {
+          "id": "18",
+          "title": "Kementerian Investasi Ungkap RAPP Sudah Tanam Modal Rp27,98 Triliun, Ingatkan Soal Kepastian Hukum",
+          "link": "https://ecobiz.asia/kementerian-investasi-ungkap-rapp-sudah-tanam-modal-rp2798-triliun-ingatkan-soal-kepastian-hukum/",
+          "canonical_url": "https://ecobiz.asia/kementerian-investasi-ungkap-rapp-sudah-tanam-modal-rp2798-triliun-ingatkan-soal-kepastian-hukum",
+          "media_name": "Ecobiz Asia",
+          "tanggal": "Wed, 25 Nov 2026 02:28:15 GMT",
+          "skor": 1.0
+        }
+      ],
+      "tone_hubungan": "K4",
+      "tone_arah": "tidak ada"
+    },
+    {
+      "isu_id": "klaster_272390e799",
+      "isu": "PT. Indah Kiat Pulp & Paper Tbk.: Fabricación de envases de papel",
+      "sumber_isu": "klaster",
+      "tanggal_awal": "2026-11-25",
+      "tanggal_terakhir": "2026-11-25",
+      "_norm_title": "pt indah kiat pulp paper tbk fabricación de envases de papel",
+      "tone": "Netral",
+      "tone_alasan": "Profil direktori bisnis perusahaan PT Indah Kiat Pulp & Paper Tbk. tidak berkaitan dengan kebijakan atau institusi Kemenperin, sehingga bernilai Netral.",
+      "tone_keyakinan": "tinggi",
+      "evaluated_at": "2026-11-26 04:05:49",
+      "member_count_at_eval": 1,
+      "member_count": 1,
+      "sample_titles": [
+        "PT. Indah Kiat Pulp & Paper Tbk.: Fabricación de envases de papel"
+      ],
+      "sample_snippets": [
+        "- B2B\n- Cotiza en bolsa\n- Fabricación\n- Centros de producción\nAcerca de PT. Indah Kiat Pulp & Paper Tbk.\nUn fabricante líder de envases de papel con distribución global, que ofrece una amplia gama de soluciones de cartón industrial y blanco desde 1991.\nDatos clave\n- Sector\n  Fabricación de papel y productos forestales\n- Tamaño de la empresa\n  1.001–5.000 empleados\n- Sede central\n  Serang, Banten, Indonesia\n- Año de fundación\n  1976\n- Facturación\n  3,2 mil M$ejercicio 2025, publicado\n¿A quién contactar en PT. Indah Kiat Pulp & Paper Tbk.?\nConéctate a Tamtam para ver a los responsables de decisión de PT. Indah Kiat Pulp & Paper Tbk., con correos verificados y números de teléfono, y encontrar más empresas como esta.\nVer a quién contactar gratis\nPT. Indah Kiat Pulp & Paper Tbk. en resumen\nPT. Indah Kiat Pulp & Paper Tbk. es una empresa B2B.\nSector de PT. Indah Kiat Pulp & Paper Tbk.: fabricación de papel y productos forestales.\nSede central de PT. Indah Kiat Pulp & Paper Tbk.: Serang, Banten, Indonesia.\nPT. Indah Kiat Pulp & Paper Tbk. fue fundada en 1976.\nPT. Indah Kiat Pulp & Paper Tbk. tiene 1.001–5.000 empleados.\nFacturación de PT. Indah Kiat Pulp & Paper Tbk.: 3,2 mil M$ (ejercici"
+      ],
+      "matched_articles": [
+        {
+          "id": "17",
+          "title": "PT. Indah Kiat Pulp & Paper Tbk.: Fabricación de envases de papel",
+          "link": "https://www.tamtam.ai/es/c/pt-indah-kiat-pulp-and-paper-tbk",
+          "canonical_url": "https://tamtam.ai/es/c/pt-indah-kiat-pulp-and-paper-tbk",
+          "media_name": "tamtam.ai",
+          "tanggal": "Wed, 25 Nov 2026 08:47:26 GMT",
+          "skor": 1.0
+        }
+      ],
+      "tone_hubungan": "K4",
+      "tone_arah": "tidak ada"
+    },
+    {
+      "isu_id": "klaster_5fd9555769",
+      "isu": "Biodiesel B50 Jadi Langkah Indonesia Kurangi Impor Solar",
+      "sumber_isu": "klaster",
+      "tanggal_awal": "2026-11-25",
+      "tanggal_terakhir": "2026-11-25",
+      "_norm_title": "biodiesel b50 jadi langkah indonesia kurangi impor solar",
+      "tone": "Netral",
+      "tone_alasan": "Artikel membahas kebijakan energi dan biodiesel oleh pemerintah secara umum tanpa menyerang atau melibatkan institusi Kemenperin secara langsung, sehingga bernilai Netral (Ne2).",
+      "tone_keyakinan": "tinggi",
+      "evaluated_at": "2026-11-26 04:05:49",
+      "member_count_at_eval": 1,
+      "member_count": 1,
+      "sample_titles": [
+        "Biodiesel B50 Jadi Langkah Indonesia Kurangi Impor Solar"
+      ],
+      "sample_snippets": [
+        "TVRINews, Jakarta\nPemerintah mendorong pengembangan biodiesel B50 sebagai salah satu upaya mengurangi ketergantungan Indonesia terhadap impor solar. Program tersebut menjadi bagian dari strategi diversifikasi energi untuk memperkuat kemandirian dan ketahanan energi nasional di tengah ketidakpastian pasokan energi global.\nKepala Badan Komunikasi Pemerintah Republik Indonesia (Bakom RI), Syahganda Nainggolan, mengatakan Indonesia mulai mengupayakan pengurangan impor solar seiring pengembangan biodiesel B50. Pemerintah juga membuka peluang untuk meningkatkan campuran biodiesel tersebut hingga mencapai B100.\nHal itu disampaikan Syahganda dalam Forum Energi Nasional 2026 di Jakarta, Rabu, 25 November 2026. Menurutnya, diversifikasi sumber energi dan pemanfaatan energi terbarukan menjadi salah satu prioritas Presiden Prabowo Subianto untuk mewujudkan kemandirian energi.\n(Kepala Bakom RI Syahganda Nainggolan (tiga kanan) pada acara Forum Energi Nasional 2026 di Jakarta, Rabu, 25 November 2026. [Foto: TVRINews.com])\n\"Kita mulai berusaha masing-masing bagian untuk berhenti mengimpor seperti kita mulai berhenti mengimpor solar. Karena kita sudah berhasil menerobos B50 dan kemungkinan nanti a"
+      ],
+      "matched_articles": [
+        {
+          "id": "43",
+          "title": "Biodiesel B50 Jadi Langkah Indonesia Kurangi Impor Solar",
+          "link": "https://nasional.tvrinews.com/berita/tca9j3s-biodiesel-b50-jadi-langkah-indonesia-kurangi-impor-solar",
+          "canonical_url": "https://nasional.tvrinews.com/berita/tca9j3s-biodiesel-b50-jadi-langkah-indonesia-kurangi-impor-solar",
+          "media_name": "TVRI News",
+          "tanggal": "Wed, 25 Nov 2026 10:41:00 GMT",
+          "skor": 1.0
+        }
+      ],
+      "tone_hubungan": "K3",
       "tone_arah": "tidak ada"
     }
   ]

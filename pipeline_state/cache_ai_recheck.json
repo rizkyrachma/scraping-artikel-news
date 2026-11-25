@@ -6613,5 +6613,1720 @@
     "id": 106,
     "label": "HILIR",
     "alasan": "Artikel membahas daya saing produk sawit Indonesia di pasar global yang dipengaruhi oleh regulasi dan standar keberlanjutan, yang merupakan isu strategis bagi industri hilir sawit."
+  },
+  "588b6ac720b69a8fe3180b8fc27f0b0839254c204608c047ef9ba1def8274cf6": {
+    "id": 1,
+    "label": "HILIR",
+    "alasan": "Melibatkan pernyataan resmi Plt. Dirjen Industri Agro Kemenperin terkait insiden di fasilitas produksi industri makanan."
+  },
+  "df68d9df1feaf4e686864ca1283999dfb6e700556741125273040c78042bfdae": {
+    "id": 2,
+    "label": "HILIR",
+    "alasan": "Pernyataan resmi Ditjen Industri Agro mengenai investigasi insiden di pabrik pengolahan permen."
+  },
+  "2dbe30dba50bccce87a22896e4f6e1ffdb5be78d16d773f950a2639022420198": {
+    "id": 3,
+    "label": "HILIR",
+    "alasan": "Koordinasi intensif Ditjen Industri Agro dalam penanganan keselamatan pekerja di pabrik manufaktur agro."
+  },
+  "c39cf0afe976e54914b15adde2b2448120786481820a1f639cf8da5305da136b": {
+    "id": 4,
+    "label": "HILIR",
+    "alasan": "Pengawasan langsung Ditjen Industri Agro terhadap insiden di fasilitas produksi industri pengolahan."
+  },
+  "28e908dd014aaa29444665319cd7a05ecc9ab5655cdc470192e006b8d1da56d7": {
+    "id": 5,
+    "label": "HILIR",
+    "alasan": "Kebijakan Kemenperin terkait biaya produksi dan pasokan bahan baku impor untuk industri manufaktur."
+  },
+  "4852ce1434837d5a0748e931adc4c45ae851ca86d0a051e6522afae2d535d60b": {
+    "id": 6,
+    "label": "HILIR",
+    "alasan": "Arahan Ditjen Industri Agro kepada manajemen perusahaan industri mamin terkait transparansi insiden pabrik."
+  },
+  "c9a6ced1972b293112e0b39fd49d491e08fd7bee312c5c7c782e358a77f998c2": {
+    "id": 7,
+    "label": "BUKAN_HILIR",
+    "alasan": "Hanya memuat opini pengamat/lembaga riset (CIPS) tanpa respons atau pernyataan resmi dari Kemenperin atau asosiasi industri."
+  },
+  "d132bb9d82e22fa44a7506c5c4230c736d06fbe9b41963f383db61f62e020219": {
+    "id": 9,
+    "label": "HILIR",
+    "alasan": "Pemantauan intensif Ditjen Industri Agro terhadap penanganan insiden di pabrik pengolahan makanan."
+  },
+  "6a52277e2bd58ce44195d051108962aea227fed9733ce104c6bf2f9a1f814bcb": {
+    "id": 10,
+    "label": "HILIR",
+    "alasan": "Tindakan pengawalan Ditjen Industri Agro terhadap keselamatan kerja di sektor industri manufaktur agro."
+  },
+  "d0c8385cf45e8240ed1a5cde1990ffaf661fecd0cd3557f0c86530a62ef2924a": {
+    "id": 11,
+    "label": "HILIR",
+    "alasan": "Evaluasi standar K3 oleh Ditjen Industri Agro pada fasilitas produksi industri pengolahan permen."
+  },
+  "0a1d2cf75e1af9d4d4745c1164ffc60ae76563fbb8f53a589285d1d1f9bfd58c": {
+    "id": 12,
+    "label": "BUKAN_HILIR",
+    "alasan": "Opini akademisi/pengamat mengenai hambatan bahan baku hulu tanpa adanya respons langsung dari pihak industri atau Kemenperin."
+  },
+  "f4472033344eeabc6bfe2ee129db489287e24390f0b1dbe5881fa83018a3b75d": {
+    "id": 13,
+    "label": "HILIR",
+    "alasan": "Dukungan resmi Ditjen Industri Agro terhadap investigasi penyebab gangguan pada fasilitas produksi industri."
+  },
+  "d28e44639153ca2be9fdef2f331a78a651729cc05c2811cfa3dbc7582a602323": {
+    "id": 14,
+    "label": "HILIR",
+    "alasan": "Intervensi dan koordinasi pemerintah melalui Ditjen Industri Agro dalam menangani musibah di pabrik mamin."
+  },
+  "efa00dd1d365a06bfe9456d8aed2048f08b490d1316f138f7c62fae876c24ab8": {
+    "id": 15,
+    "label": "BUKAN_HILIR",
+    "alasan": "Analisis pengamat (CIPS) mengenai kendala pasokan hulu tanpa memuat pernyataan dari otoritas industri terkait."
+  },
+  "53c12ef08eca964824b151c037e086bf34777551ac58dd5f15cb35d23e80f790": {
+    "id": 16,
+    "label": "BUKAN_HILIR",
+    "alasan": "Komentar lembaga riset mengenai kesiapan sektor hulu tanpa adanya respons atau dampak langsung yang dilaporkan dari sisi industri."
+  },
+  "fbc0b57dd1221aa9139ef190a33adbf5168eeb8a8bc7d8b621629e737a36a4d6": {
+    "id": 17,
+    "label": "HILIR",
+    "alasan": "Berita mengenai insiden di pabrik pengolahan makanan (permen) yang melibatkan pengawasan K3 dan pernyataan resmi Kemenperin."
+  },
+  "1890959fb00f4aea31e38fcb09c65020946351ca8c09b7c02802b2614ba2361a": {
+    "id": 18,
+    "label": "BUKAN_HILIR",
+    "alasan": "Fokus pada penetapan harga Tandan Buah Segar (TBS) di tingkat petani/mitra plasma yang merupakan ranah hulu perkebunan."
+  },
+  "50a28fa247bc09a1266a512263a1c73df5ff25dca2566f0cc52421d96efccc5b": {
+    "id": 19,
+    "label": "BUKAN_HILIR",
+    "alasan": "Fokus utama adalah keluhan petani mengenai rendahnya harga jual kelapa mentah di tingkat kebun."
+  },
+  "40aa5bf270a63f7024e1f80fd575b78a94f99171a6228d4db5d5e2c345c74f5e": {
+    "id": 20,
+    "label": "HILIR",
+    "alasan": "Membahas pengembangan teknologi pengolahan produk turunan kelapa (gula kelapa) untuk tujuan ekspor."
+  },
+  "bc8eeb859684f21598e75a4c416c6bb71d7afe070ae18af28e3fbb1108b09e0c": {
+    "id": 21,
+    "label": "BUKAN_HILIR",
+    "alasan": "Merupakan arsip karya ilmiah/skripsi akademis, bukan berita aktual mengenai aktivitas industri atau kebijakan."
+  },
+  "bb0f90237660e200c189204a353a84375903abe6a2f1a5417a7ea6ba5e4dc7e2": {
+    "id": 22,
+    "label": "BUKAN_HILIR",
+    "alasan": "Industri alas kaki bukan merupakan sektor di bawah naungan Direktorat Jenderal Industri Agro."
+  },
+  "a299dc036df8e5bdff8bab4cdf026415aae7851b430da1dd0628fdd42a568851": {
+    "id": 23,
+    "label": "HILIR",
+    "alasan": "Membahas upaya hilirisasi komoditas sagu menjadi produk olahan dalam kemasan untuk pasar nasional."
+  },
+  "e426b730dff948b94fc7c880462fd1f04f5b5885d31984d8c170c9b2a31ba354": {
+    "id": 24,
+    "label": "BUKAN_HILIR",
+    "alasan": "Berita terkait kajian kawasan transmigrasi dan kerja sama akademis yang tidak spesifik ke industri pengolahan agro."
+  },
+  "ac120f1d190c1f1f7e29dd1702c5a9363aa8429a37b2bfb98afb1f5184a7bf4f": {
+    "id": 25,
+    "label": "HILIR",
+    "alasan": "Membahas kerja sama internasional untuk pengembangan industri hilirisasi rumput laut menjadi produk biostimulan."
+  },
+  "bb2bf14b61aeba7632cd267080f0377a5d9d5f136baef2c059ad3ae0a8c45fb2": {
+    "id": 26,
+    "label": "BUKAN_HILIR",
+    "alasan": "Fokus pada data volume produksi bahan baku rumput laut di tingkat daerah, bukan pada industri pengolahannya."
+  },
+  "821e94116b344a4c548c833d85201163ede6ee1ed20aa3ce09305669cb8da4b5": {
+    "id": 27,
+    "label": "HILIR",
+    "alasan": "Membahas strategi pemerintah daerah untuk membangun industri pengolahan dan memperkuat rantai pasok hilirisasi rumput laut."
+  },
+  "94ce340d7372ab52bb35cd9819904020dced8c72a7be2df20fe2a1233192f8ed": {
+    "id": 28,
+    "label": "BUKAN_HILIR",
+    "alasan": "Artikel bersifat naratif umum mengenai statistik produksi mentah dan belum fokus pada aktivitas industri manufaktur spesifik."
+  },
+  "7a311bcd800c7e1ba4fe748e80c8cefdebe53cc38d944c1ca8e875a50cfc87da": {
+    "id": 29,
+    "label": "HILIR",
+    "alasan": "Membahas potensi investasi pada sektor hilirisasi produk kelautan dan perikanan yang masuk ranah industri agro."
+  },
+  "ba01530b31f09c4af3e88447375b69b92518a9a6c32da3617b9494fad6d61f4d": {
+    "id": 30,
+    "label": "HILIR",
+    "alasan": "Membahas peluang investasi untuk penguatan hilirisasi industri pengolahan hasil laut seperti rumput laut dan garam."
+  },
+  "3ce81d1e5ab6b2d3a0da7036c0ae6c9a36c55e5ce96d087cfe3a076cec130cb4": {
+    "id": 31,
+    "label": "HILIR",
+    "alasan": "Membahas kerja sama penerapan teknologi untuk mengolah limbah agro menjadi produk turunan bernilai ekonomi."
+  },
+  "ab7aec71b90006062504fcdde2545cfb710ebba2c4f809fefccb18e281efddb3": {
+    "id": 32,
+    "label": "BUKAN_HILIR",
+    "alasan": "Fokus pada tata ruang laut dan pameran kementerian KKP, bukan industri pengolahan agro."
+  },
+  "0907bbe04919eaffcfca03c6e8317e447c7cb39dbcf13212e9edc81e51d5a431": {
+    "id": 33,
+    "label": "BUKAN_HILIR",
+    "alasan": "Membahas kebijakan tata ruang laut dan ekonomi biru yang merupakan ranah KKP, bukan manufaktur."
+  },
+  "00ed5f61666a295e0038d311e5772fc052a157edca065658d70d6602c2d35c70": {
+    "id": 34,
+    "label": "HILIR",
+    "alasan": "Membahas strategi pengembangan industri pengolahan rumput laut dan penarikan investor industri."
+  },
+  "bf4148185f023cc167601e08c9d78d3efa4f6547598d88af7ea90695fe976c93": {
+    "id": 35,
+    "label": "HILIR",
+    "alasan": "Fokus pada perumusan strategi pengembangan industri rumput laut bersama calon investor."
+  },
+  "73d2e7035f21ccc1de1c857e342ced2a98b3fd6d4fbc3f0b56a6797f2389e950": {
+    "id": 36,
+    "label": "HILIR",
+    "alasan": "Kinerja ekonomi dan laporan keuangan perusahaan raksasa manufaktur makanan dan minuman."
+  },
+  "b19bc8f17dfadee02ef8f7b30132b0f1cbddb2dccb8f94366f564db8de66df90": {
+    "id": 37,
+    "label": "BUKAN_HILIR",
+    "alasan": "Merupakan profil usaha mikro/kreatif (upcycling) dan bukan industri manufaktur skala menengah-besar."
+  },
+  "0a767927f6d7ab851fd50020fa4ad820ef6281be88bd34a88612a6a267beec54": {
+    "id": 38,
+    "label": "HILIR",
+    "alasan": "Terkait keberlangsungan operasional dan perlindungan tenaga kerja pada industri pulp dan paper besar."
+  },
+  "07040fb89e51f6b6b912b052f3e89335f73df7595ced107da71f2f94f9fa17ea": {
+    "id": 39,
+    "label": "HILIR",
+    "alasan": "Membahas keberlanjutan rantai pasok dan kepastian kerja di pabrik pengolahan pulp dan paper."
+  },
+  "bf0984432863a5b91c46452eca9f49e3180ccf0264b39fe0e397373e16d68edb": {
+    "id": 40,
+    "label": "HILIR",
+    "alasan": "Profil korporasi dan data manufaktur perusahaan besar di sektor industri kertas dan kemasan."
+  },
+  "17d3d9eef98a05ee08bf76173cc40d87fccec19a8db27afd9cb1702863dfd90f": {
+    "id": 41,
+    "label": "BUKAN_HILIR",
+    "alasan": "Fokus pada pemulihan ekologis lahan konsesi (hulu/lingkungan) pasca pencabutan izin, bukan proses industri."
+  },
+  "5d7810639ab0b77294344d6091f6730529c0a757bb3587cf999c538ad9067f2d": {
+    "id": 42,
+    "label": "HILIR",
+    "alasan": "Terkait ketidakpastian operasional pabrik pengolahan pulp dan paper pasca peralihan aset."
+  },
+  "20b699d7a8345649cc34cbecaf973d8871d2f4e8e18a752f14c7f77aba142c42": {
+    "id": 43,
+    "label": "HILIR",
+    "alasan": "Membahas entitas pengelola aset industri pulp dan paper strategis yang berdampak pada operasional bisnis."
+  },
+  "9fc94f9d18dc294d1ca88e7de82b2de98712c4691d1dc0e692116903eed48664": {
+    "id": 44,
+    "label": "HILIR",
+    "alasan": "Terkait pengalihan pengelolaan kegiatan usaha industri manufaktur pulp dan paper (APRIL Group)."
+  },
+  "f2b7d2e831e824152d090c4a1e5c9d74a22e5730f79994460a80748943338dd3": {
+    "id": 45,
+    "label": "HILIR",
+    "alasan": "Membahas realisasi investasi besar dan rencana hilirisasi pada sektor industri pulp dan paper."
+  },
+  "c31a6d8ded9b6b7d16918e11f338229471bd8b31a24487b577d0e34dc38e1cb6": {
+    "id": 46,
+    "label": "HILIR",
+    "alasan": "Kinerja ekonomi sektor industri furnitur dengan pernyataan resmi dari asosiasi industri (HIMKI)."
+  },
+  "c3f96f22a41b07137a6347236d7187e37aca5b91a7551c46c345745129b610c1": {
+    "id": 47,
+    "label": "BUKAN_HILIR",
+    "alasan": "Fokus pada pemantauan harga komoditas karet di tingkat petani dan pengembangan perkebunan (hulu)."
+  },
+  "6a8a7451d32923716267de2539f53ac57aa20f382488194419191a76e82b8121": {
+    "id": 48,
+    "label": "HILIR",
+    "alasan": "Berita mengenai investasi, pembangunan fisik, dan persiapan operasional pabrik rokok (manufaktur)."
+  },
+  "9206a43cb9ff1b861231ee3cb7b9ea6f1c9a41539a34d28e21294f24e39aff20": {
+    "id": 52,
+    "label": "HILIR",
+    "alasan": "Dukungan serikat pekerja industri rokok untuk menjaga keberlangsungan industri hasil tembakau legal dari produk ilegal."
+  },
+  "c9b3554f5f8571ad4b0ced584d4db7deb6dbf51e408dbe1841f59e96bff3d721": {
+    "id": 53,
+    "label": "HILIR",
+    "alasan": "Permintaan pelaku industri hasil tembakau terkait kepastian kebijakan cukai dan perlindungan industri."
+  },
+  "be70995d02ffc7f36968181ef735e0730c1a2c879748177ae361259884e446a0": {
+    "id": 54,
+    "label": "HILIR",
+    "alasan": "Pelatihan teknis pengolahan (blending) untuk meningkatkan kompetensi SDM di industri hasil tembakau."
+  },
+  "54d5a1b8ce0ed14b6d3ec96f294c88ca383cfa0d185c79534f4f3b3593c712de": {
+    "id": 55,
+    "label": "HILIR",
+    "alasan": "Berita mengenai investasi pembangunan pabrik rokok baru dan penyerapan tenaga kerja industri."
+  },
+  "10537e65e1278ef15f465a5857628fc8102185278e30b931d1f4fdf729787fa6": {
+    "id": 56,
+    "label": "HILIR",
+    "alasan": "Kinerja korporasi dan penguatan SDM pada perusahaan manufaktur di sektor industri hasil tembakau."
+  },
+  "71552c6bff21f6c663a7b2bdf1473c6c52bbb37bf3ff6edaf43f9d6244c1ae07": {
+    "id": 57,
+    "label": "BUKAN_HILIR",
+    "alasan": "Fokus pada pembinaan koperasi oleh Bea Cukai dan Kementan untuk ekspor biji kakao (hulu/primer)."
+  },
+  "7e24147b4277c26139b26404e02dd8ee7ee43e55c3294e2a60899386dcea93e9": {
+    "id": 58,
+    "label": "HILIR",
+    "alasan": "Investasi pembangunan pabrik pengolahan cokelat baru (hilirisasi kakao) oleh perusahaan manufaktur besar."
+  },
+  "231896914155d7516968f4cba8715e34511eedfd2e2de78c7b6790df3d5976ee": {
+    "id": 59,
+    "label": "BUKAN_HILIR",
+    "alasan": "Fokus pada riset varietas unggul, benih, dan produktivitas lahan perkebunan (hulu)."
+  },
+  "317090db6ad252df73cb50f9084817058effc01c457d79c25b611b1c903602aa": {
+    "id": 60,
+    "label": "HILIR",
+    "alasan": "Ekspansi fasilitas produksi dan investasi pabrik pengolahan cokelat skala besar di Karawang."
+  },
+  "bde999322d9998fc0de363b6a772720af8f1ae3b0504718b4f812ce1455e7899": {
+    "id": 61,
+    "label": "HILIR",
+    "alasan": "Rencana pembangunan pabrik cokelat baru sebagai bentuk penguatan hilirisasi industri kakao di Indonesia."
+  },
+  "a40a806c8cdaf7a6726f296be0178852481fa541e03c7be961e256d126d2a1ca": {
+    "id": 63,
+    "label": "BUKAN_HILIR",
+    "alasan": "Fokus pada pembinaan IKM (Industri Kecil Menengah) dan pelatihan kerajinan tingkat lokal."
+  },
+  "83e0546611082870237cec158ae3c3bc007d70c0e73c8f0fd1db44a55b34e392": {
+    "id": 64,
+    "label": "BUKAN_HILIR",
+    "alasan": "Berita mengenai kegiatan pengabdian masyarakat/mahasiswa, bukan aktivitas industri manufaktur."
+  },
+  "885a4bf82393537a2af629fb0f13d9950568214743fdf9e7533db1910dfd99a9": {
+    "id": 65,
+    "label": "BUKAN_HILIR",
+    "alasan": "Inovasi produk pangan di tingkat mahasiswa/akademisi, bukan skala industri manufaktur komersial."
+  },
+  "1bfaa2e8fc313315963b93db05f9bba1232fffc70f2028153b3108a4d24ac554": {
+    "id": 66,
+    "label": "HILIR",
+    "alasan": "Berita mengenai investasi pembangunan pabrik pengolahan cokelat baru di Karawang oleh produsen global."
+  },
+  "4f90ab8f3d32e734465c83ac3aad552d0fec103007b219873d16622f17ef3cdb": {
+    "id": 67,
+    "label": "BUKAN_HILIR",
+    "alasan": "Regulasi pengendalian tembakau di luar negeri (Vietnam) tanpa dampak langsung bagi industri dalam negeri."
+  },
+  "8fa7147986a9192a6d6a79eff4cf572f6d10db4665d8b434c5f36d9df9fd2211": {
+    "id": 68,
+    "label": "BUKAN_HILIR",
+    "alasan": "Berita mengenai kebijakan kesehatan dan regulasi produk nikotin di Vietnam yang tidak melibatkan industri agro Indonesia."
+  },
+  "1da1d4a352973e311b1c1135f46d9d18655eb77c9bd39dd4a1ed30a7ab3be8fa": {
+    "id": 69,
+    "label": "BUKAN_HILIR",
+    "alasan": "Fokus pada kegiatan promosi jenama oleh Kementerian Ekonomi Kreatif, bukan manufaktur industri agro di bawah Kemenperin."
+  },
+  "88da53eb17bca2af3756882894365534632c4a7ce252401c88d32fa18d996c82": {
+    "id": 70,
+    "label": "RAGU",
+    "alasan": "Topik perbatasan antara penguatan hulu peternakan dan hilirisasi susu tanpa pernyataan spesifik dari pihak industri atau Kemenperin."
+  },
+  "5da2f39302227ee161ba81b17be020c9a0f2067939788f662363c60584d2df30": {
+    "id": 71,
+    "label": "HILIR",
+    "alasan": "Fokus pada penguatan industri susu nasional dan upaya pengurangan ketergantungan impor melalui kepastian pasar."
+  },
+  "ee528c65561c1842eff1ab656cff044eed6270421d2a0bf83cf28229044d4c13": {
+    "id": 72,
+    "label": "HILIR",
+    "alasan": "Ekspansi produk dan strategi pasar perusahaan industri air minum dalam kemasan (AMDK)."
+  },
+  "77a9fe451cad5138c022dfc528123c0e57639bc12957b094b00b0cb5941839a9": {
+    "id": 73,
+    "label": "HILIR",
+    "alasan": "Peluncuran varian kemasan baru oleh produsen AMDK untuk memperluas penetrasi pasar industri minuman."
+  },
+  "83e57abd421bbfbe0bd6b9695aedbb33d5b4cf1804248ba87a518e2607b8badb": {
+    "id": 74,
+    "label": "HILIR",
+    "alasan": "Kinerja ekonomi dan strategi diversifikasi produk perusahaan manufaktur minuman olahan."
+  },
+  "758d001c8dc407f28050bc8fd72c9afb8ac3387abe61dcc5d4d67e9fe88b6e70": {
+    "id": 75,
+    "label": "HILIR",
+    "alasan": "Aktivitas perluasan portofolio merek dan operasional pabrik air minum kemasan."
+  },
+  "a8d136366d163b93785581309421284e87cfd11653cc7a87565c89d76498b14c": {
+    "id": 76,
+    "label": "HILIR",
+    "alasan": "Pengembangan bisnis dan perluasan kategori produk pada industri minuman olahan nasional."
+  },
+  "5932171351637689a95419e64ebd2ad7e69e1c85c108284a2c8a17d4d090ef9d": {
+    "id": 77,
+    "label": "HILIR",
+    "alasan": "Pertumbuhan penjualan dan strategi penguasaan segmen pasar baru di industri AMDK."
+  },
+  "75cf8f624a0d7a49a8e5d7164190f7d6ddf75a4187478107fbf07672ff133210": {
+    "id": 78,
+    "label": "HILIR",
+    "alasan": "Laporan kinerja keuangan (laba/penjualan) dan ekspansi pangsa pasar perusahaan industri agro."
+  },
+  "70a9956616f9f2e3b3c3a3f9a38697a4c45d51c088852c21334c656772c5042c": {
+    "id": 79,
+    "label": "HILIR",
+    "alasan": "Strategi korporasi dalam meningkatkan kinerja melalui perluasan merek di sektor industri minuman."
+  },
+  "b14ad504631022071b494856419a021a1a9a1521797821cf9ad9a5ed578c5e60": {
+    "id": 80,
+    "label": "BUKAN_HILIR",
+    "alasan": "Fokus pada hulu perkebunan, budidaya tanaman, dan pembinaan petani oleh dinas daerah."
+  },
+  "ac61d7e458d9d692d51a8e18ce41095cfa9fd998c685e0889847ec2142805ed8": {
+    "id": 81,
+    "label": "BUKAN_HILIR",
+    "alasan": "Berita berfokus pada sektor hulu perkebunan dan pembinaan petani di tingkat desa."
+  },
+  "45d0265b6e9e8b1195b05aba348213321eead0e39c7ae211b62ffa11f56be35f": {
+    "id": 82,
+    "label": "BUKAN_HILIR",
+    "alasan": "Fokus utama adalah evaluasi UU Perkebunan dan data luas lahan serta produksi mentah perkebunan rakyat."
+  },
+  "82aa5b6cbb08841f6b606181f24aa9f6fbfc8e7c8c6a304f2cdb787b25479975": {
+    "id": 83,
+    "label": "BUKAN_HILIR",
+    "alasan": "Merupakan berita hasil penelitian ilmiah akademisi tanpa adanya keterlibatan industri atau kebijakan pemerintah."
+  },
+  "050a889c0149ed21f3aea3251342a8d83f05efc2a006c67e782dcee614a4e26e": {
+    "id": 84,
+    "label": "BUKAN_HILIR",
+    "alasan": "Berfokus pada program perhutanan sosial dan pemberdayaan masyarakat di kawasan hutan (hulu)."
+  },
+  "c1f51f976280835dac5693a83204ba150fa34c00af59893d5d9c6afc1d51e717": {
+    "id": 85,
+    "label": "BUKAN_HILIR",
+    "alasan": "Secara eksplisit menyatakan fokus pada sektor hulu kopi dan pembagian bibit kepada petani."
+  },
+  "7053d95e6ce2aab8b0be9268a3fda5261f09f14aa12fe3a603b01d964c16cdd7": {
+    "id": 86,
+    "label": "HILIR",
+    "alasan": "Membahas kinerja harga CPO yang merupakan produk olahan utama industri agro dan indikator ekonomi sektor hilir."
+  },
+  "f222ed4a606ce0fddf9f34815812ecc2370b742123533ed56eda97b304ce6276": {
+    "id": 87,
+    "label": "HILIR",
+    "alasan": "Membahas hilirisasi sawit melalui program biodiesel B50 dan dampaknya terhadap struktur pasokan industri nasional."
+  },
+  "91a06eae254f8eef6e9d8380a291577c4e7a0056b22a8174c9995153a11f69c5": {
+    "id": 88,
+    "label": "BUKAN_HILIR",
+    "alasan": "Berita bersifat lokal mengenai teknis angkutan logistik dan koordinasi dengan DPRD daerah."
+  },
+  "32c60c990e96eb9887a7e7887b6cd4f3ec159f29daf6961aad88c3859d781e18": {
+    "id": 89,
+    "label": "HILIR",
+    "alasan": "Terkait dengan standarisasi dan pengujian teknis produk turunan kelapa sawit untuk keperluan industri dan ekspor."
+  },
+  "35df7fdc6072bf7d0352cfe14bd0e909603b0235ba4eb6eb3ac9f5ddb4b0ff5d": {
+    "id": 90,
+    "label": "HILIR",
+    "alasan": "Kebijakan perdagangan internasional (tarif impor) yang berdampak langsung pada ekspor produk industri agro."
+  },
+  "df0f72a2be3f4e3c2d30ca21bfeaba290c802674dba5fe718cde514936685181": {
+    "id": 91,
+    "label": "HILIR",
+    "alasan": "Membahas kinerja ekspor produk agro dan memuat pernyataan resmi dari asosiasi industri (GAPKI)."
+  },
+  "78847c7871c8253cb92abeca6aaadc7e4f491824b51ebf6e429bf8dc51cdfb9d": {
+    "id": 92,
+    "label": "HILIR",
+    "alasan": "Inovasi produk turunan agro dari institusi pendidikan di bawah naungan Kementerian Perindustrian."
+  },
+  "e0bfcd2c4e98b9253d1f0e071354ff69f8616820a36926b4e0654ec9b521ddb4": {
+    "id": 93,
+    "label": "BUKAN_HILIR",
+    "alasan": "Berfokus pada teknologi budidaya, penyerbukan, dan manajemen panen di area perkebunan (hulu)."
+  },
+  "7d601a243e1cc2d1c874ac0aea9cb49831d27fcc08c875b13c555ba23e1cf290": {
+    "id": 94,
+    "label": "BUKAN_HILIR",
+    "alasan": "Merupakan karya ilmiah mengenai logistik pengangkutan bahan baku mentah (TBS) di area perkebunan."
+  },
+  "2976becde14c57df22eed851240b65a4e0a2f61e536b0a17824929eed49a2caf": {
+    "id": 95,
+    "label": "BUKAN_HILIR",
+    "alasan": "Berfokus pada regulasi rencana aksi daerah untuk perkebunan berkelanjutan dan pengujian lingkungan."
+  },
+  "3526dfb30af44ec1381e51f7d0f1cf4c3f0102f821995710678de38cd77dfb1a": {
+    "id": 96,
+    "label": "HILIR",
+    "alasan": "Berita membahas dampak kebijakan tarif impor AS terhadap kapasitas produksi sektor manufaktur Indonesia."
+  },
+  "30c5b57c11f80ccdd8f5c73ed72f4712cc5376e95e16319777f7e11a5c96f9e4": {
+    "id": 97,
+    "label": "BUKAN_HILIR",
+    "alasan": "Berita fokus pada fluktuasi harga komoditas mentah (CPO) di bursa, bukan pada aktivitas industri pengolahan."
+  },
+  "524dd65e14e89ab0ce8c159d6a9fba2c40be3aeb897129f0d6fda883bd0242bf": {
+    "id": 98,
+    "label": "HILIR",
+    "alasan": "Berita mengenai pelatihan teknis pengujian produk hilirisasi sawit yang relevan dengan operasional industri pengolahan."
+  },
+  "4131e3bd583cb4dd8f7c6a80e84d8f13d56d401852f024f7399ffcaf2fbd7d85": {
+    "id": 99,
+    "label": "BUKAN_HILIR",
+    "alasan": "Berita berupa karya ilmiah/skripsi akademis, bukan berita kebijakan atau kinerja industri."
+  },
+  "89aef6fc6832754834eebadcc7ea4e9ccfce4afcad920e6945b55b35c9425a79": {
+    "id": 100,
+    "label": "BUKAN_HILIR",
+    "alasan": "Berita bersifat umum mengenai strategi energi nasional, tidak spesifik membahas operasional industri agro."
+  },
+  "dce7d014902e19d2c443e9de518d5569387128923e372122f80541b3ad4f60fc": {
+    "id": 101,
+    "label": "HILIR",
+    "alasan": "Program biodiesel B50 merupakan kebijakan strategis yang berdampak langsung pada industri pengolahan sawit dalam negeri."
+  },
+  "3ad717171c9a95f6106c585dcf586df70c05da5d490edbdaab2e6e31f9c53c7f": {
+    "id": 102,
+    "label": "BUKAN_HILIR",
+    "alasan": "Berita bersifat umum mengenai diversifikasi energi, tidak memuat detail operasional industri agro."
+  },
+  "1d3299718270d13a4f717b42c808f5f1015e7713ff085a58284045253d6ddc1a": {
+    "id": 103,
+    "label": "BUKAN_HILIR",
+    "alasan": "Berita mengenai kebijakan harga BBM subsidi, tidak terkait langsung dengan sektor industri agro."
+  },
+  "99c329bcf5ed80105eb21231ee08b21c89b182d47b5995a04c03193e4cc33fc0": {
+    "id": 104,
+    "label": "BUKAN_HILIR",
+    "alasan": "Berita mengenai investasi PLTS (energi surya), tidak termasuk dalam lingkup industri agro."
+  },
+  "a1bf3a25df8ed52b64af931ecf5d9c7bb6525771182b959d7ff646f004062b4e": {
+    "id": 105,
+    "label": "HILIR",
+    "alasan": "Berita membahas pengembangan biodiesel B50 sebagai bagian dari transformasi ekonomi berbasis energi domestik."
+  },
+  "58a49c88d862663fadbaa10fac81c408c3cb5c1505087b53e26036b239ff1a83": {
+    "id": 106,
+    "label": "BUKAN_HILIR",
+    "alasan": "Berita mengenai industri alas kaki (sepatu), bukan sektor industri agro."
+  },
+  "c09d42b6cffd5baca7b885520dff7daf1559ff052106ef9e35d5638ac1d96fbf": {
+    "id": 107,
+    "label": "HILIR",
+    "alasan": "Berita mengenai kerja sama pengembangan teknologi pengolahan limbah komoditas menjadi produk turunan bernilai ekonomi."
+  },
+  "7efe2548b56445b22041ce2f53df6d07af935c3be714349ed0dd4ce750dc1854": {
+    "id": 108,
+    "label": "BUKAN_HILIR",
+    "alasan": "Berita berupa arsip perpustakaan/karya ilmiah lama mengenai mesin pakan ternak."
+  },
+  "8ad658fb5b7bc07522a99a22bb5e31d243fc35514ed55945e8dc60eb7e92a8ab": {
+    "id": 109,
+    "label": "HILIR",
+    "alasan": "Berita membahas tantangan hilirisasi industri agro dan pentingnya ketersediaan bahan baku untuk industri pengolahan."
+  },
+  "f4e6b1d25a4bd44240c46e1c84866083e1cfa473839e02067dd2372ef827ee4a": {
+    "id": 110,
+    "label": "HILIR",
+    "alasan": "Berita membahas kendala investasi hilirisasi perkebunan yang berdampak langsung pada keberlanjutan industri pengolahan."
+  },
+  "99b1cf976376e775e2e92f65ababf511db0bb844a7a9ed675d6a099115c5362d": {
+    "id": 111,
+    "label": "BUKAN_HILIR",
+    "alasan": "Berita fokus pada inovasi akademis/mahasiswa terkait pakan ternak, bukan aktivitas industri manufaktur skala besar."
+  },
+  "0c65d98f36636870f68f08f964587df5d6cb85445a09a3bd5d4f11ba59d8283a": {
+    "id": 112,
+    "label": "BUKAN_HILIR",
+    "alasan": "Berita membahas penetapan harga TBS (tandan buah segar) yang merupakan ranah hulu perkebunan."
+  },
+  "37d886ca6d83e9c945892acb221407c48ea76447bd5b3ab906aa0948d3116188": {
+    "id": 113,
+    "label": "HILIR",
+    "alasan": "Berita mengenai kebijakan Kemenperin terkait penerapan Industri 4.0 pada perusahaan manufaktur untuk meningkatkan produktivitas."
+  },
+  "5599baf815554f8ff0900c62d17628b0638f2706b64cbc4926a019d0e5e7d19e": {
+    "id": 114,
+    "label": "HILIR",
+    "alasan": "Berita mengenai capaian kinerja industri manufaktur melalui program National Lighthouse Industri 4.0 Kemenperin."
+  },
+  "d030d9ac52b91cceff3416b86506a9893e6dfed0932280c8eb64b22ab2346352": {
+    "id": 115,
+    "label": "BUKAN_HILIR",
+    "alasan": "Berita fokus pada inovasi akademis/mahasiswa terkait pakan ternak, bukan aktivitas industri manufaktur skala besar."
+  },
+  "18aa7c1c4416d9194acd0a0b12c7689221ce8e6f98c62350b230fd84ac57dc9e": {
+    "id": 116,
+    "label": "HILIR",
+    "alasan": "Berita mengenai keberlangsungan operasional industri pengolahan pulp dan kertas serta nasib pekerja di dalamnya."
+  },
+  "74c600004ce6a6bb02fe7f020186dfe5bbbd36db9a558159c75dd4ec83c8a22d": {
+    "id": 117,
+    "label": "HILIR",
+    "alasan": "Berita mengenai keberlangsungan operasional industri pengolahan pulp dan kertas serta nasib pekerja di dalamnya."
+  },
+  "6e3e482f45f8eaa648ae47be5a09f175600493232e29debcce909d3a6e876e28": {
+    "id": 119,
+    "label": "HILIR",
+    "alasan": "Berita mengenai progres investasi dan operasional pabrik rokok (industri hasil tembakau)."
+  },
+  "ec85c66f0a7b8f1c76f813ce2d1aab20c630666b3440d56f4b4c2b286f75c507": {
+    "id": 120,
+    "label": "BUKAN_HILIR",
+    "alasan": "Berita fokus pada kegiatan akademis/kampus terkait pengembangan perkebunan dan kualitas hasil kebun."
+  },
+  "f3e2d2d5da5c2eb0196188a7e1eaee081d7665dae25100def6e1f44f2d34197e": {
+    "id": 121,
+    "label": "BUKAN_HILIR",
+    "alasan": "Berita bersifat edukasi/artikel gaya hidup mengenai proses pengolahan kopi, bukan kebijakan atau kinerja industri manufaktur."
+  },
+  "cfbd70e1a31dd60b4e7e1461ad0d252e6038b9a10dde3cbf443ee311bb57bf8d": {
+    "id": 122,
+    "label": "BUKAN_HILIR",
+    "alasan": "Berita mengenai kerja sama pengembangan perkebunan kelapa sawit rakyat (ranah hulu)."
+  },
+  "0ca413f6eeccb8e05d31ee3e556a1360724e6f1efd06edac0cda4683d310e942": {
+    "id": 123,
+    "label": "HILIR",
+    "alasan": "Berita mengenai kebijakan perdagangan internasional yang berdampak langsung pada ekspor produk turunan sawit (industri hilir)."
+  },
+  "3aa34721653c3b59372b487856429f05060508d4bc098973cf6e30ff710e19cc": {
+    "id": 1,
+    "label": "HILIR",
+    "alasan": "Artikel membahas respons resmi Kemenperin (Ditjen Industri Agro) terkait insiden di fasilitas produksi manufaktur dalam negeri."
+  },
+  "dae41f5259c44264327515b4c138a50d8d01f94a04088c720fc5fb1e50bf74f5": {
+    "id": 2,
+    "label": "HILIR",
+    "alasan": "Artikel membahas respons resmi Kemenperin (Ditjen Industri Agro) terkait insiden di fasilitas produksi manufaktur dalam negeri."
+  },
+  "0355e74260a8756aa4d11550fced5725bc1fc655fa5586fec54019a56b161d37": {
+    "id": 3,
+    "label": "HILIR",
+    "alasan": "Artikel membahas respons resmi Kemenperin (Ditjen Industri Agro) terkait insiden di fasilitas produksi manufaktur dalam negeri."
+  },
+  "41ab7470a87d65c8f63c95974b41798f9470aea98710c4446cc2884a0269e2eb": {
+    "id": 4,
+    "label": "HILIR",
+    "alasan": "Artikel membahas respons resmi Kemenperin (Ditjen Industri Agro) terkait insiden di fasilitas produksi manufaktur dalam negeri."
+  },
+  "3466e6202fe5be247f2e86ec72c139c626520591b185ec1c1e036a157335cfa2": {
+    "id": 5,
+    "label": "HILIR",
+    "alasan": "Artikel membahas dampak makroekonomi terhadap biaya produksi industri manufaktur nasional dengan pernyataan resmi Kemenperin."
+  },
+  "8e53072dda241773661e811061560fced6e861f9a4d5221bb44eadd1261bfec7": {
+    "id": 6,
+    "label": "HILIR",
+    "alasan": "Artikel membahas respons resmi Kemenperin (Ditjen Industri Agro) terkait insiden di fasilitas produksi manufaktur dalam negeri."
+  },
+  "f278e015f3e0e54ef2723e20b31257dc813fd95b438326064ca907adc655f117": {
+    "id": 9,
+    "label": "HILIR",
+    "alasan": "Artikel membahas respons resmi Kemenperin (Ditjen Industri Agro) terkait insiden di fasilitas produksi manufaktur dalam negeri."
+  },
+  "2e62bff7bbc63005ceced7032a72fe313def79cac00eeda0bac4ba4f7cd045ca": {
+    "id": 10,
+    "label": "HILIR",
+    "alasan": "Artikel membahas respons resmi Kemenperin (Ditjen Industri Agro) terkait insiden di fasilitas produksi manufaktur dalam negeri."
+  },
+  "26bc9b0df1e4e916a5409f24195b076dc5618d88e1348b0be147e2f1f085b1c4": {
+    "id": 11,
+    "label": "HILIR",
+    "alasan": "Artikel membahas respons resmi Kemenperin (Ditjen Industri Agro) terkait insiden di fasilitas produksi manufaktur dalam negeri."
+  },
+  "5b7f5a1c404cc445fe7b70352e4c70ff48232c0645bf27ff4cb08ee2bbfba928": {
+    "id": 13,
+    "label": "HILIR",
+    "alasan": "Artikel membahas respons resmi Kemenperin (Ditjen Industri Agro) terkait insiden di fasilitas produksi manufaktur dalam negeri."
+  },
+  "07de7e2c1fe7e9da4f6875bc91120690d67f7fd1245f373ea85073b5ee09875d": {
+    "id": 14,
+    "label": "HILIR",
+    "alasan": "Artikel membahas respons resmi Kemenperin (Ditjen Industri Agro) terkait insiden di fasilitas produksi manufaktur dalam negeri."
+  },
+  "721cbb365617c0bfd021c99be3c12883697537521dd3c6eff6015d3e1afc47dc": {
+    "id": 17,
+    "label": "HILIR",
+    "alasan": "Artikel membahas respons resmi Kemenperin (Ditjen Industri Agro) terkait insiden di fasilitas produksi manufaktur dalam negeri."
+  },
+  "729c96c5b1a60a18b5d66a67779185bfc5ae40733c0069f90d3323f48326c157": {
+    "id": 20,
+    "label": "BUKAN_HILIR",
+    "alasan": "Hanya berupa kegiatan riset/pengabdian masyarakat oleh pihak kampus (Umsida) tanpa keterlibatan atau pernyataan resmi Kemenperin/asosiasi industri."
+  },
+  "d5567b4e448fb89b90b09d20b7828c9022c24abd080a42e6f868f5fdbe858377": {
+    "id": 23,
+    "label": "BUKAN_HILIR",
+    "alasan": "Hanya berupa wacana/aspirasi pemerintah daerah (Bupati) terkait pengembangan komoditas tanpa adanya realisasi industri manufaktur atau pernyataan Kemenperin."
+  },
+  "0df901f5229e15ac12230b219216bbb4f1c2fb04493e0e27c328a0923b24008e": {
+    "id": 25,
+    "label": "HILIR",
+    "alasan": "Membahas kebijakan hilirisasi industri rumput laut menjadi produk turunan (biostimulan) yang relevan dengan sektor industri agro."
+  },
+  "86e41a63412cc62e64972945a66f40e76c047d3357814b72f34b579db9532648": {
+    "id": 27,
+    "label": "HILIR",
+    "alasan": "Artikel membahas strategi hilirisasi rumput laut untuk pengembangan industri pengolahan dan rantai pasok."
+  },
+  "c5e1042ba16377e84859beef72e9750ef87f57582b9ec7ca8cdb69ae730d5e8a": {
+    "id": 29,
+    "label": "HILIR",
+    "alasan": "Pernyataan resmi Wakil Menteri Investasi dan Hilirisasi mengenai potensi investasi industri pengolahan rumput laut."
+  },
+  "352c00d78ce95f720e204a10f44774001ab09cbcc2e99e855ce4e72df3df5524": {
+    "id": 30,
+    "label": "HILIR",
+    "alasan": "Membahas penguatan hilirisasi pada sektor industri pengolahan rumput laut, udang, dan garam."
+  },
+  "b6e19b9220b8dce973c203e4ba2e1bc9837a40ec9078130991c7b651921b01ab": {
+    "id": 31,
+    "label": "HILIR",
+    "alasan": "Kerja sama penerapan teknologi tepat guna untuk pengolahan limbah komoditas menjadi produk turunan bernilai ekonomi."
+  },
+  "eab7ef89896716f0cc185f1c9f7f902d964c32c5f0284fec821edf2be9e59af5": {
+    "id": 34,
+    "label": "HILIR",
+    "alasan": "Pemerintah daerah membahas strategi pengembangan industri rumput laut bersama investor."
+  },
+  "7cfcc77a1d930d8b1155115d49d5ee4dc22df0126a2910831129a7bf7775fa38": {
+    "id": 35,
+    "label": "HILIR",
+    "alasan": "Kunjungan kerja pemerintah daerah untuk merumuskan strategi pengembangan industri rumput laut bersama calon investor."
+  },
+  "204ef3e42ed9cff70b631826ae30f2595aad28ce71d96e78afef4075e7c6823c": {
+    "id": 36,
+    "label": "HILIR",
+    "alasan": "Analisis kinerja operasional dan keuangan perusahaan manufaktur makanan olahan (Indofood)."
+  },
+  "d863c5cbd9cfbe88eccd20412816ee8a705a6d57f282eb178566217e3da0459a": {
+    "id": 38,
+    "label": "BUKAN_HILIR",
+    "alasan": "Fokus pada sengketa lahan dan peralihan pengelolaan aset, bukan pada aktivitas operasional industri manufaktur agro."
+  },
+  "8f13e19e52242616ea5995cf98b714eda6dcb37645e9e0d65648f18245aaf3ad": {
+    "id": 39,
+    "label": "BUKAN_HILIR",
+    "alasan": "Fokus pada isu ketenagakerjaan dan transisi administratif pascapencabutan izin, bukan pada proses industri manufaktur."
+  },
+  "ae6d9c27b85b412b8544754f1c1d8d51566f767b4886156a71171a59596326d7": {
+    "id": 40,
+    "label": "HILIR",
+    "alasan": "Profil perusahaan manufaktur kertas dan kemasan yang merupakan bagian dari industri hilir berbasis kehutanan."
+  },
+  "8a152523dc9e91b20e983ddcb5cc7859cda4c35742cd8b8766c7c7cc01358c01": {
+    "id": 42,
+    "label": "BUKAN_HILIR",
+    "alasan": "Berita mengenai sengketa administratif dan ketidakpastian pengelolaan lahan, bukan operasional industri."
+  },
+  "24dc89bed0b31ebfff012546adc625b1f82f6b5bfb753061be2fe00384b871a7": {
+    "id": 43,
+    "label": "BUKAN_HILIR",
+    "alasan": "Berita investigasi mengenai asal-usul perusahaan pengelola lahan, bukan mengenai aktivitas industri manufaktur."
+  },
+  "ee259d7b245b8a1359344aa7acee14f8f34687321981e503b7ce1f35cfcbed64": {
+    "id": 44,
+    "label": "BUKAN_HILIR",
+    "alasan": "Fokus pada polemik penunjukan perusahaan pengelola aset, bukan pada proses hilirisasi industri."
+  },
+  "00dbc34bc51ee32eb8e02276e93613a71de6e8fb4773dc9eb0d910552ae980c8": {
+    "id": 45,
+    "label": "HILIR",
+    "alasan": "Pernyataan BKPM mengenai realisasi investasi dan keberlanjutan kegiatan usaha industri pulp dan kertas."
+  },
+  "cf63045d386e54e09ec3afa4166fe8dbb592c313f2bf1d845a3ca9c006b95858": {
+    "id": 46,
+    "label": "HILIR",
+    "alasan": "Laporan pertumbuhan industri furnitur nasional dengan respons dari asosiasi industri (HIMKI)."
+  },
+  "c43ee552ed71a3ac8dd8fdc9a41253267cb25d4ab8e394fdaf3646b8303e6549": {
+    "id": 48,
+    "label": "HILIR",
+    "alasan": "Artikel membahas progres pembangunan fisik dan uji coba produksi pabrik rokok sebagai bagian dari investasi industri manufaktur."
+  },
+  "7e94bf38735a06f22f9582f0d4107a9ceb706ca429b3cddd0fd277d644c7369e": {
+    "id": 52,
+    "label": "HILIR",
+    "alasan": "Artikel melibatkan asosiasi pekerja industri (SP-RTMM) dalam isu keberlangsungan industri hasil tembakau legal."
+  },
+  "60f2ec7df541d43888f2720d3f1cfa3fb72831a92027d0658db8b7d74af10d0c": {
+    "id": 53,
+    "label": "HILIR",
+    "alasan": "Artikel memuat aspirasi pelaku industri hasil tembakau terkait kebijakan cukai yang berdampak langsung pada operasional pabrik."
+  },
+  "50ebaf6b665245f60de14571cf36667891003d9cf78f5ae59702930cac009f6a": {
+    "id": 54,
+    "label": "HILIR",
+    "alasan": "Artikel membahas pelatihan teknis proses pengolahan (blending) untuk meningkatkan kompetensi pelaku industri hasil tembakau."
+  },
+  "8d09e91a02dc0dc047cda7b7fea72896a2fb39f3e2dee8c0767b2ea562d49fa1": {
+    "id": 55,
+    "label": "HILIR",
+    "alasan": "Artikel melaporkan operasional pabrik rokok dan penyerapan tenaga kerja di sektor industri hasil tembakau."
+  },
+  "79a4348752ed86cfbb172ff502731d89a584e46f3f5d13fcef9d76f2ebe455b9": {
+    "id": 56,
+    "label": "HILIR",
+    "alasan": "Artikel membahas strategi bisnis dan penguatan SDM pada perusahaan manufaktur di industri hasil tembakau."
+  },
+  "be144131e22f27fc96f286320e2b5e9e7c1c86cd636477dc297b9dcc45cded3a": {
+    "id": 58,
+    "label": "HILIR",
+    "alasan": "Artikel melaporkan investasi pembangunan fasilitas produksi (pabrik) cokelat baru di kawasan industri."
+  },
+  "c76b6eefde9bba0c5296338e40cd9ca7d3302606c1d0e9bacc88e0da1df45b55": {
+    "id": 60,
+    "label": "HILIR",
+    "alasan": "Artikel melaporkan ekspansi kapasitas produksi melalui pembangunan pabrik cokelat baru di Indonesia."
+  },
+  "a0788acce57d9f9d256da41ada391ce0ff36f3ac3313308943a1c637fdd77286": {
+    "id": 61,
+    "label": "HILIR",
+    "alasan": "Artikel melaporkan rencana investasi pembangunan pabrik cokelat baru sebagai bagian dari pengembangan industri pengolahan kakao."
+  },
+  "c253ec00240ce0f3f2ed1a2f65fcd6cffa716d80dd268bc0b088958e7359e7b7": {
+    "id": 66,
+    "label": "HILIR",
+    "alasan": "Artikel membahas investasi pada industri pengolahan kakao dan cokelat di Indonesia."
+  },
+  "7d347a8d693b0c21969aebe26b4c47052e391f4779d3cf2b3678466f27638f1e": {
+    "id": 70,
+    "label": "BUKAN_HILIR",
+    "alasan": "Artikel lebih berfokus pada isu hulu peternakan sapi perah dan pembiayaan koperasi daripada operasional pabrik pengolahan susu."
+  },
+  "e5f1f4f43e41c19655520124b4c59f02668a85183d9953677fdae5263a8d061d": {
+    "id": 71,
+    "label": "BUKAN_HILIR",
+    "alasan": "Artikel berfokus pada penguatan kelembagaan peternak dan populasi sapi perah, bukan pada aktivitas manufaktur industri susu."
+  },
+  "5cafae9927b006de07a6658c6144dfd032220515b967e0f8d2a590897daeab33": {
+    "id": 72,
+    "label": "HILIR",
+    "alasan": "Artikel membahas strategi diversifikasi produk dan pengembangan lini produksi pada industri air minum dalam kemasan (AMDK)."
+  },
+  "24ac10d46a6a7411d5716e192e41c08abd38511e5bbf8e6042689e56a30716cb": {
+    "id": 73,
+    "label": "HILIR",
+    "alasan": "Artikel membahas strategi ekspansi portofolio produk oleh perusahaan manufaktur AMDK."
+  },
+  "96f86f7741ff1d9b90897ae69e0bdfb2f05d4131ea49201f411cbd197969b3c1": {
+    "id": 74,
+    "label": "HILIR",
+    "alasan": "Artikel membahas kinerja operasional dan strategi diversifikasi produk pada industri air minum dalam kemasan."
+  },
+  "090fdad058dc5b0095a7a7541ef88df94c4b3625f628a70d806fdc00fa62a2d5": {
+    "id": 75,
+    "label": "HILIR",
+    "alasan": "Artikel membahas strategi ekspansi bisnis dan operasional pabrik AMDK dalam negeri."
+  },
+  "2aac106be172412c6bf17491ab6af68bd1809c1ff651f458782690a4a3397611": {
+    "id": 76,
+    "label": "HILIR",
+    "alasan": "Artikel membahas strategi pengembangan bisnis dan portofolio merek perusahaan manufaktur AMDK."
+  },
+  "f5b3fadabcf6245208d57b66bfed52f68b5280e30db27d0a829fb803b68fb5e7": {
+    "id": 77,
+    "label": "HILIR",
+    "alasan": "Artikel membahas strategi pertumbuhan industri AMDK nasional melalui diversifikasi produk."
+  },
+  "8c11b3c3a8d593ce6b2112d5da3319e4511671317237a99616818f8b638ce8da": {
+    "id": 78,
+    "label": "HILIR",
+    "alasan": "Artikel membahas kinerja operasional dan perluasan portofolio produk emiten industri AMDK."
+  },
+  "6c491f1caf223d8eefc6fc94e70b3c28474686d4614a273ab68388b1d03025c2": {
+    "id": 79,
+    "label": "HILIR",
+    "alasan": "Artikel membahas strategi penetrasi pasar oleh perusahaan manufaktur AMDK."
+  },
+  "5a1f9c447868d1c071dd88ff2abf603b347b14578c70662f4a9ac855cd955d45": {
+    "id": 86,
+    "label": "BUKAN_HILIR",
+    "alasan": "Artikel hanya membahas fluktuasi harga komoditas global (hulu) dan bukan aktivitas industri manufaktur."
+  },
+  "bfa7fdda306ebd66c9fb161fdcfefec523a9e1dc4075d1aa04c986d6473bc8a9": {
+    "id": 87,
+    "label": "HILIR",
+    "alasan": "Artikel membahas dampak kebijakan biodiesel B50 terhadap industri pengolahan sawit nasional."
+  },
+  "794eeaf2527bf597a0192dad95724c8b5381d3a054402af6992450ce5d06d8c1": {
+    "id": 89,
+    "label": "HILIR",
+    "alasan": "Artikel membahas standardisasi teknis pengujian produk turunan sawit yang relevan dengan industri hilirisasi."
+  },
+  "d73d06002f96bee237ccfac8f371d3a29f280b264f4149fb379545a31dce3515": {
+    "id": 90,
+    "label": "HILIR",
+    "alasan": "Artikel membahas kebijakan tarif ekspor produk industri dan sawit yang berdampak langsung pada sektor manufaktur."
+  },
+  "766c96eae82ae154125f8619d64d88deccb66026888fa0c00ff45877d66a1a33": {
+    "id": 91,
+    "label": "HILIR",
+    "alasan": "Artikel memuat pernyataan asosiasi industri (GAPKI) terkait stabilitas harga CPO untuk kepentingan industri."
+  },
+  "9af27a73a17a9cae356d19aa0b81684c397a41af712f73ae529a5df0ef301481": {
+    "id": 92,
+    "label": "BUKAN_HILIR",
+    "alasan": "Artikel hanya membahas prestasi lomba poster ilmiah mahasiswa, bukan skala industri manufaktur."
+  },
+  "14ae9a9bec68532b70b24eeafb95d19db4a62f8f2773825fbf2d877ea481d05a": {
+    "id": 96,
+    "label": "HILIR",
+    "alasan": "Artikel membahas dampak kebijakan tarif impor AS terhadap sektor manufaktur Indonesia."
+  },
+  "4f49acaa167b9fe912a9a8d36ada36593d9fbbb67aa6ea358748cc846ee31184": {
+    "id": 98,
+    "label": "HILIR",
+    "alasan": "Artikel membahas pelatihan teknis pengujian produk hilir sawit untuk mendukung industri hilirisasi."
+  },
+  "83c65916242ba38b34188bb2847d0035f879050080dfca4a98df4e35d529e52d": {
+    "id": 101,
+    "label": "HILIR",
+    "alasan": "Artikel membahas kebijakan pemerintah terkait program biodiesel B50 sebagai bagian dari industri hilirisasi energi."
+  },
+  "b7577d286a22902ccd85595ebd54c9e2d6243d1c3e3691df59005b35b832f07c": {
+    "id": 105,
+    "label": "BUKAN_HILIR",
+    "alasan": "Artikel berupa opini umum mengenai transformasi energi tanpa membahas operasional industri manufaktur secara spesifik."
+  },
+  "542c5c97c963e12177aec07723b2e1ba8ae1a4c0956f3c3e3ea7478d1699cd0b": {
+    "id": 107,
+    "label": "BUKAN_HILIR",
+    "alasan": "Artikel ini hanya membahas penjajakan kerja sama riset teknologi tepat guna skala daerah/akademisi, bukan operasional industri manufaktur yang sudah berjalan."
+  },
+  "e509a67df92af46bdfc1f2afe34331967c51e0da92a09e1e56c444d6c24a30a0": {
+    "id": 109,
+    "label": "HILIR",
+    "alasan": "Artikel membahas strategi hilirisasi industri agro secara makro dan tantangan ketersediaan bahan baku untuk industri pengolahan."
+  },
+  "6984b941945895c242d10d8d4749bfa827b5eef2e2c013c72e40f3a192cab6af": {
+    "id": 110,
+    "label": "BUKAN_HILIR",
+    "alasan": "Artikel ini merupakan opini pengamat (CEO CIPS) mengenai kendala sektor hulu, bukan laporan operasional atau kebijakan industri manufaktur."
+  },
+  "5c98fc7a385b64bb02a16a4fbefd7494df7a636ea8f1bf329553f78d5d44561b": {
+    "id": 113,
+    "label": "HILIR",
+    "alasan": "Artikel memuat pernyataan resmi Menteri Perindustrian terkait kinerja industri manufaktur yang menerapkan teknologi Industri 4.0."
+  },
+  "5b9c1c68b253861ccb87b385260f8ee228b2e8877b05bee4b7f6ee796b7e628f": {
+    "id": 114,
+    "label": "HILIR",
+    "alasan": "Artikel membahas capaian produktivitas pabrik percontohan dan kebijakan Kemenperin terkait National Lighthouse Industri 4.0."
+  },
+  "32fa2ceb4ff59a4fbde0305c3d4a927db336c3574437aaab5f7c59d2be066a97": {
+    "id": 116,
+    "label": "HILIR",
+    "alasan": "Artikel membahas keberlangsungan operasional industri manufaktur pulp dan kertas pasca pergantian pengelola."
+  },
+  "1a6b45d9e97dbbbf10b4e7c25626ce9850ac5e8d9d0562cc2252ee90649eac44": {
+    "id": 117,
+    "label": "HILIR",
+    "alasan": "Artikel membahas kelanjutan operasional industri manufaktur pulp dan kertas serta dampaknya terhadap rantai pasok industri."
+  },
+  "1764c85611748b3d0e577d692e954adcf659a78c072465334025be60ac5f4f31": {
+    "id": 119,
+    "label": "HILIR",
+    "alasan": "Artikel melaporkan progres pembangunan fisik pabrik rokok (industri hasil tembakau) yang akan segera beroperasi."
+  },
+  "f07db6552c6d029104133462570e68b6f0dd3221680434d1695c018b46a15422": {
+    "id": 123,
+    "label": "HILIR",
+    "alasan": "Artikel membahas dampak kebijakan perdagangan internasional terhadap ekspor produk olahan sawit Indonesia."
+  },
+  "b691c1f6f3dfe13cf44a927d99135156252516d6b1db7b55896a7b65277dd9d7": {
+    "id": 1,
+    "label": "HILIR",
+    "alasan": "Artikel membahas respons resmi Ditjen Industri Agro Kemenperin terkait insiden di fasilitas produksi manufaktur dalam negeri."
+  },
+  "46017510a88f005fd2c09b10698e229d7b3b51d21aafbcba95dec31b7d841fa5": {
+    "id": 2,
+    "label": "HILIR",
+    "alasan": "Artikel membahas respons resmi Ditjen Industri Agro Kemenperin terkait insiden di fasilitas produksi manufaktur dalam negeri."
+  },
+  "51f051c21f1641dd677ec6e0da5c3c17575565ba9095d50cb0d5c723fca0e757": {
+    "id": 3,
+    "label": "HILIR",
+    "alasan": "Artikel membahas respons resmi Ditjen Industri Agro Kemenperin terkait insiden di fasilitas produksi manufaktur dalam negeri."
+  },
+  "3ec27922a4af4fac124353119e60a1a6de68c7c5ad5c5b1cf11e0dcbb85fc545": {
+    "id": 4,
+    "label": "HILIR",
+    "alasan": "Artikel membahas respons resmi Ditjen Industri Agro Kemenperin terkait insiden di fasilitas produksi manufaktur dalam negeri."
+  },
+  "9084e5d9779e6b01f9b6dcd43cec9386d6a1b7657b8cee2c61d8b7554e0cc649": {
+    "id": 5,
+    "label": "HILIR",
+    "alasan": "Artikel membahas dampak makroekonomi terhadap biaya produksi industri manufaktur nasional dan respons Kemenperin."
+  },
+  "f0eefe25e7dfba0e5acc78146dedb1ef97f41e9be5387a219548e48c4a2df38f": {
+    "id": 6,
+    "label": "HILIR",
+    "alasan": "Artikel membahas respons resmi Ditjen Industri Agro Kemenperin terkait insiden di fasilitas produksi manufaktur dalam negeri."
+  },
+  "2e9bef7124b3ec0041386c5173a3ab5771d75281bac7ab56948b783127ddb39d": {
+    "id": 9,
+    "label": "HILIR",
+    "alasan": "Artikel membahas respons resmi Ditjen Industri Agro Kemenperin terkait insiden di fasilitas produksi manufaktur dalam negeri."
+  },
+  "45b1a39087e976e47254a3340b00643b6d7478d1bc0d91c5b54439a042e5beb5": {
+    "id": 10,
+    "label": "HILIR",
+    "alasan": "Artikel membahas respons resmi Ditjen Industri Agro Kemenperin terkait insiden di fasilitas produksi manufaktur dalam negeri."
+  },
+  "5a0c2c61db272a1f6eed5c912c7d188ca64b8de4aba7468757dbe64040544777": {
+    "id": 11,
+    "label": "HILIR",
+    "alasan": "Artikel membahas respons resmi Ditjen Industri Agro Kemenperin terkait insiden di fasilitas produksi manufaktur dalam negeri."
+  },
+  "544fb4159c4c562ea8af9deea32f31fdbae3efbd5d4eaf6d493b23e3233bf995": {
+    "id": 13,
+    "label": "HILIR",
+    "alasan": "Artikel membahas respons resmi Ditjen Industri Agro Kemenperin terkait insiden di fasilitas produksi manufaktur dalam negeri."
+  },
+  "b96d310eee4b1ec4906a2e3f1abdd4c452908274f9f43932ddbd6ef673775de9": {
+    "id": 14,
+    "label": "HILIR",
+    "alasan": "Artikel membahas respons resmi Ditjen Industri Agro Kemenperin terkait insiden di fasilitas produksi manufaktur dalam negeri."
+  },
+  "258ef01f96600a083ef0e78ddee0784e8b2ef9e340585038a429d535d6ffb4b7": {
+    "id": 17,
+    "label": "HILIR",
+    "alasan": "Artikel membahas respons resmi Ditjen Industri Agro Kemenperin terkait standar K3 di sektor industri manufaktur."
+  },
+  "5e2cce3eb428cbdc3fc5fb7844dab5dfab2d049fb2a9396cd31a54b68c8c63ca": {
+    "id": 25,
+    "label": "HILIR",
+    "alasan": "Artikel membahas upaya hilirisasi komoditas agro (rumput laut) menjadi produk turunan bernilai tambah (biostimulan)."
+  },
+  "e59e3dc63149d1db7b2d5d1e2cc853c848e07d9c899b7a4f037a5abb51c5b354": {
+    "id": 27,
+    "label": "BUKAN_HILIR",
+    "alasan": "Artikel hanya berisi rencana pemerintah daerah tanpa adanya keterlibatan atau pernyataan resmi dari Kemenperin maupun asosiasi industri manufaktur."
+  },
+  "a9c2fcd70bd46a42245dcea99b416ed62f4e82c0955246c6af8dfa034cce6d96": {
+    "id": 29,
+    "label": "HILIR",
+    "alasan": "Artikel membahas potensi investasi hilirisasi sektor kelautan dan perikanan yang relevan dengan industri agro."
+  },
+  "508fa5d8601d2c1e6204d89a15272a2bee25337adb21af7d9c381db5721acfe5": {
+    "id": 30,
+    "label": "HILIR",
+    "alasan": "Artikel membahas investasi dan hilirisasi sektor kelautan dan perikanan yang didorong oleh Kementerian Investasi/BKPM."
+  },
+  "fe70c5ba0d5642db4ab2fdcda4cff633bee1230f8574e9e48de7e9670ed73f3a": {
+    "id": 31,
+    "label": "BUKAN_HILIR",
+    "alasan": "Hanya berupa penjajakan kerja sama riset/teknologi antara Pemkab dengan institusi pendidikan, belum mencakup operasional industri manufaktur skala besar."
+  },
+  "f9f07220fd3fab7904d9b3f9115d65e90fc8bb25f7c29ba8988b7b40b130a62a": {
+    "id": 34,
+    "label": "HILIR",
+    "alasan": "Membahas strategi pengembangan industri rumput laut yang melibatkan pemerintah daerah dan investor."
+  },
+  "aea82d7cef2ee13590ab784ec8eabf5c578c9e71a137aee3663078d84e74e1c5": {
+    "id": 35,
+    "label": "HILIR",
+    "alasan": "Membahas rencana pengembangan industri rumput laut bersama calon investor di Kota Tarakan."
+  },
+  "bf23ffa290b9a295b770aabb1fa70453cb0bb39eebb23e0d1d3ba994bd39ed9f": {
+    "id": 36,
+    "label": "HILIR",
+    "alasan": "Membahas kinerja operasional dan keuangan perusahaan manufaktur makanan dan minuman (Indofood)."
+  },
+  "09061da93ac8b339fb89eec78863711141453e549f61b68083c60e9009c5adb1": {
+    "id": 40,
+    "label": "HILIR",
+    "alasan": "Profil perusahaan manufaktur kertas dan kemasan yang beroperasi di Indonesia."
+  },
+  "3a1ade9969016ca3afa99e322ccf839abf9293b977680a06f90e45d1cc610ca3": {
+    "id": 45,
+    "label": "HILIR",
+    "alasan": "Membahas realisasi investasi dan pengembangan kapasitas produksi perusahaan pulp dan kertas di Indonesia."
+  },
+  "7978bcc9db1b2e6bf8ec5729b755a592ece04485a948484507c681bad9b9f594": {
+    "id": 46,
+    "label": "HILIR",
+    "alasan": "Laporan pertumbuhan industri furnitur nasional dengan pernyataan resmi dari asosiasi industri (HIMKI)."
+  },
+  "1d2e9afde6922469257576d95cd8cf6b38cc5114c0f754fcd48f3626fe3fe1b6": {
+    "id": 48,
+    "label": "HILIR",
+    "alasan": "Pemantauan langsung pembangunan pabrik rokok (industri hasil tembakau) yang akan segera beroperasi."
+  },
+  "edf0e98558c7a05f5513a22818a5296bcb381dd0f81c81bbd1a20ed2ee0c3453": {
+    "id": 52,
+    "label": "HILIR",
+    "alasan": "Pernyataan resmi asosiasi pekerja industri (SP-RTMM) terkait keberlangsungan industri hasil tembakau legal."
+  },
+  "ed579cee83f53f47e081541a9aa3385b51eac60f3a36b36c5354aa5619bdd49e": {
+    "id": 53,
+    "label": "HILIR",
+    "alasan": "Tuntutan pelaku industri hasil tembakau terkait kebijakan cukai yang berdampak langsung pada operasional pabrik."
+  },
+  "32149f1e6b833cc00f15c4f678d170c346bcdd081a984e08384d2103c671d89c": {
+    "id": 54,
+    "label": "HILIR",
+    "alasan": "Pelatihan teknis bagi pelaku industri hasil tembakau untuk meningkatkan kompetensi pengolahan bahan baku."
+  },
+  "04ffaf68d4a9c64e7495c5399bd6b28560c923d68944ec79ebe8cd007d337ae1": {
+    "id": 55,
+    "label": "HILIR",
+    "alasan": "Pembangunan pabrik rokok baru yang akan menyerap tenaga kerja dan segera beroperasi."
+  },
+  "fe63ef756e9572a0fc34da6a004e79a1af10286256306cedbd84a73af1702a59": {
+    "id": 56,
+    "label": "HILIR",
+    "alasan": "Penguatan operasional dan SDM perusahaan manufaktur hasil tembakau (PT Aroma Tobacco International)."
+  },
+  "70cd2d4bd2858954dd1c2972b20f7b74d3af75496c60fae97d5b05d7bd53809d": {
+    "id": 58,
+    "label": "HILIR",
+    "alasan": "Pembangunan pabrik baru oleh produsen cokelat di kawasan industri sebagai bagian dari ekspansi manufaktur."
+  },
+  "a6a3c6e1f3167efd26c3f93bde599ad462c79bcd6c3da52939572b9c6302c86a": {
+    "id": 60,
+    "label": "HILIR",
+    "alasan": "Artikel membahas investasi pembangunan pabrik pengolahan cokelat baru di Indonesia yang merupakan aktivitas manufaktur hilir."
+  },
+  "5e08402f306a590a2b356a8da6c6aef3b814c9a858bde7ca218c26bdad931c81": {
+    "id": 61,
+    "label": "HILIR",
+    "alasan": "Artikel membahas investasi pembangunan pabrik pengolahan cokelat baru di Indonesia yang merupakan aktivitas manufaktur hilir."
+  },
+  "4cbaa24677c8a504ad1c219b84ded49f3177801a70f351344d56e7bf006c770f": {
+    "id": 66,
+    "label": "HILIR",
+    "alasan": "Artikel membahas ekspansi investasi industri pengolahan kakao dan cokelat di Indonesia."
+  },
+  "1d3cee881b9c077c8ffd95d393777e16a7f81e3e729fca57f23a5e62183dcebf": {
+    "id": 72,
+    "label": "HILIR",
+    "alasan": "Artikel membahas strategi operasional dan diversifikasi produk manufaktur air minum dalam kemasan (AMDK) oleh perusahaan industri."
+  },
+  "d18992fa30e95ea59df4b4333671b186aae39f9d5a8ac9bf15ec88392deba334": {
+    "id": 73,
+    "label": "HILIR",
+    "alasan": "Artikel membahas peluncuran produk baru hasil proses manufaktur air minum dalam kemasan (AMDK)."
+  },
+  "d40996b4ec581327cc565947fed76cf70f7a48af4cc8104c9838f650f3a5f39c": {
+    "id": 74,
+    "label": "HILIR",
+    "alasan": "Artikel membahas kinerja penjualan dan strategi ekspansi bisnis perusahaan manufaktur air minum dalam kemasan (AMDK)."
+  },
+  "dc75b8db2d1a35f3ed353fb68924cad96862ac93f9a916e79a2c22f076222563": {
+    "id": 75,
+    "label": "HILIR",
+    "alasan": "Artikel membahas aktivitas operasional pabrik air minum dalam kemasan (AMDK) dan strategi bisnis perusahaan."
+  },
+  "30b9176595a1d8566c3d5b127ceee22e0f878a6d70ff51b054c4a79bf21af445": {
+    "id": 76,
+    "label": "HILIR",
+    "alasan": "Artikel membahas strategi pengembangan portofolio merek perusahaan manufaktur air minum dalam kemasan (AMDK)."
+  },
+  "2e26564d43d806d979311e39b087d3d3001cd86e2a728a1a4eabbb5f129bc1be": {
+    "id": 77,
+    "label": "HILIR",
+    "alasan": "Artikel membahas strategi perusahaan manufaktur AMDK dalam memperluas pasar dan diversifikasi produk."
+  },
+  "878a987102e0e7c97d07b472789fc640ff58a4355308dba823f860b635567918": {
+    "id": 78,
+    "label": "HILIR",
+    "alasan": "Artikel membahas kinerja keuangan dan strategi diversifikasi produk perusahaan manufaktur AMDK."
+  },
+  "9301c40468a406e932708f15dcee7d694ff3027c8a02fd3093842273796c1ae7": {
+    "id": 79,
+    "label": "HILIR",
+    "alasan": "Artikel membahas strategi pengembangan bisnis perusahaan manufaktur AMDK untuk meningkatkan penetrasi pasar."
+  },
+  "3f6f2066eecebf34c8a357138fce55c2fc26ead8836e9ca284b50c756a73b0bd": {
+    "id": 87,
+    "label": "HILIR",
+    "alasan": "Artikel membahas dampak kebijakan biodiesel B50 terhadap industri pengolahan sawit nasional (hilirisasi CPO menjadi energi)."
+  },
+  "26d6b0533179a4fc15b9749e6feca38b66785406b5d1f16d8f0563b0c95c7983": {
+    "id": 89,
+    "label": "HILIR",
+    "alasan": "Artikel membahas pelatihan teknis pengujian produk turunan CPO yang relevan dengan standar kualitas industri pengolahan."
+  },
+  "d6785fffe5286b0d9d75520e7e55c91853d6efa3f6ea27380fec0eed94799b9e": {
+    "id": 90,
+    "label": "HILIR",
+    "alasan": "Artikel membahas kebijakan tarif ekspor produk industri sawit dan padat karya yang berdampak langsung pada sektor manufaktur."
+  },
+  "a99479c92b348103f1dca763cd3998050aad405c80041aa598f1f15fc8c781a9": {
+    "id": 91,
+    "label": "HILIR",
+    "alasan": "Artikel membahas ekspor CPO dan peran asosiasi industri (GAPKI) dalam menjaga stabilitas industri pengolahan sawit."
+  },
+  "b4cd3c83befc3f69a2942f767d5be3a49a5655704fed20f50a67ce8846f31f50": {
+    "id": 96,
+    "label": "BUKAN_HILIR",
+    "alasan": "Artikel bersifat makro-ekonomi global dan belum spesifik membahas dampak pada sektor industri agro dalam negeri."
+  },
+  "b859d26d09cb3dda3488656c8c161f830c59415fa697692df100daf2d6089850": {
+    "id": 98,
+    "label": "HILIR",
+    "alasan": "Artikel membahas teknis pengujian produk hilirisasi sawit (CPO dan turunannya) yang relevan dengan operasional industri."
+  },
+  "14d8923e858b3b381ecfef0ebb9db2ce46ac6ba217d2877ef124d904182b90f2": {
+    "id": 101,
+    "label": "HILIR",
+    "alasan": "Program biodiesel B50 merupakan kebijakan strategis hilirisasi industri agro untuk pengolahan CPO menjadi bahan bakar."
+  },
+  "65a083dba8be926e5fb5759b027f2167fca552b892bbf011fe64e77862ebc8a9": {
+    "id": 109,
+    "label": "HILIR",
+    "alasan": "Artikel membahas tantangan ketersediaan bahan baku untuk mendukung keberlangsungan industri hilir agro."
+  },
+  "adc3a11cc6ec1c2c215adbf93bf47b8c4126133ffdcfd7cd57f678318f101b28": {
+    "id": 113,
+    "label": "HILIR",
+    "alasan": "Artikel membahas penerapan teknologi Industri 4.0 pada perusahaan manufaktur yang didukung oleh Kementerian Perindustrian."
+  },
+  "46f586284cb4aeceb9f3d7f91f2de53daafe08c2c95f13e70556f42d32480aec": {
+    "id": 114,
+    "label": "HILIR",
+    "alasan": "Artikel membahas peningkatan produktivitas pabrik melalui digitalisasi yang menjadi fokus kebijakan Kemenperin."
+  },
+  "90c25c614990c12e4db45de3dbc5393ae8f4aa9d10ffdf2afdf2050e2cf97d1d": {
+    "id": 116,
+    "label": "HILIR",
+    "alasan": "Artikel membahas keberlangsungan operasional pabrik pengolahan pulp dan kertas yang merupakan bagian dari industri agro."
+  },
+  "62be2cd7d003e2722cb03fcda416708e25e177fc3a93dd9e79288eb78142ca8b": {
+    "id": 117,
+    "label": "HILIR",
+    "alasan": "Artikel membahas transisi pengelolaan aset industri manufaktur pulp dan kertas yang berdampak pada rantai pasok industri."
+  },
+  "bc6242346652b790832d0c9575418bdef541f5d5f6314c77f42f9881814c7313": {
+    "id": 119,
+    "label": "HILIR",
+    "alasan": "Artikel membahas realisasi investasi pembangunan pabrik rokok (industri hasil tembakau) yang merupakan sektor industri agro."
+  },
+  "6238987ea4ca20259c03aebf5df01b18a00469ee23aa4259f0544dd000518ac4": {
+    "id": 123,
+    "label": "HILIR",
+    "alasan": "Artikel membahas kebijakan ekspor produk turunan minyak sawit yang berdampak langsung pada industri hilir agro nasional."
+  },
+  "a54f2cbde8fe2fe35127287c5b764cc4058b55a6b520b1b4813633a00cfa417f": {
+    "id": 1,
+    "label": "HILIR",
+    "alasan": "Artikel membahas respons resmi Ditjen Industri Agro Kemenperin terkait insiden di fasilitas produksi manufaktur dalam negeri."
+  },
+  "f50e769a80be503cb4f8302a1b619a4c26f3347424daabe4d22f58a6ce5b4930": {
+    "id": 2,
+    "label": "HILIR",
+    "alasan": "Artikel membahas respons resmi Ditjen Industri Agro Kemenperin terkait insiden di fasilitas produksi manufaktur dalam negeri."
+  },
+  "5a66e488daafb75f74c503fb51326295004fd2b887879aaa1fdf92f3b802dc7c": {
+    "id": 3,
+    "label": "HILIR",
+    "alasan": "Artikel membahas respons resmi Ditjen Industri Agro Kemenperin terkait insiden di fasilitas produksi manufaktur dalam negeri."
+  },
+  "1576cf11e11f567880af959ced7230610f9bd9388720bfab9f267539a248db95": {
+    "id": 4,
+    "label": "HILIR",
+    "alasan": "Artikel membahas respons resmi Ditjen Industri Agro Kemenperin terkait insiden di fasilitas produksi manufaktur dalam negeri."
+  },
+  "3b5d9bcd04f918c210a196ce296463f68ccffd7f083e9996491f9fd5442c1172": {
+    "id": 5,
+    "label": "HILIR",
+    "alasan": "Artikel membahas kebijakan dan kewaspadaan Kemenperin terhadap dampak ekonomi makro bagi industri manufaktur nasional."
+  },
+  "563946af1c0cf8f0aefa9ffa041e7cc3b9bfdc7158487daa234d28d039f695b0": {
+    "id": 6,
+    "label": "HILIR",
+    "alasan": "Artikel membahas respons resmi Ditjen Industri Agro Kemenperin terkait insiden di fasilitas produksi manufaktur dalam negeri."
+  },
+  "a6bcce4e3707af1f202219af6d2372624891f9d87947a103a136787dd355a364": {
+    "id": 9,
+    "label": "HILIR",
+    "alasan": "Artikel membahas respons resmi Ditjen Industri Agro Kemenperin terkait insiden di fasilitas produksi manufaktur dalam negeri."
+  },
+  "454c37420e0003256557a8d242a572b36c26b0f7bfd5f5f627609d242fa1efd2": {
+    "id": 10,
+    "label": "HILIR",
+    "alasan": "Artikel membahas respons resmi Ditjen Industri Agro Kemenperin terkait insiden di fasilitas produksi manufaktur dalam negeri."
+  },
+  "c53b85ef1f0e22949f7fa3b970fbec4e4beaf2bd448eb2ecf803579824eff508": {
+    "id": 11,
+    "label": "HILIR",
+    "alasan": "Artikel membahas respons resmi Ditjen Industri Agro Kemenperin terkait insiden di fasilitas produksi manufaktur dalam negeri."
+  },
+  "05376a0eedf13fe3c3242029c4d1505a75b97c9b5f43a126f7fb4918ff6b9cfb": {
+    "id": 13,
+    "label": "HILIR",
+    "alasan": "Artikel membahas respons resmi Ditjen Industri Agro Kemenperin terkait insiden di fasilitas produksi manufaktur dalam negeri."
+  },
+  "e01bc3e22827ce26a5a05244231737194a32fec8dae0b24c3f1f4762898293de": {
+    "id": 14,
+    "label": "HILIR",
+    "alasan": "Artikel membahas respons resmi Ditjen Industri Agro Kemenperin terkait insiden di fasilitas produksi manufaktur dalam negeri."
+  },
+  "e5a3b207bcca4832e9588e9eeb8859fec85eab0d8577bbabca50f6bd0ec15b4e": {
+    "id": 17,
+    "label": "HILIR",
+    "alasan": "Artikel membahas respons resmi Ditjen Industri Agro Kemenperin terkait insiden di fasilitas produksi manufaktur dalam negeri."
+  },
+  "cff3268e58e373a2c5e0779ff99af7d1ef373acf49ccf25e8d9d988dc3d4de82": {
+    "id": 25,
+    "label": "HILIR",
+    "alasan": "Artikel membahas hilirisasi rumput laut menjadi produk turunan (biostimulan) yang merupakan bagian dari industri pengolahan agro."
+  },
+  "aa7c239755949b912569cca3f0861a9bb37c612737699e7ec99add2b8004d29c": {
+    "id": 29,
+    "label": "HILIR",
+    "alasan": "Artikel membahas investasi hilirisasi sektor kelautan dan perikanan yang mencakup industri pengolahan produk agro."
+  },
+  "36407927422829f6586c903833b716b41411d87126b80373b2384c8cd0b7283a": {
+    "id": 30,
+    "label": "HILIR",
+    "alasan": "Artikel membahas investasi hilirisasi sektor kelautan dan perikanan yang mencakup industri pengolahan produk agro."
+  },
+  "7d36c00f8b5cf7032d122269b29e6d30ce5f696ebdf2e4dd466f1ffd924ca907": {
+    "id": 34,
+    "label": "BUKAN_HILIR",
+    "alasan": "Artikel berfokus pada pengembangan budidaya rumput laut dan penanganan sampah di tingkat daerah, bukan pada operasional pabrik pengolahan manufaktur."
+  },
+  "03eaa9e4d07f53234e9165d54d13f31d478304eb6aabb816aceec7c2bf130070": {
+    "id": 35,
+    "label": "BUKAN_HILIR",
+    "alasan": "Artikel hanya membahas koordinasi administratif daerah terkait pengembangan budidaya rumput laut dan sampah, bukan aktivitas industri manufaktur."
+  },
+  "919a1c9450eee34078af723fba97c16927ae222b9c8d267a0976c61a2c624c80": {
+    "id": 36,
+    "label": "HILIR",
+    "alasan": "Membahas kinerja keuangan dan operasional perusahaan manufaktur makanan olahan (Indofood) yang berdampak langsung pada industri agro."
+  },
+  "6b60644483de5712a50afaceb6e927f267fc2b342dfa2657676369eb6bcae4fe": {
+    "id": 40,
+    "label": "HILIR",
+    "alasan": "Perusahaan merupakan manufaktur produk kertas dan kemasan yang termasuk dalam sektor industri pengolahan hasil hutan."
+  },
+  "52f57c107f5add21eb5fe4273ca3794e8db26539d4ed14f5a3149b6e36c7ec96": {
+    "id": 45,
+    "label": "HILIR",
+    "alasan": "Membahas realisasi investasi manufaktur pulp dan kertas serta kebijakan hilirisasi oleh Kementerian Investasi."
+  },
+  "7fcf8bebc7cba4ea882b25c6dce78896dd39d165798b7bbb2d68e3de43fb5fd0": {
+    "id": 46,
+    "label": "HILIR",
+    "alasan": "Membahas pertumbuhan sektor industri furnitur nasional dengan data dari asosiasi industri (HIMKI)."
+  },
+  "f8a8477cf17861b4f7fc68227ad6708421b2044058494a1aae6da3d0395987f9": {
+    "id": 48,
+    "label": "HILIR",
+    "alasan": "Membahas progres pembangunan dan uji coba operasional pabrik rokok (industri hasil tembakau) di dalam negeri."
+  },
+  "3b6beea198caf4e53c9db9f9cabd4fce380b3d8fbc4f356b6f6acc99dba52493": {
+    "id": 52,
+    "label": "HILIR",
+    "alasan": "Membahas isu keberlangsungan industri hasil tembakau legal dan perlindungan pekerja melalui asosiasi industri (SP-RTMM)."
+  },
+  "f3aa6dd4c647e9cb161e7536d20d6c1b56fbaee4c13d974389f261f4f3949745": {
+    "id": 53,
+    "label": "HILIR",
+    "alasan": "Membahas kebijakan cukai yang berdampak langsung pada operasional industri hasil tembakau dalam negeri."
+  },
+  "63525b68e0f13684204ccd1233ab1c7fee3b51b19213809128cc91f3b985d04d": {
+    "id": 54,
+    "label": "HILIR",
+    "alasan": "Membahas peningkatan kompetensi SDM untuk proses pengolahan (blending) pada industri hasil tembakau."
+  },
+  "1e35b5ca9434f88fceb4cfb705ec12fa8f13f75ad0a946760cde8cc3daaaacf9": {
+    "id": 55,
+    "label": "HILIR",
+    "alasan": "Membahas operasional pabrik rokok baru dan penyerapan tenaga kerja di sektor industri manufaktur."
+  },
+  "2507677a9c8e27222de8d5894c67b7e840b79582a0968f82c0a98a6be5adfbc5": {
+    "id": 56,
+    "label": "HILIR",
+    "alasan": "Membahas konsistensi bisnis dan penguatan SDM pada perusahaan manufaktur industri hasil tembakau."
+  },
+  "07d84c051d9149cfdee00c7ebb8a689cd530b77d7a115cd8a7b2f2678d73b05b": {
+    "id": 58,
+    "label": "HILIR",
+    "alasan": "Membahas investasi pembangunan pabrik pengolahan cokelat baru di kawasan industri dalam negeri."
+  },
+  "8bceac8e32efa9b79f2ceb1ef35a83fcfd844675375118195a6cfa8c07f52184": {
+    "id": 60,
+    "label": "HILIR",
+    "alasan": "Membahas ekspansi fasilitas produksi manufaktur cokelat oleh perusahaan di Indonesia."
+  },
+  "98833fcd35a14aa5d29abb33469f241ac28a0ea3a456b066a648ec1d7f06a1e3": {
+    "id": 61,
+    "label": "HILIR",
+    "alasan": "Membahas rencana pembangunan pabrik pengolahan cokelat baru sebagai bagian dari investasi industri manufaktur."
+  },
+  "ee438926232cce1cb6da93574dda1c17c600efc2cf0e3a83c43b1968ba4a246a": {
+    "id": 66,
+    "label": "HILIR",
+    "alasan": "Artikel membahas investasi pabrik pengolahan cokelat baru oleh Barry Callebaut di Karawang, yang merupakan sektor industri hilir agro."
+  },
+  "ed3aef2ef34efec4cedf3e6ff623eb2ddab819007f0abd18816498365871be35": {
+    "id": 72,
+    "label": "HILIR",
+    "alasan": "Artikel membahas ekspansi produk air minum dalam kemasan (AMDK) oleh PT Sariguna Primatirta Tbk, yang termasuk sektor manufaktur hilir."
+  },
+  "ce516e3c690cce59dcdd0b273b2cb3b001c907dee17f9ffd7ce8f25c291a6213": {
+    "id": 73,
+    "label": "HILIR",
+    "alasan": "Artikel membahas peluncuran produk AMDK baru oleh PT Sariguna Primatirta Tbk sebagai strategi penetrasi pasar industri manufaktur."
+  },
+  "0c1a91865cf606dc610dea9d5251de3b6b17c63e79baaa928e60ba606931b1f3": {
+    "id": 74,
+    "label": "HILIR",
+    "alasan": "Artikel membahas kinerja penjualan dan strategi diversifikasi produk oleh emiten industri AMDK PT Sariguna Primatirta Tbk."
+  },
+  "5b1a4faefb74f91b5baa06c9fc2855fab6ac2a31818763adfe8e514b3fbca8cf": {
+    "id": 75,
+    "label": "HILIR",
+    "alasan": "Artikel membahas strategi ekspansi portofolio dan aktivitas pabrik air minum dalam kemasan milik emiten CLEO."
+  },
+  "54f68c69401d77af76c76620db90a1583719eb504c7a988a9de48a9d23eed03b": {
+    "id": 76,
+    "label": "HILIR",
+    "alasan": "Artikel membahas ekspansi portofolio merek air minum dalam kemasan (AMDK) oleh emiten manufaktur PT Sariguna Primatirta Tbk."
+  },
+  "76f457dc6fd68c5b1b6d229cb576be0e59c68a337bc7404e19a134164817ce5d": {
+    "id": 77,
+    "label": "HILIR",
+    "alasan": "Artikel membahas ekspansi pasar dan pengembangan produk di industri air minum dalam kemasan (AMDK) nasional."
+  },
+  "afec6dac9ebb358cc5fb6dc3982b192911cd4b30985426fa75eef66426868a77": {
+    "id": 78,
+    "label": "HILIR",
+    "alasan": "Artikel membahas kinerja keuangan dan perluasan portofolio produk oleh emiten industri AMDK PT Sariguna Primatirta Tbk."
+  },
+  "8393488daf27b8f46225de780fc65a0de415595a3c7190f9e7555344bbb45cd3": {
+    "id": 79,
+    "label": "HILIR",
+    "alasan": "Artikel membahas strategi perluasan portofolio merek air minum dalam kemasan (AMDK) untuk mendongkrak kinerja perusahaan manufaktur."
+  },
+  "d0442039a8c07ff7eaef455544b7df08d04331197bde8405508b6ee367562bd2": {
+    "id": 87,
+    "label": "HILIR",
+    "alasan": "Artikel membahas dampak implementasi program biodiesel B50 terhadap struktur pasokan dan permintaan industri kelapa sawit."
+  },
+  "955ed6912b051ec0fae1f5abcb7cff009096d5f3ed35a388f49638d142da16af": {
+    "id": 89,
+    "label": "HILIR",
+    "alasan": "Artikel membahas pelatihan teknis pengujian CPO dan produk turunannya hasil hilirisasi kelapa sawit oleh BPDP dan Bea Cukai."
+  },
+  "c9f72b2e347b8dbf8d4f8bae754264324cc0c6d058d9ec18437bbda899cf6460": {
+    "id": 90,
+    "label": "HILIR",
+    "alasan": "Artikel membahas kebijakan tarif impor Amerika Serikat yang mencakup produk olahan sawit dan industri manufaktur dalam negeri."
+  },
+  "610ec6e66b32fa6212a0e348a4287e035c23477072b59de1122d2d0bbf89965c": {
+    "id": 91,
+    "label": "HILIR",
+    "alasan": "Artikel membahas ekspor minyak sawit olahan (CPO) dan dorongan GAPKI untuk stabilitas perdagangan industri sawit."
+  },
+  "6aeec81bba013c40a5e45c0b45ba324ef6e60d94e80eddbade61006d42cda31c": {
+    "id": 98,
+    "label": "HILIR",
+    "alasan": "Artikel membahas pelatihan pengujian produk hilirisasi sawit seperti CPO, POME, dan EFB Oil oleh BPDP dan Bea Cukai."
+  },
+  "254ac3465f852664f62a23c591070030b9f0118bd2f4fbfa89caca65e90aca6c": {
+    "id": 101,
+    "label": "HILIR",
+    "alasan": "Artikel membahas pengembangan biodiesel B50 sebagai hilirisasi kelapa sawit untuk memperkuat ketahanan energi nasional."
+  },
+  "f421d5b7cb3055ff6d3143a1031fe11c4c280d9b3c9a80ae69dbf3cc96de163a": {
+    "id": 109,
+    "label": "HILIR",
+    "alasan": "Artikel membahas hilirisasi industri agro dan peningkatan ekspor produk olahan untuk memperkuat ekonomi nasional."
+  },
+  "63001531afc2826a685f4686187bb4467626163c5294b5d60632b7c8ef40611d": {
+    "id": 113,
+    "label": "HILIR",
+    "alasan": "Artikel secara spesifik membahas penerapan Industri 4.0 dan peningkatan produktivitas serta efisiensi di pabrik/perusahaan manufaktur."
+  },
+  "bb12dfbfc530b507789e490a6b8ed9c01c04bf63b88bfeddbf7ed4da83d523e7": {
+    "id": 114,
+    "label": "HILIR",
+    "alasan": "Artikel menyoroti penerapan teknologi digital dan peningkatan kinerja operasional pabrik percontohan sebagai rujukan industri."
+  },
+  "4e155a098d3e25e1f86df75c603d57a5189c7a79e18e90f9c5f400265a89e7e7": {
+    "id": 116,
+    "label": "HILIR",
+    "alasan": "Artikel membahas peralihan pengelolaan industri pengolahan besar (pulp and paper) serta kelanjutan aktivitas produksi pabrik."
+  },
+  "53b883521593facbb58eed432e4c5e9e39ccf08a4fe92e63177349bdbd45e132": {
+    "id": 117,
+    "label": "HILIR",
+    "alasan": "Artikel membahas penunjukan pengelola baru untuk melanjutkan kegiatan operasional dan rantai pasok industri pulp and paper."
+  },
+  "74395c659035be43c60397acfae6fbe6ca0b4ce4dd9c3385f70d87395ed3d825": {
+    "id": 119,
+    "label": "HILIR",
+    "alasan": "Artikel membahas progres pembangunan fisik dan persiapan operasional pabrik rokok (industri hasil tembakau) di Aceh Utara."
+  },
+  "4d2d823f20e8a9376b230d7e75a46423ac916db5f1029569e8fea7d8b60ddf3f": {
+    "id": 123,
+    "label": "HILIR",
+    "alasan": "Artikel membahas penghapusan tarif bea masuk nol persen dalam I-EU CEPA yang berdampak langsung pada ekspor minyak sawit olahan."
+  },
+  "75f5264acf22ed073e0aec5b64a62ab8c610b41ca4ce89c2dab8609cbe1337ee": {
+    "id": 1,
+    "label": "HILIR",
+    "alasan": "Artikel membahas penanganan insiden kebakaran fasilitas produksi PT Fonusa Agung Mulia oleh Plt Dirjen Industri Agro Kemenperin."
+  },
+  "27211f3f1719667c7f9ab84f20fd5fe158c244d29c48af6d9f95b75366f935df": {
+    "id": 2,
+    "label": "HILIR",
+    "alasan": "Artikel mengulas dukungan Kemenperin terkait kebakaran pabrik permen PT Fonusa Agung Mulia di Cikande."
+  },
+  "d0930f0cedf1b51c275e048dab28299f9c6d1fbe1f565032201438cfc0fe01c7": {
+    "id": 3,
+    "label": "HILIR",
+    "alasan": "Memuat koordinasi Kemenperin melalui Plt Dirjen Industri Agro mengenai kebakaran pabrik pengolahan di Cikande."
+  },
+  "e96241978a0048a2ac6c581baebdb0cd6ee7f42a49ca2ec44e8b2289f9387b2e": {
+    "id": 4,
+    "label": "HILIR",
+    "alasan": "Fokus pada pengawalan Kemenperin terhadap keselamatan pekerja dan penanganan pabrik yang mengalami insiden."
+  },
+  "d1cd27bb52adf739ab3f434f647908658a4c643164e05ee89806f4708393f449": {
+    "id": 5,
+    "label": "HILIR",
+    "alasan": "Membahas dampak pelemahan rupiah terhadap kenaikan biaya produksi industri manufaktur secara umum yang menjadi perhatian Kemenperin."
+  },
+  "f7bc1dd8634da0ba0b8eefcad2a7dc6609fbeca6cdea1cb3e3cd8cb5a98668eb": {
+    "id": 6,
+    "label": "HILIR",
+    "alasan": "Pernyataan resmi Kemenperin terkait penanganan dan transparansi manajemen pabrik permen PT Fonusa Agung Mulia."
+  },
+  "cab2426555f9d70019be48c58fc07c2de43d7347c4bf28db8756d15af121fbcf": {
+    "id": 9,
+    "label": "HILIR",
+    "alasan": "Berisi pemantauan dan koordinasi Kemenperin dengan manajemen pabrik pengolahan yang terdampak kebakaran."
+  },
+  "3072fe21aeb47ff5654c1494a46a0a661f4043676aedc85ed05ae43f57e564d1": {
+    "id": 10,
+    "label": "HILIR",
+    "alasan": "Pelibatan langsung Plt Dirjen Industri Agro Kemenperin dalam mengawal penanganan pabrik pengolahan makanan."
+  },
+  "84a4efeb6cf218ee908f6c916effee0e12cd49a4a9b36d9dea404317f777a788": {
+    "id": 11,
+    "label": "HILIR",
+    "alasan": "Membahas instruksi Kemenperin untuk evaluasi standar K3 pasca kebakaran pabrik permen di Cikande."
+  },
+  "83f2f7f35457a708b2c41edc70c370e08f0afe755d6c5c180fbf30954c31f1aa": {
+    "id": 13,
+    "label": "HILIR",
+    "alasan": "Tindakan Kemenperin mendukung investigasi pabrik PT Fonusa Agung Mulia sebagai bagian dari sektor industri agro."
+  },
+  "2f90795279407dfdcecf1b4144183649233633d1c0f82da1db8bc672ebfbaf69": {
+    "id": 14,
+    "label": "HILIR",
+    "alasan": "Koordinasi Kemenperin dengan manajemen pabrik permen terkait keselamatan kerja dan penanganan korban."
+  },
+  "8737f4535c6ae297a2a4eb79c6eacbb4a6dada0ac52d17ffd4a574bc917b82c1": {
+    "id": 17,
+    "label": "HILIR",
+    "alasan": "Sorotan Kemenperin terhadap evaluasi standar K3 dan penanganan insiden di pabrik pengolahan permen."
+  },
+  "10e20c666bc8dab6bcdf7d3a4b88ed435ab770b6e5b8e884f930583dcd4728e8": {
+    "id": 25,
+    "label": "HILIR",
+    "alasan": "Membahas kerja sama internasional untuk hilirisasi rumput laut menjadi produk olahan biostimulan."
+  },
+  "96c3466db65766bda49b7e555d0f2dc3c77bdeb66c413cc25e174369a0621662": {
+    "id": 29,
+    "label": "HILIR",
+    "alasan": "Pemaparan potensi investasi dan hilirisasi produk kelautan seperti rumput laut oleh Kementerian Investasi/BKPM."
+  },
+  "c55d4957b9fd916822d71339dbf9e1cbd681e0b975b1b67541a6fc03cf05be41": {
+    "id": 30,
+    "label": "HILIR",
+    "alasan": "Fokus pada dorongan penguatan hilirisasi sektor kelautan dan perikanan termasuk rumput laut, udang, dan garam."
+  },
+  "2fa7cbafd487d1c3eb3a202fa972d676a8b3ac8103964ff6524ad29a0fdc2cfa": {
+    "id": 36,
+    "label": "HILIR",
+    "alasan": "Artikel membahas kinerja keuangan dan operasional perusahaan manufaktur makanan olahan PT Indofood Sukses Makmur Tbk."
+  },
+  "1c9132bb11a5eff1de89663835d3a37f023275248d805986fe721beb1631ad34": {
+    "id": 40,
+    "label": "HILIR",
+    "alasan": "Artikel mengulas profil PT Indah Kiat Pulp & Paper Tbk sebagai manufaktur dan produsen kemasan kertas."
+  },
+  "b9a497fe64eebb49c7ccac22b5502eea13e3da5f592e8df5de280a72ee3f7d5e": {
+    "id": 45,
+    "label": "HILIR",
+    "alasan": "Artikel membahas realisasi investasi dan komitmen pengembangan industri pengolahan pulp dan kertas oleh PT Riau Andalan Pulp and Paper."
+  },
+  "603ffa75e05139330d72d0cec8d8dfa8519719d41ac627e10861d950f9f87e11": {
+    "id": 46,
+    "label": "HILIR",
+    "alasan": "Artikel memuat data pertumbuhan sektor industri furnitur nasional berdasarkan pandangan resmi asosiasi HIMKI."
+  },
+  "124024bc7c0f503857834581e97fde2d8b0cd1a17bad2d3bdbef2de4d476a981": {
+    "id": 48,
+    "label": "HILIR",
+    "alasan": "Artikel melaporkan progres pembangunan fisik dan persiapan operasional pabrik rokok tembakau di Aceh Utara."
+  },
+  "dc159ca560cf615ab94252678994abbf4d5484f417d876372b74a9d732e9e22b": {
+    "id": 52,
+    "label": "HILIR",
+    "alasan": "Artikel memuat pernyataan serikat pekerja industri rokok dan makanan minuman (SP-RTMM) dalam mendukung pemberantasan produk ilegal demi kelangsungan industri."
+  },
+  "25ba50333a7364d395474e0ae3b908f7006003ffce60c7e5ef79b342c0207046": {
+    "id": 53,
+    "label": "HILIR",
+    "alasan": "Artikel membahas tuntutan pelaku industri hasil tembakau terkait kepastian kebijakan cukai dan dampaknya terhadap pabrik."
+  },
+  "cb93a20dae21b98e9e452b455d6aefd50c1866c20229e056ace142ddf7e33818": {
+    "id": 54,
+    "label": "HILIR",
+    "alasan": "Artikel mengangkat kegiatan pelatihan peningkatan kompetensi pengolahan bahan baku bagi pelaku industri hasil tembakau."
+  },
+  "b066fc8e4d2bb301ee903f77f617fc72fa3b8f37ba9d2720930ba042e0edbdab": {
+    "id": 55,
+    "label": "HILIR",
+    "alasan": "Artikel menyoroti kesiapan operasional pabrik rokok baru yang akan menyerap tenaga kerja di sektor manufaktur tembakau."
+  },
+  "b8e8424130e651a8c830dabafcea95174a322a010c00dde9b37d1eb248af0bb3": {
+    "id": 56,
+    "label": "HILIR",
+    "alasan": "Artikel membahas perayaan korporasi dan penguatan kualitas SDM pada perusahaan industri hasil tembakau PT Aroma Tobacco International."
+  },
+  "af807fe5ce9f09297797aaef9b054b4d8f6a17beb58169a7e662b4e9b4241596": {
+    "id": 58,
+    "label": "HILIR",
+    "alasan": "Artikel melaporkan rencana investasi pembangunan pabrik pengolahan cokelat baru oleh produsen global Barry Callebaut di Karawang."
+  },
+  "3b19ff3a6a489f21dddc4469afbedc9f4be8ac3d6d556f00e28054c28e7314d8": {
+    "id": 60,
+    "label": "HILIR",
+    "alasan": "Artikel memberitakan ekspansi industri pengolahan makanan melalui pembangunan pabrik cokelat baru di Indonesia oleh Barry Callebaut."
+  },
+  "266969adca7cd1336b75fbad65dbf50746e2a1e1c1076fcd5267b8306b037e74": {
+    "id": 61,
+    "label": "HILIR",
+    "alasan": "Artikel mengonfirmasi rencana investasi dan pembangunan fasilitas produksi pabrik cokelat baru di kawasan industri Karawang."
+  },
+  "d52fdeab11469c4cdccb689c3137a03e4e91862909d14afb58111f8911fd3424": {
+    "id": 66,
+    "label": "HILIR",
+    "alasan": "Artikel membahas penguatan investasi sektor industri pengolahan kakao dan cokelat di Indonesia dengan adanya pabrik baru."
+  },
+  "5ebaa8ea3ab02dbbfbd3da1a864c33cb07294d673f13eba0265016055bc3275c": {
+    "id": 72,
+    "label": "HILIR",
+    "alasan": "Artikel membahas strategi ekspansi lini produk dan pemasaran air minum dalam kemasan oleh emiten manufaktur PT Sariguna Primatirta Tbk."
+  },
+  "2d695b4474f01e058c01e5ea6ce391facfc3cd402cdd96cb6d2d022bae1cb247": {
+    "id": 73,
+    "label": "HILIR",
+    "alasan": "Artikel membahas strategi ekspansi produk dan peluncuran kemasan baru oleh industri manufaktur AMDK dalam negeri (PT Sariguna Primatirta Tbk)."
+  },
+  "ebedaa569706b22f8e539cbe6b879cf4610f5f62f85bbd326d999e94d3ec9330": {
+    "id": 74,
+    "label": "HILIR",
+    "alasan": "Artikel membahas kinerja penjualan dan strategi diversifikasi portofolio emiten manufaktur AMDK (CLEO) di pasar domestik."
+  },
+  "1db63ef21953e5206d9f1da36d4ccbfd95dfbca4ba5d07a14cb8436c0f645f87": {
+    "id": 75,
+    "label": "HILIR",
+    "alasan": "Artikel mengulas aktivitas operasional pabrik dan strategi peningkatan penjualan emiten air minum dalam kemasan (CLEO)."
+  },
+  "03bfb7a77af1213ffb223f91fb0e760279b2a7aab42a5bb53687647324073ccd": {
+    "id": 76,
+    "label": "HILIR",
+    "alasan": "Artikel membahas strategi pengembangan bisnis dan perluasan portofolio merek oleh emiten industri AMDK PT Sariguna Primatirta Tbk."
+  },
+  "785b8d246c6eb7b10a884896ccf0be4bcd0c2479ecb54577ed00a694da5304f5": {
+    "id": 77,
+    "label": "HILIR",
+    "alasan": "Artikel memuat ekspansi pasar dan portofolio produk air mineral oleh industri pengolahan AMDK nasional."
+  },
+  "c4708ec36ea7cf28f78c18a67bfa84b839082491f4521fb8cc9f33b27ed44880": {
+    "id": 78,
+    "label": "HILIR",
+    "alasan": "Artikel membahas kinerja keuangan dan perluasan portofolio produk oleh emiten manufaktur AMDK PT Sariguna Primatirta Tbk."
+  },
+  "fd17fcb7cc7f83229eae7180cdcaf5ea4731b18faffbdc9d9e55936d8890151d": {
+    "id": 79,
+    "label": "HILIR",
+    "alasan": "Artikel mengulas strategi perluasan portofolio merek dan kinerja bisnis\n emiten industri pengolahan AMDK (CLEO)."
+  },
+  "29f3b8aa894937a1908b260623657e7ae5d0ef6eb35056f4d0afb5963837770a": {
+    "id": 87,
+    "label": "HILIR",
+    "alasan": "Artikel membahas proyeksi serapan CPO untuk industri hilir energi (biodiesel B50) yang berdampak langsung pada struktur industri."
+  },
+  "dd0f721743602a2f22e7186d1a1f2a7c4f4ed6399b3397c6eaac954bd7251df7": {
+    "id": 89,
+    "label": "HILIR",
+    "alasan": "Artikel membahas pelatihan teknis pengujian CPO dan produk turunannya oleh BPDP dan Bea Cukai untuk akurasi industri hilir."
+  },
+  "f4adf0b1d85db7f18d2a104b53133f8252b1310a6978ac02d4fdbd5f1bdb392f": {
+    "id": 90,
+    "label": "HILIR",
+    "alasan": "Artikel membahas kebijakan tarif impor Amerika Serikat untuk produk hilir sawit dan produk industri manufaktur Indonesia."
+  },
+  "53611262af9e0d2836b7a8b2f10499a34a6fb78a7cade0d69663146e237aae66": {
+    "id": 91,
+    "label": "HILIR",
+    "alasan": "Artikel memuat data ekspor olahan sawit dan dorongan stabilisasi harga CPO oleh asosiasi industri GAPKI."
+  },
+  "bb5a5831c87cfb48441a6daf4cbc3643f229d27d78079ae8ac9a8b39baab7f82": {
+    "id": 98,
+    "label": "HILIR",
+    "alasan": "Artikel berfokus langsung pada hilirisasi kelapa sawit, produk turunan, serta pengujian laboratorium untuk produk samping industri sawit."
+  },
+  "0ebcf978e6851d227d33191ad2b24c731da3a8dba507c9010e8511885b0cce73": {
+    "id": 101,
+    "label": "HILIR",
+    "alasan": "Artikel membahas pengembangan program biodiesel B50 sebagai strategi hilirisasi energi nasional untuk substitusi impor solar."
+  },
+  "2ed882ee6326f10e8f7d0e5f360ca5b058751b3a29771020fc41f79f0f6b94c5": {
+    "id": 109,
+    "label": "HILIR",
+    "alasan": "Artikel membahas tantangan dan potensi pengembangan hilirisasi industri agro serta ketersediaan bahan baku untuk manufaktur."
+  },
+  "5cfc1f16fede15158774d725ee01d7eb50da9b79930022096af0f9c6c486e08a": {
+    "id": 113,
+    "label": "HILIR",
+    "alasan": "Artikel memuat kinerja perusahaan manufaktur nasional yang ditetapkan sebagai National Lighthouse Industri 4.0 oleh Kementerian Perindustrian."
+  },
+  "7fc5afc435b50debc0a90c49229709a01db455f5afdc56af592867467e2232c2": {
+    "id": 114,
+    "label": "HILIR",
+    "alasan": "Artikel membahas penerapan Industri 4.0 pada pabrik manufaktur dan melibatkan pernyataan resmi Menteri Perindustrian."
+  },
+  "993b89045ae257890dee4520307ef595980ef7801116b1cc220fab733d25d092": {
+    "id": 116,
+    "label": "HILIR",
+    "alasan": "Artikel membahas pengambilalihan operasional pabrik dan rantai pasok industri pulp dan kertas eks RAPP."
+  },
+  "97e14afb825b5cee3a05a5531be304da3a75ebdd72c0f48b8797efa812a2e570": {
+    "id": 117,
+    "label": "HILIR",
+    "alasan": "Artikel membahas pengambilalihan aset dan keberlangsungan operasional industri manufaktur pulp dan kertas eks RAPP."
+  },
+  "04db2245bd0cb1604efa46084db851d07d4b668b759b65cf537de2fea6e3b6e4": {
+    "id": 119,
+    "label": "HILIR",
+    "alasan": "Artikel membahas progres pembangunan pabrik rokok (industri hasil tembakau) yang merupakan bagian dari sektor hilir agro."
+  },
+  "305ed0315bcda4fc01bee84903722c94fe00384efef684d301f8875f6abe521d": {
+    "id": 123,
+    "label": "HILIR",
+    "alasan": "Artikel membahas ekspor minyak kelapa sawit dan produk turunannya yang berdampak langsung pada perdagangan industri pengolahan dalam negeri."
   }
 }
