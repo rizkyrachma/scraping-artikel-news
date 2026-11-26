@@ -203,5 +203,35 @@
     "ts": 1795637673.454652,
     "reason": "rejected_target",
     "validator_version": "v1"
+  },
+  "https://news.google.com/articles/CBMiswFBVV95cUxNUjYwQVg3LWJYOHlCc09HcnNuY2F1SFg5QU0xaVJzVmtId3hIUTZiQ1pTb1VOcTdXbkdTQklqczZzcUpDZXY5YmpsTUtHdi0zTG1OSVRBblNhVE5pRXNBMEM1bTh1ZjlzZXNKU2RRY1NMbDlNNjg0MWI5NDMyMzFmYzJVMkpMaWpvTjZOZnhIRUJUeTdTcEhIdS1rQ0xDdWFGY0NMdEdvLWRyY0ZoR0JDMHZyUQ::val_v1": {
+    "ts": 1795725179.738624,
+    "reason": "rejected_target",
+    "validator_version": "v1"
+  },
+  "https://news.google.com/articles/CBMi0gFBVV95cUxQdVo2Y3BlSW1NZ1lxUGhJUWNuUWlNRlhhSlRQN1pGbHVSeE5ubXBsNER0VmY0OGVDb2lmWTBWcVZFRnlhbGF1bU1RdkJlVnZfSk5fMDh5cHhQX1Zfa19PVmxFQ0RaaWhxQ3h3Mm5ZT0NfcnM4TTZTX1NTeFhlN1N3eXhrbEJENDVLQUd2NXRrdGx3RFVyemU1bXgtUnZPbTZoemtxSndOZW1ZU1l4dE9aZU1WVWlmblZGbWxfUWctY3pibU1LREJjSXlRTS1OS2lPQmc::val_v1": {
+    "ts": 1795725180.2814171,
+    "reason": "rejected_target",
+    "validator_version": "v1"
+  },
+  "https://news.google.com/articles/CBMiggFBVV95cUxPUzFERndPVlMxX3ZMTGFuaEpJUjNSUzhYbjlCbjJKczR5RzFmcDE1czNkV0xYVGV4UUxkRW0tTVg2SVBHeGh2b2U3bTNvLWZ1MkFZOG5weXJJZjBTb0RxRm83NlVNQWhZZUlhUG91Tkp1QnZSaTlYbi1yM1Y5djN3WFlR::val_v1": {
+    "ts": 1795725200.1741343,
+    "reason": "rejected_target",
+    "validator_version": "v1"
+  },
+  "https://news.google.com/articles/CBMi0wFBVV95cUxQalhJXzRHQUxjUGZlOXJxNEVncTlSNEY2THhWOXpsMkpCcmhPV1czSFZFcnBSNXp0c0t0a2VxLXhmcmQ4SE1mNllMR3NXcWJJTHpGM0d2M3ZRc3FaQTlYZS1lS0NTRUhtdUlfNzM4X1Jab0lrUW5Yejg3b1dvcE85ajZielBSdzN6WnhrdnR5ajd5T3doX1RSbmtFTlZaN00xLWJsNFNzZ2RpUjEyb3k5TVh5NG9rZjNCeDNfcVFSV0JDaU81T01QejZIaWk0bS1IVENN::val_v1": {
+    "ts": 1795725254.1697986,
+    "reason": "rejected_target",
+    "validator_version": "v1"
+  },
+  "https://news.google.com/articles/CBMiZkFVX3lxTE8xZmJkdVBGYUVrRUJFbzQxNGk0Z3RfRnVCRmhrNWJKZUJBWGE0eHhiRVBMZTl1VTh3WFJqSjFnMzZnTEtvU2JCU3NhWjA5RDJTcGFWSlFtRjNlRVdKUGV4MmNmaWljUQ::val_v1": {
+    "ts": 1795725779.0171204,
+    "reason": "rejected_target",
+    "validator_version": "v1"
+  },
+  "https://news.google.com/articles/CBMiRkFVX3lxTFBzTVBfLWVrazZlX3NUY0tMWHRCMzh2aWRoaDU3RWNwampZLUdWTHgzUlNBeEljZGRYaE5pem5lX3V0SU9YQ1E::val_v1": {
+    "ts": 1795726011.5935295,
+    "reason": "rejected_target",
+    "validator_version": "v1"
   }
 }
