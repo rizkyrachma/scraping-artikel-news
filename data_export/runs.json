@@ -1,5 +1,26 @@
 [
   {
+    "id": "run-20261128-035557",
+    "waktu_display": "28 Nov, 03.55",
+    "timestamp": "2026-11-28T03:55:57",
+    "durasi": "41m 44s",
+    "hasil_berita": 33,
+    "status": "Berhasil",
+    "target_date": "2026-11-27",
+    "pemicu": "Terjadwal",
+    "rentang_data": "27 Nov 2026",
+    "stats": {
+      "final": 33,
+      "perlu_review": 4,
+      "tanpa_spokesperson": 28,
+      "mentah": 3812,
+      "filter_tgl": 2174,
+      "unik": 208,
+      "noise_dibuang_pct": 99
+    },
+    "log_url": "https://github.com/rizkyrachma/scraping-artikel-news/actions/runs/46062104632"
+  },
+  {
     "id": "run-20261127-035502",
     "waktu_display": "27 Nov, 03.55",
     "timestamp": "2026-11-27T03:55:02",
@@ -565,27 +586,5 @@
     "pemicu": "Manual",
     "rentang_data": "8 Nov 2026",
     "log_url": "https://github.com/rizkyrachma/scraping-artikel-news/actions/runs/42548772697"
-  },
-  {
-    "id": "run-20261106-0712",
-    "waktu_display": "06 Nov, 07.12",
-    "timestamp": "2026-11-06T07:12:00",
-    "durasi": "4m 38s",
-    "hasil_berita": 148,
-    "status": "Berhasil",
-    "target_date": "2026-11-05",
-    "stats": {
-      "mentah": 1862,
-      "filter_media": 604,
-      "filter_tgl": 212,
-      "unik": 164,
-      "final": 148,
-      "noise_dibuang_pct": 68,
-      "tone_cadangan_pct": 11,
-      "perlu_review": 8,
-      "tanpa_spokesperson": 23
-    },
-    "pemicu": "Terjadwal",
-    "rentang_data": "5 Nov 2026"
   }
 ]

@@ -9808,5 +9808,1840 @@
     "id": 108,
     "label": "HILIR",
     "alasan": "Artikel melaporkan pelepasan ekspor produk industri manufaktur senilai Rp112 triliun oleh Menperin yang melibatkan ratusan perusahaan."
+  },
+  "dd8b50748cc882f9e55ecd2e1627f1d560b0829d2af737dfcccfcae7a342a1ca": {
+    "id": 1,
+    "label": "HILIR",
+    "alasan": "Membahas potensi ekspor produk makanan olahan seperti biskuit dan kue kering ke pasar internasional."
+  },
+  "ad121a6b42b2c72921bbf05fb7ff6ddc99b1631d4d90314b639a9b3192da5152": {
+    "id": 3,
+    "label": "HILIR",
+    "alasan": "Pertemuan bisnis antara pengusaha lokal dan eksportir untuk memperkuat rantai pasok industri makanan dan pertanian."
+  },
+  "1e2f8df342d7bfec8b50473bfc6d53bc793d04d93790fba038778cd12d1475dc": {
+    "id": 4,
+    "label": "BUKAN_HILIR",
+    "alasan": "Fokus pada pengembangan SDM dan pendidikan tinggi, bukan secara spesifik pada sektor hilir industri agro."
+  },
+  "d1ad3df62512cdb986372de33b61e9ad193374516d7861c0ea322fd82bb63a70": {
+    "id": 5,
+    "label": "HILIR",
+    "alasan": "Membahas hilirisasi industri agro dan pemenuhan bahan baku untuk meningkatkan ekspor produk olahan."
+  },
+  "a1a077d9e55f6a7b7895ddc5f49df5e950a8d0bac1f002393cc8510428b2a985": {
+    "id": 6,
+    "label": "HILIR",
+    "alasan": "Keterlibatan Kemenperin dan GAPMMI dalam evaluasi K3 industri pasca insiden kebakaran pabrik makanan dan minuman."
+  },
+  "496e500e2d2a810fd477d0fb9d9e71585f9bf41e58d3faa60b868a15bb82dc1e": {
+    "id": 7,
+    "label": "HILIR",
+    "alasan": "Proyeksi kinerja ekspor industri pengolahan/manufaktur secara nasional oleh Menteri Perindustrian."
+  },
+  "ccb1d59e1dd60033ebe31aaae470122109f0bee5c5b15777d4dc4a50948a2da3": {
+    "id": 8,
+    "label": "HILIR",
+    "alasan": "Pembukaan jalur ekspor internasional di pelabuhan yang mendukung kesiapan industri pengolahan kelapa."
+  },
+  "c25b4ec3d64b7aed009fb9bf47a16a218466b65f7b664fca9ce71d01153bae85": {
+    "id": 9,
+    "label": "HILIR",
+    "alasan": "Pengolahan bahan baku kelapa lokal menjadi produk kecantikan bernilai tambah (VCO)."
+  },
+  "70cc46ee93bd9edfb25ad07d32afae0af1e88628da7718ca0b7f20c0140aadf2": {
+    "id": 10,
+    "label": "HILIR",
+    "alasan": "Produk olahan makanan dan minuman berbasis kelapa buatan industri dalam negeri meraih penghargaan internasional."
+  },
+  "44817ca251a9cc331a28e7b91bb904f6c1e290ccdde334a4a5b22a8edd6a2667": {
+    "id": 11,
+    "label": "BUKAN_HILIR",
+    "alasan": "Fokus pada peningkatan produksi hulu perkebunan kelapa sawit dan tanaman hasil peremajaan di tingkat kebun."
+  },
+  "30ce02bf3e9f3da4b6270f90b84fd77d22e611f0fd0c73a82f01561b4c41cf4d": {
+    "id": 12,
+    "label": "BUKAN_HILIR",
+    "alasan": "Membahas peningkatan produksi perkebunan kelapa sawit di tingkat hulu dan kondisi harga bagi petani."
+  },
+  "f16a43cd87795b24a95a608eb560f0d9cf956cc85657b0e5c0971dca46dfff53": {
+    "id": 13,
+    "label": "HILIR",
+    "alasan": "Pelepasan ekspor produk manufaktur secara resmi oleh Menteri Perindustrian."
+  },
+  "28a4cde35007a5ae73b5ead9637993bf6fd369f4e5c8fe2d0792a9e9beb7a8f6": {
+    "id": 14,
+    "label": "BUKAN_HILIR",
+    "alasan": "Berita berfokus pada promosi tingkat kabupaten/daerah untuk produk lokal oleh Disperindag setempat."
+  },
+  "a4defed149d740bf99b72cbd6a73f197be2015451298b2ae2e48665daa288273": {
+    "id": 15,
+    "label": "BUKAN_HILIR",
+    "alasan": "Fokus pada pemberdayaan kelompok UMKM/mama-mama Papua binaan PLN dalam skala usaha mikro."
+  },
+  "541bac5000aac04019173323596b943a13b2c644f94aa0983534e715e9ce3312": {
+    "id": 16,
+    "label": "HILIR",
+    "alasan": "Membahas pengolahan pascapanen dan diversifikasi produk turunan rumput laut untuk meningkatkan nilai tambah."
+  },
+  "1ef9908cfa55db18c4fdc90eb2cde803b53a41c7ac94ab8ea9f13e12dd87ad82": {
+    "id": 18,
+    "label": "HILIR",
+    "alasan": "Berita membahas strategi pemasaran dan inovasi produk hilir dari industri pengolahan makanan (mi instan)."
+  },
+  "ad79c8e5eb310b29c54dd14d8ec9ea413dc747fbd2d231b2529d55e7a72698a2": {
+    "id": 19,
+    "label": "HILIR",
+    "alasan": "Berita membahas teknologi pengolahan dan pengawetan pada industri pangan kemasan."
+  },
+  "b058889ec13550806476ecdfbb6fd462fb9018a6a77d7b2096f148176eff47f6": {
+    "id": 20,
+    "label": "HILIR",
+    "alasan": "Berita mencakup kerja sama BPOM dan asosiasi industri pengalengan ikan terkait standar pengolahan produk."
+  },
+  "5d63cdce5daef19b72028548f45104bc4d1b57b49023fe4e9e04c885b0a9a67b": {
+    "id": 21,
+    "label": "HILIR",
+    "alasan": "Berita fokus pada strategi efisiensi dan bahan baku industri kertas (manufaktur) di tengah pelemahan rupiah."
+  },
+  "a886a29cb30b0314186d7d05332de178a0d762964255eb966141b3655c269bda": {
+    "id": 22,
+    "label": "HILIR",
+    "alasan": "Berita membahas pencabutan izin konsesi perusahaan industri pulp dan kertas besar (RAPP)."
+  },
+  "1de155e0ff31353073fae85a8023198c80b633abff4801d618ec30342341b058": {
+    "id": 23,
+    "label": "HILIR",
+    "alasan": "Berita membahas kelanjutan pengelolaan eks konsesi perusahaan industri pulp dan kertas merespon kebijakan pemerintah."
+  },
+  "cf97af5f70dbdbe8d092ac26fdc588ee6fad56551904590da97380fd837862c4": {
+    "id": 24,
+    "label": "HILIR",
+    "alasan": "Memuat respons asosiasi industri (Kadin) terkait dampak kebijakan perizinan terhadap rantai pasok sektor industri."
+  },
+  "2dfc93922716ca4369fb4a90fc3123ea83ba1c52aa704e63e795272f2e1b57eb": {
+    "id": 25,
+    "label": "HILIR",
+    "alasan": "Berita mengulas kelanjutan bisnis dan dampak kebijakan terhadap perusahaan industri pulp dan kertas (RAPP)."
+  },
+  "1eb50e533888d97553aaefc7fa1a076fad3cf9211db12aab1b17801b079d706d": {
+    "id": 26,
+    "label": "HILIR",
+    "alasan": "Membahas strategi produsen industri mebel dalam negeri menghadapi ancaman tarif ekspor AS dengan tanggapan asosiasi HIMKI."
+  },
+  "464859d8ef3a554d3e770ab466c2ee3021fe0f10e3a4baec4e676e9c60d9c33a": {
+    "id": 27,
+    "label": "BUKAN_HILIR",
+    "alasan": "Lebih condong ke peresmian ruang seni dan pameran budaya (pariwisata/seni) dari Rumah Atsiri, bukan aktivitas pabrik/industri."
+  },
+  "68146d373c2240098752d8554e9628566e50c95dacd00029ce1854e2fa7827cb": {
+    "id": 28,
+    "label": "HILIR",
+    "alasan": "Berita membahas upaya produsen ban dalam mengelola pasokan bahan baku dan kepatuhan terhadap regulasi internasional (EUDR)."
+  },
+  "a126998d08b305c1d50ae43ab3e43ff3b4a2d3c005de4684b4519df9cb66742f": {
+    "id": 29,
+    "label": "BUKAN_HILIR",
+    "alasan": "Fokus berita adalah bantuan CSR untuk efisiensi biaya petani di tingkat hulu (petani karet)."
+  },
+  "1ca4495a0e91803e331e7733f5771fdf7499ee67f01482f8ce904aaeaa7f4d36": {
+    "id": 30,
+    "label": "BUKAN_HILIR",
+    "alasan": "Berita mengenai inovasi pembeku getah untuk membantu biaya produksi petani karet di tingkat hulu."
+  },
+  "de2725d731c99cd84f5c0711729d6b6a4a2c95ce5626a2562b9c8636f74f5083": {
+    "id": 31,
+    "label": "BUKAN_HILIR",
+    "alasan": "Berita tentang solusi pemangkasan biaya produksi bagi petani karet di tingkat hulu perkebunan."
+  },
+  "01462305b24c361ab0faf8b01ffb506967e9e23ba07a62d13204038f6e540b72": {
+    "id": 32,
+    "label": "BUKAN_HILIR",
+    "alasan": "Artikel bersifat edukasi umum mengenai aturan EUDR Uni Eropa tanpa memuat respons atau dampak langsung dari industri pengolahan dalam negeri."
+  },
+  "6a19c37c13f2a9b8247a42b8d685c9f8533ff5fef0bdd5c448c1f7dd37b6a790": {
+    "id": 33,
+    "label": "HILIR",
+    "alasan": "Berita membahas kebijakan tarif ekspor komoditas olahan agro seperti CPO dan kopi ke pasar Amerika Serikat."
+  },
+  "350d16fff6745e0a938373ea491a6cc06de5a184ffea2071e78b6e0b2a383280": {
+    "id": 34,
+    "label": "HILIR",
+    "alasan": "Berita mengenai fluktuasi harga karet internasional yang berdampak langsung pada harga beli di tingkat pabrik."
+  },
+  "c6ebcd0319adf53120ae78c168047a41ea693278ae5ef96db4d28bf1ac2a8397": {
+    "id": 35,
+    "label": "BUKAN_HILIR",
+    "alasan": "Berita berfokus pada sektor hulu perkebunan sawit dan karet di tingkat desa serta potensi pembukaan lahan."
+  },
+  "8b3714002e016ced9c7f94553517466baf5e518d5f74e59a45443a9e14b91589": {
+    "id": 36,
+    "label": "BUKAN_HILIR",
+    "alasan": "Berita berisi rekomendasi lembaga internasional (OECD) terkait usulan kenaikan cukai rokok dan MBDK tanpa respons spesifik dari industri dalam negeri."
+  },
+  "78c04b3e2b0de07b1d53e08837f2e66a3f4b1944f8d39b8145389161e35ad708": {
+    "id": 37,
+    "label": "BUKAN_HILIR",
+    "alasan": "Berita mengenai peluncuran awal lembaga pendidikan pertanian (Sekolah Kakao Nusantara) yang lebih condong ke ranah hulu/pendidikan."
+  },
+  "4643195955363d31850623f4fa4830445ba36e07cdd9ab75a0fd3eb01bdfd94b": {
+    "id": 39,
+    "label": "BUKAN_HILIR",
+    "alasan": "Berita rekomendasi OECD untuk menaikkan tarif pajak dan cukai rokok yang bersifat umum dari organisasi internasional."
+  },
+  "9dd6c32e7d355d7437da32dc67ed5f411e8f444ec238e3b36ecdff9a586275ab": {
+    "id": 40,
+    "label": "BUKAN_HILIR",
+    "alasan": "Berita peluncuran Sekolah Kakao Nusantara yang berfokus pada sumber daya manusia dan peningkatan kapasitas pertanian/hulu kakao."
+  },
+  "fbfe60213988255b207408c2106583da1dc117d4151c9722b9e5c68570627f5d": {
+    "id": 41,
+    "label": "BUKAN_HILIR",
+    "alasan": "Berita rekomendasi kebijakan pajak dan cukai oleh OECD tanpa ada respons atau keterlibatan langsung industri agro dalam negeri."
+  },
+  "94c68d414286cd78b39f44b0c202bc2291c1c12a741887c0ea55062d47af42a8": {
+    "id": 42,
+    "label": "HILIR",
+    "alasan": "Berita memuat pernyataan resmi asosiasi industri dalam negeri (Pavenas) terkait dukungan pemberantasan produk ilegal."
+  },
+  "2f35b8a03f893f73ed954fe0088ceb145479422a24c8b3aa9cf19f8ccbd97bfd": {
+    "id": 43,
+    "label": "BUKAN_HILIR",
+    "alasan": "Berita peluncuran Sekolah Kakao Nusantara yang lebih menitikberatkan pada pengembangan hulu dan peningkatan kualitas komoditas."
+  },
+  "f6c58ba06678683b2fa633631b2728820561cb0d8b001a47e09dc2ccaa3ea23e": {
+    "id": 44,
+    "label": "BUKAN_HILIR",
+    "alasan": "Berita tentang peluncuran Sekolah Kakao Nusantara oleh instansi pendidikan dan riset yang berfokus pada peningkatan kualitas hulu."
+  },
+  "11618641a89c2a2d6b63ef63200afb3305d6e4c62dbc9e627b34f97ab3243c84": {
+    "id": 45,
+    "label": "BUKAN_HILIR",
+    "alasan": "Berita kerja sama pemerintah daerah dan perusahaan untuk pemberdayaan petani serta penyediaan benih di tingkat hulu."
+  },
+  "ace0cdf5b980c5a7cb6bcea3552c6a11e1ff2e016cdc961fee1f42021b144706": {
+    "id": 46,
+    "label": "BUKAN_HILIR",
+    "alasan": "Berita bantuan bibit kopi dan kakao dari pemerintah pusat untuk memperkuat sektor hulu perkebunan."
+  },
+  "40c26bfa4d72b00ef31648c3158070934fb0de4bb66b12fefe56219bba3d2cdf": {
+    "id": 47,
+    "label": "HILIR",
+    "alasan": "Berita peluncuran Sekolah Kakao Nusantara yang secara spesifik juga mencantumkan tujuan memperkuat industri kakao nasional."
+  },
+  "cfbab9acefc1e0377aeb558ecdc21bf57c5f4692262e920d35f5321db94dbdf2": {
+    "id": 48,
+    "label": "BUKAN_HILIR",
+    "alasan": "Berita upaya pemasaran produk mentah/lokal (kopi, kelapa, kakao) oleh negara lain (Timor-Leste) di pasar global."
+  },
+  "9aa94a375e52059fafb6dd4b3d8cdfb982bc22f3451eb8b5f99eee36c241ff2d": {
+    "id": 49,
+    "label": "BUKAN_HILIR",
+    "alasan": "Berita ini fokus pada pembangunan infrastruktur jalan tani di tingkat hulu perkebunan untuk petani kakao."
+  },
+  "92e8f96d71629cab1143c8aa00f7e9dad29aa2efa0d405d83319410560af7cbb": {
+    "id": 50,
+    "label": "RAGU",
+    "alasan": "Membahas evaluasi kebijakan pajak dan cukai berdasarkan rekomendasi OECD secara umum tanpa respons spesifik dari industri agro."
+  },
+  "75571913d80dd5a975c3987af88f07aa04f2af6919e9d474b6192aebd874199b": {
+    "id": 51,
+    "label": "RAGU",
+    "alasan": "Berisi pernyataan Menkeu mengenai rekomendasi pajak dan cukai OECD tanpa keterlibatan langsung atau tanggapan resmi dari Kemenperin maupun asosiasi industri."
+  },
+  "21f0a82ebf49a6da184eb5c6c6936e315b0ced5a3f211464638d406fcbf8dee7": {
+    "id": 52,
+    "label": "BUKAN_HILIR",
+    "alasan": "Fokus berita adalah gugatan hukum dan desakan pelarangan rokok elektrik oleh lembaga pemuda terkait kesehatan, bukan analisis dampak langsung industri."
+  },
+  "2aceeda61824fe080ac22390a62acaf29c1f82c17fa5c70729bd3ddd66cf7d84": {
+    "id": 53,
+    "label": "HILIR",
+    "alasan": "Membahas aksi korporasi akuisisi perusahaan produsen tembakau besar (Imperial Brands) dan dinamika industri rokok global."
+  },
+  "6f945dbcd7d9caf84d08f21ff3a4ace497ad98b6a67dfe8d4a86c7fc2fc08812": {
+    "id": 54,
+    "label": "HILIR",
+    "alasan": "Membahas fatwa MUI terkait pelarangan produksi dan penjualan vape yang berdampak langsung terhadap kelangsungan industri rokok elektrik."
+  },
+  "237d6920432588c66f44628bb7bb7607fa936c6c60c06da1127f321499fa3e7a": {
+    "id": 55,
+    "label": "HILIR",
+    "alasan": "Masuk kategori hilir karena memuat investasi korporasi industri pengolahan susu (PT MAB) dalam mendatangkan sapi perah untuk pasokan bahan baku industri."
+  },
+  "0eebeed5b3ca018bfe13bd059d19ea5db069b052fa60e6badcb90b27e477eb4d": {
+    "id": 56,
+    "label": "HILIR",
+    "alasan": "Terikat langsung dengan realisasi investasi korporasi pengolahan susu untuk memperkuat pasokan bahan baku industri dalam negeri."
+  },
+  "f20cbb28bd6f405ea9db00fbda725310576c71ea2a4c2c72f8cba62173b13e9c": {
+    "id": 57,
+    "label": "HILIR",
+    "alasan": "Fokus pada investasi pembangunan peternakan modern skala besar oleh PT MAB senilai Rp1 triliun untuk mendukung industri pengolahan susu."
+  },
+  "e12d05e462cac745e2adc72e8b0409d35b7e3ebaf13ed36f271e1f34ffe03f4f": {
+    "id": 58,
+    "label": "BUKAN_HILIR",
+    "alasan": "Berita mengenai riset pakan ternak oleh universitas yang berfokus pada peningkatan produktivitas di tingkat peternak hulu."
+  },
+  "9fd98d947b784d3786adb5eae491a247ec1f08244be2959d851c345e58dff2a3": {
+    "id": 59,
+    "label": "BUKAN_HILIR",
+    "alasan": "Merupakan program dinas daerah yang berfokus pada subsektor peternakan dan swasembada di tingkat hulu."
+  },
+  "a87352527a5f9afc2b3590c206c69ae57fe763441050e49d1b032ccff4c7bfe9": {
+    "id": 60,
+    "label": "HILIR",
+    "alasan": "Fokus pada ekspansi portofolio produk dan peluncuran varian baru oleh emiten industri pengolahan air minum dalam kemasan (CLEO)."
+  },
+  "55283fe5ad43c6dce2bf97ebabd0c622a328928d7009faedd126a4e587df6501": {
+    "id": 62,
+    "label": "HILIR",
+    "alasan": "Membahas strategi ekspansi bisnis dan peluncuran produk baru oleh perusahaan manufaktur air minum dalam kemasan (AMDK)."
+  },
+  "9a986a254c36744d926f590685db16b2f741a9ffaa001fe600b404a34fa28463": {
+    "id": 63,
+    "label": "BUKAN_HILIR",
+    "alasan": "Ajakan kepala daerah kepada petani untuk mengembangkan komoditas dan pembagian bibit di tingkat hulu perkebunan."
+  },
+  "e2c8d1ce01d1000901a9b512b1c957a55ac556d5c90301f5f93d89f75faef4c8": {
+    "id": 64,
+    "label": "HILIR",
+    "alasan": "Secara eksplisit membahas kapasitas produksi pabrik pengolahan kopi serta aktivitas ekspor produk olahan ke berbagai negara."
+  },
+  "6f1a5d10d2b765dd7329657400039a5b737096823756d24b69368fcfe604bdd5": {
+    "id": 65,
+    "label": "BUKAN_HILIR",
+    "alasan": "Berita ini fokus pada perbaikan infrastruktur jalan hulu perkebunan dan penanganan bencana di tingkat petani kopi."
+  },
+  "acd60415bec017b79214ed49268f38227f1f9e233bbae40395dfb52286c597c2": {
+    "id": 66,
+    "label": "BUKAN_HILIR",
+    "alasan": "Berita ini membahas bantuan alat berat untuk pemulihan akses sentra perkebunan dan petani kopi di hulu."
+  },
+  "7accf67e8d846b77cc3a91ba6bb311b7ff2d2e8ba88fa93e647fda7f65bec638": {
+    "id": 67,
+    "label": "BUKAN_HILIR",
+    "alasan": "Berita ini berkaitan dengan penyerahan bantuan bibit kopi kepada kelompok tani di tingkat hulu pertanian."
+  },
+  "37e0a8654f970c47bce79901ff993e117a48cb2713d51458a68c735b74a38cc5": {
+    "id": 68,
+    "label": "HILIR",
+    "alasan": "Berita ini membahas kerja sama internasional untuk memperluas ekspor kopi bersertifikat ke pasar dunia."
+  },
+  "da63b4ba043654356ca610219b3901467ebea0704796ef3cda6c030e72474b30": {
+    "id": 69,
+    "label": "BUKAN_HILIR",
+    "alasan": "Berita ini membahas penyaluran bantuan bibit kopi Arabika dan Robusta melalui program Dinas Pertanian di hulu."
+  },
+  "6df84acabd964a3c03b455d2b0e5f75c094280b4f1d4e753c661ab9747476fba": {
+    "id": 70,
+    "label": "HILIR",
+    "alasan": "Berita ini mendorong perlindungan indikasi geografis untuk produk unggulan daerah seperti Kopi Luwak olahan."
+  },
+  "e2ff3a9adb3cac070b64178aec9c98f9e3c3aa973689fa11f0584bde5c876933": {
+    "id": 72,
+    "label": "HILIR",
+    "alasan": "Berita ini membahas harga CPO dan kebijakan biaya ekspor minyak sawit olahan yang berdampak pada perdagangan industri."
+  },
+  "18bc7ae6828f39eaf726bc37142ac106802ad52f4e8c728d02757a803ae07d24": {
+    "id": 73,
+    "label": "HILIR",
+    "alasan": "Berita ini membahas klarifikasi tarif layanan ekspor CPO oleh badan pengelola terkait komoditas industri."
+  },
+  "3efc8244522bf061e4c20cb9d9e16a1d5ab7422daf32aaf37468c5bf7de28469": {
+    "id": 74,
+    "label": "HILIR",
+    "alasan": "Berita ini menanggapi rumor fee ekspor CPO yang memicu ketidakpastian di pasar industri sawit."
+  },
+  "69c80726dbb22b9e3c04cd3393d0f7e9fa6c77b004a18f797c166f61eb714a7d": {
+    "id": 75,
+    "label": "HILIR",
+    "alasan": "Berita ini membahas kebijakan tarif ekspor dan negosiasi perdagangan internasional yang berdampak langsung pada produk manufaktur nasional."
+  },
+  "44cba565adbadcd2aa958b8d0552004916aa0624a4f91d9969b0369dad0c19b8": {
+    "id": 76,
+    "label": "HILIR",
+    "alasan": "Berita ini membahas pengkajian indeks acuan harga ekspor komoditas industri seperti CPO menjelang implementasi NADI."
+  },
+  "747727cfc04d432dffb64e7086486c4394ed59e2da4ac2e6de1c7ac12279382d": {
+    "id": 77,
+    "label": "HILIR",
+    "alasan": "Berita ini membahas penyusunan acuan harga ekspor untuk pengawasan transaksi CPO guna mencegah manipulasi perdagangan."
+  },
+  "e30611ca3b62d8357f0ed0d4c1381453f4cea0768cd7f810abbeda1349ccdd64": {
+    "id": 78,
+    "label": "HILIR",
+    "alasan": "Berita ini berkaitan dengan tata cara pendaftaran portal ekspor komoditas industri utama termasuk CPO."
+  },
+  "0f1884b56a8aa9148512d8f16bf4f03fa67cb4c11018a3d3491932b06b858729": {
+    "id": 79,
+    "label": "HILIR",
+    "alasan": "Berita ini membahas analisis dampak biaya ekspor CPO terhadap kinerja keuangan emiten industri sawit."
+  },
+  "5fd5a911a18ebd2e46c173e274ac017f171afbe29cec3afe4826ff82bf74eedb": {
+    "id": 80,
+    "label": "HILIR",
+    "alasan": "Berita ini memuat pertimbangan tarif fee ekspor CPO dan dampaknya terhadap kelangsungan bisnis pelaku usaha."
+  },
+  "7c5ddd083360bc4e22d34064f17586a84d75fd31413c5ddc57849329a588ff4a": {
+    "id": 81,
+    "label": "HILIR",
+    "alasan": "Berita membahas kebijakan biaya ekspor CPO yang berdampak langsung pada pelaku usaha dan industri hilir pengolahan sawit."
+  },
+  "b1ede5ac7fb49d20e6d00348f6304f4e1651d5f67f925f2703793ef0eae20319": {
+    "id": 82,
+    "label": "HILIR",
+    "alasan": "Berita terkait pergerakan harga komoditas CPO olahan di pasar ekspor yang dipengaruhi kebijakan domestik."
+  },
+  "fae436702c87222df2036e8939521efe404b6b3b394c521077bcca4217d4853b": {
+    "id": 83,
+    "label": "HILIR",
+    "alasan": "Memuat informasi harga lelang tender CPO domestik (KPBN) yang menjadi acuan utama industri pengolahan sawit."
+  },
+  "63dfbf0948ab41076631202722e62001a6f70b99ebe25addab59ded9fa84e357": {
+    "id": 84,
+    "label": "HILIR",
+    "alasan": "Membahas kepastian tarif ekspor untuk komoditas strategis termasuk CPO yang berdampak pada industri hilir."
+  },
+  "b8c4baa7e8588811f8cadb7eaeba78e5e247276f15b1d4197513d9e17817fa10": {
+    "id": 85,
+    "label": "HILIR",
+    "alasan": "Terkait kebijakan biaya layanan ekspor CPO oleh DSI yang langsung memengaruhi operasional pelaku usaha industri sawit."
+  },
+  "4cc5b600ac06833625508e805595061737e60a5231feab9f9f5a6f257dda51f0": {
+    "id": 86,
+    "label": "HILIR",
+    "alasan": "Program biodiesel B50 berdampak langsung pada struktur serapan domestik dan pasokan industri pengolahan sawit."
+  },
+  "d8dfd6ad3ba563ba15c5030ce135affec80af1673633e07b06ce431143e6bbc4": {
+    "id": 87,
+    "label": "HILIR",
+    "alasan": "Berisi informasi sistem registrasi ekspor satu pintu untuk CPO yang melibatkan eksportir industri."
+  },
+  "96af3718c043073ffa9db1ed4f6dc0c3922468fbbf622efd827372ec5bb09c77": {
+    "id": 88,
+    "label": "HILIR",
+    "alasan": "Membahas dampak kebijakan B50 terhadap keseimbangan pasokan CPO domestik dan industri pengolahan."
+  },
+  "eac75117a077704a9cfd0938523abfad420d531a34e6b7baed6282afee051275": {
+    "id": 89,
+    "label": "HILIR",
+    "alasan": "GAPKI menyoroti tumpang tindih regulasi dan sertifikasi halal CPO yang berkaitan langsung dengan tata kelola industri hilir."
+  },
+  "94f89d47c381d198b322f124da528659ebf225076f6adac1cabacfd9cf641ea6": {
+    "id": 90,
+    "label": "HILIR",
+    "alasan": "Perjanjian IEU-CEPA memberikan efisiensi biaya dan bea keluar ekspor produk olahan sawit ke pasar Eropa."
+  },
+  "60e2114da340028d2c233fa313c3f536fb13815038038157f964271c29559d90": {
+    "id": 91,
+    "label": "HILIR",
+    "alasan": "Membahas uji coba sistem ekspor terintegrasi untuk komoditas CPO yang melibatkan pelaku industri."
+  },
+  "077aaad0f427c0fc9c47e93993a20cde241d8ed9a50c1176c96f99df57728fbf": {
+    "id": 92,
+    "label": "BUKAN_HILIR",
+    "alasan": "Merupakan inisiatif kerajinan/batik daerah (ekonomi kreatif) dan bukan fokus manufaktur industri agro skala besar."
+  },
+  "67a6acd10d3a81ef2fab1960e65006294d51fa209678f61a753145f1db98eeb9": {
+    "id": 93,
+    "label": "BUKAN_HILIR",
+    "alasan": "Berfokus pada administrasi perkebunan hulu dan pelaporan CSR di tingkat daerah/kebun."
+  },
+  "d797296acfa337db4eda27bf2ebcfcf5f1aaaca2bceb1ea0b65dc80dddce1020": {
+    "id": 94,
+    "label": "HILIR",
+    "alasan": "Kebijakan pungutan biaya layanan ekspor sawit berdampak langsung pada kelangsungan industri pengolahan dan ekspor."
+  },
+  "c08a725b4a45336c5397f49577f462e5961c9b13f06f1109e78723066b8efd6c": {
+    "id": 95,
+    "label": "HILIR",
+    "alasan": "Membahas realisasi investasi pembangunan pabrik pengolahan kelapa sawit baru yang memperkuat kapasitas industri hilir."
+  },
+  "cb51b204243fc8c338e312d83c480d6bab638cdb1b4cf10c7963a1be30b763a6": {
+    "id": 96,
+    "label": "BUKAN_HILIR",
+    "alasan": "Berita membahas dampak pungutan ekspor terhadap emiten perkebunan hulu sawit."
+  },
+  "6bfa0baac404d3fe2490d442a375e7d86ad86e56a030e1504ba793da2f0cbebc": {
+    "id": 97,
+    "label": "BUKAN_HILIR",
+    "alasan": "Berita membahas klaim tarif ekspor komoditas hulu dan pertambangan secara umum."
+  },
+  "8a1e53ccf6e4be18527beef0d6efe8a913f303a0a87bd462cbb4f27e7ff2fd0b": {
+    "id": 98,
+    "label": "BUKAN_HILIR",
+    "alasan": "Berita membahas penurunan produksi perkebunan kelapa sawit akibat El Nino."
+  },
+  "00a6d7698d9f27c320e43df6b663a0a00a1e49ed1e167e56cec2b1f4e8d4df17": {
+    "id": 99,
+    "label": "BUKAN_HILIR",
+    "alasan": "Berita membahas masalah lahan kebun dan reforma agraria di tingkat petani."
+  },
+  "82e78d54e8a7b3b38a958ab2a9e1686d8473dc585bad326457fb86e08ea8b4d0": {
+    "id": 100,
+    "label": "HILIR",
+    "alasan": "Berita memuat pernyataan asosiasi GAPKI mengenai strategi data dan narasi industri sawit nasional."
+  },
+  "d5e6291a3494571a4f2b255c3a9191183a737f31924f5d0928e59da6a5fa5405": {
+    "id": 101,
+    "label": "HILIR",
+    "alasan": "Berita membahas persiapan sistem data ekspor yang melibatkan koordinasi dengan eksportir sawit."
+  },
+  "107f637f946d287a9cdce9bd549fc5ce726c5e3f908791cfbf9dc4b469a2f533": {
+    "id": 102,
+    "label": "BUKAN_HILIR",
+    "alasan": "Berita membahas isu kampanye negatif global dan riset terkait perkebunan sawit."
+  },
+  "b485cde61a018e7e67f2bb6aa4340f6663627acc63b40e7279decb6e7ee20144": {
+    "id": 103,
+    "label": "BUKAN_HILIR",
+    "alasan": "Berita membahas kemitraan perkebunan dan hak ekonomi pekebun plasma di hulu."
+  },
+  "be02374ca7b4a730297ca19029d2c790b9a495067e87aa6ea437957b958a75e9": {
+    "id": 104,
+    "label": "BUKAN_HILIR",
+    "alasan": "Berita membahas deklarasi tata kelola kebun kemitraan sawit tingkat petani/hulu."
+  },
+  "75831d965dadafa54dd2a9641a0da5dcce94eb91138db8f54c035c3f8f43ec92": {
+    "id": 106,
+    "label": "HILIR",
+    "alasan": "Berita membahas kesiapan pelabuhan Dumai untuk ekspor CPO olahan."
+  },
+  "4c4801f3fe0838fe243e7710047a1171fc03481d1ce43dd20db45f1d08d10b1d": {
+    "id": 107,
+    "label": "HILIR",
+    "alasan": "Berita memuat perkembangan harga komoditas minyak sawit di bursa internasional."
+  },
+  "1890b5493de37a5b06582caf32a2cfa36720947c960091e380143752945c0b4d": {
+    "id": 108,
+    "label": "BUKAN_HILIR",
+    "alasan": "Berita membahas teknis operasional mesin pengolahan di Pabrik Kelapa Sawit (hulu/pabrik kelapa sawit mentah)."
+  },
+  "0e3a578796b3fd8db55618c0eb9e778c6aa14f69bd398c7df2a7f20579af79de": {
+    "id": 109,
+    "label": "BUKAN_HILIR",
+    "alasan": "Berita merupakan kumpulan informasi umum dan kegiatan seremonial daerah terkait sawit."
+  },
+  "fa01fffd622d3331b2437ae6d58bc5a02fc576e8e4f1a286d66ad426614240f7": {
+    "id": 110,
+    "label": "BUKAN_HILIR",
+    "alasan": "Berita membahas wacana transisi energi global dan isu iklim terkait sawit."
+  },
+  "feef7a66326ab719e5e710f662ac20edef9ccddef4db3355f24fa244f8ca197d": {
+    "id": 111,
+    "label": "BUKAN_HILIR",
+    "alasan": "Berita membahas perolehan penghargaan lingkungan PROPER untuk anak usaha perkebunan sawit."
+  },
+  "238473adb5b9d372ab0c4aa89ca528725018c13824d1452e95f7004d1019b896": {
+    "id": 112,
+    "label": "HILIR",
+    "alasan": "Berita membahas kinerja keuangan perusahaan pengolahan kelapa sawit dan produk turunannya (manufaktur/hilir)."
+  },
+  "913c372b0392685a5b0344be70ab17dddeee7ee77fd1817e410f92ca377591f7": {
+    "id": 113,
+    "label": "HILIR",
+    "alasan": "Pernyataan resmi asosiasi industri GAPKI terkait peran strategis industri sawit, regulasi, dan data hilir."
+  },
+  "e609cc1c8a85fb9fb2d011a1699dc9bc9a6083fa032ea52118cab462cdf6ea64": {
+    "id": 114,
+    "label": "HILIR",
+    "alasan": "Membahas program hilirisasi sawit dan proyek pembangunan pabrik biodiesel serta produk olahan turunan."
+  },
+  "9ec5722c7f8133b34dcf8c068b6846aecd00c4d3e19b22abde33dc6e0032be25": {
+    "id": 115,
+    "label": "HILIR",
+    "alasan": "Pelepasan ekspor produk industri manufaktur oleh Menteri Perindustrian."
+  },
+  "15617fdf52ea0d4b369eddc281222b7832d1e3c8597a7f69ce86e48721045662": {
+    "id": 116,
+    "label": "HILIR",
+    "alasan": "Membahas implementasi program biodiesel B50 dan dampaknya terhadap industri sawit domestik."
+  },
+  "4ae8b842769a27485a33d5cb6c4886249ce4fd39753f4bcd7c4ef34770442f31": {
+    "id": 117,
+    "label": "HILIR",
+    "alasan": "Membahas kontribusi ekonomi dan PDB dari industri pengolahan kelapa sawit."
+  },
+  "6ebbc800c8cc50a81c1f84a4a2d4c027089b17e4e45e705a9604171be9207042": {
+    "id": 118,
+    "label": "HILIR",
+    "alasan": "Membahas kontribusi ekonomi dan PDB dari industri pengolahan kelapa sawit."
+  },
+  "c5b5b9d0f832796b898c801b8551e019d2fa23a3a09bb9e95ffcd9c9bca52288": {
+    "id": 119,
+    "label": "HILIR",
+    "alasan": "Membahas kinerja bisnis perusahaan industri biodiesel dan pengolahan turunan."
+  },
+  "14a95fd27a2e330c18ad7c994f1e8551775d9980eeb25fac520b3674e190cdb4": {
+    "id": 120,
+    "label": "HILIR",
+    "alasan": "Pemerintah mendorong percepatan pengembangan industri bioetanol nasional sebagai bagian dari hilirisasi."
+  },
+  "4255fe686d520b42859ee9c1a489e14a6f96d0c3826498ce7062c4ec707cb04f": {
+    "id": 121,
+    "label": "HILIR",
+    "alasan": "Membahas target kapasitas produksi pabrik bioetanol dalam rangka hilirisasi industri."
+  },
+  "a81861a41956ddd4ef95c155bc6dde8b550805c5972fb7b36d62ecb0bcc6af66": {
+    "id": 122,
+    "label": "BUKAN_HILIR",
+    "alasan": "Lebih berfokus pada agenda hulu pertanian/peternakan dan penyediaan bahan baku di tingkat petani oleh Kementan."
+  },
+  "d152df11a80d318a84557246d4a967c088ec2dfb1f5c91c5f578645baa754414": {
+    "id": 123,
+    "label": "BUKAN_HILIR",
+    "alasan": "Meskipun menyebut kunjungan ke pabrik pakan, fokus berita adalah pasokan bahan baku hulu (jagung) akibat El Nino."
+  },
+  "e5f86790018f8beab9978030a8b2cb7c4ce7436350810268162529281a4c9deb": {
+    "id": 124,
+    "label": "BUKAN_HILIR",
+    "alasan": "Berita terkait program Kementerian Pertanian mengenai pasokan hulu peternakan dan pakan."
+  },
+  "cf193cefcad1baf4cbfab07027abd804009e4a12eb24e5383ec6069877fe4859": {
+    "id": 125,
+    "label": "BUKAN_HILIR",
+    "alasan": "Inovasi riset akademik/dosen politeknik terkait pakan alternatif di tingkat hulu/pendidikan."
+  },
+  "18e70c45bb1374d2cf975a3e66a9e805344984778924f8646abda4a821f21cbf": {
+    "id": 126,
+    "label": "BUKAN_HILIR",
+    "alasan": "Membahas hilirisasi nikel (pertambangan/mineral), bukan sektor industri agro di bawah Ditjen IA."
+  },
+  "028428c45949e910a94187448695da8cc34350d3fcdf2d4d625bdf42c6aad7e1": {
+    "id": 127,
+    "label": "HILIR",
+    "alasan": "Berita berfokus pada penerapan teknologi Industri 4.0 dan transformasi digital di fasilitas refinery pabrik sawit."
+  },
+  "d446c46bcea537600778c76bcae73ca3df4d67b9aa65183800c1490cbd9d8c93": {
+    "id": 128,
+    "label": "HILIR",
+    "alasan": "Berita membahas integrasi industri pengolahan gula dan pemanfaatan limbah ampas tebu untuk bioenergi."
+  },
+  "ee63f935bfbdca21ef611400495ddd8a549bdd1b36cfc42ddf67a02c4ecee223": {
+    "id": 129,
+    "label": "HILIR",
+    "alasan": "Berita membahas arah kebijakan pembangunan industri kelapa sawit nasional yang produktif dan berkelanjutan."
+  },
+  "e720638a0d9b3929011e4c7bc0929b7cfa068b6920b8e7fc4b4e34fe0023843e": {
+    "id": 130,
+    "label": "HILIR",
+    "alasan": "Berita berkaitan dengan rencana pembangunan Kawasan Peruntukan Industri (KPI) pengolahan sagu di Maluku."
+  },
+  "3575811e74b8538f4e93493d8dd8bf5fd660bc69b4b3b0fe43ece44bb526cf04": {
+    "id": 131,
+    "label": "BUKAN_HILIR",
+    "alasan": "Berita lebih berfokus pada pengelolaan aset eks kawasan hutan dan status administratif perusahaan pulp."
+  },
+  "dc3b7f80e477c030236a69752d86c35d8702eb0e629c4f009c977554c11926fc": {
+    "id": 132,
+    "label": "BUKAN_HILIR",
+    "alasan": "Berita membahas pencabutan izin pemanfaatan hutan dan penguasaan lahan di sektor hulu kehutanan."
+  },
+  "10f6344bfdbace2018593f594119f236800e7021fe9d2f41fd15fa08d4d7776c": {
+    "id": 133,
+    "label": "HILIR",
+    "alasan": "Berita mencatat kinerja ekspor produk manufaktur dari perusahaan-perusahaan di Kawasan Industri JIIPE."
+  },
+  "bb21940f20e6b064ea5f19c89c48934321efc429246268c7545c6ea720a39beb": {
+    "id": 134,
+    "label": "HILIR",
+    "alasan": "Berita membahas peluncuran Sekolah Kakao Nusantara untuk memodernisasi industri cokelat nasional dari hulu hingga hilir."
+  },
+  "b7f94918297bd2831bb77f18c5e1b29ed51966ca0ac88f1fa339e498512051ae": {
+    "id": 135,
+    "label": "HILIR",
+    "alasan": "Berita mendukung penguatan kemitraan pendidikan dan pengembangan SDM untuk industri kakao."
+  },
+  "8f872fe122fee266d898a506614dfe2ad526486ead4d69a45552a56900f8b5e5": {
+    "id": 136,
+    "label": "HILIR",
+    "alasan": "Berita membahas kolaborasi pemangku kepentingan dalam pengembangan ekosistem industri kakao nasional."
+  },
+  "a47e6c3a864dd8fbd29ec9635ad770bb9178d5b9952b0662b98279e4ff7bb2e3": {
+    "id": 137,
+    "label": "HILIR",
+    "alasan": "Berita membahas inisiatif peningkatan nilai tambah dan SDM untuk membangun industri kakao yang kompetitif."
+  },
+  "9a81a6f8181938049f28225cd5397cdd7356a364dcbaf0e858bedb1d9a2dcc57": {
+    "id": 138,
+    "label": "BUKAN_HILIR",
+    "alasan": "Berita membahas program hulu perkebunan yaitu Peremajaan Sawit Rakyat (PSR) dan legalitas lahan petani."
+  },
+  "24573f7f1b09f5a115e97c11feb1c48faa7567f5525dcd9670a86d37f084c499": {
+    "id": 139,
+    "label": "HILIR",
+    "alasan": "Berita membahas kolaborasi KADIN dan asosiasi luar negeri terkait perdagangan dan keberlanjutan sawit."
+  },
+  "228733e28f2b3ccf83878be692d3e17ba84d96770b8dbee37f2b868918226400": {
+    "id": 140,
+    "label": "HILIR",
+    "alasan": "Berita membahas tata kelola ekspor komoditas strategis industri kelapa sawit dan dialog dengan pelaku industri."
+  },
+  "82208e3c71a7ed6472efc57521bb19618292568d0f5ba44fc6162fac3aebcdef": {
+    "id": 141,
+    "label": "BUKAN_HILIR",
+    "alasan": "Berita berfokus pada kemitraan di tingkat hulu perkebunan antara perusahaan inti dan petani plasma."
+  },
+  "ec51c82e9d30134c87c19627e6e153fca49d7c74cee2193225b3b8703fe622e7": {
+    "id": 142,
+    "label": "BUKAN_HILIR",
+    "alasan": "Berita ini membahas hulu pertanian perkebunan dan produktivitas petani sawit (PSR), bukan industri pengolahan hilir."
+  },
+  "8e2621cf0344ff3f945012d42d407c4a7753a9ec4bb6d5c7ed287c17dfa3ec0e": {
+    "id": 143,
+    "label": "BUKAN_HILIR",
+    "alasan": "Berita ini berfokus pada kemitraan hulu perkebunan dan pengelolaan Tandan Buah Segar (TBS) di tingkat petani/kebun."
+  },
+  "9d54e1197f505edc9a5295f7d92ab6449a7d13064a7b7131c44c98e8f118bc09": {
+    "id": 144,
+    "label": "HILIR",
+    "alasan": "Berita memuat informasi konkret mengenai hilirisasi sawit yang ditopang keberadaan pabrik minyak goreng dan industri biodiesel."
+  },
+  "249849ea48ba6442eb01ce0b5f9e9ec190fe9212e994f100d720547b780c1496": {
+    "id": 145,
+    "label": "HILIR",
+    "alasan": "Berita memuat pernyataan resmi Menteri Perindustrian terkait strategi ekspor dan perlindungan daya saing industri dalam negeri."
+  },
+  "87297c3c708e1351e44da3a0e05c38d26f8f3df63be905b0afda57f9a7609a80": {
+    "id": 1,
+    "label": "HILIR",
+    "alasan": "Membahas potensi ekspor produk olahan pangan hilir seperti biskuit dan makanan ringan berdasarkan data perdagangan internasional."
+  },
+  "dd32c985ce8be91b91a64de5f5465abcd7ff62ab8f88ce8bcdad2c2aaf434e41": {
+    "id": 3,
+    "label": "HILIR",
+    "alasan": "Fokus pada pertemuan bisnis pengusaha industri pengolahan makanan dan eksportir untuk memperkuat rantai pasok manufaktur."
+  },
+  "831982ba4ce9a67a29065b2e5a1ca989a5cc7af541e48bb4b704175e2c58c532": {
+    "id": 5,
+    "label": "HILIR",
+    "alasan": "Membahas hilirisasi industri agro dan pemenuhan bahan baku untuk mendukung ekspor produk olahan."
+  },
+  "c704bfbb5823e26740b8c30b13b3e48c5bf4967f8c581a25bd117d176d388e3e": {
+    "id": 6,
+    "label": "HILIR",
+    "alasan": "Melibatkan Kemenperin dan GAPMMI dalam evaluasi K3 pasca insiden kebakaran di pabrik pengolahan makanan."
+  },
+  "51c7e1dac42aa52332fc967937edba7843831428f4d7fc0b8bed22920128f1be": {
+    "id": 7,
+    "label": "HILIR",
+    "alasan": "Memuat proyeksi resmi Menperin terkait kinerja ekspor industri pengolahan manufaktur nasional."
+  },
+  "78f030a94865040e8a3ef08820eb8eaa8e566defc46a1ebc21e30a56d91c2563": {
+    "id": 8,
+    "label": "HILIR",
+    "alasan": "Membahas pembukaan jalur ekspor internasional di pelabuhan untuk mendukung kelancaran distribusi industri manufaktur."
+  },
+  "40675c4629c916bd66118067c383ad8dc5a4485217a30ee97dd89d4e2d764bfa": {
+    "id": 9,
+    "label": "BUKAN_HILIR",
+    "alasan": "Lebih menyoroti kisah inspiratif UMKM dan keluhan petani di hulu terkait harga kelapa mentah dari tengkulak."
+  },
+  "fca1650a73f473aa1612b52caec6e3c03341a3d2d9d88c4f371520361c62e828": {
+    "id": 10,
+    "label": "HILIR",
+    "alasan": "Membahas prestasi produk olahan minuman dan pangan buatan pabrik dalam negeri di ajang internasional."
+  },
+  "ae781927878d2ad2e07962dde97c120c69e84eb1588b6062fb31cb48046f43a7": {
+    "id": 13,
+    "label": "HILIR",
+    "alasan": "Memuat pernyataan resmi Menperin terkait pelepasan ekspor produk industri pengolahan manufaktur."
+  },
+  "23f2dca41c801a512e4256cc88df838e99ffde7227e40183eee250ecd034d357": {
+    "id": 16,
+    "label": "BUKAN_HILIR",
+    "alasan": "Fokus pada kegiatan penjemuran dan penanganan pascapanen rumput laut di tingkat petani/komunitas."
+  },
+  "62d32175e3bc1cd9a22bf848fdc411541f4296f81c5d5bee0fd59c1463da887f": {
+    "id": 18,
+    "label": "HILIR",
+    "alasan": "Membahas strategi pemasaran dan inovasi produk mi instan dari pabrik consumer goods."
+  },
+  "5fbe1ec02d25b5d7933498a2f6f98b6c6689b2db5a92f16d01bb6715a261aabd": {
+    "id": 19,
+    "label": "BUKAN_HILIR",
+    "alasan": "Merupakan artikel edukasi kampus/akademis tentang teknologi pengawetan makanan secara umum tanpa melibatkan industri spesifik."
+  },
+  "b3feedd7fb3af6b27c1beed91db758d36ba3a5fb9f233695a64d4a3a99f2b4da": {
+    "id": 20,
+    "label": "HILIR",
+    "alasan": "Melibatkan BPOM dan Asosiasi Pengalengan Ikan Indonesia (APIKI) dalam edukasi publik terkait produk industri pengalengan."
+  },
+  "c192566316ef9b8a95da80bfb2da3e4b1a499f385b41563c285fe84c014dffdd": {
+    "id": 21,
+    "label": "HILIR",
+    "alasan": "Membahas strategi efisiensi operasional pabrik industri kertas (PT Suparma Tbk) menghadapi fluktuasi rupiah."
+  },
+  "9d2defe2a10be02bd8c596f9953a6137170150296321579283b4604eb9e5549c": {
+    "id": 22,
+    "label": "BUKAN_HILIR",
+    "alasan": "Merupakan berita kebijakan kehutanan dan pencabutan izin usaha pemanfaatan hutan di sektor hulu perkebunan/pulp."
+  },
+  "2f454cfe31a3457c259646b9d5ac4b679ae8d83741a55096368a25f9ad790463": {
+    "id": 23,
+    "label": "BUKAN_HILIR",
+    "alasan": "Artikel ini membahas pengelolaan areal konsesi hutan dan perizinan hulu sektor kehutanan, bukan pengolahan industri manufaktur agro."
+  },
+  "65eaaa1e5577b48ada813141a7aa9f0b08ccf5a090649447d9d9db6efee930f8": {
+    "id": 24,
+    "label": "BUKAN_HILIR",
+    "alasan": "Artikel ini berfokus pada pencabutan izin konsesi di sektor kehutanan dan perkebunan hulu."
+  },
+  "334da687ea1ec320ca7e53e86cd34f279097d6dc58376dc0b1115831664e9c5d": {
+    "id": 25,
+    "label": "BUKAN_HILIR",
+    "alasan": "Artikel ini menyoroti polemik izin konsesi kehutanan hulu (RAPP), bukan aktivitas pabrik pengolahan."
+  },
+  "170fbda2548cd4c4042c79d97528958869ce370c25b2132fd14ce5c5523a61d1": {
+    "id": 26,
+    "label": "HILIR",
+    "alasan": "Artikel membahas strategi industri mebel dalam negeri menghadapi ancaman tarif ekspor AS dengan tanggapan resmi dari HIMKI."
+  },
+  "7721f307439df545d90d3d0743b96b470c05954be4d2ae289ca55b8992fa5115": {
+    "id": 28,
+    "label": "HILIR",
+    "alasan": "Artikel membahas upaya produsen ban dalam mengelola rantai pasok bahan baku karet dan regulasi global."
+  },
+  "5ebc59fa019b61b9c07fd85fc84c2d16f283fca3847cbb53afa2005d4a7658a6": {
+    "id": 33,
+    "label": "HILIR",
+    "alasan": "Artikel membahas kebijakan tarif ekspor AS dan dampaknya terhadap komoditas serta produk olahan agro dalam negeri."
+  },
+  "da6ffdc8c9bb90ec6c01f8e0083e0accf6b6cdf3e221318564c102d79911d19f": {
+    "id": 34,
+    "label": "BUKAN_HILIR",
+    "alasan": "Artikel ini secara spesifik membahas fluktuasi harga komoditas karet mentah di tingkat petani dan bursa internasional, bukan aktivitas pabrik pengolahan."
+  },
+  "09f0eb4c4707b4ad1568b7ef42fecf5314904d1411ed7258e01bdbd454664f50": {
+    "id": 42,
+    "label": "HILIR",
+    "alasan": "Artikel memuat respons asosiasi industri rokok elektrik (Pavenas) terkait tata kelola dan pemberantasan produk ilegal."
+  },
+  "fc7ea1fbab3ecb4558f612008c204f8bf14870d32371af96257dd69cc784c9da": {
+    "id": 47,
+    "label": "BUKAN_HILIR",
+    "alasan": "Artikel ini berfokus pada peluncuran Sekolah Kakao Nusantara untuk pengembangan SDM dan pendidikan hulu, bukan operasional pabrik pengolahan."
+  },
+  "c79cf87e1c0cd71e0eef9c111bb41ab51101478274f549b286ffe685a78677f6": {
+    "id": 50,
+    "label": "HILIR",
+    "alasan": "Artikel membahas evaluasi kebijakan fiskal pemerintah seperti cukai rokok dan MBDK yang berdampak langsung pada industri hasil tembakau dan makanan minuman."
+  },
+  "a2d0f3ad899c054a487cf0913a344ff42d45dcdd7baa47f9c1b99695b437a39e": {
+    "id": 51,
+    "label": "HILIR",
+    "alasan": "Artikel membahas respons pemerintah terhadap rekomendasi pajak dan cukai yang memengaruhi sektor industri hasil tembakau dan MBDK."
+  },
+  "3541c549d48d1368fc1fb5feeb9bf77d251df082d0c1924e716d5a8dfb19cb23": {
+    "id": 53,
+    "label": "BUKAN_HILIR",
+    "alasan": "Artikel ini membahas aksi korporasi dan akuisisi perusahaan rokok multinasional di luar negeri (Altria dan Imperial Brands) tanpa kaitan langsung dengan operasional industri di Indonesia."
+  },
+  "80717582443c95eb21e95aca4b5e87550e712c1cb2393fe9bec82f1785e87f11": {
+    "id": 54,
+    "label": "HILIR",
+    "alasan": "Artikel membahas dampak fatwa MUI terhadap kelangsungan produksi dan tenaga kerja di industri rokok elektrik (vape) dalam negeri."
+  },
+  "846cba96eebeaf463a6fe6d97b21c095d6499979036855211480d3d1a09cba73": {
+    "id": 55,
+    "label": "BUKAN_HILIR",
+    "alasan": "Artikel ini berfokus pada aktivitas peternakan sapi perah hulu dan impor bibit ternak, bukan industri pengolahan susu di pabrik."
+  },
+  "e088b765c1fd31e16ebf2e0838b803d1ef3afb26ccb59141abaf5bde8ac0dbef": {
+    "id": 56,
+    "label": "BUKAN_HILIR",
+    "alasan": "Artikel ini berfokus pada kedatangan impor sapi perah hidup untuk pengembangan populasi di tingkat peternakan hulu."
+  },
+  "eb33807273472575731aecf518cbc75fcd379285d77ab822e50d57a878d38993": {
+    "id": 57,
+    "label": "HILIR",
+    "alasan": "Investasi pembangunan peternakan modern dan pabrik pengolahan susu sapi oleh PT MAB masuk dalam ekosistem industri pengolahan pangan."
+  },
+  "8a732f33b3070ffc6cd81e58f67a3c4893b4f474bbc15479673fbd24e348eb87": {
+    "id": 60,
+    "label": "HILIR",
+    "alasan": "Ekspansi produk air minum dalam kemasan oleh PT Sariguna Primatirta Tbk (CLEO) secara langsung menunjukkan aktivitas manufaktur industri agro."
+  },
+  "19676850146ff7ef06dde6715790ab15c604d579700ad8a36232b7de2ce9c20b": {
+    "id": 62,
+    "label": "HILIR",
+    "alasan": "Peluncuran varian produk air minum dalam kemasan baru oleh PT Sariguna Primatirta mencerminkan operasional hilir industri makanan dan minuman."
+  },
+  "b9b26461693a969287a45c048c78c1b27236158f2fd1b10547a652273a15d3f4": {
+    "id": 64,
+    "label": "HILIR",
+    "alasan": "Artikel membahas pabrik pengolahan kopi yang melakukan produksi dan ekspor olahan, yang merupakan bagian dari sektor industri hilir agro."
+  },
+  "2d2c47c87a89433bed7c4a327ee9ec4cd04d730fd2bc524ad8fe1ad8eecafc84": {
+    "id": 68,
+    "label": "BUKAN_HILIR",
+    "alasan": "Artikel ini merupakan inisiatif riset dan penjajakan kerja sama oleh pusat studi kampus (LPPM USK) tanpa keterlibatan operasional industri manufaktur langsung."
+  },
+  "b0cdb233be5600eea831ee6b8d60f786fb7f42dc4f9acddfcf04329c42f3d371": {
+    "id": 70,
+    "label": "BUKAN_HILIR",
+    "alasan": "Berita ini berfokus pada dorongan pemerintah daerah untuk perlindungan Indikasi Geografis dan pendampingan hulu komoditas petani."
+  },
+  "d1501731be9c6e2af347b711b87517bb7f508670ee72696e42df51ea03115bbd": {
+    "id": 72,
+    "label": "HILIR",
+    "alasan": "Meskipun terkait komoditas sawit, artikel membahas kebijakan biaya ekspor CPO yang berdampak langsung pada daya saing industri pengolahan dalam negeri."
+  },
+  "43c43937be92b3d83e3cfe1d41c9e082e66010e5c51a1b09958d1d8b4d115fee": {
+    "id": 73,
+    "label": "HILIR",
+    "alasan": "Klarifikasi tarif layanan ekspor CPO oleh Danantara Sumberdaya Indonesia berkaitan langsung dengan kelangsungan ekspor produk industri kelapa sawit."
+  },
+  "26d526cc800230fbabe71acaeec5a6a041b791cc2bd688bcba8df11969ef2c9a": {
+    "id": 74,
+    "label": "HILIR",
+    "alasan": "Tanggapan resmi terkait fee ekspor CPO menyangkut tata niaga ekspor produk olahan kelapa sawit nasional."
+  },
+  "5c8054d554d41b0374ed37490bf635184d3a067ad6d98319dea07f956ad4e01a": {
+    "id": 75,
+    "label": "HILIR",
+    "alasan": "Kebijakan tarif perdagangan internasional AS berdampak langsung pada volume dan kelayakan ekspor produk manufaktur industri Indonesia."
+  },
+  "0f9f5d5c91d12163de2549016c3f6b46377c07fbf130525814d2834600fb8d2e": {
+    "id": 76,
+    "label": "HILIR",
+    "alasan": "Kajian indeks harga acuan ekspor CPO oleh DSI berkaitan erat dengan tata kelola ekspor komoditas hasil industri agro."
+  },
+  "be633c1631f8d0bbd3165e887629b7805ab04e8f8eae37d529b89f00c40f548c": {
+    "id": 77,
+    "label": "HILIR",
+    "alasan": "Penyusunan acuan harga ekspor CPO untuk deteksi transaksi bertujuan mengawasi tata niaga ekspor komoditas hilir andalan."
+  },
+  "41aa24843070e05e2d0b3ee1f85b23318ca155171103594f2ea02d6bbbc7299d": {
+    "id": 78,
+    "label": "HILIR",
+    "alasan": "Implementasi sistem ekspor satu pintu melalui NADI bagi eksportir CPO langsung mengatur arus operasional hilir."
+  },
+  "5d4aacbec687d068f861d4644bc95ae2f5ce5eb354da309d5be60aee5f41968e": {
+    "id": 79,
+    "label": "HILIR",
+    "alasan": "Dampak pungutan biaya ekspor CPO secara langsung menekan kinerja finansial emiten industri perkebunan dan pengolahan sawit."
+  },
+  "7ff0ece33e3fcf0c417867d27ce229ad975f3dcc034fb91d6df57b5366d01855": {
+    "id": 80,
+    "label": "HILIR",
+    "alasan": "Pertimbangan nominal fee ekspor CPO oleh DSI memengaruhi struktur biaya dan operasional korporasi eksportir minyak sawit."
+  },
+  "fc57e8ad544dc999bbccd27e84f1e9632911c7f05f92f5eccdcd0cb6915920fa": {
+    "id": 81,
+    "label": "HILIR",
+    "alasan": "Artikel membahas kebijakan layanan ekspor CPO yang berdampak langsung pada pelaku industri pengolahan sawit."
+  },
+  "2f34fed4e74b371f62b691864b321f57c0a5ccb1b1ef9821fed32ed5260d3cad": {
+    "id": 82,
+    "label": "HILIR",
+    "alasan": "Pergerakan harga CPO berkaitan langsung dengan aktivitas perdagangan dan industri hilir sawit."
+  },
+  "a48c376b0b6b2c9c73f7f0c4aaebaf90c83d1a8c96d944fc0950fc33f430c2fb": {
+    "id": 83,
+    "label": "HILIR",
+    "alasan": "Harga tender KPBN untuk CPO Franco Dumai merupakan indikator penting bagi biaya bahan baku industri pengolahan."
+  },
+  "efc848efec8ed69d76a5033d7c1aefad6f511cdfd306919c45db47ae8a98187e": {
+    "id": 84,
+    "label": "HILIR",
+    "alasan": "Kebijakan tarif ekspor komoditas olahan seperti CPO berdampak langsung pada operasional perusahaan eksportir dan industri."
+  },
+  "7e8de9faac528b69620a15819c97eee3161d62b0fd47c32b4a42b2e50d6eadfc": {
+    "id": 85,
+    "label": "HILIR",
+    "alasan": "Kepastian biaya layanan ekspor dari DSI langsung memengaruhi struktur biaya logistik dan ekspor industri sawit."
+  },
+  "615599749f62a97dc18021f6c11cba25ceb3feec89219ffbb7bbf0bccdf3f4ed": {
+    "id": 86,
+    "label": "HILIR",
+    "alasan": "Program biodiesel B50 secara langsung mengubah struktur serapan dan rantai pasok industri hilir sawit domestik."
+  },
+  "06adfb2d5cb9306a55cd979499c6190ecd9dd8496f7de203547cd76bfc1ce894": {
+    "id": 87,
+    "label": "HILIR",
+    "alasan": "Persiapan portal NADI dan registrasi eksportir berkaitan langsung dengan tata kelola logistik industri pengolahan sawit."
+  },
+  "0fb1ac3dc8aa4a9c69b65474b67ed58022721e9aab3fe9e8cb6bcb3a65f6e0ce": {
+    "id": 88,
+    "label": "HILIR",
+    "alasan": "Dampak implementasi B50 terhadap ekspor CPO nasional langsung memengaruhi kinerja industri sawit dalam negeri."
+  },
+  "9ef03b2487e8090f44af39fd88a4b067c70db0f966f34748564b3178a4adf389": {
+    "id": 89,
+    "label": "HILIR",
+    "alasan": "Pernyataan resmi GAPKI menyoroti regulasi pemerintah yang berdampak langsung pada operasional industri pengolahan sawit."
+  },
+  "9dced0cdec9493099a7c4da33f1ee4cca2acdac07ca7f200914b23457f00dccc": {
+    "id": 90,
+    "label": "HILIR",
+    "alasan": "Implementasi IEU-CEPA memberikan fasilitas tarif dan bea keluar yang berdampak langsung pada ekspor industri hilir sawit."
+  },
+  "d97c78e4d58f0ac24022b87d30e19dbe4fcbed0d103ea645b1f1ac0698c3f2d4": {
+    "id": 91,
+    "label": "HILIR",
+    "alasan": "Uji coba sistem PEB oleh DSI melibatkan langsung para pelaku industri eksportir komoditas olahan."
+  },
+  "1d8c66e4d9bed070d006f70e3f5fd006585334ce5f43219d3a9b0e6d1d249062": {
+    "id": 94,
+    "label": "HILIR",
+    "alasan": "Kebijakan pungutan biaya layanan ekspor sawit oleh DSI langsung memengaruhi beban biaya industri terkait."
+  },
+  "e31c45c2c4e62cd32f558beb2ecf89dfb185343daad905841e39b6385a92fd57": {
+    "id": 95,
+    "label": "BUKAN_HILIR",
+    "alasan": "Artikel ini lebih berfokus pada pembangunan pabrik baru dan dampak ekonomi lokal/desa serta apresiasi bupati, bukan kebijakan industri manufaktur nasional."
+  },
+  "031575cb1adfac09c9a4e7037cae3fee6bed30e2dc8ede9189f65e5d08ddcd36": {
+    "id": 100,
+    "label": "HILIR",
+    "alasan": "Pernyataan resmi dari Direktur Eksekutif GAPKI membahas tata kelola dan strategi industri pengolahan sawit nasional."
+  },
+  "66376d1eaafdf4ae30488ab37f29db511442d5991cc3275779660e90f88d53f9": {
+    "id": 101,
+    "label": "HILIR",
+    "alasan": "Koordinasi DSI dengan asosiasi industri sawit terkait portal NADI berdampak langsung pada operasional ekspor industri."
+  },
+  "8cb2f1a60ad1b6d373495dabbc4b2507e0917f39aea5f2424760e4118e608f1a": {
+    "id": 106,
+    "label": "HILIR",
+    "alasan": "Artikel membahas kesiapan pelabuhan untuk ekspor CPO olahan yang merupakan bagian dari rantai pasok industri hilir."
+  },
+  "d2a40647f5f606d40943c3001db68fa29a5bec0aa1d53bc673316244868eca43": {
+    "id": 107,
+    "label": "BUKAN_HILIR",
+    "alasan": "Artikel hanya membahas fluktuasi harga komoditas minyak sawit berjangka di bursa luar negeri tanpa keterlibatan operasional pabrik dalam negeri."
+  },
+  "dbd68b686795a8edcacf7de66495f726b3457266e3a4755313c751f04fb59329": {
+    "id": 112,
+    "label": "HILIR",
+    "alasan": "Artikel membahas kinerja keuangan perusahaan pengolahan kelapa sawit dan produk turunannya (PT Mahkota Group Tbk)."
+  },
+  "03f2b7e52049e5a43d10d20a633f3003e61290e54c16e0941c58d3c450511919": {
+    "id": 113,
+    "label": "HILIR",
+    "alasan": "Artikel memuat pernyataan resmi GAPKI terkait kontribusi strategis dan regulasi industri sawit nasional."
+  },
+  "f952264f023063c66d905dcb49d7d39d9b0522760dd1deef86043d2d4d392d21": {
+    "id": 114,
+    "label": "HILIR",
+    "alasan": "Artikel membahas regulasi hilirisasi sawit dan proyek pembangunan pabrik biodiesel serta produk turunan oleh BUMN."
+  },
+  "b1b9b404f84ae904395ee7444a15e4dc3075cc8a790d1d5b0cb6d9a4ac58a4f1": {
+    "id": 115,
+    "label": "HILIR",
+    "alasan": "Artikel melaporkan pelepasan ekspor produk industri manufaktur Indonesia oleh Kementerian Perindustrian."
+  },
+  "c7c337187dc72591bde5bf754f89c4d2c46eb46ee44874c72c6163e8c48e6aaf": {
+    "id": 116,
+    "label": "HILIR",
+    "alasan": "Artikel membahas dampak implementasi biodiesel B50 terhadap industri sawit dan ketahanan energi nasional."
+  },
+  "5cf02ff0cc9c7dd08ba9c6236fa1b81fea9f6b49651064ef485b1c79e9aa6d68": {
+    "id": 117,
+    "label": "HILIR",
+    "alasan": "Artikel mengulas kontribusi ekonomi makro industri kelapa sawit terhadap PDB nasional berdasarkan analisis institusi."
+  },
+  "9ba2b0cd5bc2f64134a180361c2eeaad57dc685a137f485d12ac82bccaeaee3b": {
+    "id": 118,
+    "label": "HILIR",
+    "alasan": "Artikel mengulas kontribusi ekonomi makro industri kelapa sawit terhadap PDB nasional berdasarkan analisis institusi."
+  },
+  "c73f97b455f277131be21bb7fc2e556670d30807e77502ff8fb07cd5d3db29d1": {
+    "id": 119,
+    "label": "HILIR",
+    "alasan": "Artikel membahas kinerja penjualan korporasi dan operasional industri biodiesel PT Jhonlin Agro Raya Tbk."
+  },
+  "8b5e5aaa4c825878114766cfb3fe9419c5debe1f283aaf21cfb4902e58f80c09": {
+    "id": 120,
+    "label": "HILIR",
+    "alasan": "Artikel membahas percepatan pembangunan pabrik bioetanol sebagai bagian dari strategi hilirisasi Kementerian Investasi."
+  },
+  "3f4560b9edaa7d1b4935c8532429e3f9f197bcc34ecb9921274f748b4ecd6c3f": {
+    "id": 121,
+    "label": "HILIR",
+    "alasan": "Artikel membahas proyek hilirisasi dan target kapasitas produksi pabrik bioetanol terintegrasi di Lampung."
+  },
+  "c1abadf75b23615c48565ba1435dd7fde8f9fca3a6b95bd4fa4f811c49d74458": {
+    "id": 127,
+    "label": "HILIR",
+    "alasan": "Artikel membahas penerapan teknologi Industri 4.0 di fasilitas refinery PT SMART Tbk yang diakui Kemenperin."
+  },
+  "0ad99ee0bf677e24a7ed14a3f467dd71e06f897fcf7b9cde0b53f1134664df29": {
+    "id": 128,
+    "label": "HILIR",
+    "alasan": "Artikel memuat dorongan Asosiasi Gula Indonesia (AGI) untuk integrasi industri gula dan pemanfaatan ampas tebu menjadi bioenergi."
+  },
+  "cfeeaca5fcf74da26308017672ef173afcb6114296404268958a2564c4274978": {
+    "id": 129,
+    "label": "HILIR",
+    "alasan": "Artikel membahas kebijakan dan kolaborasi lintas sektor yang didorong Bappenas untuk pengembangan industri kelapa sawit."
+  },
+  "8671f73c6f5d1fd4a12c74431b45bf6495f044f2db3699901a0493e5e34cf0be": {
+    "id": 130,
+    "label": "HILIR",
+    "alasan": "Artikel membahas rencana pembangunan kawasan industri pengolahan sagu yang merupakan bagian dari hilirisasi sektor agro."
+  },
+  "8d4ccd3df1db23f861e37a4d138a26097f916535ac4910cf64f90548f0d1fd50": {
+    "id": 133,
+    "label": "BUKAN_HILIR",
+    "alasan": "Artikel didominasi oleh industri logam (Freeport, ferroalloy) dan kaca/solar panel yang bukan merupakan sektor industri agro."
+  },
+  "c6b528aa64859254b680d7f1f01c36215343513f62c952e96979f8298d98f349": {
+    "id": 134,
+    "label": "BUKAN_HILIR",
+    "alasan": "Artikel berfokus pada inisiatif pendidikan/pelatihan SDM oleh lembaga pendidikan dan riset, bukan operasional pabrik manufaktur."
+  },
+  "d172ef21e583e1e1967a5e1cfa8570e1e647102f70b8878ed80ef0e77434f6a8": {
+    "id": 135,
+    "label": "BUKAN_HILIR",
+    "alasan": "Artikel hanya membahas kerja sama pendidikan dan peningkatan kapasitas SDM di lingkungan kampus, bukan aktivitas industri manufaktur."
+  },
+  "be30de942d8ff2d6499d09905b760a0a5b4ce2d9401b7ed93b54bd9744c0e4b3": {
+    "id": 136,
+    "label": "BUKAN_HILIR",
+    "alasan": "Artikel berisi pernyataan akademisi mengenai pengembangan SDM, tidak ada kaitan langsung dengan operasional pabrik atau kebijakan industri."
+  },
+  "d964b01d308f6b0baac7651bb05374361bb7b7de1c590071fdd54a35455c7319": {
+    "id": 137,
+    "label": "BUKAN_HILIR",
+    "alasan": "Artikel membahas peluncuran program pendidikan/pelatihan di kampus, bukan aktivitas hilirisasi industri manufaktur."
+  },
+  "e74eb051c81e4216843278502d6845bd53efd0c414880fef172f6d754fd2fb9e": {
+    "id": 139,
+    "label": "HILIR",
+    "alasan": "Pertemuan KADIN dengan asosiasi internasional terkait sawit berkelanjutan berdampak langsung pada kebijakan perdagangan industri sawit nasional."
+  },
+  "2083a4c81fe18ca028ff8ffb8698c68251b539063ce72dbe39f489aa4a75b5fa": {
+    "id": 140,
+    "label": "BUKAN_HILIR",
+    "alasan": "Artikel membahas tata kelola ekspor komoditas mentah (sawit dan batu bara) serta sistem data, bukan proses pengolahan manufaktur."
+  },
+  "d396b73ff405d9935725704eda00b203c33a64b8a29fea24510f8dbf00d7e0b4": {
+    "id": 144,
+    "label": "HILIR",
+    "alasan": "Artikel secara eksplisit menyebutkan keberadaan pabrik minyak goreng dan industri biodiesel sebagai bentuk hilirisasi sawit."
+  },
+  "f5ae14017638bf27dcc380f70bbcd0fdac5e7caff963bd99e32c2f522bfd682a": {
+    "id": 145,
+    "label": "HILIR",
+    "alasan": "Artikel memuat pernyataan resmi Menteri Perindustrian mengenai strategi menjaga daya saing industri nasional terhadap kebijakan ekspor."
+  },
+  "307628ec5183ec396843b40ce063e43097a528bcee92aa9afffa7c6351be8cb7": {
+    "id": 1,
+    "label": "HILIR",
+    "alasan": "Membahas potensi ekspor produk makanan olahan (biskuit/kue) yang merupakan output industri manufaktur agro."
+  },
+  "52ec129e8aff53c6cfe39f69a2552ea214e15eb2ea72788bd91a3ec237a5ad70": {
+    "id": 3,
+    "label": "HILIR",
+    "alasan": "Melibatkan asosiasi vokasi dan eksportir dalam forum bisnis yang berdampak langsung pada rantai pasok industri pengolahan."
+  },
+  "50c8e57587d2e31ea338baccc2e75a62d8609749558d15a1c30f475ac9fe7bee": {
+    "id": 5,
+    "label": "HILIR",
+    "alasan": "Membahas strategi hilirisasi industri agro dan pemenuhan bahan baku untuk kebutuhan industri manufaktur."
+  },
+  "327d2bfad25bd87742ba8a917956c3d540e4ab42435a3951e9cce2cb292268eb": {
+    "id": 6,
+    "label": "HILIR",
+    "alasan": "Melibatkan Kemenperin dan GAPMMI dalam evaluasi K3 di fasilitas pabrik makanan dan minuman."
+  },
+  "a8a9ba6b4a6a1f71536ae3b9545e888035970e343f0a79b07de9673e2c262cec": {
+    "id": 7,
+    "label": "HILIR",
+    "alasan": "Laporan resmi Menperin mengenai proyeksi kinerja ekspor industri pengolahan nasional."
+  },
+  "d20b93023f8ee3e0be5157a25eb75de15e5a4babf534fb17e66ff54e0f31e40e": {
+    "id": 8,
+    "label": "HILIR",
+    "alasan": "Membahas kesiapan infrastruktur logistik (pelabuhan) untuk mendukung ekspor komoditas industri kelapa."
+  },
+  "55a801eb41540511e8b6b5d57cd055ac908cf56244407d398af9120c4a8f6684": {
+    "id": 10,
+    "label": "HILIR",
+    "alasan": "Prestasi produk olahan berbasis kelapa (manufaktur) di ajang inovasi internasional."
+  },
+  "db878c967eb5f3b99d32c17d7d9e7dc7945140e8f7244e3ea3956de229bd3f04": {
+    "id": 13,
+    "label": "HILIR",
+    "alasan": "Pernyataan resmi Menperin mengenai capaian ekspor produk manufaktur nasional."
+  },
+  "89a23b843e783b31cd7c09a986df6e0117f4720cd01c2d5a567a9ae62f2070fd": {
+    "id": 18,
+    "label": "HILIR",
+    "alasan": "Membahas inovasi produk dan strategi pemasaran perusahaan manufaktur makanan (Wings Food)."
+  },
+  "3ac68f78507a5f8e6c15e24cf94b4e6a08af1317fd0ed95fec9490146037c178": {
+    "id": 20,
+    "label": "HILIR",
+    "alasan": "Edukasi publik oleh BPOM dan asosiasi industri pengalengan ikan (APIKI) terkait standar proses manufaktur."
+  },
+  "3126da0ea9e9ca9bf6deef31f5f91d9b2844ceacb70d54c4a0152af927a83e26": {
+    "id": 21,
+    "label": "HILIR",
+    "alasan": "Strategi operasional perusahaan manufaktur kertas dalam menghadapi fluktuasi kurs dan bahan baku."
+  },
+  "30467c98f976f31121bb3a497343fe776ce8dde907c4831764f7e53abcb14f7b": {
+    "id": 26,
+    "label": "BUKAN_HILIR",
+    "alasan": "Judul dan snippet mencampuradukkan isu mebel dengan berita otomotif (bus Fuso) yang tidak relevan dengan industri agro."
+  },
+  "8a711f071068c7ad0c6f2a726402a0829bead4306c43f702f837375d6c98597d": {
+    "id": 28,
+    "label": "HILIR",
+    "alasan": "Membahas rantai pasok dan keberlanjutan industri ban (manufaktur) terkait regulasi global."
+  },
+  "34c6331164c8ef97a6e33fa0001538add2fd50c5f2ca8173da61539550ad5f36": {
+    "id": 33,
+    "label": "HILIR",
+    "alasan": "Dampak kebijakan tarif ekspor AS terhadap komoditas olahan agro (CPO dan kopi) yang krusial bagi industri."
+  },
+  "76065c2de1e36ab250b0b768e4973ae1309787f4eee79b40e3f4fdc4d1b23b86": {
+    "id": 42,
+    "label": "HILIR",
+    "alasan": "Melibatkan asosiasi industri vape (Pavenas) dalam kebijakan tata kelola produk industri rokok elektronik."
+  },
+  "f5a768429a75430eaa3d762f3429aecc879a85f4e31303e3fac13807e13b984a": {
+    "id": 50,
+    "label": "BUKAN_HILIR",
+    "alasan": "Artikel membahas kebijakan makro perpajakan dan cukai secara umum, bukan spesifik pada operasional industri manufaktur agro."
+  },
+  "fef225b2552ed12affc6db100e71792e37f06a1d69fb28f54fadef1844055466": {
+    "id": 51,
+    "label": "BUKAN_HILIR",
+    "alasan": "Artikel membahas evaluasi kebijakan fiskal pemerintah atas rekomendasi OECD, bukan aktivitas industri manufaktur agro."
+  },
+  "bbd188fe75baa20d00bcd98193218219b17cdcac9239535c7a23fe91b4896834": {
+    "id": 54,
+    "label": "HILIR",
+    "alasan": "Artikel membahas dampak fatwa MUI terhadap operasional industri manufaktur rokok elektrik (vape) di Indonesia."
+  },
+  "96e83efe7743a655601de6afe962a8d393a078f8feefbb96ea5f53220b424abe": {
+    "id": 57,
+    "label": "BUKAN_HILIR",
+    "alasan": "Artikel berfokus pada kegiatan hulu yaitu peternakan sapi perah dan pemenuhan bahan baku susu, bukan pengolahan di pabrik."
+  },
+  "cb6dda482c5e90849f0ad21407427aa57efec3c7a8f1ce5678d110cf76dd803e": {
+    "id": 60,
+    "label": "HILIR",
+    "alasan": "Artikel membahas ekspansi bisnis dan peluncuran produk baru oleh perusahaan manufaktur AMDK."
+  },
+  "bf82e9e090303b4f5510fa624fe3b67199920672dcce0243215f2fb4561be7f8": {
+    "id": 62,
+    "label": "HILIR",
+    "alasan": "Artikel membahas strategi pengembangan bisnis dan perluasan portofolio produk oleh industri manufaktur AMDK."
+  },
+  "44dfd5390cd45e28d0b33b63a84e52a7b29a23f4859544520579540cbaa6bb1f": {
+    "id": 64,
+    "label": "HILIR",
+    "alasan": "Artikel membahas operasional pabrik pengolahan kopi dan aktivitas ekspor produk olahan."
+  },
+  "9f020e00dd22e3d8f0c04c02dfdd5c42e3ae86b7482bdec68b5dbc23205539e6": {
+    "id": 72,
+    "label": "HILIR",
+    "alasan": "Artikel membahas dampak kebijakan ekspor terhadap daya saing industri minyak sawit (CPO) Indonesia."
+  },
+  "92f0dbe9ee379afc6ade0049261d47a67fe0156e11b12e1e97741b7a2d95dc37": {
+    "id": 73,
+    "label": "HILIR",
+    "alasan": "Artikel membahas regulasi biaya layanan ekspor yang berdampak langsung pada operasional industri CPO."
+  },
+  "84e7c68e9e23e09dfbbbfdb33f9816f39d64c540b86af1af9ddf8e4db1c981a3": {
+    "id": 74,
+    "label": "HILIR",
+    "alasan": "Artikel membahas ketidakpastian biaya ekspor yang berdampak pada operasional industri CPO."
+  },
+  "a2a64a21e89e5f7f56388271d7299b0e790b9956d15906d63455ddee47fb72bc": {
+    "id": 75,
+    "label": "HILIR",
+    "alasan": "Artikel membahas kebijakan tarif ekspor produk Indonesia ke AS yang berdampak langsung pada sektor industri manufaktur."
+  },
+  "572ef794b137eabf708bdbf795dee5d8a1ef5c86083fa807f289ff861a59b7f2": {
+    "id": 76,
+    "label": "HILIR",
+    "alasan": "Artikel membahas sistem pemantauan ekspor komoditas industri (CPO) melalui platform NADI."
+  },
+  "0a304be3792d215daaeab28e972f0d36b90708b4d5ff2d2d51ccef2691b8f53e": {
+    "id": 77,
+    "label": "HILIR",
+    "alasan": "Artikel membahas mekanisme pengawasan transaksi ekspor CPO untuk mencegah manipulasi harga di industri."
+  },
+  "6351c9c651567dcc375d31da550dd8281c9140b442928e7bde99f48775685677": {
+    "id": 78,
+    "label": "HILIR",
+    "alasan": "Artikel membahas implementasi sistem ekspor komoditas industri (CPO) yang wajib diikuti oleh eksportir."
+  },
+  "4aee3617fe87d00c071cbf95115dcdecc86877dea19c41b980f3ceab69016b24": {
+    "id": 79,
+    "label": "HILIR",
+    "alasan": "Artikel membahas dampak finansial kebijakan ekspor terhadap emiten industri sawit."
+  },
+  "75f8651d29b1fc57bd8e7b96625c0bc30aa6a982995dabd85d76ba4dda8fea86": {
+    "id": 80,
+    "label": "BUKAN_HILIR",
+    "alasan": "Artikel berfokus pada mekanisme keuangan ekspor komoditas mentah dan dampaknya terhadap harga kontrak berjangka, bukan pada proses pengolahan industri manufaktur."
+  },
+  "2bead86e76aba3bfed33da606cdbd32327fff185faa1aba79165c9a403644245": {
+    "id": 81,
+    "label": "BUKAN_HILIR",
+    "alasan": "Artikel hanya membahas ketidakpastian administratif terkait biaya layanan ekspor satu pintu untuk komoditas mentah."
+  },
+  "dad27e9fcfd6cd4efbe685bcc9f51d28d2450b8eea71de9d3d65722be43575bb": {
+    "id": 82,
+    "label": "BUKAN_HILIR",
+    "alasan": "Artikel ini adalah laporan pasar komoditas global dan fluktuasi harga CPO di bursa luar negeri, bukan aktivitas industri manufaktur dalam negeri."
+  },
+  "8a989dd3a1445c04ec4ef4d7c05377bba68eb910e54473177758994961305348": {
+    "id": 83,
+    "label": "BUKAN_HILIR",
+    "alasan": "Artikel ini adalah laporan harga lelang komoditas mentah di KPBN yang merupakan ranah perdagangan hulu/perkebunan."
+  },
+  "06ab6429887ee9cd6e2e939c4f3cb6defaffa960c784cc65a4b1e1f5363ef07e": {
+    "id": 84,
+    "label": "BUKAN_HILIR",
+    "alasan": "Artikel membahas isu administratif ekspor komoditas mentah (CPO, batu bara, paduan besi) yang bersifat lintas sektor dan bukan fokus pada hilirisasi industri agro."
+  },
+  "324ece67f8aba4890592f221ff96cbc260494c6023465e194046ed9512a461b2": {
+    "id": 85,
+    "label": "BUKAN_HILIR",
+    "alasan": "Artikel hanya membahas kepastian biaya layanan ekspor komoditas mentah, bukan operasional pabrik pengolahan."
+  },
+  "2a6f0683a508fdc45de0c5ae84b5d38ca17da79f62067dcbbab0935144d254f7": {
+    "id": 86,
+    "label": "HILIR",
+    "alasan": "Program B50 merupakan kebijakan strategis hilirisasi industri agro yang berdampak langsung pada penyerapan CPO untuk industri biodiesel dalam negeri."
+  },
+  "185364aa767316ed32d203295560ca5fefe8a9aa8ef40a60eab62c0bf63119c3": {
+    "id": 87,
+    "label": "BUKAN_HILIR",
+    "alasan": "Artikel hanya membahas teknis registrasi portal sistem ekspor untuk komoditas mentah."
+  },
+  "a01655c88546b4d7666b2b2d962cd3cc79a1e37869c71a70055ef9cb364f6908": {
+    "id": 88,
+    "label": "HILIR",
+    "alasan": "Artikel membahas dampak kebijakan hilirisasi biodiesel B50 terhadap struktur industri sawit nasional."
+  },
+  "bed85c293522b4c26d80130b850ac52b63e14973136eb8e110c47cab2efad265": {
+    "id": 89,
+    "label": "HILIR",
+    "alasan": "Artikel memuat pernyataan resmi asosiasi industri (GAPKI) mengenai hambatan regulasi yang berdampak pada tata kelola industri sawit nasional."
+  },
+  "600f8e5984142ecf7f827a4c65e86a048a366666418ce383c30eb20cea2040b6": {
+    "id": 90,
+    "label": "HILIR",
+    "alasan": "Artikel membahas dampak perjanjian dagang IEU-CEPA terhadap efisiensi biaya ekspor produk industri minyak sawit nasional."
+  },
+  "c4e4c147a72d7f453e18dfc774002534f5ae8f5152b45d8d04e6d63ceb80584a": {
+    "id": 91,
+    "label": "BUKAN_HILIR",
+    "alasan": "Artikel hanya melaporkan data teknis transaksi uji coba sistem ekspor komoditas mentah."
+  },
+  "894e08d798a59889737019e47ef4ba03cc8fe5184797417865a67ddd601e89b0": {
+    "id": 94,
+    "label": "BUKAN_HILIR",
+    "alasan": "Artikel hanya membahas rencana pemungutan biaya layanan ekspor komoditas mentah."
+  },
+  "6bd507061fa50552f7494237b0343714c7060edc70ffd8b73a80a652318ca44e": {
+    "id": 100,
+    "label": "HILIR",
+    "alasan": "Artikel memuat pernyataan resmi asosiasi industri (GAPKI) mengenai kebutuhan tata kelola dan narasi industri sawit nasional."
+  },
+  "5fcb8c42f8b6d780dbfbd3962ef493bac25ebd64d792def46debd3e026572952": {
+    "id": 101,
+    "label": "HILIR",
+    "alasan": "Artikel membahas koordinasi DSI dengan asosiasi industri terkait sistem ekspor yang melibatkan pelaku industri pengolahan."
+  },
+  "177e1227a3f9e85bc30c9331cf91881ee23b91fef66364a33bcca03792969125": {
+    "id": 106,
+    "label": "BUKAN_HILIR",
+    "alasan": "Artikel berfokus pada logistik pelabuhan dan ekspor komoditas mentah (CPO), bukan pada proses pengolahan manufaktur atau hilirisasi industri."
+  },
+  "801bc36a711561155a1e5a9e0c2170f1523e7834dc854c88308c6c98f7b0cb74": {
+    "id": 112,
+    "label": "HILIR",
+    "alasan": "Artikel membahas kinerja keuangan perusahaan pengolahan kelapa sawit dan produk turunannya yang merupakan bagian dari industri manufaktur."
+  },
+  "154072c3faefec0c3abcaed4c1bf542397b80b1cf4e3f67edde5d3f0f4b27027": {
+    "id": 113,
+    "label": "BUKAN_HILIR",
+    "alasan": "Artikel bersifat normatif mengenai kebijakan makro dan data perkebunan, tidak membahas operasional pabrik atau hilirisasi industri secara spesifik."
+  },
+  "0daf47f567973e9f1f92f8db6d73173e3ac6463f6e2b9f2f95531ab99ee2c291": {
+    "id": 114,
+    "label": "HILIR",
+    "alasan": "Artikel secara eksplisit membahas rencana pembangunan pabrik biodiesel dan produk turunan sawit (hilirisasi) oleh BUMN."
+  },
+  "f87fe9c3ff75c32125dba14a388ceadada5e6df177cd8aa23833f90e51ee5713": {
+    "id": 115,
+    "label": "HILIR",
+    "alasan": "Artikel melaporkan pelepasan ekspor produk industri manufaktur yang didukung langsung oleh Menteri Perindustrian."
+  },
+  "5c9a69eb0bb1bd803d96ddc942d429db5709d500fda4e7155b0122cc3de90d97": {
+    "id": 116,
+    "label": "HILIR",
+    "alasan": "Artikel membahas dampak implementasi mandatori biodiesel B50 terhadap industri pengolahan sawit dalam negeri."
+  },
+  "5ed744c9a8aae8477493164ba32f679712ba9058c3cf770cde0a40bfd69e53e9": {
+    "id": 117,
+    "label": "BUKAN_HILIR",
+    "alasan": "Artikel hanya menyajikan data makro ekonomi (PDB) dari lembaga riset tanpa membahas operasional industri manufaktur atau pabrik."
+  },
+  "bc15136a5fe47c20d652d932bfd178ec1240e173cc35c21cdc69fc70b34b8b71": {
+    "id": 118,
+    "label": "BUKAN_HILIR",
+    "alasan": "Artikel merupakan duplikasi dari ID 117 yang hanya membahas data makro ekonomi tanpa substansi operasional industri manufaktur."
+  },
+  "e3b96cff2d3ff998c2ff184906219ce252a5bb7b23c82167de8b1b69079aea8c": {
+    "id": 119,
+    "label": "HILIR",
+    "alasan": "Artikel membahas operasional dan kinerja penjualan perusahaan industri biodiesel (JARR) yang merupakan bagian dari hilirisasi agro."
+  },
+  "0f75b37826832bb53e90fbea6e0dec995cd234d03c773dd948488b0dbbadd16b": {
+    "id": 120,
+    "label": "HILIR",
+    "alasan": "Artikel membahas percepatan pembangunan pabrik bioetanol sebagai bagian dari strategi hilirisasi industri agro."
+  },
+  "b6f0432b590f7cf5011549e3c0261c4ddf54bccf209a6acde3638b1b0e867c1c": {
+    "id": 121,
+    "label": "HILIR",
+    "alasan": "Artikel membahas proyek pembangunan pabrik bioetanol terintegrasi yang merupakan bagian dari hilirisasi industri agro."
+  },
+  "4cad855237b191b9c974b350c3e310336ca37c469b53e251806e027ddf7a91a6": {
+    "id": 127,
+    "label": "HILIR",
+    "alasan": "Artikel membahas penerapan teknologi Industri 4.0 di fasilitas refinery (pabrik pengolahan) yang diakui oleh Kemenperin."
+  },
+  "5f59fb93bbe0897f7337bf2b33c05d7aa886ebacd51918c6a8710f014847aba4": {
+    "id": 128,
+    "label": "HILIR",
+    "alasan": "Artikel membahas integrasi industri gula dengan bioenergi (pemanfaatan limbah pabrik) yang merupakan bagian dari hilirisasi industri."
+  },
+  "c190de39cd7736bd4a1c5d50c50591d7e20630f55b994086af706d2a8bcb1228": {
+    "id": 129,
+    "label": "BUKAN_HILIR",
+    "alasan": "Artikel berisi pernyataan normatif Bappenas mengenai arah kebijakan industri secara umum tanpa membahas operasional pabrik atau hilirisasi spesifik."
+  },
+  "d68b61ad7d1d7a57229bee4f20f865ff4abd3b646858a0365cc837a19888d3e4": {
+    "id": 130,
+    "label": "HILIR",
+    "alasan": "Artikel membahas rencana pembangunan kawasan industri pengolahan sagu yang merupakan bagian dari pengembangan industri manufaktur agro."
+  },
+  "4a87fab0ecd1c92fce3b492a1d09f22e455a1cbdfe6c601379db452ef4fc0227": {
+    "id": 139,
+    "label": "HILIR",
+    "alasan": "Artikel melibatkan KADIN sebagai asosiasi industri Indonesia dalam pembahasan kolaborasi strategis hilirisasi sawit berkelanjutan."
+  },
+  "68ada6177c7f5ffd469d1cb00af11cd385b646cd5459ee3d101ebd77c21a3e47": {
+    "id": 144,
+    "label": "HILIR",
+    "alasan": "Artikel secara eksplisit membahas operasional pabrik minyak goreng dan industri biodiesel sebagai bentuk nyata hilirisasi di daerah."
+  },
+  "874a46df92b51db23b8ac7214c98a3bedfda7b5ab124823103a8044cd6a83572": {
+    "id": 145,
+    "label": "HILIR",
+    "alasan": "Artikel memuat pernyataan resmi Menteri Perindustrian terkait strategi menjaga daya saing industri manufaktur nasional terhadap kebijakan perdagangan global."
+  },
+  "11f7a050dbec4abb55cd4954e00321065394981212f2f41a8d55e3d880e12f20": {
+    "id": 1,
+    "label": "HILIR",
+    "alasan": "Artikel membahas potensi ekspor produk olahan makanan dan minuman (biskuit) yang merupakan bagian dari industri manufaktur agro."
+  },
+  "823bc8f2d62afd64ced6ce82d5b4b166bc900846ebaba3fadc1ba683474f3449": {
+    "id": 3,
+    "label": "HILIR",
+    "alasan": "Kegiatan ini melibatkan asosiasi vokasi dan eksportir dalam forum bisnis yang berdampak langsung pada rantai pasok industri pengolahan."
+  },
+  "65614ca0abf960dd8a27cd11b486fc161eeb64475f9032b56d0edf8789d1a89c": {
+    "id": 5,
+    "label": "HILIR",
+    "alasan": "Artikel membahas strategi hilirisasi industri agro dan sinergi pemangku kepentingan untuk mendukung ekspor produk olahan."
+  },
+  "d9bcec7e3fd7e6e29173e065825fe97a08ba99d029af9d9d21dd026c7cc657c6": {
+    "id": 6,
+    "label": "HILIR",
+    "alasan": "Terdapat keterlibatan langsung Kemenperin dan asosiasi industri (GAPMMI) dalam evaluasi K3 di fasilitas pabrik."
+  },
+  "cf573d266afa9274ee55382294ae6a6fc96d170ea702622ba9810f9fc218d37a": {
+    "id": 7,
+    "label": "HILIR",
+    "alasan": "Artikel memuat proyeksi kinerja ekspor industri pengolahan manufaktur yang disampaikan langsung oleh Menteri Perindustrian."
+  },
+  "14d6fbbb48d3a5b7f8d09828ca7b00f6c76ec2cd619e369b8580c9008d116826": {
+    "id": 8,
+    "label": "HILIR",
+    "alasan": "Pembukaan jalur ekspor di pelabuhan berdampak langsung pada kelancaran distribusi komoditas industri kelapa olahan."
+  },
+  "ed83fa6e83524f59d62caee72b99720c3afd09c0ea67d208dde980e64ab0132c": {
+    "id": 10,
+    "label": "HILIR",
+    "alasan": "Membahas prestasi produk olahan manufaktur (susu kelapa) Indonesia di pasar internasional yang merepresentasikan industri hilir."
+  },
+  "97ba054df9a7d53fc039be9e2efb78b2c06a302279307a1cfab854e9634306d9": {
+    "id": 13,
+    "label": "HILIR",
+    "alasan": "Laporan resmi Menperin mengenai pelepasan ekspor produk manufaktur yang merupakan indikator utama kinerja industri hilir."
+  },
+  "2b70017b828390327e5595cc7bf93c29904d614c73c2298d7b12e93005424b1b": {
+    "id": 18,
+    "label": "HILIR",
+    "alasan": "Membahas inovasi produk dan strategi pemasaran perusahaan manufaktur makanan (WINGS Food) di sektor industri mi instan."
+  },
+  "655e845a841071fb0e3768da95cf7e614eb2420dc4386624c8f2d155dad71000": {
+    "id": 20,
+    "label": "HILIR",
+    "alasan": "Melibatkan asosiasi industri pengalengan ikan (APIKI) dalam edukasi standar keamanan produk industri."
+  },
+  "63bae4d0daece150e2108d119091aba9ade59ae83e488a3eb2e3d39fdcd39c0d": {
+    "id": 21,
+    "label": "HILIR",
+    "alasan": "Membahas strategi operasional perusahaan manufaktur kertas dalam menghadapi fluktuasi ekonomi dan efisiensi bahan baku."
+  },
+  "b743e87e5669440fc7c49ad9bc68eff0d81bcb8dbbf198a4dd931707807153d4": {
+    "id": 28,
+    "label": "HILIR",
+    "alasan": "Artikel membahas rantai pasok industri ban (manufaktur) dan kepatuhan terhadap regulasi internasional (EUDR)."
+  },
+  "3b61fcccc38b45e1d9706fb2e42760ebc94ea11945ba44c9d06343e6eb2ed33d": {
+    "id": 33,
+    "label": "HILIR",
+    "alasan": "Kebijakan tarif ekspor berdampak langsung pada daya saing produk olahan agro (CPO dan kopi) di pasar internasional."
+  },
+  "c04f251fb497e7fa345c71fb5d31109857158bc5a92b1e1390ff869f8934c300": {
+    "id": 42,
+    "label": "HILIR",
+    "alasan": "Melibatkan asosiasi industri vape dalam kebijakan tata kelola produk industri rokok elektrik legal."
+  },
+  "5fedfc688fe49b6d9fa8033ec0eff35d42c5322a9b2ff6bfe6bec23fd9a0ffa0": {
+    "id": 54,
+    "label": "BUKAN_HILIR",
+    "alasan": "Artikel hanya membahas fatwa keagamaan (MUI) tanpa menyertakan respons atau kebijakan resmi dari Kemenperin maupun asosiasi industri terkait dampak operasional pabrik."
+  },
+  "1e559dc5b159e0daac244b7a464faa740bc22460255d96880c5352708da11bd2": {
+    "id": 60,
+    "label": "HILIR",
+    "alasan": "Artikel membahas ekspansi operasional pabrik dan portofolio produk air minum dalam kemasan (AMDK) oleh emiten manufaktur."
+  },
+  "97d6922e0294f9107f627bbadb8e3019853a1a1230d0ad2f6c4021830da85f4d": {
+    "id": 62,
+    "label": "HILIR",
+    "alasan": "Artikel membahas strategi pengembangan bisnis dan peluncuran produk baru oleh industri manufaktur AMDK."
+  },
+  "f0be6a29faa1f6d4fe3fc8746baa05af55d3227c93206e7edb4a0e4a080a462b": {
+    "id": 64,
+    "label": "HILIR",
+    "alasan": "Artikel membahas operasional pabrik pengolahan kopi dan aktivitas ekspor produk olahan."
+  },
+  "24b67c9e7c89b839d08a9ae371fa1cc491d16f338de60547829469c096c6d3b9": {
+    "id": 72,
+    "label": "BUKAN_HILIR",
+    "alasan": "Artikel berfokus pada fluktuasi harga komoditas mentah (CPO) dan dinamika perdagangan internasional, bukan operasional pabrik hilir."
+  },
+  "63d40be1cb4ab82410a9fce440babc0436ba3bc335d018f7e6077444355ffcb9": {
+    "id": 73,
+    "label": "BUKAN_HILIR",
+    "alasan": "Artikel membahas kebijakan administratif/biaya layanan ekspor komoditas mentah (CPO, batu bara, logam) yang bersifat lintas sektor (ESDM/Perdagangan)."
+  },
+  "a0740117cf9975e974b726f1fbada2495e100e388f1f29c177b315b057ec90de": {
+    "id": 74,
+    "label": "BUKAN_HILIR",
+    "alasan": "Artikel membahas isu administratif biaya layanan ekspor komoditas mentah yang tidak spesifik pada industri manufaktur agro."
+  },
+  "5622444ae444d2c4313ada8c787c8e25367aa08d134bccf45744fe0c7320a4f5": {
+    "id": 75,
+    "label": "BUKAN_HILIR",
+    "alasan": "Artikel membahas kebijakan tarif dagang makro secara umum dan tidak spesifik pada sektor industri agro."
+  },
+  "a4f67b0e2c8e7eb8e6aec6e004b825d1edee9e15a88a5763185f05ee5b66a799": {
+    "id": 76,
+    "label": "BUKAN_HILIR",
+    "alasan": "Artikel membahas sistem pemantauan ekspor komoditas mentah (batu bara, CPO, ferroalloy) yang bersifat lintas sektor dan administratif."
+  },
+  "d1dde5073a8b87f11b2f7c3aabf8e97eb149905566cf75a877dbb2a871e265e2": {
+    "id": 77,
+    "label": "BUKAN_HILIR",
+    "alasan": "Artikel membahas mekanisme pengawasan harga ekspor komoditas mentah untuk deteksi manipulasi transaksi, bukan operasional industri manufaktur."
+  },
+  "eab2a43da245e7748b72f6091c930b4b61fbfdab4985d3181fd8b074af62f69f": {
+    "id": 78,
+    "label": "BUKAN_HILIR",
+    "alasan": "Artikel membahas prosedur teknis pendaftaran sistem ekspor komoditas mentah (batu bara, CPO, ferroalloy) melalui portal NADI."
+  },
+  "b6655fbd58f90353f6d3b90f248092b8d846785f6c1f32d95e7c403d36de41eb": {
+    "id": 79,
+    "label": "BUKAN_HILIR",
+    "alasan": "Artikel membahas dampak biaya ekspor komoditas mentah terhadap kinerja keuangan emiten, bukan operasional pabrik hilir."
+  },
+  "78ed966f81e0878552492ffce5a7d2a09c544994a88bc80e25078724d86b2941": {
+    "id": 86,
+    "label": "HILIR",
+    "alasan": "Artikel membahas kebijakan hilirisasi sawit melalui program biodiesel (B50) yang berdampak langsung pada industri pengolahan dalam negeri."
+  },
+  "1fd2f87ab9c3916a1c6db16e4e66de407907f5cd5ddff5ef2ac9b365d0484877": {
+    "id": 88,
+    "label": "HILIR",
+    "alasan": "Artikel membahas dampak kebijakan biodiesel B50 terhadap industri pengolahan sawit dan ketahanan energi nasional."
+  },
+  "bfe713cce5b5faba33cc0560db5d1ac661f068c6f0a166d38de848a9df880624": {
+    "id": 89,
+    "label": "HILIR",
+    "alasan": "Artikel memuat pernyataan resmi asosiasi industri (GAPKI) mengenai tata kelola dan regulasi industri sawit nasional."
+  },
+  "1fcebcfdc40b6c924ed5264b6ee34ea593084d113da03ed86774a7276c078191": {
+    "id": 90,
+    "label": "HILIR",
+    "alasan": "Artikel membahas dampak perjanjian dagang internasional terhadap efisiensi biaya ekspor produk industri minyak sawit nasional."
+  },
+  "9990408e7a3aedc35f5111c90b31c51ab6163c78ed86b70046749a03b4ec3296": {
+    "id": 100,
+    "label": "HILIR",
+    "alasan": "Artikel membahas narasi strategis industri sawit yang melibatkan asosiasi industri (GAPKI) sebagai pemangku kepentingan utama sektor hilirisasi."
+  },
+  "945f0f90558c0dcbc2f99b451b2c37df955f344bd3e60150409babb45c9e7c95": {
+    "id": 101,
+    "label": "BUKAN_HILIR",
+    "alasan": "Artikel ini bersifat administratif/birokrasi terkait portal data lintas sektor (termasuk batu bara) dan belum menyentuh operasional spesifik industri manufaktur agro."
+  },
+  "13b6e587bf426efd10c9f43e0cfbd9d165ec6363a686a3904ca44ec52578d605": {
+    "id": 112,
+    "label": "HILIR",
+    "alasan": "Artikel membahas kinerja keuangan perusahaan manufaktur pengolahan kelapa sawit dan produk turunannya (MGRO)."
+  },
+  "0f9a9443cc3e3853bacac81c923c6841f95089bf3b7bb38fa6ada9294542312e": {
+    "id": 114,
+    "label": "HILIR",
+    "alasan": "Artikel membahas kebijakan pemerintah terkait pembangunan pabrik biodiesel dan produk turunan sawit (hilirisasi)."
+  },
+  "337ca52f5ef352e8b286d702c581b344aac942ab952934232436491444e31a65": {
+    "id": 115,
+    "label": "HILIR",
+    "alasan": "Artikel melaporkan pelepasan ekspor produk industri manufaktur yang didukung langsung oleh pernyataan resmi Menteri Perindustrian."
+  },
+  "ffea64d0a8a426c95729fa83b0de8bfcfe7f17bcefa7b6b05f67f20acb3468f4": {
+    "id": 116,
+    "label": "HILIR",
+    "alasan": "Artikel membahas dampak kebijakan mandatori B50 terhadap industri pengolahan sawit dalam negeri."
+  },
+  "23b310727a84ecb9e6aa0d04124544ebc85f4ee5047d43da2fa261b83599b15c": {
+    "id": 119,
+    "label": "HILIR",
+    "alasan": "Artikel membahas operasional dan kinerja perusahaan industri biodiesel (JARR) yang merupakan bagian dari sektor hilir agro."
+  },
+  "26390c96a9c3548a66c2b35f70bc8d5eec1bab04a604ff0d45643ff9c56b21e2": {
+    "id": 120,
+    "label": "HILIR",
+    "alasan": "Artikel membahas percepatan pembangunan pabrik bioetanol sebagai bagian dari strategi hilirisasi pemerintah."
+  },
+  "12b91a2b81e1cb3c0b6b5cead36abd28405ff99ec7a7a103be29cd00717a6a08": {
+    "id": 121,
+    "label": "HILIR",
+    "alasan": "Artikel membahas proyek industri bioetanol terintegrasi yang merupakan bagian dari program hilirisasi nasional."
+  },
+  "9ce48079c31bba40d65ce2fe30a4e17d7c99ee981e9b601154e34b8fb0130045": {
+    "id": 127,
+    "label": "HILIR",
+    "alasan": "Artikel membahas penerapan teknologi Industri 4.0 di fasilitas refinery (pabrik pengolahan) yang diakui oleh Kemenperin."
+  },
+  "b7ac32c8fceb02dfc1fd17f99d60e4e611c3b4cfff459137ef4d71814ebee23d": {
+    "id": 128,
+    "label": "HILIR",
+    "alasan": "Artikel membahas integrasi industri pengolahan gula dan bioenergi yang melibatkan asosiasi industri (AGI)."
+  },
+  "e1fd99225931f1a73530931c9cc00f18605878041f6c3e1b48db192a0fff6ad3": {
+    "id": 130,
+    "label": "HILIR",
+    "alasan": "Artikel membahas rencana pembangunan kawasan industri pengolahan sagu yang merupakan bagian dari pengembangan manufaktur agro."
+  },
+  "a1b745cff07d2f7fce14fd646fbeb838e8538800273f40f7cd338bfda56259b5": {
+    "id": 139,
+    "label": "HILIR",
+    "alasan": "Artikel membahas kolaborasi KADIN terkait keberlanjutan industri sawit dalam forum industri internasional."
+  },
+  "7c31495fc5eafe7df81d102a67452404a071bdbcf2b4b5946db96c4c138616ad": {
+    "id": 144,
+    "label": "HILIR",
+    "alasan": "Artikel secara eksplisit menyebutkan keberadaan pabrik minyak goreng dan industri biodiesel sebagai bagian dari hilirisasi sawit."
+  },
+  "45e8b143f648a58e606b8561b92e58b1fab5a69d7e9a03fd4e74ee4d616134a3": {
+    "id": 145,
+    "label": "HILIR",
+    "alasan": "Artikel memuat respons resmi Menteri Perindustrian terkait kebijakan ekspor yang berdampak langsung pada daya saing industri manufaktur nasional."
+  },
+  "cbb9a34dd83f873f8110faad87721ffb888693a8ac5eec66ae2537bef2c418b9": {
+    "id": 1,
+    "label": "HILIR",
+    "alasan": "Membahas potensi ekspor produk makanan olahan (biskuit/kue) yang merupakan output industri manufaktur agro."
+  },
+  "28971f58c97ef2a25e1798013524e839feebd2e63b38f5c77296d08d1f949867": {
+    "id": 3,
+    "label": "HILIR",
+    "alasan": "Melibatkan asosiasi vokasi dan eksportir dalam forum bisnis untuk memperkuat rantai pasok industri pengolahan."
+  },
+  "68729269aaeb194af78bef1be40f7d5981b497e2c0d424ac57accbdfc5643994": {
+    "id": 5,
+    "label": "HILIR",
+    "alasan": "Membahas strategi hilirisasi industri agro untuk meningkatkan nilai tambah ekspor produk olahan."
+  },
+  "7959b87c617b6968ad422393402e5c35d0751ca2f2541fd790dac18e07ca7a26": {
+    "id": 6,
+    "label": "HILIR",
+    "alasan": "Melibatkan Kemenperin dan GAPMMI dalam evaluasi K3 di fasilitas pabrik makanan dan minuman."
+  },
+  "8651c4ea17b3e2884da03f2b2e2cc15ea153995d499ac49c70c06c650c6fd951": {
+    "id": 7,
+    "label": "HILIR",
+    "alasan": "Laporan resmi Menperin mengenai proyeksi kinerja ekspor sektor industri pengolahan nasional."
+  },
+  "88b2e40e62346fda5b971164c02c971333606cb89437fb22b6c2f68f6b3621da": {
+    "id": 8,
+    "label": "HILIR",
+    "alasan": "Membahas kesiapan infrastruktur logistik pelabuhan untuk mendukung ekspor komoditas industri kelapa."
+  },
+  "1cc21ab644d686606ef5c6e9321bc5f6d32d202c9af032761e3d72df9cd79955": {
+    "id": 10,
+    "label": "HILIR",
+    "alasan": "Prestasi produk olahan berbasis kelapa (manufaktur) di pasar internasional yang berdampak pada citra industri agro Indonesia."
+  },
+  "f5847bd3871b4edf15837abf73f798bb54244e3ae5d1238873cd57b47e48bd03": {
+    "id": 13,
+    "label": "HILIR",
+    "alasan": "Pernyataan resmi Menperin mengenai kinerja ekspor produk manufaktur nasional."
+  },
+  "9d076296159d13370977f7b9d88ba44afbc0fc0732aba1f4741d5c565841ca40": {
+    "id": 18,
+    "label": "HILIR",
+    "alasan": "Membahas inovasi produk dan strategi pemasaran perusahaan manufaktur makanan (WINGS Food)."
+  },
+  "c2591f32445cbe9ca382f7caca2308ef63efcc565cd1743ac1c7c4ba349c8a36": {
+    "id": 20,
+    "label": "HILIR",
+    "alasan": "Melibatkan BPOM dan asosiasi industri pengalengan ikan (APIKI) terkait standar keamanan produk olahan."
+  },
+  "8b7ee7b4ebce94392c415a9a66878eda09c646b75b2a1866f8811c725eb80a47": {
+    "id": 21,
+    "label": "HILIR",
+    "alasan": "Membahas strategi operasional perusahaan manufaktur kertas dalam menghadapi fluktuasi ekonomi."
+  },
+  "14c4dbc68cc69938f324f1218b0b5b11abfc191a5aeec8cb41ee1d95dde32a5b": {
+    "id": 28,
+    "label": "HILIR",
+    "alasan": "Membahas rantai pasok industri ban (manufaktur) terkait kepatuhan terhadap regulasi global."
+  },
+  "129f69b215408e5708d9e7a63fd7bfe8c8770a3144cd5c86b50b09b4d6e145b9": {
+    "id": 33,
+    "label": "HILIR",
+    "alasan": "Membahas kebijakan tarif ekspor komoditas olahan agro (CPO dan kopi) yang berdampak langsung pada industri."
+  },
+  "9a9ae54abf6b45572d9e790c2cbdbdfb4bad038797c76c699763a49f164101a3": {
+    "id": 42,
+    "label": "HILIR",
+    "alasan": "Melibatkan asosiasi industri vape terkait legalitas dan tata kelola produk industri rokok elektrik."
+  },
+  "ee02cddf485c0ef03bfc0ca6347e111bb1c674fb546413567a224c787a38394c": {
+    "id": 60,
+    "label": "HILIR",
+    "alasan": "Membahas ekspansi lini produksi dan portofolio produk perusahaan manufaktur AMDK."
+  },
+  "d3e0f77cfb8304680e2c86a25a11bb11b33efa5b91a907d4ebcef16393244125": {
+    "id": 62,
+    "label": "HILIR",
+    "alasan": "Artikel membahas ekspansi bisnis dan peluncuran produk baru oleh perusahaan manufaktur AMDK."
+  },
+  "d42f3857e07855a4f99fb301ac99826eedf35e6e5a3a78727110c91c0aef63db": {
+    "id": 64,
+    "label": "HILIR",
+    "alasan": "Artikel membahas operasional pabrik pengolahan kopi dan aktivitas ekspor produk olahan."
+  },
+  "e47dd76934a93d2070fe50ceaa001b58df43bd98626d11632c447d247c70c2b7": {
+    "id": 86,
+    "label": "HILIR",
+    "alasan": "Kebijakan B50 berdampak langsung pada struktur industri pengolahan sawit dalam negeri."
+  },
+  "bd6a3d394247ed643354edf19296f407bf827e624774f9f2f64cbdccd3684f66": {
+    "id": 88,
+    "label": "HILIR",
+    "alasan": "Analisis dampak kebijakan biodiesel terhadap industri pengolahan sawit dan neraca perdagangan."
+  },
+  "72638e6d5f7b404ca6f1519c0a735826f7d952a78e869241c679539013829bd5": {
+    "id": 89,
+    "label": "HILIR",
+    "alasan": "Pernyataan resmi asosiasi industri (GAPKI) mengenai hambatan regulasi yang berdampak pada operasional industri hilir."
+  },
+  "cdc1d72c60e3ec2798bba5906092dc9ea73d4f34e69343fb548c759a4ba37336": {
+    "id": 90,
+    "label": "HILIR",
+    "alasan": "Dampak perjanjian dagang internasional terhadap efisiensi biaya ekspor industri pengolahan sawit."
+  },
+  "98c1ab2c01a0a8ab104b490e81cfc8f1f3c25f99dd4bb17ac9f795ab20ae1053": {
+    "id": 100,
+    "label": "HILIR",
+    "alasan": "Pernyataan resmi asosiasi industri (GAPKI) mengenai tata kelola strategis industri sawit nasional."
+  },
+  "be2270285afb51e7e237ff83a7cf5779353143de01865ef0bf6c7b0bbc903b8d": {
+    "id": 112,
+    "label": "HILIR",
+    "alasan": "Laporan kinerja keuangan perusahaan pengolahan kelapa sawit dan produk turunannya."
+  },
+  "938b9d9b2a90f7c4035463824ba14aec3ab876bcbbe9cf7f33bca8545db0fbbb": {
+    "id": 114,
+    "label": "HILIR",
+    "alasan": "Kebijakan pemerintah terkait pembangunan pabrik biodiesel dan hilirisasi produk turunan sawit."
+  },
+  "f420cd9d27614244560746515e215e1c13bcfe6a85314cec7c62b61fde2c9d0c": {
+    "id": 115,
+    "label": "BUKAN_HILIR",
+    "alasan": "Artikel mencakup sektor non-agro seperti logam dasar yang tidak spesifik pada industri agro."
+  },
+  "96c4e6912fa5f2c4a1159250c271e1469f218999343b0ae8d1b3cf6aa0e63034": {
+    "id": 116,
+    "label": "HILIR",
+    "alasan": "Analisis tantangan industri sawit dalam menghadapi kebijakan mandatori biodiesel domestik."
+  },
+  "5cae044d6edff7bf1adb1c058cf181cb2d74074054f005fb68bde169cb1fa9ed": {
+    "id": 119,
+    "label": "HILIR",
+    "alasan": "Membahas operasional dan kinerja keuangan perusahaan publik di sektor industri biodiesel."
+  },
+  "012d3165cd70e4dae1e631ece08d01c1b65a2a52ebfbc49eefca721c2814f4f4": {
+    "id": 120,
+    "label": "HILIR",
+    "alasan": "Upaya pemerintah dalam percepatan pembangunan pabrik bioetanol sebagai bagian dari hilirisasi industri."
+  },
+  "dc21986270a8df11a3fe89e3680ee534a0f3b2e4a9f89983099d60fd4ef9520a": {
+    "id": 121,
+    "label": "HILIR",
+    "alasan": "Proyek strategis pembangunan pabrik bioetanol untuk mendukung hilirisasi industri dalam negeri."
+  },
+  "18779aa87d221da62c75ce731c54c0559f89412b5917e71ae4cedcbaca86ae15": {
+    "id": 127,
+    "label": "HILIR",
+    "alasan": "Penerapan teknologi Industri 4.0 di fasilitas refinery perusahaan yang diakui oleh Kemenperin."
+  },
+  "5ef8d8328d05e529047d3afa8894e6fa8fd078cd0f7bc857996a383c64870c85": {
+    "id": 128,
+    "label": "HILIR",
+    "alasan": "Artikel membahas integrasi industri pengolahan gula dan bioenergi yang merupakan bagian dari hilirisasi industri agro."
+  },
+  "dff2752e1b3c4b45f3ef41adfc9763eff76d1c18bc7fc08fdeb0cb5ca41c4cf0": {
+    "id": 130,
+    "label": "HILIR",
+    "alasan": "Artikel membahas rencana pembangunan kawasan peruntukan industri (KPI) pengolahan sagu yang merupakan proyek manufaktur."
+  },
+  "7b7c55e3fdb6c1e00e908c7cf280f725cfde4724699e6601cbb6e99931cc78f0": {
+    "id": 139,
+    "label": "HILIR",
+    "alasan": "Artikel melibatkan KADIN Indonesia dalam pembahasan kolaborasi industri sawit yang berdampak pada perdagangan dan hilirisasi komoditas."
+  },
+  "035b4175a28d022f1031bdb71ce20d143b87e68c51ece28ecf1005fe80366cae": {
+    "id": 144,
+    "label": "HILIR",
+    "alasan": "Artikel secara eksplisit menyebutkan keberadaan pabrik minyak goreng dan industri biodiesel sebagai bentuk hilirisasi sawit."
+  },
+  "32c4b9d76ac316c0e15a982a6d0d2eccfdd73c1aa1479095d3a67fdd4638deb5": {
+    "id": 145,
+    "label": "HILIR",
+    "alasan": "Artikel memuat pernyataan resmi Menteri Perindustrian mengenai strategi menjaga daya saing industri nasional terhadap kebijakan tarif ekspor."
   }
 }
